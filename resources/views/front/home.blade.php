@@ -441,7 +441,7 @@ Home
 
 <!-------------------------------- industry_area ------------------------------------>
 @if($industryMatricData->isNotEmpty())
-<section class="industry_area">
+<section class="industry_area industry_multiplat_data">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -459,43 +459,37 @@ Home
             </div>
             <div class="col-lg-12">
                 <div class="industry_area_inner2">
-                    <div thumbsSlider="" class="swiper mySwiper1">
-                        <div class="swiper-wrapper">
-                            @foreach($industryMatricData as $matric)
-                            <div class="swiper-slide">
-                                <div class="industry_area_sld_bx">
-                                    <div class="content">
-                                        <h3>{{$matric->title}}</h3>
-                                        <button class="commen_btn">Read More</button>
-                                    </div>
-                                    <img src="{{ asset('storage/' . $matric->image) }}" alt="" />
-                                </div>
-                            </div>
-                            @endforeach
+                <div thumbsSlider="" class="swiper mySwiper1">
+                    <div class="swiper-wrapper">
+                    @foreach($industryMatricData as $index => $matric)
+                    <div class="swiper-slide">
+                        <div class="industry_area_sld_bx {{ $index === 0 ? 'active-toggle' : '' }}" data-index="{{ $index }}">
+                        <div class="content">
+                            <h3>{{ $matric->title }}</h3>
+                            <button class="commen_btn toggle-btn" data-index="{{ $index }}">Read More</button>
+                        </div>
+                        <img src="{{ asset('storage/' . $matric->image) }}" alt="" />
                         </div>
                     </div>
-                    <div style="
-                            --swiper-navigation-color: #fff;
-                            --swiper-pagination-color: #fff;
-                            " class="swiper mySwiper2">
-                        <div class="swiper-wrapper">
-                            @foreach($industryMatricData as $matric)
-                            <div class="swiper-slide">
-                                <div class="industry_area_sld_bx1">
-                                    <p>
-                                        {!! $matric->description !!}
-                                    </p>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
+                    @endforeach
                     </div>
                 </div>
+
+                    <div class="more-info-box">
+                        @foreach($industryMatricData as $index => $matric)
+                        <div class="industry_area_sld_bx1 toggle-content {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}">
+                        <p>{!! $matric->description !!}</p>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+
                
             </div>
         </div>
     </section>
 @endif
+ 
 
 <!-------------------------------- about_area ------------------------------------>
 @if(!empty($homeAboutData))
@@ -676,7 +670,7 @@ Home
 
 <!--------------------------------  H/J Forum area  ------------------------------------>
 @if(count($hjForumData)>0)
-    <section class="industry_area">
+    <section class="industry_area forum-bg-border pb-0">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 d-flex justify-content-between align-items-center flex-wrap ">
@@ -761,18 +755,21 @@ Home
 <!--------------------------------  H/J Forum area end  ------------------------------------>
 
 <!--------------------------------  Collaborations area  ------------------------------------>
-
-
 @if($partnershipCollaborate->isNotEmpty())
-<section class="section pt-0">
-    <div class="container">
-        <div class="section-heading">
-            <h2>Collaborations</h2>
-        </div>
+<section class="section ">
+    <div class="container"> 
+         <div class="row">
+                <div class="col-lg-12">
+                    <div class="forbuyer_area_inner">
+                       <h2>Collaborations</h2>
+                    </div>
+                </div>
+            </div>
         <div class="tag-scrollers">
             <div class="tag-scroller scrolling">
+                @foreach($partnershipCollaborate as $batches)
                 <ul class="tag-list" style="--duration: 35.32s;">
-                     @foreach($partnershipCollaborate as $image)
+                     @foreach($batches as $image)
                     <li>
                         <div class="greview">
                             <img src="{{asset('storage/'. $image->image)}}" alt="logo">
@@ -780,33 +777,7 @@ Home
                     </li>
                     @endforeach
                 </ul>
-                <ul class="tag-list" style="--duration: 35.30s;">
-                     @foreach($partnershipCollaborate as $image)
-                    <li>
-                        <div class="greview">
-                            <img src="{{asset('storage/'. $image->image)}}" alt="logo">
-                        </div>
-                    </li>
-                    @endforeach
-                </ul>
-                <ul class="tag-list" style="--duration: 35.32s;">
-                     @foreach($partnershipCollaborate as $image)
-                    <li>
-                        <div class="greview">
-                            <img src="{{asset('storage/'. $image->image)}}" alt="logo">
-                        </div>
-                    </li>
-                    @endforeach
-                </ul>
-                <ul class="tag-list" style="--duration: 35.32s;">
-                     @foreach($partnershipCollaborate as $image)
-                    <li>
-                        <div class="greview">
-                            <img src="{{asset('storage/'. $image->image)}}" alt="logo">
-                        </div>
-                    </li>
-                    @endforeach
-                </ul>
+                @endforeach
             </div>
         </div>
     </div>
@@ -1132,6 +1103,45 @@ function updateMapMarkers(events) {
         });
     });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll(".toggle-btn");
+
+    buttons.forEach(button => {
+      button.addEventListener("click", function () {
+        const index = this.getAttribute("data-index");
+
+        // Hide all toggle contents
+        document.querySelectorAll(".toggle-content").forEach(content => {
+          content.classList.remove("active");
+        });
+
+        // Show matching content
+        const targetContent = document.querySelector(`.toggle-content[data-index='${index}']`);
+        if (targetContent) {
+          targetContent.classList.add("active");
+        }
+
+        // Remove 'active-toggle' from all slide boxes
+        document.querySelectorAll(".industry_area_sld_bx").forEach(slide => {
+          slide.classList.remove("active-toggle");
+        });
+
+        // Add 'active-toggle' to the clicked button's parent box
+        const currentSlideBox = this.closest(".industry_area_sld_bx");
+        if (currentSlideBox) {
+          currentSlideBox.classList.add("active-toggle");
+        }
+
+        // Optional: scroll into view
+        document.querySelector(".more-info-box").scrollIntoView({ behavior: "smooth" });
+      });
+    });
+  });
+</script>
+
+
+
 
 
 

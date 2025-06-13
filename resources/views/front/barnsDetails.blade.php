@@ -386,21 +386,28 @@ Product Details
                                             @endif
                                         </div>
 
-                                        @if(@$products->user->reviews->isNotEmpty())
+                                        @if(optional(@$products->user->reviews)->isNotEmpty())
                                             @foreach(@$products->user->reviews as $review)
                                                 <div class="rating-card">
-                                                    <div class="user-info">
-                                                        <img src="{{asset('storage/'.@$review->user->profile_photo_path)}}" height="49"
-                                                            alt="Ellipse">
-                                                            @php
-                                                                $averageRating = @$review->rating;
-                                                            @endphp 
-                                                    <h5>{{ucfirst(@$review->user->name)}}</h5>
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        <i class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
-                                                    @endfor
+                                                    <div class="user-info modl-view-rating">
+                                                       <div>
+                                                           <img src="{{(@$review->user->profile_photo_path!="")?asset('storage/'.@$review->user->profile_photo_path):asset('front/auth/assets/img/user-img.png')}}"  height="49" alt="">
+                                                               @php
+                                                                   $averageRating = @$review->rating;
+                                                               @endphp 
+                                                       <h5>{{ucfirst(@$review->user->name)}}</h5>
+
+                                                       @for ($i = 1; $i <= 5; $i++)
+                                                           <i class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
+                                                       @endfor
+                                                       </div>
+                                                       <div>
+                                                           <p>{{@$review->message}}</p>
+                                                           @if($review->image)
+                                                               <img src="{{asset('storage/'.@$review->image)}}" class="rating-img-usr mt-2"  alt="">
+                                                           @endif
+                                                       </div>
                                                     </div>
-                                                    {{--<img src="{{asset('front/home/assets/images/icons/stars02.png')}}" height="18" alt="stars02">--}}
                                                 </div>
                                             @endforeach
                                         @endif
@@ -431,13 +438,9 @@ Product Details
                                             <textarea class="form-control style-2" placeholder="You are welcome..."
                                                 id="contactMessage" rows="5"></textarea>
                                         </div>
-                                        {{--<div class="file-upload">
-                                            <span class="text-secondary">Upload Image</span>
-                                            <img src="{{asset('front/home/assets/images/icons/img-icon.png')}}" width="20px" alt="">
-                                        </div>--}}
-                                        <div class="file-upload">
-                                            <span class="text-secondary">Upload Image</span>
-                                            <input type="file" id="reviewImage" accept="image/*" />
+                                        <div class="file-upload cusom-uplod">
+                                            <label for="reviewImage" class="upload-label" id="uploadText">Upload Image</label>
+                                            <input type="file" id="reviewImage" accept="image/jpeg,image/png" hidden />
                                         </div>
                                         <button type="button" class="apply-flitter mt-3 w-100"  id="submitReview">Submit</button>
                                     </div>
@@ -619,7 +622,7 @@ function chatCreate() {
         success: function(response) {
             console.log('Chat room created:', response.data);
             if (response.success) {
-                window.location.href = '{{ route("messages") }}';
+                window.location.href = '{{ route("messages",["room_id" => ""]) }}' + response.data;
             } else {
                 Swal.fire("Elite Equine", 'Failed to create chat room: ' + response.message, "error");
             }
@@ -985,6 +988,20 @@ var slider = new Swiper('.gallery-slider', {
     });
 
     
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const fileInput = document.getElementById("reviewImage");
+    const uploadText = document.getElementById("uploadText");
+
+    fileInput.addEventListener("change", function () {
+      if (fileInput.files.length > 0) {
+        uploadText.textContent = fileInput.files[0].name;
+      } else {
+        uploadText.textContent = "Upload Image";
+      }
+    });
+  });
 </script>
 
 @endsection

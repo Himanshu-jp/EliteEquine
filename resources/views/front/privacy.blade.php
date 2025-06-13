@@ -1,25 +1,35 @@
 @extends('front.layouts.main')
 @section('title')
-About us
+    About us
 @endsection
 @section('content')
-<section class="hero-content-wrapper section">
-    <div class="container">
-        <div class="simplebar-content">
-            <div class="col-lg-7 col-md-10 mx-auto">
-                <div class="about-title text-center">
-                    <h1>{{ucfirst($policyData->name)}}</h1>
-                    {!! $policyData->content !!}
+    <section class="content-page section">
+        <div class="container">
+            <div class="simplebar-content">
+                <div class="col-lg-12 col-md-12 mx-auto">
+                    <div class="about-title pb-0">
+                       <h1 class="mb-0 pb-0">{{ucfirst($policyData->name)}}</h1>
+                    </div>
                 </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="data-sections mt-4">
+                {!! $policyData->content !!}
             </div>
             @if(!empty($policyData->image))
-            <div class="col-lg-10 col-md-8 mx-auto">
-                <div class="text-center">
-                    <img src="{{asset('storage'. $policyData->image)}}" class="w-100" alt="{{$policyData->name}}">
+                <div class="col-lg-12 col-md-12 mx-auto">
+                    <div class="text-center">
+                        <img src="{{asset('storage' . $policyData->image)}}" class="w-100" alt="{{$policyData->name}}">
+                    </div>
                 </div>
-            </div>
             @endif
         </div>
-    </div>
-</section>
+    </section>
+
+
 @endsection

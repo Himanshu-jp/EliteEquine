@@ -109,6 +109,10 @@ Route::middleware([
     
 });
 
+
+//-----contactAdOwner route-----//
+Route::post('/contactAdOwner', [HomeController::class, 'contactAdOwner'])->name('contactAdOwner');
+
 //------Community & Events Joining route----------//
 Route::get('/event/join/{id}', [CommunityEventsController::class, 'joinEvent'])->name('community.join');
 Route::get('/event/success', [CommunityEventsController::class, 'success'])->name('event.success');

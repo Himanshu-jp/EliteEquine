@@ -5,9 +5,9 @@ Horse Listing
 @section('content')
 
 <section class="section">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-lg-2">
                 <!-- Mobile Filter Toggle Button -->
                 <button class="filter-toggle" onclick="toggleFilter()">Filter</button>
 
@@ -188,7 +188,7 @@ Horse Listing
 
 
             </div>
-            <div class="col-lg-9">
+            <div class="col-lg-10">
                 <div class="search-head-top">
                     <div class="results-bar">
                         <div class="results-left">
@@ -277,9 +277,9 @@ Horse Listing
                         <button class="search-btn btn btn-warning" onclick="window.location.href='{{route('equipment-listing')}}'">Reset</button>
                     </div>
 
-                    <div class="row">
+                    
 
-                        <div id="horse-list">
+                        <div id="horse-list" class="row">
                             {{-- Horse cards will be injected here --}}
                         </div>
 

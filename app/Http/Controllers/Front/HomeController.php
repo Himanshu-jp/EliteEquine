@@ -73,7 +73,8 @@ class HomeController extends Controller
         $sellerBusinessData = SellerBusiness::first();
         $buyerBrowserData = BuyerBrowser::first();
         $buyerFaqData = BuyerFaq::orderBy('id', 'desc')->get();
-        $partnershipCollaborate = PartnerShipCollaborate::latest()->get();
+        $partnerShipListing = PartnerShipCollaborate::get();
+        $partnershipCollaborate = $partnerShipListing->chunk(15);
         
         $coordinate = ['latitude' => '', 'longitude' => ''];
         if(Auth::check() == true)
@@ -91,6 +92,8 @@ class HomeController extends Controller
         ])->where(['product_status' => 'live', 'deleted_at' => null]);
 
         //-----add horse category condition------//
+
+        
 
         // dd($hjForumData->toArray());
         $events = $data->where('category_id', $categoryId)->orderBy('id', 'desc')->take(3)->get()->toArray();
@@ -370,7 +373,8 @@ class HomeController extends Controller
 
     public function chatMessage(Request $request)
     {
-                
+        $roomId = $request->query('room_id') ?? null;
+
         $user = Auth::user();
 
         $chatList = ChatUser::where('user_id',$user->id)->pluck('convenience_id');
@@ -390,7 +394,7 @@ class HomeController extends Controller
         }
         $list = $list->orderBy('updated_at', 'desc')->get();
         // dd($list->toArray());
-        return view('frontauth/chat/messages');
+        return view('frontauth/chat/messages',compact('roomId'));
     }
 
 
