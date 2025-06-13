@@ -5,6 +5,34 @@
         .map-locations .col-md-6 #map { position: absolute; top: 0; left: 0; width: 98%; border:0; border-radius: 14px; height:120vh; } */
         .category-scroll button {border: none;}
         .category-scroll button.active .card-list {background: #d6b868;}
+        .location-suggestions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.location-suggestions li {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.location-suggestions li:last-child {
+    border-bottom: none;
+}
+
+.location-suggestions li.highlighted,
+.location-suggestions li:hover {
+    background-color: #0074D9; /* nice blue */
+    color: white;
+}
     </style>
 @section('title')
 Home
@@ -83,23 +111,24 @@ Home
     <div class="top-header-map">
 
         <div class="top-form">
-            <form action="{{route('universalSearch')}}" id="universalSearchFormAgain">
+            <form action="{{route('home')}}" id="universalSearchFormAgain">
                 <div class="banner_area_inner_search">
                     <div class="form_bx">
                         <img src="{{asset('front/home/assets/images/icons/search.svg')}}" alt="search-icon"
                             class="icon" />
-                        <input type="text" placeholder="Search for" name="search" id="search" autocomplete="off" />
+                        <input type="text" placeholder="Search for product name" name="search" id="search" autocomplete="off" />
                     </div>
                     <div class="form_bx wow zoomIn location-manage-add" data-wow-delay="0.6s">
                         <img src="{{asset('front/home/assets/images/icons/search.svg')}}" alt="search-icon"
                             class="icon" />
-                        <input type="text" autocomplete="off" placeholder="Located in" name="location" id="location" value="{{ request()->query('location') }}" onkeypress="initializeLocationAutocomplete()" autocomplete="off" />
-                        <span id="location-message" class="text-danger" style="display: none; font-size: 12px;"></span>
-                            <ul id="location-list" style="display: none;">
+                        <input type="text" autocomplete="off" placeholder="Located in" name="location" id="map-location" value="{{ request()->query('location') }}" onkeyup 
+                        ="initializeLocationAutocomplete()" autocomplete="off" />
+                        <span id="map-location-message" class="text-danger" style="display: none; font-size: 12px;"></span>
+                            <ul id="map-location-list" style="display: none;">
                                 <!-- Location suggestions will appear here -->
                             </ul>
-                            <input type="hidden" id="latitude" name="latitude" value="{{ request()->query('latitude')}}">
-                            <input type="hidden" id="longitude" name="longitude" value="{{ request()->query('longitude')}}">
+                            <input type="hidden" id="map-latitude" name="latitude" value="{{ request()->query('latitude')}}">
+                            <input type="hidden" id="map-longitude" name="longitude" value="{{ request()->query('longitude')}}">
                     </div>
                     <div class="form_bx">
                         <img src="{{asset('front/home/assets/images/icons/search.svg')}}" alt="search-icon"
@@ -857,7 +886,9 @@ Home
 
 
 
-
+<!-- jQuery & CKEditor -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v1.0.0/mapbox-gl-supported.js"></script>
 <script>
@@ -868,13 +899,76 @@ mapboxgl.accessToken = mapboxAccessToken;
 let map; // global map reference
 let currentPopup = null; // to keep track of the currently opened popup
 
+// Reverse geocode to get human-readable location from lat,lng and set input value
+function reverseGeocode(lat, lng) {
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxAccessToken}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.features && data.features.length > 0) {
+                // Use the place_name of the first feature as the location string
+                const placeName = data.features[0].place_name;
+                const locationInput = document.getElementById('map-location');
+                if(locationInput){
+                    locationInput.value = placeName;
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Reverse geocoding error:', error);
+        });
+}
+
 window.onload = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const lat = urlParams.get('latitude') || 26.8467;
-    const lng = urlParams.get('longitude') || 75.7647;
+    // Default or from URL
+    let lat = parseFloat(urlParams.get('latitude')) || 26.8467;
+    let lng = parseFloat(urlParams.get('longitude')) || 75.7647;
     const selectedCategory = urlParams.get('category') || '1';
 
-    initializeMap(parseFloat(lat), parseFloat(lng));
+    // Elements to store lat and lng values
+    const latInput = document.getElementById('map-latitude');
+    const lngInput = document.getElementById('map-longitude');
+
+    // Try to get user's current location via Geolocation API
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                lat = position.coords.latitude;
+                lng = position.coords.longitude;
+
+                // Update lat/lng input fields
+                if (latInput) latInput.value = lat.toFixed(6);
+                if (lngInput) lngInput.value = lng.toFixed(6);
+
+                initializeMap(lat, lng);
+
+                // Reverse geocode to update location input text
+                reverseGeocode(lat, lng);
+
+                fetchEventsByCategory(selectedCategory);
+            },
+            error => {
+                // If geolocation denied or fails, fallback to URL or defaults
+                if (latInput) latInput.value = lat.toFixed(6);
+                if (lngInput) lngInput.value = lng.toFixed(6);
+
+                initializeMap(lat, lng);
+                reverseGeocode(lat, lng);
+                fetchEventsByCategory(selectedCategory);
+            },
+            { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+        );
+    } else {
+        // Geolocation not supported
+        if (latInput) latInput.value = lat.toFixed(6);
+        if (lngInput) lngInput.value = lng.toFixed(6);
+
+        initializeMap(lat, lng);
+        reverseGeocode(lat, lng);
+        fetchEventsByCategory(selectedCategory);
+    }
 
     // Set active category button
     const buttons = document.querySelectorAll('.category-scroll button[data-id]');
@@ -884,7 +978,6 @@ window.onload = () => {
     }
     if (activeButton) {
         activeButton.classList.add('active');
-        fetchEventsByCategory(selectedCategory);
     }
 
     // Handle category click
@@ -892,6 +985,7 @@ window.onload = () => {
         const btn = e.target.closest('button[data-id]');
         if (!btn) return;
 
+        // Remove active class from all buttons, add to clicked one
         document.querySelectorAll('.category-scroll button[data-id]').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
@@ -905,6 +999,9 @@ window.onload = () => {
             currentPopup.remove();
             currentPopup = null;
         }
+
+        // Remove active marker highlight from previous markers
+        document.querySelectorAll('.red-circle-marker').forEach(el => el.classList.remove('active-marker'));
 
         fetchEventsByCategory(catId);
     });
@@ -935,6 +1032,9 @@ function fetchEventsByCategory(categoryId) {
         currentPopup.remove();
         currentPopup = null;
     }
+
+    // Remove active marker highlights
+    document.querySelectorAll('.red-circle-marker').forEach(el => el.classList.remove('active-marker'));
 
     let apiUrl = '{{ url("/api/v1/product/mapbox-list?category=") }}' + categoryId;
     fetch(apiUrl)
@@ -1034,20 +1134,186 @@ function updateMapMarkers(events) {
             if (currentPopup && currentPopup !== popup) {
                 currentPopup.remove();
             }
-            // Toggle the clicked popup
-            popup.toggle();
+
+            // Open clicked popup
+            popup.addTo(map);
             currentPopup = popup;
 
+            // Update active marker class
             document.querySelectorAll('.red-circle-marker').forEach(el => el.classList.remove(activeClass));
             markerEl.classList.add(activeClass);
         });
     }
 }
-</script>
 
-<!-- jQuery & CKEditor -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
+
+
+
+// search location
+ function initializeLocationAutocomplete() {
+    const sessionToken = Math.random().toString(36).substring(2, 15);
+
+    const locationInput = document.getElementById('map-location');
+    const locationList = document.getElementById('map-location-list');
+    const locationMessage = document.getElementById('map-location-message');
+    const latitudeInput = document.getElementById('map-latitude');
+    const longitudeInput = document.getElementById('map-longitude');
+
+    let selectedIndex = -1;
+    let suggestions = [];
+
+    function clearSuggestions() {
+        locationList.innerHTML = '';
+        locationList.style.display = 'none';
+        locationMessage.style.display = 'none';
+        selectedIndex = -1;
+        suggestions = [];
+    }
+
+    function highlightSuggestion(index) {
+        const items = locationList.querySelectorAll('li');
+        items.forEach((li, i) => {
+            if (i === index) {
+                li.classList.add('highlighted');
+                // Scroll to make sure the highlighted item is visible:
+                li.scrollIntoView({ block: 'nearest' });
+            } else {
+                li.classList.remove('highlighted');
+            }
+        });
+    }
+
+    function selectSuggestion(index) {
+        if (index < 0 || index >= suggestions.length) return;
+        const suggestion = suggestions[index];
+
+        const name = suggestion.name || '';
+        // context may be an array in Mapbox API — handle safely:
+        let state = '';
+        let country = '';
+
+        if (suggestion.context && Array.isArray(suggestion.context)) {
+            suggestion.context.forEach(ctx => {
+                if (ctx.id.startsWith('region')) state = ctx.text || ctx.name || '';
+                if (ctx.id.startsWith('country')) country = ctx.text || ctx.name || '';
+            });
+        } else if (typeof suggestion.context === 'object') {
+            state = suggestion.context.region?.name || suggestion.context.region?.text || '';
+            country = suggestion.context.country?.country_code || suggestion.context.country?.text || '';
+        }
+
+        const fullAddress = [name, state, country].filter(Boolean).join(', ');
+
+        locationInput.value = fullAddress;
+        clearSuggestions();
+
+        // Fetch coordinates by mapbox_id
+        const mapbox_id = suggestion.mapbox_id;
+
+        fetch(`https://api.mapbox.com/search/searchbox/v1/retrieve/${mapbox_id}?session_token=${sessionToken}&access_token=${mapboxAccessToken}`)
+            .then(response => response.json())
+            .then(data => {
+                const features = data.features;
+                if (features && features.length > 0) {
+                    const coordinates = features[0].geometry.coordinates;
+                    if (coordinates) {
+                        latitudeInput.value = coordinates[1]; // latitude
+                        longitudeInput.value = coordinates[0]; // longitude
+                        // Optional callback
+                        if (typeof fetchVenues === 'function') {
+                            fetchVenues(latitudeInput.value, longitudeInput.value);
+                        }
+                    }
+                }
+            })
+            .catch(err => console.error('Error fetching coordinates:', err));
+    }
+
+    locationInput.addEventListener('input', function () {
+        const query = locationInput.value.trim();
+
+        if (query.length > 2) {
+            fetch(`https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodeURIComponent(query)}&language=en&limit=5&session_token=${sessionToken}&access_token=${mapboxAccessToken}`)
+                .then(response => response.json())
+                .then(data => {
+                    locationList.innerHTML = '';
+                    suggestions = data.suggestions || [];
+
+                    if (suggestions.length > 0) {
+                        suggestions.forEach((suggestion, i) => {
+                            const li = document.createElement('li');
+
+                            const name = suggestion.name || '';
+
+                            // Again safely parse context:
+                            let state = '';
+                            let country = '';
+                            if (suggestion.context && Array.isArray(suggestion.context)) {
+                                suggestion.context.forEach(ctx => {
+                                    if (ctx.id.startsWith('region')) state = ctx.text || ctx.name || '';
+                                    if (ctx.id.startsWith('country')) country = ctx.text || ctx.name || '';
+                                });
+                            }
+
+                            const fullAddress = [name, state, country].filter(Boolean).join(', ');
+                            li.textContent = fullAddress;
+                            li.setAttribute('data-index', i);
+
+                            li.addEventListener('click', () => selectSuggestion(i));
+                            locationList.appendChild(li);
+                        });
+                        locationList.style.display = 'block';
+                        locationMessage.style.display = 'none';
+                        selectedIndex = -1;
+                    } else {
+                        locationMessage.style.display = 'block';
+                        locationMessage.textContent = 'No locations found';
+                        locationList.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching location data:', error);
+                    locationMessage.style.display = 'block';
+                    locationMessage.textContent = 'Failed to fetch location data';
+                    locationList.style.display = 'none';
+                });
+        } else {
+            clearSuggestions();
+        }
+    });
+
+    // Keyboard navigation support
+    locationInput.addEventListener('keydown', function (e) {
+        const items = locationList.querySelectorAll('li');
+        if (locationList.style.display === 'block' && items.length > 0) {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex + 1) % items.length;
+                highlightSuggestion(selectedIndex);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+                highlightSuggestion(selectedIndex);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (selectedIndex >= 0 && selectedIndex < items.length) {
+                    selectSuggestion(selectedIndex);
+                }
+            } else if (e.key === 'Escape') {
+                clearSuggestions();
+            }
+        }
+    });
+
+    // Hide suggestions if user clicks outside
+    document.addEventListener('click', function (e) {
+        if (!locationInput.contains(e.target) && !locationList.contains(e.target)) {
+            clearSuggestions();
+        }
+    });
+}
+
+</script>
 
 <script>
     $(window).on('load', function(){

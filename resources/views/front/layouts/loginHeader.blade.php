@@ -21,7 +21,8 @@
     {{-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css"> --}}
     <link rel='stylesheet' href="{{asset('front/auth/assets/datepicker/jquery-ui.min.css')}}">
 
-    
+    <!-- map box -->
+     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
 </head>
 
 <body>
