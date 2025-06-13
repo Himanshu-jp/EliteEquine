@@ -457,45 +457,46 @@ Product Details
                                 </div>
                             </div>
                         </div>
+
                         @if(!auth()->check())
-                        <div class="contact-ad-owner-box">
-                            <h4 class="form-title">Contact Ad Owner</h4>
-                            <form action="{{route('contactAdOwner')}}" method="post" id="contactAdOwnerForm">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{$products->id}}">
+                            <div class="contact-ad-owner-box">
+                                <h4 class="form-title">Contact Ad Owner</h4>
+                                <form action="{{route('contactAdOwner')}}" method="post" id="contactAdOwnerForm">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{$products->id}}">
 
-                                <!-- Full Name -->
-                                <div class="mb-3">
-                                    <label for="contactName" class="form-label custom-label">Full Name
-                                        <span>*</span></label>
-                                    <input type="text" name="contactName" autocomplete="off" class="form-control custom-input" id="contactName" />
-                                </div>
+                                    <!-- Full Name -->
+                                    <div class="mb-3">
+                                        <label for="contactName" class="form-label custom-label">Full Name
+                                            <span>*</span></label>
+                                        <input type="text" name="contactName" autocomplete="off" class="form-control custom-input" id="contactName" />
+                                    </div>
 
-                                <!-- Email -->
-                                <div class="mb-3">
-                                    <label for="contactEmail" class="form-label custom-label">Your Email
-                                        <span>*</span></label>
-                                    <input type="email" name="contactEmail" autocomplete="off" class="form-control custom-input" id="contactEmail" />
-                                </div>
+                                    <!-- Email -->
+                                    <div class="mb-3">
+                                        <label for="contactEmail" class="form-label custom-label">Your Email
+                                            <span>*</span></label>
+                                        <input type="email" name="contactEmail" autocomplete="off" class="form-control custom-input" id="contactEmail" />
+                                    </div>
 
-                                <!-- Message -->
-                                <div class="mb-3">
-                                    <label for="contactMessage" class="form-label custom-label">Message  <span>*</span></label>
-                                    <textarea class="form-control custom-textarea" id="contactMessage" name="contactMessage" rows="4"></textarea>
-                                </div>
+                                    <!-- Message -->
+                                    <div class="mb-3">
+                                        <label for="contactMessage" class="form-label custom-label">Message  <span>*</span></label>
+                                        <textarea class="form-control custom-textarea" id="contactMessage" name="contactMessage" rows="4"></textarea>
+                                    </div>
 
-                                <!-- Checkbox -->
-                                <div class="form-check mb-3">
-                                    <a href="{{route('register')}}" target="_blank" style="text-decoration: none;">
-                                        <label class="form-check-label custom-check-label" for="createAccount">
-                                            I want to create an account to contact the owner.
-                                        </label>
-                                    </a>
-                                </div>
-                                <!-- Submit Button -->
-                                <button type="submit" class="btn-theme-bg" id="contactAdOwnerFormSubmit">Send</button>
-                            </form>
-                        </div>
+                                    <!-- Checkbox -->
+                                    <div class="form-check mb-3">
+                                        <a href="{{route('register')}}" target="_blank" style="text-decoration: none;">
+                                            <label class="form-check-label custom-check-label" for="createAccount">
+                                                I want to create an account to contact the owner.
+                                            </label>
+                                        </a>
+                                    </div>
+                                    <!-- Submit Button -->
+                                    <button type="submit" class="btn-theme-bg" id="contactAdOwnerFormSubmit">Send</button>
+                                </form>
+                            </div>
                         @endif
 
                     </div>
