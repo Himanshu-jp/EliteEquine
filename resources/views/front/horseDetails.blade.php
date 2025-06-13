@@ -1056,20 +1056,7 @@ var slider = new Swiper('.gallery-slider', {
 
     
 </script>
-<div class="horsescard-popup" id="popupCard" >
-                <div class="inner-box">
 
-                    <img src="assets/images/featured_hource2.png" id="popupImage">
-                    <div class="info" id="popupInfo">
-      <h3>Starfire | 2020 | 15.3h</h3>
-      <span class="breed">Thoroughbred | Mare</span>
-      <div class="horse-price"><strong>Sale:</strong> $80,000 – $100,000</div>
-        <div class="horse-location">Los Angeles, CA</div>
-         <div class="horse-trial"><img src="assets/images/loca-icon.svg"> Sunset Arena<br>2/01/25 – 3/01/25</div>
-    </div>
-                </div>
-                <span class="close-btn" onclick="closePopup()">×</span>
-            </div>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const fileInput = document.getElementById("reviewImage");
