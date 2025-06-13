@@ -23,7 +23,7 @@ class ProductReviewService
             [
                 'rating' => $data['rating'],
                 'message' => $data['message'] ?? null,
-                'image_path' => $imagePath,
+                'image' => $imagePath,
             ]
         );
     }

@@ -54,14 +54,14 @@
                                     @enderror
                                 </div>
 
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="image">Page Image (Optional)</label>
                                     <input type="file" name="image" id="image"
                                            class="form-control-file @error('image') is-invalid @enderror">
                                     @error('image')
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
-                                </div>
+                                </div> --}}
                             </div>
 
                             <div class="card-footer">

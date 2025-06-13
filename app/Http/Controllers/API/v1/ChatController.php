@@ -22,42 +22,7 @@ use FFMpeg;
 
 class ChatController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    public function FcmToken($data)
-    {
-        $SERVER_API_KEY = 'AAAADEtnVsE:APA91bG-Cuz0EJNhFFt17RnizBg2TBLtRr_-wJ30-nh5c_RAoepZQyd2da83KQd4YcbDm_AztBTaVDdlOHvG25LkstUSxuTdBUdHUbPpKVZCqZcFKWggKMPCm5ysA4symc_aKHb0Yq1t';
-        $dataString = json_encode($data);
-
-        $headers = [
-            'Authorization: key=' . $SERVER_API_KEY,
-            'Content-Type: application/json',
-        ];
-
-
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
-
-        $response = curl_exec($ch);
-        //dd($response);
-        if ($response === false) {
-            // Handle cURL error
-            echo 'cURL Error: ' . curl_error($ch);
-        }
-
-        curl_close($ch);
-    }
-
+   
     public function getUser(Request $request)
     {
 

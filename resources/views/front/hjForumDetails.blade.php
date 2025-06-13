@@ -6,8 +6,8 @@ HJ Forum Details
 
 
 <section class="single-banner">
-    {{-- <img src="{{asset('front/home/assets/images/hj-forum-bg.jpg')}}" class="banner-bg w-100" alt=""> --}}
-    <img src="{{asset('storage/'.$forum->image)}}" class="banner-bg w-100" alt="">
+    <img src="{{asset('front/home/assets/images/hj-forum-bg.jpg')}}" class="banner-bg w-100" alt="">
+    {{-- <img src="{{asset('storage/'.$forum->image)}}" class="banner-bg w-100" alt=""> --}}
     <div class="container">
         <div class="banner-container">
             <h1 class="text-light">H/J Forum Details</h1>
