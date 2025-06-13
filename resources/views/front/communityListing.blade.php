@@ -137,10 +137,8 @@ Community & Events
                         <button class="search-btn" onclick="loadHorses();">Search</button>
                         <button class="search-btn btn btn-warning" onclick="window.location.href='{{route('community-events')}}'">Reset</button>
                     </div>
-
-                    <div class="row">
-
-                        <div id="horse-list">
+ 
+                        <div id="horse-list" class="row">
                             {{-- Horse cards will be injected here --}}
                         </div>
 

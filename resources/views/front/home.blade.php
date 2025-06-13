@@ -1066,7 +1066,7 @@ function updateMapMarkers(events) {
             const title = product.title || 'Untitled';
             const desc = product.description || '';
             const truncated = desc.length > 40 ? desc.slice(0, 40) + '...' : desc;
-            const imgUrl = product.image?.[0]?.image ? `/storage/${product.image[0].image}` : '';
+            const imgUrl = product.image?.[0]?.image ? `{{asset("/")}}/storage/${product.image[0].image}` : '';
             const price = product.price || product.product_detail?.sale_price || 'N/A';
             const fullAddr = [product.product_detail?.street, product.product_detail?.city, product.product_detail?.state, product.product_detail?.country].filter(Boolean).join(', ');
             const detailUrl = venueDetailRoute.replace(':id', product.id);
@@ -1076,20 +1076,24 @@ function updateMapMarkers(events) {
                     <div class="evn-dte-ll">
                         <div class="ent-emg">
                             ${imgUrl ? `<img src="${imgUrl}" style="width:60px;height:60px;" alt="${title}">` : ''}
-                            <div>
-                                <h3><a href="${detailUrl}" target="_blank">${title}</a></h3>
-                                <p>${truncated}</p>
-                            </div>
+                            
+                        </div>
+                        <div class="map-card-left">
+                        <div>
+                            <h3><a href="${detailUrl}" target="_blank">${title}</a></h3>
+                            <p>${truncated}</p>
                         </div>
                         <div class="venue-name-new-ic">
                             <img src="{{ asset('images/marker_map_icon.svg') }}" alt="Location icon" />
                             ${fullAddr}
                         </div>
+
                         <div class="loc-meta">
                             <div><strong>Price:</strong> $${price}</div>
                             <div class="loc-metabutton">
                                 <a href="${detailUrl}" target="_blank" class="meta-btn">View Details</a>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>
