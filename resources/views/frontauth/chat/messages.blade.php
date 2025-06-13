@@ -194,9 +194,36 @@ Chat Messages
 
 
 <script>
+    <?php if($roomId!=""){?>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('.thread_details').first().trigger('click');
+                console.log("Page loaded, first thread selected after delay.");
+            }, 1000); // 4000 ms = 4 seconds
+        });
+    <?php } ?>
 
-// const socket = io("http://192.168.5.81:3115/");
-const socket = io("https://v1.checkprojectstatus.com:3115/");
+    // Initialize the emoji picker
+    // $('#picker').emojioneArea({
+    //     pickerPosition: "bottom",
+    //     tonesStyle: "bullet"
+    // });
+
+    // Handle file input change
+    $('#attach-doc').on('change', function() {
+        var fileName = $(this).val().split('\\').pop();
+        $('.message_file').val(fileName);
+        $('#file-name').text(fileName);
+        $('#image-preview').show();
+    });
+
+    // Handle emoji selection
+    // $(document).on('click', '.emojiselect', function() {
+    //     $('#picker').toggle();
+    // });
+
+const socket = io("http://192.168.5.81:3115/");
+// const socket = io("https://v1.checkprojectstatus.com:3115/");
 
     
     var SENDER_ID = '{{Auth()->user()->id}}';
@@ -306,8 +333,7 @@ const socket = io("https://v1.checkprojectstatus.com:3115/");
                             
                             console.log("Deleting:", selected); // For debug
                             // Example AJAX call to delete
-                            $.ajax({                        
-                                //kamal
+                            $.ajax({
                                 url: "{{url('api/v1/deleteMultipleUser')}}",
                                 method: 'POST',
                                 data:{
@@ -453,7 +479,7 @@ const socket = io("https://v1.checkprojectstatus.com:3115/");
 	    return str_op;
 	}
 
-    
+ 
     $(document).on('click', '.thread_details', function() {
         setDate = '';
         $('.message-bar-head').show();
@@ -520,6 +546,8 @@ const socket = io("https://v1.checkprojectstatus.com:3115/");
             "limit":10
         });
     });
+
+
 
     $(document).on('click', '.loadmore', function() {
         page = page + 1;
@@ -793,6 +821,7 @@ const socket = io("https://v1.checkprojectstatus.com:3115/");
   	
     
     var firstthread = localStorage.getItem("firstthread");
+    //kamal
     if(firstthread){
     	var data = JSON.parse(firstthread);
     	ROOM_ID = data.id

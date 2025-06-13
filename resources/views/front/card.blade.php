@@ -107,7 +107,7 @@
 
 @else
 
-    <div class="col-lg-7">
+    <div class="col-lg-8">
         <div class="map-info">
             <div>
                 <div class="top-header-map">
@@ -143,7 +143,7 @@
         </div>
     </div>
     
-    <div class="col-lg-5">
+    <div class="col-lg-4">
         @foreach($data as $key=>$value)
             <div class="feat_card_bx list-page-card">
                 <a href="{{route('horseDetails',@$value->id)}}">

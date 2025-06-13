@@ -25038,6 +25038,7 @@ hr.horizontal.gray-light {
   display: flex;
   align-items: center;
   white-space: nowrap;
+  gap: 15px;
 }
 
 .navbar-vertical .navbar-heading {
@@ -30470,7 +30471,7 @@ span#file-name{
 }
 
 
-.swiper-slide-active .industry_area_sld_bx::before {
+/* .industry_area_sld_bx::before {
   position: absolute;
   content: "";
   left: 41px;
@@ -30480,7 +30481,7 @@ span#file-name{
   height: 25px;
   clip-path: polygon(0 0, 49% 100%, 100% 0);
 
-}
+} */
 
 .gallery-thumbs .swiper-slide img {
   width: auto;
@@ -30869,4 +30870,7 @@ ul.act-icon li {
 
 .defolt-error{
   position: relative !important;
+}
+.navbar-vertical .navbar-nav>.nav-item .nav-link.active path {
+    fill: #a09165;
 }

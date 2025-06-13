@@ -35,7 +35,7 @@
                   <thead>
                     <tr>
                       <th>S.No.</th>
-                      <th>Image</th>
+                      {{-- <th>Image</th> --}}
                       <th>Title</th>
                       <th>Slug</th>
                       <th>Action</th>
@@ -46,7 +46,7 @@
                       @foreach($pages as $key => $page)
                         <tr>
                           <td>{{ $pages->firstItem() + $key }}</td>
-                          <td>
+                          {{-- <td>
                                 @if($page->image)
                                     <div style="position: relative; display: inline-block;">
                                         <img src="{{ asset('storage/' . $page->image) }}" width="80" alt="page image" style="border: 1px solid #ddd; border-radius: 4px; padding: 2px;">
@@ -59,7 +59,7 @@
                                 @else
                                     <img src="{{ asset('images/default-blog.png') }}" width="80" alt="page image">
                                 @endif
-                            </td>
+                            </td> --}}
                           <td>{{ $page->name }}</td>
                           <td>{{ $page->slug }}</td>
                           <td>

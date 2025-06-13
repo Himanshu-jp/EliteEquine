@@ -31,6 +31,7 @@ class ProductReviewController extends Controller
         {
             return response()->json(['success' => false, 'message' => 'You are not able to add review.']);
         }
+        
         $this->reviewService->submitReview($data);
 
         return response()->json(['success' => true, 'message' => 'Review submitted successfully.']);

@@ -35,11 +35,11 @@
                         <div class="card-body">
                             <!-- Display CMS Page Details -->
                             <div class="row">
-                                <div class="col-md-3">
+                                {{-- <div class="col-md-3">
                                     <h4>Page Image</h4>
                                     <img src="{{ ($page->image) ? asset('storage/' . $page->image) : asset('images/default-page.jpg') }}" 
                                         width="150" height="150" alt="Page Image">
-                                </div>
+                                </div> --}}
                                 <div class="col-md-9">
                                     <h4>Page Information</h4>
                                     <ul class="list-unstyled">
