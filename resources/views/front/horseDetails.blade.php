@@ -457,43 +457,46 @@ Product Details
                                 </div>
                             </div>
                         </div>
-
+                        @if(!auth()->check())
                         <div class="contact-ad-owner-box">
                             <h4 class="form-title">Contact Ad Owner</h4>
                             <form action="{{route('contactAdOwner')}}" method="post" id="contactAdOwnerForm">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{$products->id}}">
+
                                 <!-- Full Name -->
                                 <div class="mb-3">
                                     <label for="contactName" class="form-label custom-label">Full Name
                                         <span>*</span></label>
-                                    <input type="text" class="form-control custom-input" id="contactName" included />
+                                    <input type="text" name="contactName" autocomplete="off" class="form-control custom-input" id="contactName" />
                                 </div>
 
                                 <!-- Email -->
                                 <div class="mb-3">
                                     <label for="contactEmail" class="form-label custom-label">Your Email
                                         <span>*</span></label>
-                                    <input type="email" class="form-control custom-input" id="contactEmail" included />
+                                    <input type="email" name="contactEmail" autocomplete="off" class="form-control custom-input" id="contactEmail" />
                                 </div>
 
                                 <!-- Message -->
                                 <div class="mb-3">
-                                    <label for="contactMessage" class="form-label custom-label">Message</label>
-                                    <textarea class="form-control custom-textarea" id="contactMessage"
-                                        rows="4"></textarea>
+                                    <label for="contactMessage" class="form-label custom-label">Message  <span>*</span></label>
+                                    <textarea class="form-control custom-textarea" id="contactMessage" name="contactMessage" rows="4"></textarea>
                                 </div>
 
                                 <!-- Checkbox -->
                                 <div class="form-check mb-3">
-                                    <input type="checkbox" class="form-check-input custom-check" id="createAccount" />
-                                    <label class="form-check-label custom-check-label" for="createAccount">
-                                        Create an account for me
-                                    </label>
+                                    <a href="{{route('register')}}" target="_blank" style="text-decoration: none;">
+                                        <label class="form-check-label custom-check-label" for="createAccount">
+                                            I want to create an account to contact the owner.
+                                        </label>
+                                    </a>
                                 </div>
-
                                 <!-- Submit Button -->
-                                <button type="submit" class="btn-theme-bg">Send</button>
+                                <button type="submit" class="btn-theme-bg" id="contactAdOwnerFormSubmit">Send</button>
                             </form>
                         </div>
+                        @endif
 
                     </div>
                     <div class="card-boxleft">
@@ -656,6 +659,53 @@ Product Details
  <script>
 
 
+$(document).ready(function () {
+    $("#contactAdOwnerForm").validate({
+        rules: {
+            contactName: {
+                required: true,
+                maxlength: 250
+            },
+            contactEmail: {
+                required: true,
+                email:true
+            },
+            contactMessage: {
+                required: true,
+                maxlength: 5000
+            }
+        },
+        messages: {
+            contactName: {
+                required: "Name is required.",
+                maxlength: "Name may not be greater than 250 characters."
+            },
+            contactEmail: {
+                required: "Email is required.",
+                email: "Please enter a valid email address."
+            },
+            contactMessage: {
+                required: "Message is required.",
+                maxlength: "Message may not be greater than 5000 characters."
+            }
+        },
+        errorClass: 'error text-danger',
+        errorElement: 'span',
+
+        highlight: function (element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('is-invalid');
+        },
+        submitHandler: function (form) {
+            $('#contactAdOwnerFormSubmit').prop('disabled', true).text('Please wait...');
+            form.submit();
+        }
+    });
+});
+
+
 function chatCreate() {
     var formData = new FormData();
     formData.append('sender_id', {{ auth()->id() }});
@@ -684,9 +734,7 @@ function chatCreate() {
     });
 }
 
-
-
-       // share
+//-------------share -----------------//
 document.getElementById('shareBtn').addEventListener('click', function(event) {
     event.preventDefault();
     if (navigator.share) {

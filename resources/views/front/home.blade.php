@@ -1075,7 +1075,7 @@ function updateMapMarkers(events) {
                 <div class="map-pp-main">
                     <div class="evn-dte-ll">
                         <div class="ent-emg">
-                            ${imgUrl ? `<img src="${imgUrl}" style="width:60px;height:60px;" alt="${title}">` : ''}
+                            ${imgUrl ? `<img src="${imgUrl}" style="width:80px;height:100%;object-fit: cover;border-radius: 5px;" alt="${title}">` : ''}
                             
                         </div>
                         <div class="map-card-left">
@@ -1089,7 +1089,7 @@ function updateMapMarkers(events) {
                         </div>
 
                         <div class="loc-meta">
-                            <div><strong>Price:</strong> $${price}</div>
+                            <div class="price-box-mld"><strong>Price:</strong> $${price}</div>
                             <div class="loc-metabutton">
                                 <a href="${detailUrl}" target="_blank" class="meta-btn">View Details</a>
                             </div>

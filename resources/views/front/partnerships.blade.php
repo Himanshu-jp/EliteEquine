@@ -27,8 +27,9 @@ Partnerships
         </div>
         <div class="tag-scrollers">
             <div class="tag-scroller scrolling">
+                @foreach($partnershipCollaborate as $batches)
                 <ul class="tag-list" style="--duration: 35.32s;">
-                    @foreach($partnershipCollaborate as $image)
+                     @foreach($batches as $image)
                     <li>
                         <div class="greview">
                             <img src="{{asset('storage/'. $image->image)}}" alt="logo">
@@ -36,34 +37,9 @@ Partnerships
                     </li>
                     @endforeach
                 </ul>
-                <ul class="tag-list" style="--duration: 35.30s;">
-                   @foreach($partnershipCollaborate as $image)
-                    <li>
-                        <div class="greview">
-                            <img src="{{asset('storage/'. $image->image)}}" alt="logo">
-                        </div>
-                    </li>
-                    @endforeach
-                   
-                </ul>
-                <ul class="tag-list" style="--duration: 35.32s;">
-                    @foreach($partnershipCollaborate as $image)
-                    <li>
-                        <div class="greview">
-                            <img src="{{asset('storage/'. $image->image)}}" alt="logo">
-                        </div>
-                    </li>
-                    @endforeach
-                </ul>
-                <ul class="tag-list" style="--duration: 35.32s;">
-                    @foreach($partnershipCollaborate as $image)
-                    <li>
-                        <div class="greview">
-                            <img src="{{asset('storage/'. $image->image)}}" alt="logo">
-                        </div>
-                    </li>
-                    @endforeach
-                </ul>
+                @endforeach
+
+                
             </div>
         </div>
     </div>
@@ -105,7 +81,7 @@ Partnerships
                     <h3>{{$way->title}} </h3>
                     {!! $way->description !!}
                     <h5>Ready to elevate your brand?</h5>
-                    <button type="button" class="apply-flitter mt-3">Get in touch here</button>
+                    <button type="button" class="apply-flitter mt-3" onclick="window.location.href='{{ route('contact.form') }}'">Get in touch here</button>
                 </div>
 
             </div>

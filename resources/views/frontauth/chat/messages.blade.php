@@ -821,7 +821,7 @@ const socket = io("http://192.168.5.81:3115/");
   	
     
     var firstthread = localStorage.getItem("firstthread");
-    //kamal
+    
     if(firstthread){
     	var data = JSON.parse(firstthread);
     	ROOM_ID = data.id

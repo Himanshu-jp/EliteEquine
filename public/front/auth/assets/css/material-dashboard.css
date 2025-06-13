@@ -3129,8 +3129,8 @@ form.error{
 .form-check-input {
   --form-check-bg: #fff;
   flex-shrink: 0;
-  width: 1.23em;
-  height: 1.23em;
+  width: 24px;
+  height: 24px;
   margin-top: 0.135em;
   vertical-align: top;
   appearance: none;
@@ -23861,20 +23861,24 @@ body.dark-version {
 }
 
 .form-check:not(.form-switch) .form-check-input[type=radio]:after {
-  transition: opacity 0.25s ease-in-out;
-  content: "";
-  position: absolute;
-  width: 0.8375rem;
-  height: 0.8375rem;
-  border-radius: 50%;
-  /* background-image: linear-gradient(195deg, #EC407A 0%, #D81B60 100%), var(--gradient); */
-  background: var(--primary);
-  opacity: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
+    transition: opacity 0.25s ease-in-out;
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-image: url(../.././assets/img/chekmark-icon.svg);
+    /* background-image: linear-gradient(195deg, #EC407A 0%, #D81B60 100%), var(--gradient); */
+    background-color: var(--primary);
+    opacity: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background-repeat: no-repeat;
+    background-size: 76%;
+    background-position: center;
 }
 
 .form-check:not(.form-switch) .form-check-input[type=radio]:checked {
@@ -30873,4 +30877,104 @@ ul.act-icon li {
 }
 .navbar-vertical .navbar-nav>.nav-item .nav-link.active path {
     fill: #a09165;
+}
+
+.notife-custom-checkbox {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+.notife-custom-checkbox input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.notife-custom-checkbox span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: white;
+  border: 2px solid #b3a075;
+  border-radius: 4px;
+}
+.notife-custom-checkbox input:checked + span {
+  background-color: #b3a075;
+}
+.notife-custom-checkbox span:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.notife-custom-checkbox input:checked + span:after {
+  display: block;
+}
+.notife-custom-checkbox span:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Save Button */
+.btn-save {
+  background-color: #b3a075;
+  color: white;
+  padding: 8px 24px;
+  border-radius: 30px;
+  border: none;
+}
+#notificationModal .modal-body .table thead th {
+    padding: 0.75rem 1.5rem;
+    text-transform: capitalize;
+    letter-spacing: 0px;
+    border-bottom: 1px solid #e5e5e5;
+    color: #000;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+}
+#notificationModal .modal-dialog {
+    max-width: 695px;
+    border-radius: 20px;
+    background: #FFF;
+    overflow: hidden;
+}
+
+#notificationModal .modal-body {
+    border-radius: 15px;
+    border: 1px solid #D9D9D9;
+    background: #FFF;
+    padding: 0px;
+}
+
+#notificationModal .modal-body td.text-start {
+    color: #000;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 0px 19px;
+}
+
+#notificationModal.modal-title {
+    color: var(--Black, #000);
+    font-family: Inter;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 32px; /* 123.077% */
+    letter-spacing: -0.52px;
+}
+
+#notificationModal .modal-header {
+    padding: 15px 0px;
 }

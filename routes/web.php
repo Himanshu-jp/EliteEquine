@@ -110,7 +110,7 @@ Route::middleware([
 });
 
 
-//-----contactAdOwner route-----//
+//-----contact Ad Owner route-----//
 Route::post('/contactAdOwner', [HomeController::class, 'contactAdOwner'])->name('contactAdOwner');
 
 //------Community & Events Joining route----------//

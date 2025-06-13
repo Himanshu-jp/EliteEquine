@@ -24,4 +24,11 @@ class HomeService
     {
         return ProductComment::where('id',$id)->delete();
     }
+    
+    // Store a new comment
+    public function contactAdOwner($data)
+    {
+        // dd($data);
+        return true;
+    }
 }

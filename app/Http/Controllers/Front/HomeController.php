@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\CommentRequest;
+use App\Http\Requests\Front\ContactAdOwnerRequest;
 use App\Http\Requests\Front\NewsLetterRequest;
 use App\Models\Blog;
 use App\Models\HjForum;
@@ -430,8 +431,18 @@ class HomeController extends Controller
     {
         $partnerContent = PartnershipContent::first();
         $partnerhipWay = PartnershipWay::get();
-        $partnershipCollaborate = PartnerShipCollaborate::latest()->get();
+
+        $partnerShipListing = PartnerShipCollaborate::get();
+        $partnershipCollaborate = $partnerShipListing->chunk(15);
+
         return view('front/partnerships', compact('partnerContent', 'partnerhipWay', 'partnershipCollaborate'));
+    }
+
+    public function contactAdOwner(ContactAdOwnerRequest $request)
+    {
+        $data = $request->all();
+        $this->homeService->contactAdOwner($data);
+        return redirect()->back()->with('success', 'Your message has been sent successfully. Owner will contact you soon.');
     }
 
 
