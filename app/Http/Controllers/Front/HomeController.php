@@ -48,7 +48,6 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        $categoryId = request()->category??1;
         $blogs = Blog::with('category')->where('deleted_at', null)->orderBy('id', 'desc')->take(6)->get();
         $hjForumData = HjForum::latest()->take(10)->get();
         $featured = Product::with([
@@ -92,11 +91,30 @@ class HomeController extends Controller
         ])->where(['product_status' => 'live', 'deleted_at' => null]);
 
         //-----add horse category condition------//
+        $searchString = $request->search;
+        if (!empty($searchString)) {
+            $data = $data->where(function ($query) use ($searchString) {
+                $query->where('title', 'like', "%$searchString%");
+            });
+        }
 
+        if (!empty($request->location)) {
+            $location = $request->location;
+            $data = $data->where(function ($query) use ($location) {
+                $query->orWhereHas('productDetail', function ($q) use ($location) {
+                    $q->where('precise_location', 'like', "%$location%")
+                        ->orWhere('city', 'like', "%$location%")
+                        ->orWhere('state', 'like', "%$location%")
+                        ->orWhere('country', 'like', "%$location%")
+                        ->orWhere('street', 'like', "%$location%");
+                });
+            });
+        }
         
-
-        // dd($hjForumData->toArray());
-        $events = $data->where('category_id', $categoryId)->orderBy('id', 'desc')->take(3)->get()->toArray();
+        if (!empty($request->category)) {
+            $data->where('category_id', $request->category);
+        }
+        $events = $data->orderBy('id', 'desc')->take(3)->get()->toArray();
         return view('front/home', compact(['blogs', 'partnershipCollaborate', 'featuredData', 'industryMatricData', 'homeAboutData', 'sellerBusinessData', 'buyerBrowserData', 'buyerFaqData', 'events', 'coordinate','hjForumData']));
     }
 
