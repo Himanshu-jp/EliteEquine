@@ -36,6 +36,8 @@ Your Ads
         <div class="row">
             <input type="hidden" name="productId" value="{{$productId}}">
             <input type="hidden" name="productDetailId" value="{{@$products->productDetail->id}}">
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
             
             @if(@$products->category_id)
                 <div class="col-md-3 mt-3 position-relative">
@@ -517,6 +519,48 @@ Your Ads
 @section('script')
 
 <script>
+    $(window).on('load', function () {
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                const latitude = position.coords.latitude.toFixed(6);
+                const longitude = position.coords.longitude.toFixed(6);
+
+                console.log("Latitude:", latitude);
+                console.log("Longitude:", longitude);
+
+                // Optional: Set values into hidden inputs if needed
+                $('#latitude').val(latitude);
+                $('#longitude').val(longitude);
+            },
+            function (error) {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        console.error("User denied the request for Geolocation.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        console.error("Location information is unavailable.");
+                        break;
+                    case error.TIMEOUT:
+                        console.error("The request to get user location timed out.");
+                        break;
+                    default:
+                        console.error("An unknown error occurred.");
+                        break;
+                }
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    } else {
+        console.error("Geolocation is not supported by this browser.");
+    }
+});
+
+
     $(document).ready(function () {
         function toggleAddressFields() {
             if ($('#addressSet').is(':checked')) {
