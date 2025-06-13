@@ -47,9 +47,10 @@ class PartnershipWaysController extends Controller
         return view('admin.website_manage.partnership.ways_to.show', compact('way'));
     }
 
-    public function update(PartnershipWaysRequest $request, PartnershipWay $partnershipWay)
+    public function update(PartnershipWaysRequest $request, $id)
     {
         $data = $request->validated();
+        $partnershipWay = PartnershipWay::findOrFail($id);
         $this->partnershipService->waysUpdate($partnershipWay, $data);
         return redirect()->route('partner_ways.index')->with('success', 'Partnership Way updated successfully.');
     }
