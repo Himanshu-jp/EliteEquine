@@ -1,0 +1,107 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+label {
+  font-size: 16px;
+  font-weight: 400;
+  color: black;
+}
+
+.is-invalid {
+  color: #a94442;
+  border-color: #a94442;
+  /* margin-top: 10px; */
+}
+
+.panel {
+  border: 1px solid;
+  border-color: black;
+}
+
+/* .preloader {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  position: fixed;
+  z-index: 99999;
+  background: #fff;
+} */
+
+.preloader {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 99999;
+  background: #fff;
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+.Password-form {
+  position: relative;
+}
+
+.Password-form .icon_eye img {
+  position: absolute;
+  top: 69%;
+  right: 21px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.Password-form .icon_eye img.toggle-password-input {
+  position: absolute;
+  top: 60px;
+  right: 28px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  width: 20px;
+}
+
+
+.close-icon {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#editImg{
+    width: 240px;
+    max-width: 100%;
+}

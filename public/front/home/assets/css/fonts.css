@@ -1,0 +1,27 @@
+/* @font-face {
+    font-family: 'Magical Source Demo';
+    src: url('./fonts/Magical-Source.woff2') format('woff2'),
+        url('./fonts/Magical-Source.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+} */
+
+
+
+@font-face {
+    font-family: 'Gilbert Einstein Italic';
+    font-style: normal;
+    font-weight: normal;
+    src: url('./fonts/GilbertEinstein.woff') format('woff')
+    }
+    
+    
+    @font-face {
+        font-family: 'Magical Source Demo';
+        src: url('./fontsmagicalsource-webfont.woff2') format('woff2'),
+             url('./fontsmagicalsource-webfont.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    
+    }
