@@ -30928,6 +30928,7 @@ ul.act-icon li {
   padding: 8px 24px;
   border-radius: 30px;
   border: none;
+  margin-bottom: 0px !important;
 }
 #notificationModal .modal-body .table thead th {
     padding: 0.75rem 1.5rem;
@@ -30943,11 +30944,16 @@ ul.act-icon li {
 }
 #notificationModal .modal-dialog {
     max-width: 695px;
+    
+}
+#notificationModal .modal-content { 
     border-radius: 20px;
     background: #FFF;
     overflow: hidden;
 }
-
+#notificationModal table.table {
+    margin-bottom: 0px;
+}
 #notificationModal .modal-body {
     border-radius: 15px;
     border: 1px solid #D9D9D9;
@@ -30978,3 +30984,4 @@ ul.act-icon li {
 #notificationModal .modal-header {
     padding: 15px 0px;
 }
+ 

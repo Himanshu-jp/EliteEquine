@@ -212,8 +212,6 @@ class AuthService
 
     public function settingUpdate($data,$user)
     {
-
-    
         // customer create on stripe
         Stripe::setApiKey(Config::get('config.stripe_secret'));
         // stripe custome update on stripe
