@@ -161,7 +161,7 @@ header nav .navbar-brand img {
 }
 
 header nav ul {
-  gap: 25px;
+  gap: 10px;
   justify-content: end;
   width: 100%;
   margin-top: 29px;
@@ -2310,19 +2310,23 @@ ul.footer-bottom-link li {
   .forbuyer_area img {
     width: 100%;
   }
+  #horse-list {
+    justify-content: center;
+}
 }
 
 /* Filter Toggle for Mobile */
 .filter-toggle {
-  display: none;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  z-index: 1001;
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 5px 15px;
+    z-index: 99;
+    border-radius: 10px;
 }
 
 /* Filter Sidebar */
@@ -3595,6 +3599,12 @@ select {
   padding: 45px 50px;
 }
 
+#ReportProduct .modal-content {
+  width: 450px;
+  border-radius: 24px;
+  padding: 45px 50px;
+}
+
 #PlaceBid .modal-content {
   width: 400px;
   border-radius: 24px;
@@ -4735,6 +4745,11 @@ section.hero-content-wrapper::after {
 }
 
 .act-icon .favorite-btn {
+  border: none;
+  background: transparent;
+}
+
+.act-icon .report-btn {
   border: none;
   background: transparent;
 }
@@ -6103,8 +6118,75 @@ section.industry_area.forum-bg-border .container {
 .about-extrer-box { 
     margin-bottom: 20px;
 }
+.industry_multiplat_data .swiper {
+    width: 100%;
+    height: max-content;
 }
+.more-info-box {
+    position: relative; 
+    top: 0%; 
+}
+.industry_multiplat_data {
+    padding: 45px 0 40px;
+}
+.swiper-backface-hidden .swiper-slide {
+    justify-content: center;
+}
+section.industry_area.forum-bg-border .container { 
+    padding-bottom: 30px !important;
+}
+.forbuyer_area_inner h2 {
+     font-size: 32px;
+}
+.featured_area_inner2  {
+    margin-top: 10px; 
+}
+.horse-label {
+    text-align: left;
+    display: block;
+}
+.horse-info-row { 
+    line-height: 1.4;
+}
+.info-desc { 
+    padding: 20px; 
+}
+.btn-cont { 
+    margin-top: 6px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.owner-profile { 
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.connect-numr {
+    margin-top: 16px; 
+}
+ul.act-icon { 
+    gap: 4px;
+}
+ul.act-icon li { 
+    width: 50px;
+    height: 50px;
+    padding: 6px 0px;
+    flex: 0 0 50px;
+}
+ul.act-icon li img {
+    width: 30px;
 
+} 
+.container-fluid {
+    --bs-gutter-x: 1.5rem;
+}
+.gallery-slider .swiper-slide {
+    height: auto; 
+}
+.gallery-thumbs .swiper-slide {
+    width: 70px;
+    height: 70px; 
+}
+}
 div#map {
     background-image: url(../images/map-dummy.png);
     border-radius: 20px;

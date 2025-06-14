@@ -30984,4 +30984,145 @@ ul.act-icon li {
 #notificationModal .modal-header {
     padding: 15px 0px;
 }
+#notificationModal .modal-header .btn-close {
+    background-color: #000;
+    margin-right: 0px;
+}
+.rating-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+    background: #fff;
+    border: 1px solid #F0F0F0;
+    border-radius: 12px;
+    padding: 10px 15px;
+}
+.user-info.modl-view-rating .rating-img-usr {
+    width: 100%;
+    border-radius: 10px;
+}
+.user-info.modl-view-rating {
+    flex-direction: column;
+    text-align: left;
+    align-items: self-start;
+}
+.user-info.modl-view-rating h5 {
+    font-size: 16px;
+    margin: 10px 0px 5px;
+}
  
+ 
+   .rating-card .text-container {
+    position: relative;
+    max-height: 50px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+   .rating-card .text-container p{
+    margin-bottom: 0;
+   }
+  .rating-card .text-container.expanded {
+    max-height: 500px; /* Adjust this based on expected max content height */
+  }
+
+  .rating-card .toggle-btn {
+    color: #a09165;
+    cursor: pointer;
+    font-weight: 500;
+    margin-top: 5px;
+    display: inline-block;
+  }
+  .invoice-tbl table tbody tr:last-child td {
+    border-width: 1px;
+    border-color: #e5e5e5;
+    border-style: solid;
+}
+    .invoice-wrapper {
+      max-width: 90%;
+      margin: auto;
+      border: 1px solid #ddd;
+      padding: 20px;
+    }
+
+   .info-invoice .header {
+      background-color: #7a8b99;
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .info-invoice .header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #fff;
+    }
+
+   .info-invoice .company-info {
+      text-align: right;
+      font-size: 14px;
+    }
+
+    .info-invoice .section {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+   .info-invoice .section div {
+      flex: 1 1 300px;
+      margin-bottom: 10px;
+    }
+
+   .info-invoice .bold {
+      font-weight: bold;
+    }
+
+   .info-invoice .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+   .info-invoice .table th,
+   .info-invoice .table td {
+      border-top: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+   .info-invoice .table th {
+      background-color: #f2f2f2;
+    }
+
+  .info-invoice .text-right {
+      text-align: right;
+    }
+
+   .info-invoice .total {
+      font-size: 16px;
+      font-weight: bold;
+      padding-top: 10px;
+    }
+
+    @media print {
+    
+     .info-invoice .invoice-wrapper {
+        border: none;
+        padding: 0;
+      }
+
+    .info-invoice .header {
+        color: white !important;
+      -webkit-print-color-adjust: exact;
+      }
+
+    .info-invoice .table th {
+        background-color: #f2f2f2 !important;
+        -webkit-print-color-adjust: exact;
+      }
+    }

@@ -448,6 +448,34 @@ Product Details
                             </div>
                         </div>
 
+                        <!-- Report An Product popup -->
+                        <div class="modal fade" id="ReportProduct" aria-hidden="true" aria-labelledby="ReportProduct"
+                            tabindex="-1" style="min-width: 380px;;">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content text-center">
+                                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <div class="modal-body p-0">
+                                        
+                                        <h1 class="modal-title fs-4" id="exampleModalLabel">Report To Ad Owner.</h1>
+                                        <div class="py-3">
+                                            <p>Your feedback helps us serve you better.</p>
+                                        </div>
+                                        <form action="{{route('submitReport')}}" method="post" id="reportProductForm">
+                                            @csrf
+                                            <input type="hidden" name="product_id" id="product_id" value="{{$products->id}}">
+                                            <div class="mb-3">
+                                                <textarea class="form-control style-2" placeholder="Enter your comment here..." id="message" name="message" rows="5"></textarea>
+                                                @if($errors->has('message'))
+                                                    <span class="error text-danger">{{$errors->first('message')}}</span>
+                                                @endif
+                                            </div>
+                                            <button type="submit" class="apply-flitter mt-3 w-100"  id="reportProductFormSubmit">Submit</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         @if(!auth()->check())
                             <div class="contact-ad-owner-box">
                                 <h4 class="form-title">Contact Ad Owner</h4>
@@ -504,8 +532,13 @@ Product Details
                                                                             <i class="fa-regular fa-heart favorited"></i>
                                                                             @endif
                                                                         </button></li>
-                            {{--<li><a href=""><img src="{{asset('front/home/assets/images/heart-icon.svg')}}" alt="" /></a></li>--}}
-                            <li><a href=""><img src="{{asset('front/home/assets/images/plag-icon.svg')}}" alt="" /></a></li>
+                           @if($products->user_id !== auth()->id() && auth()->check())
+                                <li><button class="report-btn"  data-bs-target="#ReportProduct" data-bs-toggle="modal"><img src="{{asset('front/home/assets/images/plag-icon.svg')}}" alt="" /></button></li>
+                            @elseif($products->user_id == auth()->id())
+                                <li><button class="report-btn"  onclick="Swal.fire('Elite Equine', 'You are not allowed to report this as the owner.', 'warning');"><img src="{{asset('front/home/assets/images/plag-icon.svg')}}" alt="" /></button></li>
+                            @else
+                                <li><button class="report-btn"  onclick="showLoginModal('Please login to report this to ad owner.')"><img src="{{asset('front/home/assets/images/plag-icon.svg')}}" alt="" /></button></li>
+                            @endif
                             <li>
                                 <a href="javascript:void(0)">
                                     <span class="compare-add-button" data-id="{{$products->id}}">
@@ -612,6 +645,35 @@ Product Details
 
 
 $(document).ready(function () {
+
+    $("#reportProductForm").validate({
+        rules: {
+            message: {
+                required: true,
+                maxlength: 5000
+            }
+        },
+        messages: {
+            message: {
+                required: "Message is required.",
+                maxlength: "Message may not be greater than 5000 characters."
+            }
+        },
+        errorClass: 'error text-danger',
+        errorElement: 'span',
+
+        highlight: function (element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('is-invalid');
+        },
+        submitHandler: function (form) {
+            $('#reportProductFormSubmit').prop('disabled', true).text('Please wait...');
+            form.submit();
+        }
+    });
+    
     $("#contactAdOwnerForm").validate({
         rules: {
             contactName: {

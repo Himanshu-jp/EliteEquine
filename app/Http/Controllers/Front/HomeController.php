@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\CommentRequest;
 use App\Http\Requests\Front\ContactAdOwnerRequest;
 use App\Http\Requests\Front\NewsLetterRequest;
+use App\Http\Requests\Front\ReportAdOwnerRequest;
 use App\Models\Blog;
 use App\Models\HjForum;
 use App\Models\Product;
@@ -24,6 +25,7 @@ use App\Models\BuyerFaq;
 use App\Models\ChatUser;
 use App\Models\Conveniencs;
 use App\Models\ProductComment;
+use App\Models\ProductReport;
 use App\Services\Front\HomeService;
 use App\Services\Front\NewsletterService;
 use Illuminate\Http\Request;
@@ -444,6 +446,20 @@ class HomeController extends Controller
         $this->homeService->contactAdOwner($data);
         return redirect()->back()->with('success', 'Your message has been sent successfully. Owner will contact you soon.');
     }
+   
+    public function submitReport(ReportAdOwnerRequest $request)
+    {
+        $data = $request->all();
+        $user = Auth::user();
+        $existingReport = ProductReport::where('user_id', $user->id)
+            ->where('product_id', $data['product_id'])
+            ->first();
+        if ($existingReport) {
+            return redirect()->back()->with('error', 'You have already reported this.');
+        }
+        $this->homeService->submitReport($data,$user);
+        return redirect()->back()->with('success', 'Success! Your report is on its way—thank you, and we’re proud of your contribution.');
+    }
 
 
     public function communityEvents()
@@ -481,12 +497,6 @@ class HomeController extends Controller
 
 
     //************************************bleow routes need to work****************************************-//
-
-
-    public function ads()
-    {
-        return view('frontauth/ads');
-    }
 
     public function favorite(Request $request)
     {
