@@ -1343,11 +1343,11 @@ header nav ul li a.active::before {
   }
 
   .banner_area {
-    padding-top: 141px;
+    padding-top:31px;
   }
 
   .banner_area_inner1 h1>span:nth-child(2) {
-    font-size: 53px;
+    font-size: 41px;
   }
 
   .banner_area_inner1 h1 {
@@ -1391,7 +1391,7 @@ header nav ul li a.active::before {
 
 @media screen and (max-width: 450px) {
   .banner_area_inner1 h1>span:nth-child(2) {
-    font-size: 43px;
+    font-size: 41px;
   }
 
   .container {
@@ -6186,8 +6186,21 @@ ul.act-icon li img {
     width: 70px;
     height: 70px; 
 }
+.list-unstyled { 
+    flex-wrap: wrap;
 }
-div#map {
+.comment-submit-btn { 
+    margin-top: 10px;
+}
+#map {
+    width: 100%;
+    height: 40vh;
+}
+}
+.list-unstyled li a {
+    display: inline-block;
+}
+#map {
     background-image: url(../images/map-dummy.png);
     border-radius: 20px;
 }
