@@ -214,6 +214,7 @@ Route::post('/contact', [ContactUsController::class, 'submit'])->name('contact.s
 Route::post('/submitReport', [HomeController::class, 'submitReport'])->name('submitReport');
 Route::get('/favorite', [HomeController::class, 'favorite'])->name('favorite');
 Route::get('/review', [HomeController::class, 'review'])->name('review');
+Route::get('/invoice', [HomeController::class, 'invoice'])->name('invoice');
 // Route::get('/bidDetails', [HomeController::class, 'bidDetails'])->name('bidDetails');
 
 

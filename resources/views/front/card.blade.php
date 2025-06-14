@@ -10,7 +10,12 @@
                     <a href="{{route('horseDetails',@$value->id)}}">
                         <div class="image">
                             <img src="{{(@$value->image->first())?asset('storage/'.@$value->image->first()->image):asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
-                            @if(!empty(@$value->greenEligibilities))<span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span>@endif
+                            
+                            @if(@$value->product_status == 'sold')
+                                <span class="tag-img sold-tag">Sold</span>
+                            @else
+                                @if(!empty(@$value->greenEligibilities))<span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span>@endif
+                            @endif
                         </div>
                     </a>
                     <div class="content">

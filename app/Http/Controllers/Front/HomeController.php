@@ -545,6 +545,11 @@ class HomeController extends Controller
     {
         return view('frontauth/review');
     }
+   
+    public function invoice()
+    {
+        return view('frontauth/invoice');
+    }
 
     public function bidDetails()
     {
