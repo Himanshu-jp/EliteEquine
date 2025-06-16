@@ -33,20 +33,22 @@ class CheckoutRequest extends FormRequest
                 // product
                 // 'product_id' => 'required|exists:products,id',
                 // Shipping
-                'shipping_name' => 'required|string|max:100',
-                'shipping_phone' => 'required|digits_between:7,15',
-                'shipping_address' => 'required|string|max:255',
-                'shipping_city' => 'required|string|max:100',
-                'shipping_state' => 'required|string|max:100',
-                'shipping_zip' => 'required|string|max:20',
+
+
+                // 'shipping_name' => 'required|string|max:100',
+                // 'shipping_phone' => 'required|digits_between:7,15',
+                // 'shipping_address' => 'required|string|max:255',
+                // 'shipping_city' => 'required|string|max:100',
+                // 'shipping_state' => 'required|string|max:100',
+                // 'shipping_zip' => 'required|string|max:20',
 
                 // Billing
-                'billing_name' => 'required|string|max:100',
-                'billing_phone' => 'required|digits_between:7,15',
-                'billing_address' => 'required|string|max:255',
-                'billing_city' => 'required|string|max:100',
-                'billing_state' => 'required|string|max:100',
-                'billing_zip' => 'required|string|max:20',
+                // 'billing_name' => 'required|string|max:100',
+                // 'billing_phone' => 'required|digits_between:7,15',
+                // 'billing_address' => 'required|string|max:255',
+                // 'billing_city' => 'required|string|max:100',
+                // 'billing_state' => 'required|string|max:100',
+                // 'billing_zip' => 'required|string|max:20',
             ];
         }
 

@@ -16,7 +16,7 @@ Checkout
                 <form method="POST" action="{{ route('product.checkout.process', $products->id) }}" id="checkout-form">
                     @csrf
 
-                    <h4>Shipping Address</h4>
+                    {{-- <h4>Shipping Address</h4>
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="shipping_name" class="form-label">Full Name</label>
@@ -79,7 +79,30 @@ Checkout
                             <label for="billing_zip" class="form-label">ZIP</label>
                             <input type="text" class="form-control" name="billing_zip" id="billing_zip" required>
                         </div>
+                    </div> --}}
+
+                    <h5 class="mb-3">Product Summary</h5>
+                    <div class="d-flex align-items-center mb-3">
+
+                        @if(@$products->image->first())
+                        <img src="{{ asset('storage/' . @$products->image->first()->image) }}" class="me-3" width="80" height="80" alt="">
+                        @endif
+                        <div>
+                            <h6>{{ @$products->title }}</h6>
+                            @php $price = 0; @endphp
+                            @if(@$products->sale_method == 'auction')
+                                @php $price = (@$products->highestBid->amount) ?? @$products->productDetail->bid_min_price; @endphp
+                            @else
+                                @php $price = @$products->price; @endphp
+                            @endif
+                            <p class="mb-0"><strong>Price:</strong> ${{ number_format((float) @$price, 2, '.', ',') }}</p>
+                            <p class="mb-0"><strong>Category:</strong> {{ @$products->subcategory->name }}</p>
+                            <p class="mb-0"><strong>Location:</strong> {{ @$products->productDetail->city }}, {{ @$products->productDetail->state }}</p>
+                        </div>
                     </div>
+                    <hr>
+                    <p><strong>Listing Date:</strong> {{ \Carbon\Carbon::parse($products->created_at)->format('M d, Y') }}</p>
+                    <p>{{ \Illuminate\Support\Str::limit(@$products->description, 100) }}</p>
 
                     <div class="mt-4">
                         <button type="submit" class="commen_btn btn-lg w-100">Proceed to Checkout</button>
@@ -88,7 +111,7 @@ Checkout
             </div>
 
             <!-- Right: Product Summary -->
-            <div class="col-lg-4">
+            {{-- <div class="col-lg-4">
                 <div class="card shadow-sm p-3">
                     <h5 class="mb-3">Product Summary</h5>
                     <div class="d-flex align-items-center mb-3">
@@ -113,7 +136,7 @@ Checkout
                     <p><strong>Listing Date:</strong> {{ \Carbon\Carbon::parse($products->created_at)->format('M d, Y') }}</p>
                     <p>{{ \Illuminate\Support\Str::limit(@$products->description, 100) }}</p>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </section>

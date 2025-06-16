@@ -67,7 +67,7 @@ Your Ads
         @csrf
         <!----horse product fields--------->
 
-        <div class="row">
+        <div class="row align-items-baseline cusmt-form-mb">
             <input type="hidden" name="productId" value="{{$productId}}">
             <input type="hidden" name="productDetailId" value="{{@$products->productDetail->id}}">
             
@@ -113,7 +113,7 @@ Your Ads
                 </div>
 
 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3 position-relative">
                     <label for="stalls_available" class="form-label">Stalls Available</label>
                     <input type="text" name="stalls_available" id="stalls_available" class="inner-form form-control mb-0 numbervalid" placeholder="Enter available stalls count" value="{{old('stalls_available',@$products->productDetail->stalls_available)}}">
                     @if($errors->has('stalls_available'))
@@ -158,7 +158,7 @@ Your Ads
                     @endif
                 </div>
 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3 position-relative">
                     <label for="fromdate" class="form-label">Trial Dates Available From</label>
                     <input type="date" class="inner-form form-control mb-0" name="fromdate" id="fromdate" placeholder="abc" value="{{old('fromdate',@$products->productDetail->fromdate)}}">
                         @if($errors->has('fromdate'))
@@ -166,7 +166,7 @@ Your Ads
                     @endif
                 </div>
 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3 position-relative">
                     <label for="todate" class="form-label">Trial Dates To</label>
                     <input type="date" class="inner-form form-control mb-0" name="todate" id="todate" placeholder="" value="{{old('todate',@$products->productDetail->todate)}}" >
                         @if($errors->has('todate'))
@@ -174,7 +174,7 @@ Your Ads
                     @endif
                 </div>                
                 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3 position-relative">
                     <label for="sleeps" class="form-label">Sleeps</label>
                     <input type="text" name="sleeps" id="sleeps" class="inner-form form-control mb-0 numbervalid" placeholder="Enter sleeps" value="{{old('sleeps',@$products->productDetail->sleeps)}}">
                     @if($errors->has('sleeps'))
@@ -203,7 +203,7 @@ Your Ads
 
                 {{-- -------------------------------------------------------------- --}}
                 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3 position-relative">
                     <label for="daily_board_rental_rate" class="form-label">Daily Board or Rental Rate</label>
                     <input type="text" name="daily_board_rental_rate" id="daily_board_rental_rate" class="inner-form form-control mb-0 numbervalid" placeholder="Enter daily board rental rate" value="{{old('daily_board_rental_rate',@$products->productDetail->daily_board_rental_rate)}}">
                     @if($errors->has('daily_board_rental_rate'))
@@ -211,7 +211,7 @@ Your Ads
                     @endif
                 </div>
                 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3 position-relative">
                     <label for="weekly_board_rental_rate" class="form-label">Weekly Board or Rental Rate</label>
                     <input type="text" name="weekly_board_rental_rate" id="weekly_board_rental_rate" class="inner-form form-control mb-0 numbervalid" placeholder="Enter weekly board rental rate" value="{{old('weekly_board_rental_rate',@$products->productDetail->weekly_board_rental_rate)}}">
                     @if($errors->has('weekly_board_rental_rate'))
@@ -219,7 +219,7 @@ Your Ads
                     @endif
                 </div>
 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3 position-relative">
                     <label for="monthly_board_rental_rate" class="form-label">Monthly Board or Rental Rate</label>
                     <input type="text" name="monthly_board_rental_rate" id="monthly_board_rental_rate" class="inner-form form-control mb-0 numbervalid" placeholder="Enter monthly borad rental rate" value="{{old('monthly_board_rental_rate',@$products->productDetail->monthly_board_rental_rate)}}">
                     @if($errors->has('monthly_board_rental_rate'))
@@ -227,7 +227,7 @@ Your Ads
                     @endif
                 </div>
                 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3 position-relative">
                     <label for="sale_cost" class="form-label">Sale Cost</label>
                     <input type="text" name="sale_cost" id="sale_cost" class="inner-form form-control mb-0 numbervalid" placeholder="Enter sale cost" value="{{old('sale_cost',@$products->productDetail->sale_cost)}}">
                     @if($errors->has('sale_cost'))
@@ -235,7 +235,7 @@ Your Ads
                     @endif
                 </div>
 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3 position-relative">
                     <label for="realtor" class="form-label">Realtor</label>
                     <input type="text" name="realtor" id="realtor" class="inner-form form-control mb-0" placeholder="Enter realtor name" value="{{old('realtor',@$products->productDetail->realtor)}}">
                     @if($errors->has('realtor'))
@@ -243,7 +243,7 @@ Your Ads
                     @endif
                 </div>
 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3 position-relative">
                     <label for="property_manager" class="form-label">Property Managers</label>
                     <input type="text" name="property_manager" id="property_manager" class="inner-form form-control mb-0" placeholder="Enter property managers name here" value="{{old('property_manager',@$products->productDetail->property_manager)}}">
                     @if($errors->has('property_manager'))
@@ -251,7 +251,7 @@ Your Ads
                     @endif
                 </div>
 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3 position-relative">
                     <label for="bid_min_price" class="form-label">Bid Minimum Price</label>
                     <input type="text" name="bid_min_price" id="bid_min_price" class="inner-form form-control mb-0 numbervalid" placeholder="Enter bid minimum price" value="{{old('bid_min_price',@$products->productDetail->bid_min_price)}}">
                     @if($errors->has('bid_min_price'))
@@ -289,7 +289,7 @@ Your Ads
         </div>
 
         <!-- phone fields (hidden/shown based on checkbox) -->
-        <div class="col-md-3 mt-3" id="contactFields" style="display: none;">
+        <div class="col-md-3 mt-3 position-relative" id="contactFields" style="display: none;">
             <label for="phone" class="form-label">Phone number</label>
             <input type="text" class="inner-form form-control mb-0" placeholder="eg. +91 9856965852" name="phone" id="phone" value="{{old('phone',@$products->productDetail->phone)}}">
             @if($errors->has('phone'))
@@ -303,7 +303,7 @@ Your Ads
             <div class="row">
                 <div class="col-md-6">
                     
-                    <div class="mt-2">
+                    <div class="mb-4 position-relative">
                         <label class="form-label">Precise Location</label>
                         <input type="text" class="inner-form form-control" placeholder="Enter location.." name="precise_location" id="precise_location" onkeyup="initializeLocationAutocomplete()" value={{old('precise_location',@$products->productDetail->precise_location)}}>
                          <span id="map-location-message" class="text-danger" style="display: none; font-size: 12px;"></span>
@@ -316,34 +316,43 @@ Your Ads
                             <span class="error text-danger">{{$errors->first('precise_location')}}</span>
                         @endif
                     </div>
-                    <div class="mt-2">
+                    <div class="mb-4 position-relative">
                         <label class="form-label">Country</label>
                         <input type="text" class="inner-form form-control" placeholder="Populate on Google place select.." name="country" id="country" value={{old('country',@$products->productDetail->country)}}>
                         @if($errors->has('country'))
                             <span class="error text-danger">{{$errors->first('country')}}</span>
                         @endif
                     </div>
-                    <div class="mt-2">
+                    <div class="mb-4 position-relative">
                         <label class="form-label">State</label>
                         <input type="text" class="inner-form form-control" placeholder="Populate on Google place select.." name="state" id="state" value={{old('state',@$products->productDetail->state)}}>
                         @if($errors->has('state'))
                             <span class="error text-danger">{{$errors->first('state')}}</span>
                         @endif
                     </div>
-                    <div class="mt-2">
+                    <div class="mb-4 position-relative">
                         <label class="form-label">City</label>
                         <input type="text" class="inner-form form-control" placeholder="Populate on Google place select.." name="city" id="city" value={{old('city',@$products->productDetail->city)}}>
                         @if($errors->has('city'))
                             <span class="error text-danger">{{$errors->first('city')}}</span>
                         @endif
                     </div>
-                    <div class="mt-2">
+                    <div class="mb-4 position-relative">
                         <label class="form-label">Street </label>
                         <input type="text" class="inner-form form-control" placeholder="Populate on Google place select.." name="street" id="street" value={{old('street',@$products->productDetail->street)}}>
                         @if($errors->has('street'))
                             <span class="error text-danger">{{$errors->first('street')}}</span>
                         @endif
                     </div>
+
+                     <div class="mb-4 position-relative">
+                        <label class="form-label">Trial / Exchange Location</label>
+                        <input type="text" class="inner-form form-control" placeholder="Enter trial / exchange location..." name="trial_location" id="trial_location" value={{old('trial_location',@$products->productDetail->trial_location)}}>
+                        @if($errors->has('trial_location'))
+                            <span class="error text-danger">{{$errors->first('trial_location')}}</span>
+                        @endif
+                    </div>
+
                 </div>
                 <div class="col-md-6">
                     <div class="map" id="map">
@@ -386,7 +395,7 @@ Your Ads
         </div>
 
         <!-----terms & conditions section-------->
-        <div class="form-check pt-2">
+        <div class="form-check pt-2 position-relative mt-3">
             <input class="form-check-input" type="checkbox" name="agree" id="agree" value="1" {{(old('agree')==1 || @$products->productDetail->agree==1)?'checked':''}}>
             <label class="form-check-label fw-bold text-dark" for="agree" >I agree to <a href="{{route('cms.terms.condition')}}" target="_blank" style="color: #A19061;">Terms Of Use</a></label>
 
@@ -767,7 +776,7 @@ Your Ads
                 'property_types[]': { required: "Please select at least one property type." },
                 'stalls_available': "Please enter the number of stalls available.",
                 'stable_amenities[]': { required: "Please select at least one stable amenity." },
-                'housing_stables_around_horse_shows[]': { required: "Please select at least one housing option around horse shows." },
+                'housing_stables_around_horse_shows[]': { required: "Please select at least one option." },
                 'fromdate': "Please select the starting date.",
                 'todate': "Please select the ending date.",
                 'sleeps': "Please specify how many it sleeps.",
@@ -781,7 +790,7 @@ Your Ads
                 'agree': "You must agree to the terms.",
                 'banners': "Banner is required"
             },
-            errorClass: 'error text-danger',
+            errorClass: 'error text-danger custom-error',
             errorElement: 'span',
 
             highlight: function (element) {

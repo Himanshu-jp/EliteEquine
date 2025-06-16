@@ -2,7 +2,7 @@
 import axios from 'axios';
 import FormData from 'form-data';
 // const baseurl = 'http://localhost/elight-equine/public/api/v1/'; 
-const baseurl = 'http://192.168.5.81/elight-equine/public/api/v1/'; 
+const baseurl = 'http://192.168.5.81/EliteEquine/public/api/v1/'; 
 class ChatController {
 
 

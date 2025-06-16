@@ -161,7 +161,7 @@ header nav .navbar-brand img {
 }
 
 header nav ul {
-  gap: 25px;
+  gap: 10px;
   justify-content: end;
   width: 100%;
   margin-top: 29px;
@@ -1343,11 +1343,11 @@ header nav ul li a.active::before {
   }
 
   .banner_area {
-    padding-top: 141px;
+    padding-top:31px;
   }
 
   .banner_area_inner1 h1>span:nth-child(2) {
-    font-size: 53px;
+    font-size: 41px;
   }
 
   .banner_area_inner1 h1 {
@@ -1391,7 +1391,7 @@ header nav ul li a.active::before {
 
 @media screen and (max-width: 450px) {
   .banner_area_inner1 h1>span:nth-child(2) {
-    font-size: 43px;
+    font-size: 41px;
   }
 
   .container {
@@ -2310,19 +2310,23 @@ ul.footer-bottom-link li {
   .forbuyer_area img {
     width: 100%;
   }
+  #horse-list {
+    justify-content: center;
+}
 }
 
 /* Filter Toggle for Mobile */
 .filter-toggle {
-  display: none;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  z-index: 1001;
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 5px 15px;
+    z-index: 99;
+    border-radius: 10px;
 }
 
 /* Filter Sidebar */
@@ -3271,7 +3275,7 @@ button.bid {
   line-height: normal;
   padding: 12px 27px;
   min-height: 60px;
-  min-width: 273px;
+  min-width: auto;
   white-space: nowrap;
 }
 
@@ -3595,6 +3599,12 @@ select {
   padding: 45px 50px;
 }
 
+#ReportProduct .modal-content {
+  width: 450px;
+  border-radius: 24px;
+  padding: 45px 50px;
+}
+
 #PlaceBid .modal-content {
   width: 400px;
   border-radius: 24px;
@@ -3618,6 +3628,10 @@ select {
 .rate:hover i,
 .rate i.active {
   color: #fc0;
+}
+
+.sold-tag {
+  background-color: rgb(248, 197, 197);
 }
 
 .rate:hover i:nth-child(2) {
@@ -4739,6 +4753,11 @@ section.hero-content-wrapper::after {
   background: transparent;
 }
 
+.act-icon .report-btn {
+  border: none;
+  background: transparent;
+}
+
 .act-icon .favorite-btn .fa-heart {
   color: #A19061;
   font-size: 30px;
@@ -5490,7 +5509,7 @@ section.content-page.section {
     padding-bottom: 100px;
 }
 section.hero-content-wrapper.about-us-page::before {
-    height: calc(100vh - 350px);
+    height: calc(100vh - 240px);
 }
 .about-us-page h1 {
     text-align: left;}
@@ -5507,13 +5526,16 @@ section.hero-content-wrapper.about-us-page::before {
 .about_for_buyers .about_area_inner img {
     position: absolute;
     width: 400px;
-    top: -10%;
+    top: -8%;
+    height: 650px;
+    object-fit: contain;
 }
-section.about_for_buyers {
-    position: relative; 
+.about_for_buyers {
+    position: relative;
     background: #f4f0e3;
     padding: 100px 0 72px;
-    min-height: 630px;
+    min-height: 540px;
+    margin-top: 6%;
 }
 .about_horses_img {
     position: absolute;
@@ -5959,15 +5981,140 @@ section.industry_area.forum-bg-border .container {
   transition: all 0.3s ease;
   cursor: pointer;
 }
+#map-location-list {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: #fff;
+    width: 100%;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 0px 0px 10px 10px;
+    border: 1px solid #ccc;
+    border-top: 0px;
+}
 
- 
+#map-location-list li {
+    list-style: none;
+    margin-bottom: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+ .mapboxgl-popup {
+    display: flex;
+    pointer-events: none;
+    position: absolute;
+    /* will-change: transform; */
+    top:auto !important ;
+    left: 50% !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    transform: translate(-50%, 0%) !important;
+    width: 100%;
+}
+.mapboxgl-popup-content {
+    width: 440px;
+    max-height: 220px;
+    overflow: auto;
+    border-radius: 20px !important;
+    border: 1px solid var(--Blue-Gray-200, #E2E8F0) !important;
+    background: var(--White, #FFF) !important;
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.10), 0px 0px 6px 0px rgba(0, 0, 0, 0.07) !important;
+}
+.mapboxgl-popup-content::-webkit-scrollbar {
+    display: none;
+}
+.map-pp-main .evn-dte-ll {
+    display: flex;
+    gap: 10px; 
+    border-bottom: 1px solid var(--Blue-Gray-200, #E2E8F0) !important;
+    padding: 10px 0px;
+}
+
+.map-pp-main .evn-dte-ll h3 a {
+    color: var(--Neutral-900, #0E1735);
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px; /* 155.556% */
+    margin-bottom: 0px;
+    text-transform: capitalize;
+}
+
+.map-pp-main .evn-dte-ll h3 {
+    margin-bottom: 0px;
+}
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+    align-self: center;
+    border-bottom: none;
+    border-top-color: #fff;
+    position: absolute !important;
+    top: -9px !important;
+    transform: rotate(180deg) !important;
+}
+.map-pp-main .evn-dte-ll p {
+    color: var(--Neutral-700, #3C4563);
+    font-family: Poppins;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.4;
+    text-transform: capitalize;
+    margin-bottom: 0;
+}
+
+.venue-name-new-ic {
+    color: var(--Neutral-700, #3C4563);
+    font-family: Poppins;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%; /* 19.2px */
+        margin: 10px 0px;
+}
+.mapboxgl-popup-close-button { 
+    right: 10px !important;
+    top: 10px !important;
+    font-size: 25px;
+}
+.loc-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.loc-meta .price-box-mld {
+    color: var(--Neutral-700, #3C4563);
+    font-family: Poppins;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.map-card-left {
+    flex: 1;
+}
+
+.loc-meta .loc-metabutton a {
+    font-size: 12px;
+    color: #c5a95d;
+    font-weight: bold;
+    letter-spacing: 0.3;
+}
+#map-location-message {
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+}
 @media (max-width: 768px) {
   .about_horses_img { 
     display: none;
 }
 .about_for_buyers .about_area_inner img {
         width: 90%;
-        top: 0px;
+        top: -9%;
     }
     .about-extrer-box { 
     padding: 20px;
@@ -5978,4 +6125,116 @@ section.industry_area.forum-bg-border .container {
 .about-extrer-box { 
     margin-bottom: 20px;
 }
+.industry_multiplat_data .swiper {
+    width: 100%;
+    height: max-content;
 }
+.more-info-box {
+    position: relative; 
+    top: 0%; 
+}
+.industry_multiplat_data {
+    padding: 45px 0 40px;
+}
+.swiper-backface-hidden .swiper-slide {
+    justify-content: center;
+}
+section.industry_area.forum-bg-border .container { 
+    padding-bottom: 30px !important;
+}
+.forbuyer_area_inner h2 {
+     font-size: 32px;
+}
+.featured_area_inner2  {
+    margin-top: 10px; 
+}
+.horse-label {
+    text-align: left;
+    display: block;
+}
+.horse-info-row { 
+    line-height: 1.4;
+}
+.info-desc { 
+    padding: 20px; 
+}
+.btn-cont { 
+    margin-top: 6px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.owner-profile { 
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.connect-numr {
+    margin-top: 16px; 
+}
+ul.act-icon { 
+    gap: 4px;
+}
+ul.act-icon li { 
+    width: 50px;
+    height: 50px;
+    padding: 6px 0px;
+    flex: 0 0 50px;
+}
+ul.act-icon li img {
+    width: 30px;
+
+} 
+.container-fluid {
+    --bs-gutter-x: 1.5rem;
+}
+.gallery-slider .swiper-slide {
+    height: auto; 
+}
+.gallery-thumbs .swiper-slide {
+    width: 70px;
+    height: 70px; 
+}
+.list-unstyled { 
+    flex-wrap: wrap;
+}
+.comment-submit-btn { 
+    margin-top: 10px;
+}
+#map {
+    width: 100%;
+    height: 40vh;
+}
+}
+.list-unstyled li a {
+    display: inline-block;
+}
+#map {
+    background-image: url(../images/map-dummy.png);
+    border-radius: 20px;
+}
+.form-check:not(.form-switch) .form-check-input[type=radio]:after {
+  transition: opacity 0.25s ease-in-out;
+  content: "";
+  position: absolute;
+  width: 0.8375rem;
+  height: 0.8375rem;
+  border-radius: 50%;
+  background-image:url(.../images/chekmark-icon.svg);
+  /* background-image: linear-gradient(195deg, #EC407A 0%, #D81B60 100%), var(--gradient); */
+  background-color: var(--primary);
+  opacity: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.swal2-confirm {
+    border: none;
+}
+ 
+.comment-btn-act {
+    font-size: 14px;
+    color: #a09165;
+}
+.buyers_and_browsers{ width: 100%;}

@@ -61,6 +61,13 @@ Route::middleware([
     Route::get('/settings', [AuthController::class, 'settings'])->name('settings');
     Route::post('/settingUpdate', [AuthController::class, 'settingUpdate'])->name('settingUpdate');
     Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription');
+
+
+    //Stipe Conenct Code
+Route::get('/connect_stipe_account', [StripeController::class, 'connect_stipe_account'])->name('connect_stipe_account');
+Route::get('/updateAccountDetails', [StripeController::class, 'updateAccountDetails'])->name('updateAccountDetails');
+
+
     
     //---------------below route is related to add products---------------------///
     Route::get('/product', [ProductController::class, 'index'])->name('product');
@@ -110,7 +117,7 @@ Route::middleware([
 });
 
 
-//-----contactAdOwner route-----//
+//-----contact Ad Owner route-----//
 Route::post('/contactAdOwner', [HomeController::class, 'contactAdOwner'])->name('contactAdOwner');
 
 //------Community & Events Joining route----------//
@@ -155,6 +162,9 @@ Route::get('/productCommentListing/{id}', [HomeController::class, 'productCommen
 Route::post('/productComment', [HomeController::class, 'productComment'])->name('productComment');
 Route::post('/comment/update', [HomeController::class, 'commentUpdate'])->name('productComment.update');
 Route::get('/productCommentDelete/{id}', [HomeController::class, 'productCommentDelete'])->name('comment.delete');
+
+
+
 
 
 //------community events & details routes -----//
@@ -211,14 +221,19 @@ Route::get('/contact', [ContactUsController::class, 'show'])->name('contact.form
 Route::post('/contact', [ContactUsController::class, 'submit'])->name('contact.submit');
 
 //-------------------------------------------------------------------------//
-Route::get('/ads', [HomeController::class, 'ads'])->name('ads');
+Route::post('/submitReport', [HomeController::class, 'submitReport'])->name('submitReport');
 Route::get('/favorite', [HomeController::class, 'favorite'])->name('favorite');
 Route::get('/review', [HomeController::class, 'review'])->name('review');
-Route::get('/bidDetails', [HomeController::class, 'bidDetails'])->name('bidDetails');
+Route::get('/invoice', [HomeController::class, 'invoice'])->name('invoice');
+// Route::get('/bidDetails', [HomeController::class, 'bidDetails'])->name('bidDetails');
 
 
 
 Route::middleware(['auth:admin'])->group(function () {
     // Route::get('/sold', [HomeController::class, 'sold'])->name('sold');
 });
+
+
+Route::get('/webhook_stripe_for_connect', [StripeController::class, 'webhook_stripe_for_connect'])->name('webhook_stripe_for_connect');
+
 

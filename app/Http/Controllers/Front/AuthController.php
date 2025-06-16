@@ -57,6 +57,7 @@ class AuthController extends Controller
     public function postLogin(LoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
+       
         $credentials['role'] = 2; // Optional but helpful
 
         if (Auth::guard('web')->attempt($credentials)) {
@@ -65,6 +66,8 @@ class AuthController extends Controller
                 Auth::logout();
                 return redirect()->back()->with('error', 'Please verify your email before logging in.')->withInput();
             }
+             $remember = $request->filled('remember');
+            Auth::attempt($credentials, $remember);
             return redirect()->route('dashboard')->with('success', 'Login successful!');
         }
 

@@ -8,15 +8,15 @@
         <div class="about-content z-3 position-relative">
             <div class="col-lg-7 col-md-10 mx-auto">
                 <div class="about-title text-center p-0">
-                    <h1>Contact Us</h1>
-                    <p>ELITE EQUINE is your One Stop Equestrian Shop and premier destination for high quality hunter-jumper horses, equine, barn, and rider equipment, boarding barns and equestrian properties, as well as equine services and jobs.</p>
+                    <h1 class="mb-0 pb-0">Contact Us</h1>
+                    <!-- <p>ELITE EQUINE is your One Stop Equestrian Shop and premier destination for high quality hunter-jumper horses, equine, barn, and rider equipment, boarding barns and equestrian properties, as well as equine services and jobs.</p> -->
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="section">
+<section class="section mb-5">
     <div class="container">
         <div>
             @if(session('success'))
@@ -53,7 +53,7 @@
                     </div> 
 
                 <div class="text-center">
-                    <button type="submit" id="submitBtn" class="btn apply-flitter mt-3 text-light">Send Message <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+                    <button type="submit" id="submitBtn" class="btn apply-flitter mt-3 text-light">Leave us a Message <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
   <path d="M5.5 12.5H19.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M12.5 5.5L19.5 12.5L12.5 19.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg></button>

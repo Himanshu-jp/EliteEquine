@@ -10,7 +10,12 @@
                     <a href="{{route('horseDetails',@$value->id)}}">
                         <div class="image">
                             <img src="{{(@$value->image->first())?asset('storage/'.@$value->image->first()->image):asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
-                            @if(!empty(@$value->greenEligibilities))<span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span>@endif
+                            
+                            @if(@$value->product_status == 'sold')
+                                <span class="tag-img sold-tag">Sold</span>
+                            @else
+                                @if(!empty(@$value->greenEligibilities))<span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span>@endif
+                            @endif
                         </div>
                     </a>
                     <div class="content">
@@ -77,11 +82,7 @@
                                         @for ($i = 1; $i <= 5; $i++)
                                             <i class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
                                         @endfor
-                                        <!-- <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i> -->
+
                                     </div>
                                 </div>
                             </div>
@@ -194,6 +195,7 @@
                             </div>
                             <div class="content">
                                     <h4>{{@$value->user->name}}</h4>
+                                    
                                 <div class="stars">
                                      @php
                                         $averageRating = round(optional(@$value->user->reviews)->avg('rating'), 1);

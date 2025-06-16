@@ -60,42 +60,70 @@ class AuthService
             'email' => $data['email'],
         ]);
 
-        $notifiactionDetails = [
-            [
+        //kamal
+        $notifiactionDetails = [];
+        $alerts = ['subscription', 'payment', 'auction'];
+        foreach ($alerts as $metaKey) {
+            // $alert = UserDetailAlert::where([
+            //     'meta_key' => $metaKey,
+            //     'user_id' => $user->id,
+            //     'user_detail_id' => $owner->id
+            // ])->first();
+
+            // if ($alert) {
+            //     $alert->email  = !empty($data[$metaKey]['email']) ? 1 : 0;
+            //     $alert->sms    = !empty($data[$metaKey]['sms']) ? 1 : 0;
+            //     $alert->mobile = !empty($data[$metaKey]['mobile']) ? 1 : 0;
+            //     $alert->save();
+            // }
+
+            $notifiactionDetails[] = [
                 'user_id' => $user->id,
                 'user_detail_id' => $userDetails->id,
-                'meta_key' => 'subscription',
-                'sms' => @$data['sms'] ? 1 : 0,
-                'mobile' => @$data['mobile'] ? 1 : 0,
-                'email' => @$data['mail'] ? 1 : 0,
-                'created_at'=> (new DateTime())->format('Y-m-d H:i:s'),
-                'updated_at'=> (new DateTime())->format('Y-m-d H:i:s'),
-            ],
-            [
-                'user_id' => $user->id,
-                'user_detail_id' => $userDetails->id,
-                'meta_key' => 'payment',
-                'sms' => @$data['sms'] ? 1 : 0,
-                'mobile' => @$data['mobile'] ? 1 : 0,
-                'email' => @$data['mail'] ? 1 : 0,
-                'created_at'=> (new DateTime())->format('Y-m-d H:i:s'),
-                'updated_at'=> (new DateTime())->format('Y-m-d H:i:s'),
-            ],
-            [
-                'user_id' => $user->id,
-                'user_detail_id' => $userDetails->id,
-                'meta_key' => 'auction',
-                'sms' => @$data['sms'] ? 1 : 0,
-                'mobile' => @$data['mobile'] ? 1 : 0,
-                'email' => @$data['mail'] ? 1 : 0,
-                'created_at'=> (new DateTime())->format('Y-m-d H:i:s'),
-                'updated_at'=> (new DateTime())->format('Y-m-d H:i:s'),
-            ]
-        ];
+                'meta_key' => $metaKey,
+                'sms' => !empty($data[$metaKey]['sms']) ? 1 : 0,
+                'mobile' => !empty($data[$metaKey]['mobile']) ? 1 : 0,
+                'email' => !empty($data[$metaKey]['email']) ? 1 : 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        // $notifiactionDetails = [
+        //     [
+        //         'user_id' => $user->id,
+        //         'user_detail_id' => $userDetails->id,
+        //         'meta_key' => $metaKey,
+        //         'sms' => !empty($data[$metaKey]['sms']) ? 1 : 0,
+        //         'mobile' =>!empty($data[$metaKey]['mobile']) ? 1 : 0,
+        //         'email' => !empty($data[$metaKey]['email']) ? 1 : 0,
+        //         'created_at'=> (new DateTime())->format('Y-m-d H:i:s'),
+        //         'updated_at'=> (new DateTime())->format('Y-m-d H:i:s'),
+        //     ],
+        //     [
+        //         'user_id' => $user->id,
+        //         'user_detail_id' => $userDetails->id,
+        //         'meta_key' => 'payment',
+        //         'sms' => @$data['sms'] ? 1 : 0,
+        //         'mobile' => @$data['mobile'] ? 1 : 0,
+        //         'email' => @$data['mail'] ? 1 : 0,
+        //         'created_at'=> (new DateTime())->format('Y-m-d H:i:s'),
+        //         'updated_at'=> (new DateTime())->format('Y-m-d H:i:s'),
+        //     ],
+        //     [
+        //         'user_id' => $user->id,
+        //         'user_detail_id' => $userDetails->id,
+        //         'meta_key' => 'auction',
+        //         'sms' => @$data['sms'] ? 1 : 0,
+        //         'mobile' => @$data['mobile'] ? 1 : 0,
+        //         'email' => @$data['mail'] ? 1 : 0,
+        //         'created_at'=> (new DateTime())->format('Y-m-d H:i:s'),
+        //         'updated_at'=> (new DateTime())->format('Y-m-d H:i:s'),
+        //     ]
+        // ];
+
         $userDetails = UserDetailAlert::insert($notifiactionDetails);
 
-
-      
         $encryptedEmail = Crypt::encrypt($data['email']);
         $mailData = [
             'user_name' => $data['name'],
@@ -212,8 +240,6 @@ class AuthService
 
     public function settingUpdate($data,$user)
     {
-
-    
         // customer create on stripe
         Stripe::setApiKey(Config::get('config.stripe_secret'));
         // stripe custome update on stripe

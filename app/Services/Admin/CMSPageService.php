@@ -21,9 +21,9 @@ class CMSPageService
 
     public function update(CMSPage $cmsPage, $data)
     {
-        if ($data['name'] !== $cmsPage->name) {
-            $data['slug'] = $this->generateUniqueSlug($data['name'], $cmsPage->id);
-        }
+        // if ($data['name'] !== $cmsPage->name) {
+        //     $data['slug'] = $this->generateUniqueSlug($data['name'], $cmsPage->id);
+        // }
 
         if (isset($data['image'])) {
             if ($cmsPage->image) {

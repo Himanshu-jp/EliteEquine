@@ -84,31 +84,34 @@
                             </div>
 
                             <div class="mt-3">
-                                <h6>Option in to notifications</h6>
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="form-check pe-0">
-                                        <input class="form-check-input" type="radio" name="opt_in_notification"
-                                            id="flexRadioDefault1" onchange="toggleBox()" value="yes"
-                                            {{ old('opt_in_notification') == 'yes' ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="flexRadioDefault1">Yes</label>
-                                    </div>
-
-                                    <div class="form-check pe-0">
-                                        <input class="form-check-input" type="radio" name="opt_in_notification"
-                                            id="flexRadioDefault2" onchange="toggleBox()" value="no"
-                                            {{ old('opt_in_notification') == 'no' ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="flexRadioDefault2">No</label>
-                                    </div>
-
+                                <h6>Opt in to notificaitons </h6>
+                               <div class="d-flex align-items-center gap-3">
+                                <div class="form-check pe-0">
+                                    <input class="form-check-input" type="radio" name="opt_in_notification"
+                                        id="flexRadioDefault1" onchange="toggleBox(this)" value="yes"
+                                        {{ old('opt_in_notification') == 'yes' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="flexRadioDefault1">Yes</label>
                                 </div>
+
+                                <div class="form-check pe-0">
+                                    <input class="form-check-input" type="radio" name="opt_in_notification"
+                                        id="flexRadioDefault2" onchange="toggleBox(this)" value="no"
+                                        {{ old('opt_in_notification') == 'no' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="flexRadioDefault2">No</label>
+                                </div>
+                            </div>
                                 @if ($errors->has('opt_in_notification'))
                                 <div class="alert alert-danger mt-2">
                                     {{ $errors->first('opt_in_notification') }}
                                 </div>
                                 @endif
 
+                                {{-- @if($errors->has('contact'))
+                                    <span class="error text-danger">{{$errors->first('contact')}}</span>
+                                @endif --}}
+
                                 <!-- Hidden Box with 3 Checkboxes -->
-                                <div id="hiddenBox" class="mt-3" style="display: none;">                                    
+                                <!-- <div id="hiddenBox" class="mt-3" style="display: none;">                                    
                                     <div class="d-flex align-items-center gap-3">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" name="sms" value="1"
@@ -133,7 +136,94 @@
                                     @if($errors->has('contact'))
                                     <span class="error text-danger">{{$errors->first('contact')}}</span>
                                     @endif
+                                </div> -->
+
+                                <div class="modal fade" id="notificationModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content rounded-4 p-3">
+                                        <div class="modal-header border-0">
+                                            <h5 class="modal-title">Select Your Notifications Settings</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="table-responsive">
+                                            <table class="table align-middle text-center">
+                                                <thead>
+                                                <tr>
+                                                    <th class="text-start">Alert Type</th>
+                                                    <th>Email</th>
+                                                    <th>SMS</th>
+                                                    <th>Mobile App</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td class="text-start">Subscription Expiring</td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="email1"
+                                                            value="1" name="subscription[email]"
+                                                            {{ old('subscription.email') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="sms1"
+                                                            value="1" name="subscription[sms]"
+                                                            {{ old('subscription.sms') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="mobile1"
+                                                            value="1" name="subscription[mobile]"
+                                                            {{ old('subscription.mobile') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-start">Payment Received</td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="email2"
+                                                            value="1" name="payment[email]"
+                                                            {{ old('payment.email') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="sms2"
+                                                            value="1" name="payment[sms]"
+                                                            {{ old('payment.sms') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                    <input class="form-check-input mx-auto" type="checkbox" id="mobile2"
+                                                            value="1" name="payment[mobile]"
+                                                            {{ old('payment.mobile') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-start">Auction Ending</td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="email3"
+                                                            value="1" name="auction[email]"
+                                                            {{ old('auction.email') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="sms3"
+                                                            value="1" name="auction[sms]"
+                                                            {{ old('auction.sms') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="mobile3"
+                                                            value="1" name="auction[mobile]"
+                                                            {{ old('auction.mobile') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer border-0 justify-content-end">
+                                            <button type="button" class="btn btn-save" data-bs-dismiss="modal" aria-label="Close">Save</button>
+                                        </div>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
 
                             <button class="btn btn-primary w-100" type="submit" id="register-form-submit">Register</button>
@@ -149,6 +239,8 @@
             </div>
         </div>
     </section>
+
+
 
     <!-- <--------------------------------------------// js CDN & files--------------------------------------------->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
@@ -263,6 +355,7 @@
     </script>
 
     <script>
+
     function toggleBox() {
         var yesRadio = document.getElementById('flexRadioDefault1');
         var hiddenBox = document.getElementById('hiddenBox');
@@ -297,7 +390,22 @@
       });
     });
   </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<!-- ✅ Then your custom JS -->
+<script>
+  function toggleBox(el) {
+    if (el.value === "yes") {
+      const modalElement = document.getElementById('notificationModal');
+      if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+      } else {
+        console.error("Modal element not found");
+      }
+    }
+  }
+</script>
 </body>
 
 </html>

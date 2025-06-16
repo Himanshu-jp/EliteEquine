@@ -68,7 +68,7 @@ Chat Messages
 
                 <span class="d-flex gap-2 align-items-center dropdown">
                     <div class="report-dropdown">
-                        <a type="button"class="p-3" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                        <a type="button"class="p-3" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fa fa-ellipsis-v">.</i></a>
                         <ul class="drrpp sideellipes dropdown-menu">
                             <!-- <li type="button" class="deletechat">Clear Chat</li> -->
                         </ul>
@@ -194,14 +194,14 @@ Chat Messages
 
 
 <script>
-    <?php if($roomId!=""){?>
+    
         $(document).ready(function () {
             setTimeout(function () {
                 $('.thread_details').first().trigger('click');
                 console.log("Page loaded, first thread selected after delay.");
             }, 1000); // 4000 ms = 4 seconds
         });
-    <?php } ?>
+
 
     // Initialize the emoji picker
     // $('#picker').emojioneArea({
@@ -821,7 +821,7 @@ const socket = io("http://192.168.5.81:3115/");
   	
     
     var firstthread = localStorage.getItem("firstthread");
-    //kamal
+    
     if(firstthread){
     	var data = JSON.parse(firstthread);
     	ROOM_ID = data.id

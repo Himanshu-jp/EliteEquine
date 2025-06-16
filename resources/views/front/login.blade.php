@@ -65,8 +65,8 @@
 
                             <div class="d-flex justify-content-between align-items-center mt-1">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    <label class="form-check-label fw-bold" for="flexCheckDefault">Keep me login</label>
+                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                    <label class="form-check-label fw-bold" for="remember">Keep me login</label>
                                 </div>
                                 <span><a href="{{route('forget.password.get')}}" class="password-teg fw-bold">Forgot your password?</a></span>
                             </div>

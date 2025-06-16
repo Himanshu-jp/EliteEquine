@@ -10,10 +10,122 @@ use Stripe\Product;
 use Stripe\Price;
 use Stripe\Stripe;
 use Stripe\Customer;
+use Stripe\Account;
 use Stripe\Subscription;
+use App\Models\User;
+
 
 class StripeController extends Controller
 {
+
+    //stript Connect Code
+
+
+    public function connect_stipe_account(request $request)
+    {
+
+
+
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $account = \Stripe\Account::create([
+            'type' => 'custom',
+            'country' => 'US',
+            'email' => Auth::user()->email,
+            'capabilities' => [
+                'transfers' => ['requested' => true], // important
+            ],
+            'business_type' => 'individual',
+            'individual' => [
+                'first_name' => Auth::user()->name,
+                'last_name' => ' ',
+                'email' => Auth::user()->email,
+            ],
+            'tos_acceptance' => [
+                'date' => time(),
+                'ip' => $request->ip(),
+            ],
+        ]);
+
+        User::where('id', Auth::user()->id)->update(['stripe_id' => $account->id]);
+        $accountLink = \Stripe\AccountLink::create([
+            'account' => $account->id,
+            'refresh_url' => route('webhook_stripe_for_connect') . '?account_id=' . $account->id,
+            'return_url' => route('webhook_stripe_for_connect') . '?account_id=' . $account->id,
+            'type' => 'account_onboarding',
+        ]);
+
+        return redirect()->to($accountLink->url);
+
+
+        //   return   __transferAmount('acct_1RaWyjQciskEp7bw',50);
+        //     $user= Auth::user();
+        // $url = 'https://connect.stripe.com/oauth/authorize?' . http_build_query([
+        //     'response_type' => 'code',
+        //     'client_id' => 'ca_SVWxo5o959YJTBWMiRyBbcRPz12qR4UD', // Live Client ID
+        //     'scope' => 'read_write',
+        //     'state' =>$user->id ,
+        // ]);
+
+        // return redirect($url);
+    }
+
+public function updateAccountDetails(request $request){
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    $accountId=Auth::user()->stripe_id;
+        $accountLink = \Stripe\AccountLink::create([
+            'account' => $accountId,
+            'refresh_url' => route('webhook_stripe_for_connect') . '?account_id=' . $accountId,
+            'return_url' => route('webhook_stripe_for_connect') . '?account_id=' . $accountId,
+            'type' => 'account_onboarding',
+        ]);
+
+        return redirect()->to($accountLink->url);
+}
+
+
+    public function webhook_stripe_for_connect(Request $request)
+    {
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $connectedAccountId = $request->account_id;
+        $bankAccounts = \Stripe\Account::allExternalAccounts(
+            $connectedAccountId, // e.g. "acct_1ABC23XYZ..."
+            [
+                'object' => 'bank_account',
+            ]
+        );
+
+        User::where('stripe_id', $connectedAccountId)->update(['stripe_connect_data' => json_encode($bankAccounts['data'])]);
+
+        //     $ch = curl_init();
+        //     curl_setopt($ch, CURLOPT_URL, "https://connect.stripe.com/oauth/token");
+        //     curl_setopt($ch, CURLOPT_POST, 1);
+        //     curl_setopt(
+        //         $ch,
+        //         CURLOPT_POSTFIELDS,
+        //         "client_secret=" . env('STRIPE_SECRET', env('STRIPE_SECRET')) . "&grant_type=authorization_code&code=" . $request->code . ""
+        //     );
+
+        //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        //      $server_output = curl_exec($ch);
+
+        //     curl_close($ch);
+        //     if(!is_array($server_output)){
+        //         $server_output = json_decode($server_output, true);
+        //     }
+        //     return $server_output;
+        //     $user_id= $_GET['state'] ?? Auth::user()->id;
+
+        //      $user_data =User::where('id',$user_id)->first();
+        //     $user_data->stripe_id = isset($server_output['stripe_user_id']) ? $server_output['stripe_user_id'] : '';
+        // $user_data->stripe_connect_data = json_encode($server_output ?? []);
+        //     $user_data->save();
+        return redirect()->route('settings')->with('Success', 'Stripe account setup successfully');
+    }
+
     public function plan()
     {
         return view('create');

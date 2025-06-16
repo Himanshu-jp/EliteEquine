@@ -79,7 +79,7 @@ Your Ads
                 </div>
             @endif
 
-            <div class="row">
+            <div class="row align-items-baseline cusmt-form-mb">
 
                 <div class="col-md-3 mt-3 position-relative">
                     <label for="sub_category" class="form-label">Sub Category *</label>
@@ -451,10 +451,10 @@ Your Ads
 
         <!-- Address fields (hidden/shown based on checkbox) -->
         <div class="form-section" id="addressFields" style="display: none;">
-            <div class="row">
+            <div class="row cusmt-form-mb">
                 <div class="col-md-6">
                     
-                    <div class="mt-2 position-relative">
+                    <div class="mt-4 position-relative">
                         <label class="form-label">Precise Location</label>
                         <input type="text" class="inner-form form-control" placeholder="Enter location.." name="precise_location" id="precise_location" onkeyup="initializeLocationAutocomplete()" value={{old('precise_location',@$products->productDetail->precise_location)}}>
                         <span id="map-location-message" class="text-danger" style="display: none; font-size: 12px;"></span>
@@ -467,34 +467,44 @@ Your Ads
                             <span class="error text-danger">{{$errors->first('precise_location')}}</span>
                         @endif
                     </div>
-                    <div class="mt-2 position-relative">
+
+                    <div class="mt-4 position-relative">
                         <label class="form-label">Country</label>
                         <input type="text" class="inner-form form-control" placeholder="Populate on Google place select.." name="country" id="country" value={{old('country',@$products->productDetail->country)}}>
                         @if($errors->has('country'))
                             <span class="error text-danger">{{$errors->first('country')}}</span>
                         @endif
                     </div>
-                    <div class="mt-2 position-relative">
+                    <div class="mt-4 position-relative">
                         <label class="form-label">State</label>
                         <input type="text" class="inner-form form-control" placeholder="Populate on Google place select.." name="state" id="state" value={{old('state',@$products->productDetail->state)}}>
                         @if($errors->has('state'))
                             <span class="error text-danger">{{$errors->first('state')}}</span>
                         @endif
                     </div>
-                    <div class="mt-2 position-relative">
+                    <div class="mt-4 position-relative">
                         <label class="form-label">City</label>
                         <input type="text" class="inner-form form-control" placeholder="Populate on Google place select.." name="city" id="city" value={{old('city',@$products->productDetail->city)}}>
                         @if($errors->has('city'))
                             <span class="error text-danger">{{$errors->first('city')}}</span>
                         @endif
                     </div>
-                    <div class="mt-2 position-relative">
+                    <div class="mt-4 position-relative">
                         <label class="form-label">Street </label>
                         <input type="text" class="inner-form form-control" placeholder="Populate on Google place select.." name="street" id="street" value={{old('street',@$products->productDetail->street)}}>
                         @if($errors->has('street'))
                             <span class="error text-danger">{{$errors->first('street')}}</span>
                         @endif
                     </div>
+
+                    <div class="mt-4 position-relative">
+                        <label class="form-label">Trial / Exchange Location</label>
+                        <input type="text" class="inner-form form-control" placeholder="Enter trial / exchange location..." name="trial_location" id="trial_location" value={{old('trial_location',@$products->productDetail->trial_location)}}>
+                        @if($errors->has('trial_location'))
+                            <span class="error text-danger">{{$errors->first('trial_location')}}</span>
+                        @endif
+                    </div>
+
                 </div>
                 <div class="col-md-6">
                     <div class="map" id="map">
@@ -537,7 +547,7 @@ Your Ads
         </div>
 
         <!-----terms & conditions section-------->
-        <div class="form-check pt-2">
+        <div class="form-check pt-2 mt-3">
             <input class="form-check-input" type="checkbox" name="agree" id="agree" value="1" {{(old('agree')==1 || @$products->productDetail->agree==1)?'checked':''}}>
             <label class="form-check-label fw-bold text-dark" for="agree" >I agree to <a href="{{route('cms.terms.condition')}}" target="_blank" style="color: #A19061;">Terms Of Use</a></label>
 

@@ -372,7 +372,7 @@ function loadHorses(page = 1) {
     //--------View mode of listing---------//
     let selectedView = $('input[name="view_mode"]:checked').val();
 
-    //kamal
+    
     $('.preloader').show();
     $.ajax({
         url: '{{ url("equipment-listing/dataTable") }}',

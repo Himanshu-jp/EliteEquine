@@ -100,8 +100,8 @@
                 </div>
                 <div class="col-lg-6">
                     <ul class="footer-bottom-link">
-                        <li><a href="{{url('/terms-conditions')}}">Terms</a></li>
-                        <li><a href="{{url('/privacy-policies')}}">Privacy</a></li>
+                        <li><a href="{{url('/terms-conditions')}}">Terms of Use</a></li>
+                        <li><a href="{{url('/privacy-policies')}}">Privacy Policy </a></li>
                         <li class="me-0"><a href="{{route('contact.form')}}">Contact</a></li>
                     </ul>
                 </div>

@@ -615,7 +615,7 @@ Home
             </div>
             <div class="row mt-5 align-items-center">
                 <div class="col-lg-6">
-                    <img src="{{asset('storage/'.$buyerBrowserData->image)}}" alt="" />
+                    <img class="buyers_and_browsers" src="{{asset('storage/'.$buyerBrowserData->image)}}" alt="" />
                 </div>
                 <div class="col-lg-6">
                     <div class="accordion my-4" id="simpleAccordion">
@@ -816,7 +816,8 @@ Home
                 <ul class="tag-list" style="--duration: 35.32s;">
                      @foreach($batches as $image)
                     <li>
-                        <div class="greview">
+                        <div class="gr
+                        eview">
                             <img src="{{asset('storage/'. $image->image)}}" alt="logo">
                         </div>
                     </li>
@@ -1127,6 +1128,7 @@ function updateMapMarkers(events, categoryId) {
                                 </div>
                             </div>
                         </div>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -1419,12 +1421,11 @@ function initializeLocationAutocomplete() {
         }
     });
 }
-</script>
 
-<script>
+
     $(window).on('load', function(){
-    $($("#myTab .nav-item .nav-link")[0]).addClass('active');
-});
+        $($("#myTab .nav-item .nav-link")[0]).addClass('active');
+    });
     $(document).ready(function () {
         $("#newsletterForm").validate({
             rules: {
@@ -1503,9 +1504,9 @@ function initializeLocationAutocomplete() {
             }
         });
     });
-</script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
+
+    
+     document.addEventListener("DOMContentLoaded", function () {
     const buttons = document.querySelectorAll(".toggle-btn");
 
     buttons.forEach(button => {
