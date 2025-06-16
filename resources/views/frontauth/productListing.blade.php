@@ -225,6 +225,7 @@ Product Listing
                                             class="text-xs font-weight-bold">{{@$value->sex->commonMaster->name}}</span>
                                     </td> --}}
                                     <td class="align-middle text-center">
+                                        
                                         @if($sale == 'auction')
                                             @if($status == 'live' && $method == 'platform')
                                                 <a href="{{ route('product.bid-detail',@$value->id)}}" class="text-dark me-2" data-toggle="tooltip" data-placement="top" title="Bid Detail"><i class="fi fi-rr-eye"></i></a>                       
@@ -232,12 +233,15 @@ Product Listing
                                                 <a href="{{ route('product.bid-detail',@$value->id)}}" class="text-dark me-2" data-toggle="tooltip" data-placement="top" title="Bid Detail"><i class="fi fi-rr-eye"></i></a>
                                             @endif
                                         @endif
+
+                                        @if($status !== 'sold')
                                         <a href="{{ route('editProduct',@$value->id)}}" class="text-dark me-2"><i
                                                 class="fi fi-rr-pencil"></i></a>
                                         <span class="text-dark confirm-button"
                                             data-href="{{route('product/delete',$value->id)}}">
                                             <i class="fi fi-rr-trash"></i>
                                         </span>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
