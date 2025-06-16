@@ -222,8 +222,8 @@ Chat Messages
     //     $('#picker').toggle();
     // });
 
-const socket = io("http://192.168.5.81:3115/");
-// const socket = io("https://v1.checkprojectstatus.com:3115/");
+// const socket = io("http://192.168.5.81:3115/");
+const socket = io("https://v1.checkprojectstatus.com:3115/");
 
     
     var SENDER_ID = '{{Auth()->user()->id}}';
