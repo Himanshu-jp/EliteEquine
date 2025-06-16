@@ -30,6 +30,33 @@ Product Details
                                         </video>
                                     </div>
                                 @endforeach
+                                
+                                @foreach(@$products->videoLink as $key=>$video)
+                                    <div class="swiper-slide">
+                                        @php
+                                            preg_match("/v=([^&]+)/", $video->link, $matches);
+                                            $videoId = $matches[1] ?? null;
+                                        @endphp
+
+                                        @if($videoId)
+                                            <div class="ratio ratio-16x9">
+                                                <iframe
+                                                    width="848"
+                                                    height="480"
+                                                    src="https://www.youtube.com/embed/{{ $videoId }}"
+                                                    title="YouTube video player"
+                                                    frameborder="0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowfullscreen>
+                                                </iframe>
+                                            </div>
+                                        @else
+                                            <p>Invalid YouTube link.</p>
+                                        @endif
+                                    </div>
+                                @endforeach
+
+
                             </div>
                             <!-- Navigation Arrows -->
 
@@ -46,6 +73,10 @@ Product Details
 
                                 @foreach(@$products->video as $key=>$video)
                                     <div class="swiper-slide"><img src="{{asset('storage/'.$video->thumbnail)}}" alt=""></div>
+                                @endforeach
+                               
+                                @foreach(@$products->videoLink as $key=>$video)
+                                    <div class="swiper-slide"><img src="{{asset('front/auth/assets/img/bg-images/shape-1.svg')}}" alt=""></div>
                                 @endforeach
 
                                 
@@ -172,15 +203,18 @@ Product Details
                         </ul>
                     </div>
                     @endif
-                    @if(@$products->external_link)
+
+                    @if(@$products->externalLink->count()>0)
                     <div class="info-desc mt-4">
                         <h3 class="horse-info-heading">External Links</h3>
-                        <div class="links-box">
-                            <a href="{{@$products->external_link}}" target="_blank">
-                                <img src="{{asset('front/home/assets/images/link-icon.svg')}}" alt="" />
-                                <span>{{@$products->external_link}}</span>
-                            </a>                            
-                        </div>
+                        @foreach($products->externalLink as $key=>$link)
+                            <div class="links-box">
+                                <a href="{{@$link->link}}" target="_blank">
+                                    <img src="{{asset('front/home/assets/images/link-icon.svg')}}" alt="" />
+                                    <span>{{@$link->link}}</span>
+                                </a>                            
+                            </div>
+                        @endforeach
                     </div>
                     @endif
 

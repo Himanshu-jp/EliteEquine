@@ -346,7 +346,9 @@ class ProductListingController extends Controller
             'height',
             'sex',
             'greenEligibilities',
-            'highestBid'
+            'highestBid',
+            'externalLink',
+            'videoLink'
         ]);
         $products = $products->where(['deleted_at' => null, 'id' => $id]);
         // $products = $products->where('product_status', '!=', 'sold');

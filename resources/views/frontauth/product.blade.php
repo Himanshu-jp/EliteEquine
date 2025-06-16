@@ -190,11 +190,11 @@ Your Ads
                         <label class="form-label">Add External Links</label>
                         <div id="external-links-wrapper">
                             @php
-                                $externalLinks = old('external_link', isset($products->external_link) ? (array) $products->external_link : ['']);
+                                $externalLinks = old('external_link', isset($products->externalLink) ? $products->externalLink : ['']);
                             @endphp
                             @foreach($externalLinks as $index => $link)
                                 <div class="position-relative mb-2 external-link-group">
-                                    <input type="text" name="external_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add External Link..." value="{{ $link }}">
+                                    <input type="text" name="external_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add External Link..." value="{{ $link->link }}" autocomplete="off">
                                     <button type="button" class="btn btn-sm btn-danger remove-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
                                 </div>
                             @endforeach
@@ -210,11 +210,11 @@ Your Ads
                         <label class="form-label">Add Video Links</label>
                         <div id="external-video-links-wrapper">
                             @php
-                                $externalLinks = old('video_link', isset($products->video_link) ? (array) $products->video_link : ['']);
+                                $externalLinks = old('video_link', isset($products->videoLink) ? $products->videoLink : ['']);
                             @endphp
                             @foreach($externalLinks as $index => $link)
                                 <div class="position-relative mb-2 external-video-link-group">
-                                    <input type="text" name="video_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add Video Link..." value="{{ $link }}">
+                                    <input type="text" name="video_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add Video Link..." value="{{ $link->link }}" autocomplete="off">
                                     <button type="button" class="btn btn-sm btn-danger remove-video-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
                                 </div>
                             @endforeach
@@ -239,7 +239,7 @@ Your Ads
                     
                     <div class="position-relative">
                         <label for="video_link" class="form-label">Add Video Links</label>
-                        <input type="text" autocomplete="off" class="inner-form form-control mb-0 pe-5" id="external_link" name="video_link"
+                        <input type="text" autocomplete="off" class="inner-form form-control mb-0 pe-5" id="video_link" name="video_link"
                             value="{{old('video_link', @$products->video_link)}}" placeholder="Add Vidoe Links...">
                         <button type="button" class="add-new-link">+ Add More</button>
                         @if($errors->has('video_link'))
@@ -438,7 +438,7 @@ Your Ads
         $('#add-video-link-btn').click(function () {
             let newField = `
                 <div class="position-relative mb-2 external-video-link-group">
-                    <input type="text" name="external_link[]" class="inner-form form-control mb-0 pe-5" placeholder="Add External Link...">
+                    <input type="text" name="video_link[]" class="inner-form form-control mb-0 pe-5" placeholder="Add Video Link...">
                     <button type="button" class="btn btn-sm btn-danger remove-video-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
                 </div>`;
             $('#external-video-links-wrapper').append(newField);

@@ -77,15 +77,14 @@ class ProductController extends Controller
     public function editProduct($id)
     {
         $user = auth::user();
-        $products = Product::with(['image', 'video', 'document','category'])
+        $products = Product::with(['image', 'video', 'document','category','externalLink','videoLink'])
             ->where(['id' => $id, 'deleted_at' => null, 'user_id' => $user->id])
             ->orderBy('id', 'desc')
             ->first();
         
         if($products->product_status=="sold"){
              return redirect()->back()->with('error', 'This product has been sold and can no longer be updated.');
-        }
-            
+        }            
         return view('frontauth/product', compact('products'));
     }
    
@@ -211,7 +210,7 @@ class ProductController extends Controller
             'triedUpcomingShows',
             'height',
             'sex',
-            'greenEligibilities'
+            'greenEligibilities',
         ])
             ->where(['id' => $request->id, 'deleted_at' => null, 'user_id' => $user->id])
             ->orderBy('id', 'desc')

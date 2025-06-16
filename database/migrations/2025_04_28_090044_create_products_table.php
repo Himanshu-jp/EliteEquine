@@ -27,8 +27,7 @@ return new class extends Migration
             $table->enum("price_reduced",['yes',"no"])->nullable();
         
             $table->string("currency")->nullable();
-            $table->text("description")->nullable();          
-            $table->string("external_link")->nullable();
+            $table->text("description")->nullable();
             $table->enum("transaction_method",['platform',"buyertoseller"])->nullable();
             $table->integer("auc_winner_pay_in")->nullable();
             $table->integer("bid_end_days")->nullable();

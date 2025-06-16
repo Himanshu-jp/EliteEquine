@@ -128,7 +128,7 @@ About us
     <div class="container">
         <div class="row">
             <div class="col-lg-3">
-                <h2 class="title">For Sellers and Businesses: </h2>
+                <h2 class="title">Join the <br/> Movement </h2>
             </div>
             <div class="col-lg-7 ms-auto">
                 {!! $aboutData->description !!}
