@@ -31917,9 +31917,10 @@ ul.act-icon li {
 
 .custom-error {
     position: absolute;
-    bottom: -13px;
+    bottom: -18px;
     left: 15px;
     text-wrap: nowrap;
+    line-height: 1;
 }
 
 /* .select2-container .select2-selection--multiple .select2-selection__rendered {
@@ -32273,4 +32274,10 @@ ul.act-icon li {
     color: #fff;
     border-radius: 7px;
     font-size: 16px;
+}
+.cusmt-form-mb .col-md-3.mt-3  {
+    margin-bottom: 8px;
+}
+.cusmt-form-mb .col-md-3.mt-3 span.select2.select2-container.select2-container--default {
+    margin-bottom: 10px;
 }

@@ -47,7 +47,7 @@ class ProductService
         // $product->price_reduced = ($data['price_reduced'] == 'on') ? 1 : 0;
         $product->currency = $data['currency'];
         $product->description = $data['description'];
-        $product->external_link = $data['external_link'];
+        // $product->external_link = $data['external_link'];
         // $product->transaction_method = $data['transaction_method'];
         // $product->auc_winner_pay_in = ($data['auc_winner_pay_in'] == 'on') ? 1 : 0;
         // $product->bid_end_days = $data['bid_end_days'];
