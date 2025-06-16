@@ -12,7 +12,9 @@ use App\Http\Resources\API\v1\user\ProductResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
+use App\Models\Community;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ProductController extends BaseController
 {
@@ -217,13 +219,31 @@ class ProductController extends BaseController
                 'error' => 'Category parameter is required'
             ], 400);
         }
+        
+        if(in_array($categoryId, [1,2,3,4]))
+        {
+            $data = Product::with(['user', 'productDetail', 'image'])
+                ->where(['product_status' => 'live', 'deleted_at' => null])
+                ->where('category_id', $categoryId)
+                ->orderBy('id', 'desc')
+                ->get();
+        }elseif($categoryId == 5)
+        {
+            $now = Carbon::now();
 
-        $data = Product::with(['user', 'productDetail', 'image'])
-            ->where(['product_status' => 'live', 'deleted_at' => null])
-            ->where('category_id', $categoryId)
-            ->orderBy('id', 'desc')
-            ->take(3)
-            ->get();
+            $data = Community::with('user')
+                ->whereNull('deleted_at') // or use softDeletes if applicable
+                ->where(function ($query) use ($now) {
+                    $query->where('date', '>', $now->toDateString())
+                        ->orWhere(function ($q) use ($now) {
+                            $q->where('date', $now->toDateString())
+                                ->where('time', '>=', $now->toTimeString());
+                        });
+                })
+                ->orderBy('date', 'asc')
+                ->orderBy('time', 'asc')
+                ->get();
+        }
 
         return response()->json($data);
     }

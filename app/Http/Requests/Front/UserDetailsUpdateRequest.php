@@ -41,6 +41,8 @@ class UserDetailsUpdateRequest extends FormRequest
             'city' => 'required|string|max:300',
             'street' => 'required|string|max:300',
             'agree' => 'required',
+            'latitude' => 'nullable',
+            'longitude' => 'nullable',
             // 'banners' => 'required',
         ];
     }

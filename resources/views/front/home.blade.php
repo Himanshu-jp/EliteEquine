@@ -67,7 +67,14 @@ Home
                         <div class="form_bx">
                             <img src="{{asset('front/home/assets/images/icons/search.svg')}}" alt="search-icon"
                                 class="icon" />
-                            <input type="text" autocomplete="off" placeholder="Located in" name="location" id="location" />
+                            <input type="text" autocomplete="off" placeholder="Located in"  value="{{ request()->query('location') }}" onkeyup 
+                        ="initializeLocationAutocomplete()" name="location" id="location" />
+                            <span id="location-message" class="text-danger" style="display: none; font-size: 12px;"></span>
+                            <ul id="location-list" style="display: none;">
+                                <!-- Location suggestions will appear here -->
+                            </ul>
+                            <input type="hidden" id="latitude" name="latitude" value="{{ request()->query('latitude')}}">
+                            <input type="hidden" id="longitude" name="longitude" value="{{ request()->query('longitude')}}">
                         </div>
                         <div class="form_bx">
                             <img src="{{asset('front/home/assets/images/icons/search.svg')}}" alt="search-icon"
@@ -197,7 +204,7 @@ Home
 
     <div class="map-info">
         <div id="map">
-            <div class="onlinebox"><span class="online"></span> Online</div>
+            <!-- <div class="onlinebox"><span class="online"></span> Online</div> -->
         </div>
         <!-- Card INSIDE MAP container -->
         <div class="horsescard-popup" id="popupCard">
@@ -575,7 +582,16 @@ Home
                             {{$sellerBusinessData->$content}}
                         </div>
                         @endforeach
-                        
+                        <div class="bx1">
+                            <img src="https://v1.checkprojectstatus.com/elite-quaine-marketplace/web/public/storage/seller_business/icons/K9TTHnnVkRHDwQm0R19sqmkKXHs3708kygNNDVBP.svg" alt="">
+                            <h3>Flexible Selling: Auctions & Secure Payments</h3>
+                            Sell equipment, apparel, and services your way—use our built-in auction tool for competitive bidding or opt for direct sales through our secure, Stripe-powered payment system.
+                        </div>
+                        <div class="bx1">
+                            <img src="https://v1.checkprojectstatus.com/elite-quaine-marketplace/web/public/storage/seller_business/icons/K9TTHnnVkRHDwQm0R19sqmkKXHs3708kygNNDVBP.svg" alt="">
+                            <h3>Real-Time Messaging & Instant Alerts</h3>
+                            Connect with buyers directly through our secure in-platform messaging, and stay informed with real-time notifications for new messages, payment updates, subscription reminders, and more.
+                        </div>
                     </div>
                     <div class="forseller_area_inner3">
                         {!! $sellerBusinessData->description !!}
@@ -861,8 +877,7 @@ Home
 <!-- jQuery & CKEditor -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js"></script>
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v1.0.0/mapbox-gl-supported.js"></script>
+
 <script>
 
 let mapboxAccessToken = '{{ config("config.map_box_access_token") }}';
@@ -881,7 +896,12 @@ function reverseGeocode(lat, lng) {
             if (data.features && data.features.length > 0) {
                 // Use the place_name of the first feature as the location string
                 const placeName = data.features[0].place_name;
-                const locationInput = document.getElementById('map-location');
+                const mapLocationInput = document.getElementById('map-location');
+                if(mapLocationInput){
+                    mapLocationInput.value = placeName;
+                }
+
+                const locationInput = document.getElementById('location');
                 if(locationInput){
                     locationInput.value = placeName;
                 }
@@ -900,8 +920,11 @@ window.onload = () => {
     const selectedCategory = urlParams.get('category') || '1';
 
     // Elements to store lat and lng values
-    const latInput = document.getElementById('map-latitude');
-    const lngInput = document.getElementById('map-longitude');
+    const latInput = document.getElementById('latitude');
+    const lngInput = document.getElementById('longitude');
+    
+    const mapLatInput = document.getElementById('map-latitude');
+    const mapLngInput = document.getElementById('map-longitude');
 
     // Try to get user's current location via Geolocation API
     if (navigator.geolocation) {
@@ -913,6 +936,9 @@ window.onload = () => {
                 // Update lat/lng input fields
                 if (latInput) latInput.value = lat.toFixed(6);
                 if (lngInput) lngInput.value = lng.toFixed(6);
+                
+                if (mapLatInput) mapLatInput.value = lat.toFixed(6);
+                if (mapLngInput) mapLngInput.value = lng.toFixed(6);
 
                 initializeMap(lat, lng);
 
@@ -926,6 +952,9 @@ window.onload = () => {
                 if (latInput) latInput.value = lat.toFixed(6);
                 if (lngInput) lngInput.value = lng.toFixed(6);
 
+                if (mapLatInput) mapLatInput.value = lat.toFixed(6);
+                if (mapLngInput) mapLngInput.value = lng.toFixed(6);
+
                 initializeMap(lat, lng);
                 reverseGeocode(lat, lng);
                 fetchEventsByCategory(selectedCategory);
@@ -936,6 +965,9 @@ window.onload = () => {
         // Geolocation not supported
         if (latInput) latInput.value = lat.toFixed(6);
         if (lngInput) lngInput.value = lng.toFixed(6);
+
+        if (mapLatInput) mapLatInput.value = lat.toFixed(6);
+        if (mapLngInput) mapLngInput.value = lng.toFixed(6);
 
         initializeMap(lat, lng);
         reverseGeocode(lat, lng);
@@ -1015,14 +1047,14 @@ function fetchEventsByCategory(categoryId) {
             return response.json();
         })
         .then(data => {
-            updateMapMarkers(data);
+            updateMapMarkers(data, categoryId);
         })
         .catch(error => {
             console.error('Fetch error:', error);
         });
 }
 
-function updateMapMarkers(events) {
+function updateMapMarkers(events, categoryId) {
     if (!map) return;
 
     if (!events.length) {
@@ -1031,109 +1063,206 @@ function updateMapMarkers(events) {
     }
 
     const eventGroups = {};
-
-    events.forEach(event => {
-        const lat = parseFloat(event.product_detail?.latitude);
-        const lng = parseFloat(event.product_detail?.longitude);
-        if (!isNaN(lat) && !isNaN(lng)) {
-            const key = `${lat},${lng}`;
-            if (!eventGroups[key]) eventGroups[key] = [];
-            eventGroups[key].push(event);
-        }
-    });
-
     const venueDetailRoute = "{{ route('horseDetails', ':id') }}";
     const activeClass = 'active-marker';
+    if (['1', '2', '3', '4'].includes(categoryId)) {
+        events.forEach(event => {
+            const lat = parseFloat(event.product_detail?.latitude);
+            const lng = parseFloat(event.product_detail?.longitude);
+            if (!isNaN(lat) && !isNaN(lng)) {
+                const key = `${lat},${lng}`;
+                if (!eventGroups[key]) eventGroups[key] = [];
+                eventGroups[key].push(event);
+            }
+        });
 
-    for (const latLng in eventGroups) {
-        const [lat, lng] = latLng.split(',').map(Number);
-        const markerEl = document.createElement('div');
-        markerEl.className = 'red-circle-marker';
+        for (const latLng in eventGroups) {
+            const [lat, lng] = latLng.split(',').map(Number);
+            const markerEl = document.createElement('div');
+            markerEl.className = 'red-circle-marker';
 
-        const img = document.createElement('img');
-        img.src = "{{ asset('images/marker_map_icon.svg') }}";
-        img.className = 'marker-image';
-        markerEl.appendChild(img);
+            const img = document.createElement('img');
+            /* img.src = "{{ asset('images/marker_map_icon.svg') }}";
+            img.className = 'marker-image';
+            markerEl.appendChild(img); */
 
-        const firstProduct = eventGroups[latLng][0];
-        const venueName = document.createElement('span');
-        venueName.className = 'marker-venue-name';
-        venueName.innerText = firstProduct.title || 'No Title';
-        markerEl.appendChild(venueName);
+            const firstProduct = eventGroups[latLng][0];
+            const venueName = document.createElement('span');
+            venueName.className = 'marker-venue-name';
+            venueName.innerText = firstProduct.title || 'No Title';
+            markerEl.appendChild(venueName);
 
-        const marker = new mapboxgl.Marker(markerEl).setLngLat([lng, lat]).addTo(map);
+            const marker = new mapboxgl.Marker(markerEl).setLngLat([lng, lat]).addTo(map);
 
-        const popupHTML = eventGroups[latLng].map(product => {
-            const title = product.title || 'Untitled';
-            const desc = product.description || '';
-            const truncated = desc.length > 40 ? desc.slice(0, 40) + '...' : desc;
-            const imgUrl = product.image?.[0]?.image ? `{{asset("/")}}/storage/${product.image[0].image}` : '';
-            const price = product.price || product.product_detail?.sale_price || 'N/A';
-            const fullAddr = [product.product_detail?.street, product.product_detail?.city, product.product_detail?.state, product.product_detail?.country].filter(Boolean).join(', ');
-            const detailUrl = venueDetailRoute.replace(':id', product.id);
+            const popupHTML = eventGroups[latLng].map(product => {
+                img.src = "{{ asset('images/marker_map_icon.svg') }}";
+                img.className = 'marker-image';
+                markerEl.appendChild(img);
 
-            return `
-                <div class="map-pp-main">
-                    <div class="evn-dte-ll">
-                        <div class="ent-emg">
-                            ${imgUrl ? `<img src="${imgUrl}" style="width:80px;height:100%;object-fit: cover;border-radius: 5px;" alt="${title}">` : ''}
-                            
-                        </div>
-                        <div class="map-card-left">
-                        <div>
-                            <h3><a href="${detailUrl}" target="_blank">${title}</a></h3>
-                            <p>${truncated}</p>
-                        </div>
-                        <div class="venue-name-new-ic">
-                            <img src="{{ asset('images/marker_map_icon.svg') }}" alt="Location icon" />
-                            ${fullAddr}
-                        </div>
+                const title = product.title || 'Untitled';
+                const desc = product.description || '';
+                const truncated = desc.length > 40 ? desc.slice(0, 40) + '...' : desc;
+                const imgUrl = product.image?.[0]?.image ? `{{asset('/storage')}}/${product.image[0].image}` : '';
+                const price = product.price || product.product_detail?.sale_price || 'N/A';
+                const fullAddr = [product.product_detail?.street, product.product_detail?.city, product.product_detail?.state, product.product_detail?.country].filter(Boolean).join(', ');
+                const detailUrl = venueDetailRoute.replace(':id', product.id);
 
-                        <div class="loc-meta">
-                            <div class="price-box-mld"><strong>Price:</strong> $${price}</div>
-                            <div class="loc-metabutton">
-                                <a href="${detailUrl}" target="_blank" class="meta-btn">View Details</a>
+                return `
+                    <div class="map-pp-main">
+                        <div class="evn-dte-ll">
+                            <div class="ent-emg">
+                                ${imgUrl ? `<img src="${imgUrl}" style="width:60px;height:60px;" alt="${title}">` : ''}
+                                <div>
+                                    <h3><a href="${detailUrl}" target="_blank">${title}</a></h3>
+                                    <p>${truncated}</p>
+                                </div>
+                            </div>
+                            <div class="venue-name-new-ic">
+                                <img src="{{ asset('images/location-mdl-icon.svg') }}" alt="Location icon" />
+                                ${fullAddr}
+                            </div>
+                            <div class="loc-meta">
+                                <div><strong>Price:</strong> $${price}</div>
+                                <div class="loc-metabutton">
+                                    <a href="${detailUrl}" target="_blank" class="meta-btn">View Details</a>
+                                </div>
                             </div>
                         </div>
                         </div>
                     </div>
-                </div>
-            `;
-        }).join('');
+                `;
+            }).join('');
 
-        const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupHTML);
+            const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupHTML);
 
-        marker.setPopup(popup);
+            marker.setPopup(popup);
 
-        markerEl.addEventListener('click', () => {
-            // Close previously opened popup if different
-            if (currentPopup && currentPopup !== popup) {
-                currentPopup.remove();
+            markerEl.addEventListener('click', () => {
+                // Close previously opened popup if different
+                if (currentPopup && currentPopup !== popup) {
+                    currentPopup.remove();
+                }
+
+                // Open clicked popup
+                popup.addTo(map);
+                currentPopup = popup;
+
+                // Update active marker class
+                document.querySelectorAll('.red-circle-marker').forEach(el => el.classList.remove(activeClass));
+                markerEl.classList.add(activeClass);
+            });
+        }
+    } else if(categoryId == 5) {
+        events.forEach(event => {
+            const lat = parseFloat(event?.latitude);
+            const lng = parseFloat(event?.longitude);
+            if (!isNaN(lat) && !isNaN(lng)) {
+                const key = `${lat},${lng}`;
+                if (!eventGroups[key]) eventGroups[key] = [];
+                eventGroups[key].push(event);
             }
-
-            // Open clicked popup
-            popup.addTo(map);
-            currentPopup = popup;
-
-            // Update active marker class
-            document.querySelectorAll('.red-circle-marker').forEach(el => el.classList.remove(activeClass));
-            markerEl.classList.add(activeClass);
         });
+
+        for (const latLng in eventGroups) {
+            const [lat, lng] = latLng.split(',').map(Number);
+            const markerEl = document.createElement('div');
+            markerEl.className = 'red-circle-marker';
+            
+            const img = document.createElement('img');
+            img.src = "{{ asset('images/marker_map_icon.svg') }}";
+            img.className = 'marker-image';
+            markerEl.appendChild(img); 
+
+            const firstProduct = eventGroups[latLng][0];
+
+            const venueName = document.createElement('span');
+            venueName.className = 'marker-venue-name';
+            venueName.innerText = firstProduct.title || 'No Title';
+            markerEl.appendChild(venueName);
+
+            const marker = new mapboxgl.Marker(markerEl).setLngLat([lng, lat]).addTo(map);
+
+            const popupHTML = eventGroups[latLng].map(product => {
+                img.src = "{{ asset('images/marker_map_icon.svg') }}";
+                img.className = 'marker-image';
+                markerEl.appendChild(img);
+
+                const title = product.title || 'Untitled';
+                const requirement = product.requirement || '';
+                const truncated = requirement.length > 40 ? requirement.slice(0, 40) + '...' : '';
+                const imgUrl = product.image ? `{{asset('/storage')}}/${product.image}` : '';
+                const price = product.price || 'N/A';
+                const date = product.date || '';
+                const time = product.time || '';
+                const fullAddr = product.location || '';
+                const detailUrl = venueDetailRoute.replace(':id', product.id);
+
+                return `
+                    <div class="map-pp-main">
+                        <div class="evn-dte-ll">
+                            <div class="ent-emg">
+                                ${imgUrl ? `<img src="${imgUrl}" style="width:60px;height:60px;" alt="${title}">` : ''}
+                                <div>
+                                    <h3><a href="${detailUrl}" target="_blank">${title}</a></h3>
+                                    <p>${truncated}</p>
+                                </div>
+                            </div>
+                            <div class="venue-name-new-ic">
+                                <img src="{{ asset('images/location-mdl-icon.svg') }}" alt="Location icon" />
+                                ${fullAddr}
+                            </div>
+                            <div class="loc-meta">
+                                <div><strong>Date:</strong> ${date}</div>
+                                <div><strong>Time:</strong> ${time}</div>
+                                <div><strong>Price:</strong> $${price}</div>
+                                <div class="loc-metabutton">
+                                    <a href="${detailUrl}" target="_blank" class="meta-btn">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupHTML);
+
+            marker.setPopup(popup);
+
+            markerEl.addEventListener('click', () => {
+                if (currentPopup && currentPopup !== popup) {
+                    currentPopup.remove();
+                }
+
+                popup.addTo(map);
+                currentPopup = popup;
+
+                document.querySelectorAll('.red-circle-marker').forEach(el => el.classList.remove(activeClass));
+                markerEl.classList.add(activeClass);
+            });
+        }
+
     }
+
+    
 }
 
-
-
-
 // search location
- function initializeLocationAutocomplete() {
+function initializeLocationAutocomplete() {
     const sessionToken = Math.random().toString(36).substring(2, 15);
 
-    const locationInput = document.getElementById('map-location');
-    const locationList = document.getElementById('map-location-list');
-    const locationMessage = document.getElementById('map-location-message');
-    const latitudeInput = document.getElementById('map-latitude');
-    const longitudeInput = document.getElementById('map-longitude');
+    // Elements for user location
+    const locationInput = document.getElementById('location');
+    const locationList = document.getElementById('location-list');
+    const locationMessage = document.getElementById('location-message');
+    const latitudeInput = document.getElementById('latitude');
+    const longitudeInput = document.getElementById('longitude');
+
+    // Elements for map location (mirrored fields)
+    const mapLocationInput = document.getElementById('map-location');
+    const mapLocationList = document.getElementById('map-location-list');
+    const mapLocationMessage = document.getElementById('map-location-message');
+    const mapLatitudeInput = document.getElementById('map-latitude');
+    const mapLongitudeInput = document.getElementById('map-longitude');
 
     let selectedIndex = -1;
     let suggestions = [];
@@ -1151,7 +1280,6 @@ function updateMapMarkers(events) {
         items.forEach((li, i) => {
             if (i === index) {
                 li.classList.add('highlighted');
-                // Scroll to make sure the highlighted item is visible:
                 li.scrollIntoView({ block: 'nearest' });
             } else {
                 li.classList.remove('highlighted');
@@ -1164,7 +1292,6 @@ function updateMapMarkers(events) {
         const suggestion = suggestions[index];
 
         const name = suggestion.name || '';
-        // context may be an array in Mapbox API — handle safely:
         let state = '';
         let country = '';
 
@@ -1181,9 +1308,10 @@ function updateMapMarkers(events) {
         const fullAddress = [name, state, country].filter(Boolean).join(', ');
 
         locationInput.value = fullAddress;
+        mapLocationInput.value = fullAddress;
+
         clearSuggestions();
 
-        // Fetch coordinates by mapbox_id
         const mapbox_id = suggestion.mapbox_id;
 
         fetch(`https://api.mapbox.com/search/searchbox/v1/retrieve/${mapbox_id}?session_token=${sessionToken}&access_token=${mapboxAccessToken}`)
@@ -1193,11 +1321,17 @@ function updateMapMarkers(events) {
                 if (features && features.length > 0) {
                     const coordinates = features[0].geometry.coordinates;
                     if (coordinates) {
-                        latitudeInput.value = coordinates[1]; // latitude
-                        longitudeInput.value = coordinates[0]; // longitude
-                        // Optional callback
+                        const lat = coordinates[1];
+                        const lon = coordinates[0];
+
+                        latitudeInput.value = lat;
+                        longitudeInput.value = lon;
+
+                        mapLatitudeInput.value = lat;
+                        mapLongitudeInput.value = lon;
+
                         if (typeof fetchVenues === 'function') {
-                            fetchVenues(latitudeInput.value, longitudeInput.value);
+                            fetchVenues(lat, lon);
                         }
                     }
                 }
@@ -1220,10 +1354,9 @@ function updateMapMarkers(events) {
                             const li = document.createElement('li');
 
                             const name = suggestion.name || '';
-
-                            // Again safely parse context:
                             let state = '';
                             let country = '';
+
                             if (suggestion.context && Array.isArray(suggestion.context)) {
                                 suggestion.context.forEach(ctx => {
                                     if (ctx.id.startsWith('region')) state = ctx.text || ctx.name || '';
@@ -1258,7 +1391,7 @@ function updateMapMarkers(events) {
         }
     });
 
-    // Keyboard navigation support
+    // Keyboard navigation
     locationInput.addEventListener('keydown', function (e) {
         const items = locationList.querySelectorAll('li');
         if (locationList.style.display === 'block' && items.length > 0) {
@@ -1281,7 +1414,7 @@ function updateMapMarkers(events) {
         }
     });
 
-    // Hide suggestions if user clicks outside
+    // Hide suggestions when clicking outside
     document.addEventListener('click', function (e) {
         if (!locationInput.contains(e.target) && !locationList.contains(e.target)) {
             clearSuggestions();
@@ -1289,12 +1422,10 @@ function updateMapMarkers(events) {
     });
 }
 
-</script>
 
-<script>
     $(window).on('load', function(){
-    $($("#myTab .nav-item .nav-link")[0]).addClass('active');
-});
+        $($("#myTab .nav-item .nav-link")[0]).addClass('active');
+    });
     $(document).ready(function () {
         $("#newsletterForm").validate({
             rules: {
@@ -1373,9 +1504,9 @@ function updateMapMarkers(events) {
             }
         });
     });
-</script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
+
+    
+     document.addEventListener("DOMContentLoaded", function () {
     const buttons = document.querySelectorAll(".toggle-btn");
 
     buttons.forEach(button => {

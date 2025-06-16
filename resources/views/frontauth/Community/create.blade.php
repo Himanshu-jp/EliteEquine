@@ -95,7 +95,13 @@ else{
             
             <div class="col-md-6 mt-3">
                 <label for="location" class="form-label">Event Location</label>
-                <input type="text" name="location" id="location" class="inner-form form-control mb-0" placeholder="Enter location here." value="{{old('location', @$community->location)}}" autocomplete="off">
+                <input type="text" name="location" id="location" onkeydown="initializeLocationAutocomplete()" class="inner-form form-control mb-0" placeholder="Enter location here." value="{{old('location', @$community->location)}}" autocomplete="off">
+                        <span id="location-message" class="text-danger" style="display: none; font-size: 12px;"></span>
+                            <ul id="location-list" style="display: none;">
+                                <!-- Location suggestions will appear here -->
+                            </ul>
+                            <input type="hidden" id="latitude" name="latitude" value="{{ request()->query('latitude')??@$community->latitude}}">
+                            <input type="hidden" id="longitude" name="longitude" value="{{ request()->query('longitude')??@$community->longitude}}">
                 @if($errors->has('location'))
                     <span class="error text-danger">{{$errors->first('location')}}</span>
                 @endif
@@ -177,10 +183,144 @@ else{
 
 @endsection
 
+
 @section('script')
+<script>
+    // search location
+    function initializeLocationAutocomplete() {
+        const accessToken = '{{ config("config.map_box_access_token") }}';
+        const sessionToken = Math.random().toString(36).substring(2);
+        const locationInput = document.getElementById('location');
+        const locationList = document.getElementById('location-list');
+        const locationMessage = document.getElementById('location-message');
+        const latitudeInput = document.getElementById('latitude');
+        const longitudeInput = document.getElementById('longitude');
+        
+        let suggestions = [], selectedIndex = -1;
+        let debounceTimeout, abortController;
 
+        function clearSuggestions() {
+            locationList.innerHTML = '';
+            locationList.style.display = 'none';
+            locationMessage.style.display = 'none';
+            selectedIndex = -1;
+        }
 
+        function renderSuggestions() {
+            locationList.innerHTML = '';
+            suggestions.forEach((s, i) => {
+                const name = s.name || '';
+                let region = '', country = '';
 
+                if (Array.isArray(s.context)) {
+                    region = s.context.find(c => c.id?.startsWith('region'))?.text || '';
+                    country = s.context.find(c => c.id?.startsWith('country'))?.text || '';
+                } else {
+                    console.warn('Unexpected context format:', s.context);
+                }
+
+                const li = document.createElement('li');
+                li.textContent = [name, region, country].filter(Boolean).join(', ');
+                li.setAttribute('data-index', i);
+                li.addEventListener('click', () => selectSuggestion(i));
+                locationList.appendChild(li);
+            });
+            locationList.style.display = 'block';
+        }
+
+        function selectSuggestion(index) {
+            if (index < 0 || index >= suggestions.length) return;
+            const s = suggestions[index];
+            const name = s.name || '';
+            let region = '', country = '';
+
+            if (Array.isArray(s.context)) {
+                region = s.context.find(c => c.id?.startsWith('region'))?.text || '';
+                country = s.context.find(c => c.id?.startsWith('country'))?.text || '';
+            } else {
+                console.warn('Unexpected context format:', s.context);
+            }
+
+            locationInput.value = [name, region, country].filter(Boolean).join(', ');
+            clearSuggestions();
+
+            fetch(`https://api.mapbox.com/search/searchbox/v1/retrieve/${s.mapbox_id}?session_token=${sessionToken}&access_token=${accessToken}`)
+                .then(r => r.json())
+                .then(data => {
+                    const coords = data?.features?.[0]?.geometry?.coordinates;
+                    if (coords) {
+                        latitudeInput.value = coords[1];
+                        longitudeInput.value = coords[0];
+                        if (typeof fetchVenues === 'function') {
+                            fetchVenues(coords[1], coords[0]);
+                        }
+                    }
+                })
+                .catch(console.error);
+        }
+
+        locationInput.addEventListener('input', () => {
+            const query = locationInput.value.trim();
+            clearTimeout(debounceTimeout);
+
+            if (query.length <= 2) return clearSuggestions();
+
+            debounceTimeout = setTimeout(() => {
+                if (abortController) abortController.abort();
+                abortController = new AbortController();
+
+                fetch(`https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodeURIComponent(query)}&language=en&limit=5&session_token=${sessionToken}&access_token=${accessToken}`, {
+                    signal: abortController.signal
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                        suggestions = data?.suggestions || [];
+                        if (suggestions.length) {
+                            renderSuggestions();
+                            locationMessage.style.display = 'none';
+                        } else {
+                            clearSuggestions();
+                            locationMessage.textContent = 'No locations found';
+                            locationMessage.style.display = 'block';
+                        }
+                    })
+                    .catch(err => {
+                        if (err.name !== 'AbortError') {
+                            console.error('Fetch error:', err);
+                            locationMessage.textContent = 'Failed to fetch location data';
+                            locationMessage.style.display = 'block';
+                        }
+                    });
+            }, 300);
+        });
+
+        locationInput.addEventListener('keydown', e => {
+            const items = locationList.querySelectorAll('li');
+            if (!items.length) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex + 1) % items.length;
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                selectSuggestion(selectedIndex);
+            } else if (e.key === 'Escape') {
+                clearSuggestions();
+            }
+
+            items.forEach((li, i) => li.classList.toggle('highlighted', i === selectedIndex));
+        });
+
+        document.addEventListener('click', e => {
+            if (!locationInput.contains(e.target) && !locationList.contains(e.target)) {
+                clearSuggestions();
+            }
+        });
+    }
+</script>
 <script>
 // document.getElementById('plusIcon').addEventListener('click', function() {
 //     // Yahan pe aap file upload ya koi bhi action likh sakte ho

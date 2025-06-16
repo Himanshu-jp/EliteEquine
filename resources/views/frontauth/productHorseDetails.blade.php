@@ -1,4 +1,38 @@
 @extends('frontauth.layouts.main')
+<style>
+        body { margin: 0; padding: 0; }
+        .form-section .col-md-6 { position: relative; }
+        .form-section .col-md-6 #map { position: absolute; top: 0; left: 0; width: 98%; border:0; border-radius: 14px; height:600px; }
+        
+
+    .custom-map-marker {
+        background-image: url("{{asset('images/location-user-mkr.svg')}}");
+        background-size: contain;
+        width: 32px;
+        height: 39px;
+        cursor: pointer;
+    }
+
+    .highlighted {
+        background-color: #f0f0f0;
+    }
+
+    #map-location-list li {
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    #map-location-list {
+        border: 1px solid #ccc;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none;
+        position: absolute;
+        z-index: 999;
+        background: white;
+        width: 100%;
+    }
+    </style>
 @section('title')
 Your Ads
 @endsection
@@ -36,6 +70,8 @@ Your Ads
         <div class="row">
             <input type="hidden" name="productId" value="{{$productId}}">
             <input type="hidden" name="productDetailId" value="{{@$products->productDetail->id}}">
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
             
             @if(@$products->category_id)
                 <div class="col-md-3 mt-3 position-relative">
@@ -420,7 +456,13 @@ Your Ads
                     
                     <div class="mt-4 position-relative">
                         <label class="form-label">Precise Location</label>
-                        <input type="text" class="inner-form form-control" placeholder="Enter location.." name="precise_location" id="precise_location" value={{old('precise_location',@$products->productDetail->precise_location)}}>
+                        <input type="text" class="inner-form form-control" placeholder="Enter location.." name="precise_location" id="precise_location" onkeyup="initializeLocationAutocomplete()" value={{old('precise_location',@$products->productDetail->precise_location)}}>
+                        <span id="map-location-message" class="text-danger" style="display: none; font-size: 12px;"></span>
+                            <ul id="map-location-list" style="display: none;">
+                                <!-- Location suggestions will appear here -->
+                            </ul>
+                            <input type="hidden" id="map-latitude" name="latitude" value="{{ request()->query('latitude')}}">
+                            <input type="hidden" id="map-longitude" name="longitude" value="{{ request()->query('longitude')}}">
                         @if($errors->has('precise_location'))
                             <span class="error text-danger">{{$errors->first('precise_location')}}</span>
                         @endif
@@ -465,11 +507,11 @@ Your Ads
 
                 </div>
                 <div class="col-md-6">
-                    <div class="map">
-                        <iframe
+                    <div class="map" id="map">
+                        <!-- <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d113874.30006216935!2d75.70815698269863!3d26.88533996496087!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1745411421280!5m2!1sen!2sin"
                             width="100%" height="600px" style="border:0; border-radius: 14px;" allowfullscreen=""
-                            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
                     </div>
                 </div>
             </div>
@@ -527,6 +569,330 @@ Your Ads
 @section('script')
 
 <script>
+    let mapboxAccessToken = '{{ config("config.map_box_access_token") }}';
+    mapboxgl.accessToken = mapboxAccessToken;
+
+    // Initialize the map
+    /* const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [77.2090, 28.6139],
+        zoom: 10
+    }); */
+
+    let currentMarker = null;
+
+    function addMapMarker(lat, lng) {
+        if (currentMarker) currentMarker.remove();
+
+        const el = document.createElement('div');
+        el.className = 'custom-map-marker';
+
+        currentMarker = new mapboxgl.Marker(el)
+            .setLngLat([lng, lat])
+            .addTo(map);
+
+        map.flyTo({ center: [lng, lat], zoom: 14 });
+    }
+
+    function reverseGeocode(lat, lng) {
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxAccessToken}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.features && data.features.length > 0) {
+                    const placeName = data.features[0].place_name;
+                    const locationInput = document.getElementById('map-location');
+                    if (locationInput) locationInput.value = placeName;
+                }
+            })
+            .catch(error => {
+                console.error('Reverse geocoding error:', error);
+            });
+    }
+
+    window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        let lat = parseFloat(urlParams.get('latitude')) || 26.8467;
+        let lng = parseFloat(urlParams.get('longitude')) || 75.7647;
+
+        const latInput = document.getElementById('map-latitude');
+        const lngInput = document.getElementById('map-longitude');
+
+        const updateLocation = () => {
+            if (latInput) latInput.value = lat.toFixed(6);
+            if (lngInput) lngInput.value = lng.toFixed(6);
+            reverseGeocode(lat, lng);
+            initializeMap(lat, lng);
+            addMapMarker(lat, lng);
+        };
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    lat = position.coords.latitude;
+                    lng = position.coords.longitude;
+                    updateLocation();
+                },
+                () => updateLocation(),
+                { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+            );
+        } else {
+            updateLocation();
+        }
+
+        initializeLocationAutocomplete();
+    };
+
+    function initializeMap(latitude, longitude) {
+    map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [longitude, latitude],
+        zoom: 10,
+        pitch: 60,
+        bearing: -20
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+}
+
+    function initializeLocationAutocomplete() {
+        const locationInput = document.getElementById('precise_location');
+        const locationList = document.getElementById('map-location-list');
+        const locationMessage = document.getElementById('map-location-message');
+        const latitudeInput = document.getElementById('map-latitude');
+        const longitudeInput = document.getElementById('map-longitude');
+        const countryInput = document.getElementById('country');
+        const stateInput = document.getElementById('state');
+        const cityInput = document.getElementById('city');
+        const streetInput = document.getElementById('street');
+
+        const sessionToken = Math.random().toString(36).substring(2, 15);
+        const cache = {};
+        let selectedIndex = -1;
+        let suggestions = [];
+        let debounceTimer;
+
+        function clearSuggestions() {
+            locationList.innerHTML = '';
+            locationList.style.display = 'none';
+            locationMessage.style.display = 'none';
+            selectedIndex = -1;
+            suggestions = [];
+        }
+
+        function highlightSuggestion(index) {
+            const items = locationList.querySelectorAll('li');
+            items.forEach((li, i) => {
+                li.classList.toggle('highlighted', i === index);
+                if (i === index) li.scrollIntoView({ block: 'nearest' });
+            });
+        }
+
+        function parseContext(context) {
+            let state = '', country = '', city = '', street = '';
+
+            if (Array.isArray(context)) {
+            context.forEach(ctx => {
+                const id = ctx.id || '';
+                if (id.startsWith('region')) state = ctx.text || ctx.name || '';
+                else if (id.startsWith('country')) country = ctx.text || ctx.name || '';
+                else if (id.startsWith('place') || id.startsWith('district')) city = ctx.text || ctx.name || '';
+                else if (id.startsWith('locality') && !city) city = ctx.text || ctx.name || '';
+                else if (id.startsWith('address') || id.startsWith('street')) street = ctx.text || ctx.name || '';
+            });
+        } else if (typeof context === 'object' && context !== null) {
+            if (context.region) state = context.region.text || context.region.name || '';
+            if (context.country) country = context.country.text || context.country.name || '';
+            if (context.place) city = context.place.text || context.place.name || '';
+            if (!city && context.district) city = context.district.text || context.district.name || '';
+            if (!city && context.locality) city = context.locality.text || context.locality.name || '';
+            if (context.address) street = context.address.text || context.address.name || '';
+            if (!street && context.street) street = context.street.text || context.street.name || '';
+        }
+
+            return { state, country, city, street };
+        }
+
+        function selectSuggestion(index) {
+            if (index < 0 || index >= suggestions.length) return;
+            const suggestion = suggestions[index];
+            const name = suggestion.name || '';
+
+            const { state, country, city, street } = parseContext(suggestion.context);
+            let finalStreet = street || (suggestion.place_type?.includes('address') ? name : '');
+            let finalCity = city || (suggestion.place_type?.includes('place') ? name : '');
+
+            locationInput.value = [name, state, country].filter(Boolean).join(', ');
+            countryInput.value = country;
+            stateInput.value = state;
+            cityInput.value = finalCity;
+            streetInput.value = finalStreet;
+
+            clearSuggestions();
+
+            const mapbox_id = suggestion.mapbox_id;
+            fetch(`https://api.mapbox.com/search/searchbox/v1/retrieve/${mapbox_id}?session_token=${sessionToken}&access_token=${mapboxAccessToken}`)
+                .then(response => response.json())
+                .then(data => {
+                    const feature = data.features?.[0];
+                    if (!feature) return;
+
+                    const coords = feature.geometry.coordinates;
+                    if (coords) {
+                        const lat = coords[1];
+                        const lng = coords[0];
+                        latitudeInput.value = lat;
+                        longitudeInput.value = lng;
+                        addMapMarker(lat, lng);
+                        if (typeof fetchVenues === 'function') fetchVenues(lat, lng);
+                    }
+
+                    let { state: rState, country: rCountry, city: rCity, street: rStreet } = parseContext(feature.context);
+                    if (feature.properties?.address && !rStreet) {
+                        rStreet = feature.properties.address;
+                    }
+
+                    if (!countryInput.value) countryInput.value = rCountry;
+                    if (!stateInput.value) stateInput.value = rState;
+                    if (!cityInput.value) cityInput.value = rCity;
+                    if (!streetInput.value) streetInput.value = rStreet;
+                })
+                .catch(err => console.error('Error fetching coordinates:', err));
+        }
+
+        function fetchSuggestions(query) {
+            if (cache[query]) {
+                renderSuggestions(cache[query]);
+                return;
+            }
+
+            fetch(`https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodeURIComponent(query)}&language=en&limit=5&session_token=${sessionToken}&access_token=${mapboxAccessToken}`)
+                .then(response => response.json())
+                .then(data => {
+                    cache[query] = data;
+                    renderSuggestions(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching location data:', error);
+                    locationMessage.style.display = 'block';
+                    locationMessage.textContent = 'Failed to fetch location data';
+                    locationList.style.display = 'none';
+                });
+        }
+
+        function renderSuggestions(data) {
+            locationList.innerHTML = '';
+            suggestions = data.suggestions || [];
+
+            if (suggestions.length > 0) {
+                suggestions.forEach((suggestion, i) => {
+                    const li = document.createElement('li');
+                    const name = suggestion.name || '';
+                    const { state, country } = parseContext(suggestion.context);
+                    const fullAddress = [name, state, country].filter(Boolean).join(', ');
+
+                    li.textContent = fullAddress;
+                    li.setAttribute('data-index', i);
+                    li.addEventListener('click', () => selectSuggestion(i));
+                    locationList.appendChild(li);
+                });
+
+                locationList.style.display = 'block';
+                locationMessage.style.display = 'none';
+                selectedIndex = -1;
+            } else {
+                locationMessage.style.display = 'block';
+                locationMessage.textContent = 'No locations found';
+                locationList.style.display = 'none';
+            }
+        }
+
+        locationInput.addEventListener('input', function () {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const query = locationInput.value.trim();
+                if (query.length > 2) {
+                    fetchSuggestions(query);
+                } else {
+                    clearSuggestions();
+                }
+            }, 600);
+        });
+
+        locationInput.addEventListener('keydown', function (e) {
+            const items = locationList.querySelectorAll('li');
+            if (locationList.style.display === 'block' && items.length > 0) {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    selectedIndex = (selectedIndex + 1) % items.length;
+                    highlightSuggestion(selectedIndex);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+                    highlightSuggestion(selectedIndex);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (selectedIndex >= 0) selectSuggestion(selectedIndex);
+                } else if (e.key === 'Escape') {
+                    clearSuggestions();
+                }
+            }
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!locationInput.contains(e.target) && !locationList.contains(e.target)) {
+                clearSuggestions();
+            }
+        });
+    }
+
+</script>
+<script>
+    $(window).on('load', function () {
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                const latitude = position.coords.latitude.toFixed(6);
+                const longitude = position.coords.longitude.toFixed(6);
+
+                console.log("Latitude:", latitude);
+                console.log("Longitude:", longitude);
+
+                // Optional: Set values into hidden inputs if needed
+                $('#latitude').val(latitude);
+                $('#longitude').val(longitude);
+            },
+            function (error) {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        console.error("User denied the request for Geolocation.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        console.error("Location information is unavailable.");
+                        break;
+                    case error.TIMEOUT:
+                        console.error("The request to get user location timed out.");
+                        break;
+                    default:
+                        console.error("An unknown error occurred.");
+                        break;
+                }
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    } else {
+        console.error("Geolocation is not supported by this browser.");
+    }
+});
+
+
     $(document).ready(function () {
         function toggleAddressFields() {
             if ($('#addressSet').is(':checked')) {
