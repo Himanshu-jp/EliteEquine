@@ -25,7 +25,7 @@ class AboutSellerBusinessRequest extends FormRequest
     {
         return [
             /* 'title' => 'required|string|min:3|max:255',*/
-            'description' => 'required|string|min:10|max:1000', 
+            // 'description' => 'required|string|min:10|max:1000', 
             'image' => 'required|file|mimes:jpg,jpeg,png,svg,webp|max:5120', // max 5MB
             
             // Listing Section

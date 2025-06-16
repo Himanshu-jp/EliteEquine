@@ -128,8 +128,9 @@
                 </div>
             </div>
             <div id="map">
-                <div class="onlinebox"><span class="online"></span> Online</div>
+                <!-- <div class="onlinebox"><span class="online"></span> Online</div> -->
             </div>
+            
             <!-- Card INSIDE MAP container -->
             <div class="horsescard-popup" id="popupCard">
                 <div class="inner-box">
@@ -194,11 +195,13 @@
                             <div class="content">
                                     <h4>{{@$value->user->name}}</h4>
                                 <div class="stars">
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
+                                     @php
+                                        $averageRating = round(optional(@$value->user->reviews)->avg('rating'), 1);
+                                        $totalReviews  = optional(@$value->user->reviews)->count();
+                                    @endphp 
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <i class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
+                                    @endfor
                                 </div>
                             </div>
                         </div>
@@ -222,9 +225,6 @@
     </div>
 
 @endif
-
-
-
 <script>
     // add favorite
     $('.favorite-btn').on('click', function(e) {
@@ -271,5 +271,23 @@
                 }
             }
         });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const mapContainer = document.getElementById('map');
+        if (mapContainer) {
+            const map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [77.2090, 28.6139],
+                zoom: 10
+            });
+
+            // Optional: Add a marker example
+            new mapboxgl.Marker()
+                .setLngLat([77.2090, 28.6139])
+                .addTo(map);
+        }
     });
 </script>

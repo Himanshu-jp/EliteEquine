@@ -10,7 +10,7 @@ class Community extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'title', 'requirement', 'image','date','time','event_around','price','location'];
+    protected $fillable = ['user_id', 'title', 'requirement', 'image','date','time','event_around','price','location', 'latitude', 'longitude'];
 
     public function user()
     {

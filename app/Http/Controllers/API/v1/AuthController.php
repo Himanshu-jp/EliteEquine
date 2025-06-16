@@ -70,7 +70,7 @@ class AuthController extends BaseController
     public function login(LoginRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $credentials = $request->only('username', 'password');
+        $credentials = $request->only('email', 'password');
         $deviceName = $request->device_name ?? 'web'; // default if missing
 
         $authResult = $this->userService->login($credentials, $deviceName);

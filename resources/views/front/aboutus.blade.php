@@ -25,6 +25,104 @@ About us
         </div>
     </div>
 </section>
+<!-------------------------------- forseller_area ------------------------------------>
+@if(!empty($sellerBusinessData))
+    <section class="forseller_area">
+        <div class="container-fluid ps-lg-0">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="forseller_area_head">
+                        <h2>For Sellers and Businesses</h2>
+                    </div>
+                </div>
+                <div class="col-lg-6 ps-0 my-auto">
+                    <div class="forseller_area_inner">
+                        <img src="{{ asset('storage/' . $sellerBusinessData->image) }}" alt="" />
+                    </div>
+                </div>
+                <div class="col-xxl-5 col-lg-6">
+                    <div class="forseller_area_inner2">
+                        @php
+                            $sections = ['listing' => 'Listing', 'track' => 'Track', 'featured' => 'Featured', 'post' => 'Post'];
+                        @endphp
+                        @foreach ($sections as $key => $label) 
+                        @php 
+                            $title = $key.'_title'; 
+                            $icon = $key.'_icon'; 
+                            $content = $key.'_content'; 
+                        @endphp
+                        
+                        <div class="bx1">
+                            <img src="{{asset('storage/'. $sellerBusinessData->$icon)}}" alt="" />
+                            <h3>{{$sellerBusinessData->$title}}</h3>
+                            {{$sellerBusinessData->$content}}
+                        </div>
+                        @endforeach
+                        <div class="bx1">
+                            <img src="https://v1.checkprojectstatus.com/elite-quaine-marketplace/web/public/storage/seller_business/icons/K9TTHnnVkRHDwQm0R19sqmkKXHs3708kygNNDVBP.svg" alt="">
+                            <h3>Flexible Selling: Auctions & Secure Payments</h3>
+                            Sell equipment, apparel, and services your way—use our built-in auction tool for competitive bidding or opt for direct sales through our secure, Stripe-powered payment system.
+                        </div>
+                        <div class="bx1">
+                            <img src="https://v1.checkprojectstatus.com/elite-quaine-marketplace/web/public/storage/seller_business/icons/K9TTHnnVkRHDwQm0R19sqmkKXHs3708kygNNDVBP.svg" alt="">
+                            <h3>Real-Time Messaging & Instant Alerts</h3>
+                            Connect with buyers directly through our secure in-platform messaging, and stay informed with real-time notifications for new messages, payment updates, subscription reminders, and more.
+                        </div>
+                    </div>
+                    {{--<div class="forseller_area_inner3">
+                        {!! $sellerBusinessData->description !!}
+                    </div>--}}
+                </div>
+            </div>
+        </div>
+    </section>
+@endif
+
+<!-------------------------------- forbuyer_area ------------------------------------>
+@if(!empty($buyerBrowserData) || !empty($buyerFaqData))
+    <section class="forbuyer_area">
+        <div class="container z-11">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="forbuyer_area_inner">
+                        <h2>For Buyers and Browsers</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5 align-items-center">
+                <div class="col-lg-6">
+                    <img src="{{asset('storage/'.$buyerBrowserData->image)}}" alt="" />
+                </div>
+                <div class="col-lg-6">
+                    <div class="accordion my-4" id="simpleAccordion">
+                        @foreach($buyerFaqData as $index => $faq)
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{$index}}">
+                                <button class="accordion-button {{ $index > 0 ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse{{$index}}">
+                                    {{$faq->questions}}
+                                </button>
+                            </h2>
+                            <div id="collapse{{$index}}" class="accordion-collapse collapse {{ $index === 0 ? 'show' : '' }}" aria-labelledby="heading{{ $index }}"
+                                data-bs-parent="#simpleAccordion">
+                                <div class="accordion-body">
+                                    {!! $faq->answers !!}
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            {{--<div class="row">
+                <div class="desic">
+                    {!! $buyerBrowserData->description !!}
+                </div>
+            </div>--}}
+        </div>
+    </section>
+@endif
 @if(!empty($aboutData))
 <section class="section story-section">
     <div class="container">
@@ -130,6 +228,7 @@ About us
               </div>
     </div>
 </section>
+
 <section class="section">
 <div class="container-fluid mt-4">
    

@@ -64,6 +64,8 @@ class ProductHorseDetailsRequest extends FormRequest
             'street' => 'nullable|string|max:300',
             'agree' => 'required|accepted',
             'banners' => 'required',
+            'latitude' => 'nullable',
+            'longitude' => 'nullable',
            
         ];
 
