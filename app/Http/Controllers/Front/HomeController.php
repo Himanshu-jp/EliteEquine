@@ -421,9 +421,12 @@ class HomeController extends Controller
     public function aboutus()
     {
         $aboutData = About::first();
-        $aboutSellerBusinessData = AboutSellerBusiness::first();
+        $sellerBusinessData = SellerBusiness::first();
+        $buyerBrowserData = BuyerBrowser::first();
+        $buyerFaqData = BuyerFaq::orderBy('id', 'desc')->get();
+        // $aboutSellerBusinessData = AboutSellerBusiness::first();
         $hjForumData = HjForum::latest()->take(6)->get();
-        return view('front/aboutus', compact('aboutData', 'aboutSellerBusinessData', 'hjForumData'));
+        return view('front/aboutus', compact('aboutData', 'hjForumData', 'sellerBusinessData', 'buyerBrowserData', 'buyerFaqData'));
     }
 
     public function partnerships()

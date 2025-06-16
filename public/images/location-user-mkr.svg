@@ -1,0 +1,13 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Red Marker Shape -->
+  <path d="M32 2C19 2 9 13 9 26c0 11.5 8.6 24 20.7 36.7a3 3 0 0 0 4.6 0C46.4 50 55 37.5 55 26 55 13 45 2 32 2Z" fill="#E53935"></path>
+
+  <!-- White Circle Background for Icon -->
+  <circle cx="32" cy="26" r="12" fill="#ffffff"></circle>
+
+  <!-- User Icon: Head -->
+  <circle cx="32" cy="22" r="4" fill="#E53935"></circle>
+
+  <!-- User Icon: Rounded Shoulders/Torso -->
+  <path d="M24 32c0-4 16-4 16 0 0 2-1.5 3-4.5 3h-7c-3 0-4.5-1-4.5-3z" fill="#E53935" stroke="none" stroke-linejoin="round"></path>
+</svg>

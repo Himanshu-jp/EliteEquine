@@ -265,12 +265,17 @@ class ProductService
             $state = $userDetail->state;
             $city = $userDetail->city;
             $street = $userDetail->street;
+            $latitude = $userDetail->latitude;
+            $longitude = $userDetail->longitude;
         }else{
             $precise_location = $data['precise_location'];
             $country = $data['country'];
             $state = $data['state'];
             $city = $data['city'];
             $street = $data['street'];
+            
+            $latitude = $data['latitude'];
+            $longitude = $data['longitude'];
         }
 
         $productDetail->phone = $phone; 
@@ -278,6 +283,8 @@ class ProductService
         $productDetail->country = $country;
         $productDetail->state = $state;
         $productDetail->city = $city;
+        $productDetail->latitude = $latitude;
+        $productDetail->longitude = $longitude;
         $productDetail->street = $street;
         $productDetail->banner = $data['banners'];
         $productDetail->agree = $data['agree'];
@@ -468,6 +475,8 @@ class ProductService
             $country = $userDetail->country;
             $state = $userDetail->state;
             $city = $userDetail->city;
+            $latitude = $userDetail->latitude;
+            $longitude = $userDetail->longitude;
             $street = $userDetail->street;
         }else{
             $precise_location = $data['precise_location'];
@@ -475,8 +484,12 @@ class ProductService
             $state = $data['state'];
             $city = $data['city'];
             $street = $data['street'];
+            $latitude = $data['latitude'];
+            $longitude = $data['longitude'];
         }
 
+        $productDetail->latitude = $latitude;
+        $productDetail->longitude = $longitude;
         $productDetail->phone = $phone; 
         $productDetail->precise_location = $precise_location;
         $productDetail->country = $country;
@@ -688,11 +701,15 @@ class ProductService
             $state = $userDetail->state;
             $city = $userDetail->city;
             $street = $userDetail->street;
+            $latitude = $userDetail->latitude;
+            $longitude = $userDetail->longitude;
         }else{
             $precise_location = $data['precise_location'];
             $country = $data['country'];
             $state = $data['state'];
             $city = $data['city'];
+            $latitude = $data['latitude'];
+            $longitude = $data['longitude'];
             $street = $data['street'];
         }
 
@@ -701,6 +718,8 @@ class ProductService
         $productDetail->country = $country;
         $productDetail->state = $state;
         $productDetail->city = $city;
+        $productDetail->latitude = $latitude;
+        $productDetail->longitude = $longitude;
         $productDetail->street = $street;
         $productDetail->banner = $data['banners'];
         $productDetail->agree = $data['agree'];
@@ -805,18 +824,23 @@ class ProductService
         }else{
             $phone = $data['phone'];
         }
+        
         if(@$data['addressSet']){
             $precise_location = $userDetail->precise_location;
             $country = $userDetail->country;
             $state = $userDetail->state;
             $city = $userDetail->city;
             $street = $userDetail->street;
+            $latitude = $userDetail->latitude;
+            $longitude = $userDetail->longitude;
         }else{
             $precise_location = $data['precise_location'];
             $country = $data['country'];
             $state = $data['state'];
             $city = $data['city'];
             $street = $data['street'];
+            $latitude = $data['latitude'];
+            $longitude = $data['longitude'];
         }
 
         $productDetail->phone = $phone; 
@@ -824,6 +848,8 @@ class ProductService
         $productDetail->country = $country;
         $productDetail->state = $state;
         $productDetail->city = $city;
+        $productDetail->latitude = $latitude;
+        $productDetail->longitude = $longitude;
         $productDetail->street = $street;
         $productDetail->banner = $data['banners'];
         $productDetail->agree = $data['agree'];
