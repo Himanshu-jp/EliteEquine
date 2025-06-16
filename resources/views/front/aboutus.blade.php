@@ -189,7 +189,7 @@ About us
     </div>
 </section>
 @endif
-<section class="section  pb-sm-0">
+{{-- <section class="section  pb-sm-0">
    <div class="container">
             <div class="row text-center py-5" >
                 <div class="disc-info">
@@ -227,7 +227,7 @@ About us
                 </div>
               </div>
     </div>
-</section>
+</section> --}}
 
 <section class="section">
 <div class="container-fluid mt-4">

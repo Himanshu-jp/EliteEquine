@@ -138,30 +138,30 @@
                                     @endif
                                 </div> -->
 
-                                <div class="modal fade" id="notificationModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal fade" id="notificationModalnext" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content rounded-4 p-3">
                                         <div class="modal-header border-0">
-                                            <h5 class="modal-title">Select Your Notifications Settings</h5>
+                                            <h5 class="modal-title">Are you an Ad Lister or Ad Viewer?</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
 
 
-                                        <div class="modal-body">
-                                            <div class="lister-checkbox-box">
+                                        <div class="modal-body p-0">
+                                            <div class="lister-checkbox-box p-0">
                                                 <div>
 
                                                     <label class="ad-lister-checkbox">
                                                         <input class="form-check-input" type="checkbox" id="email1">
                                                         <span>Ad Lister</span>
                                                     </label>
-                                                    <div class="toggle-list" id="list-email1">
+                                                    <!-- <div class="toggle-list" id="list-email1">
                                                         <ul>
                                                         <li>Subscription Expiring</li>
                                                         <li>Payment Received</li>
                                                         <li>Direct Message</li>
                                                         </ul>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             <div>
 
@@ -169,13 +169,13 @@
                                                     <input class="form-check-input" type="checkbox" id="email2">
                                                     <span>Ad Viewer</span>
                                                 </label>
-                                                <div class="toggle-list" id="list-email2">
+                                                <!-- <div class="toggle-list" id="list-email2">
                                                     <ul>
                                                     <li>Listing Matching Saved Search Appears</li>
                                                     <li>Auction Ending on Bidding Item</li>
                                                     <li>Direct Messaging</li>
                                                     </ul>
-                                                </div>  
+                                                </div>   -->
                                             </div>
                                             </div>
 
@@ -183,7 +183,7 @@
                                         </div>
 
                                         <div class="modal-footer border-0 justify-content-end">
-                                            <button type="button" class="btn btn-save" data-bs-dismiss="modal" aria-label="Close">Save</button>
+                                            <button type="button" class="btn btn-save" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#notificationModal">Next</button>
                                         </div>
                                         </div>
                                     </div>
@@ -204,7 +204,91 @@
             </div>
         </div>
     </section>
+ <div class="modal fade" id="notificationModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content rounded-4 p-3">
+                                        <div class="modal-header border-0">
+                                            <h5 class="modal-title">Select Your Notifications Settings</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
 
+                                        <div class="modal-body">
+                                            <div class="table-responsive">
+                                            <table class="table align-middle text-center">
+                                                <thead>
+                                                <tr>
+                                                    <th class="text-start">Alert Type</th>
+                                                    <th>Email</th>
+                                                    <th>SMS</th>
+                                                    <th>Mobile App</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td class="text-start">Subscription Expiring</td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="email1"
+                                                            value="1" name="subscription[email]"
+                                                            {{ old('subscription.email') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="sms1"
+                                                            value="1" name="subscription[sms]"
+                                                            {{ old('subscription.sms') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="mobile1"
+                                                            value="1" name="subscription[mobile]"
+                                                            {{ old('subscription.mobile') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-start">Payment Received</td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="email2"
+                                                            value="1" name="payment[email]"
+                                                            {{ old('payment.email') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="sms2"
+                                                            value="1" name="payment[sms]"
+                                                            {{ old('payment.sms') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                    <input class="form-check-input mx-auto" type="checkbox" id="mobile2"
+                                                            value="1" name="payment[mobile]"
+                                                            {{ old('payment.mobile') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-start">Direct Messaging</td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="email3"
+                                                            value="1" name="auction[email]"
+                                                            {{ old('auction.email') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="sms3"
+                                                            value="1" name="auction[sms]"
+                                                            {{ old('auction.sms') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                    <td><label class="notife-custom-checkbox">
+                                                        <input class="form-check-input mx-auto" type="checkbox" id="mobile3"
+                                                            value="1" name="auction[mobile]"
+                                                            {{ old('auction.mobile') == 1 ? 'checked' : '' }}>
+                                                        <span></span></label></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer border-0 justify-content-end">
+                                            <button type="button" class="btn btn-save" data-bs-dismiss="modal" aria-label="Close">Save</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
 
 <style>
     
@@ -341,13 +425,13 @@
     </div>
 
  <style>
-    .ad-lister-checkbox {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-      cursor: pointer;
-    }
+   .ad-lister-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
 
     .ad-lister-checkbox .form-check-input {
       width: 18px;
@@ -355,7 +439,10 @@
       cursor: pointer;
       border: 1px solid #000;
     }
-
+.ad-lister-checkbox span {
+    font-size: 18px;
+    line-height: 1;
+}
    .toggle-list {
     display: none;
     margin-left: 0;
@@ -363,17 +450,18 @@
 }
 
    .toggle-list ul {
+
     padding-left: 0; 
     list-style: none;
-    margin: 0 !important;
+    margin: 10px 0 !important;
 }
 
-    .toggle-list ul li {
-        list-style: none;
-        margin-bottom: 4px;
-        font-size: 15px;
-        color: #000;
-    }
+  .toggle-list ul li {
+    list-style-type: decimal;
+    margin-bottom: 4px;
+    font-size: 15px;
+    color: #000;
+}
     .toggle-list ul li {
         list-style: none;
         margin-bottom: 4px;
@@ -413,7 +501,7 @@
 <script>
   function toggleBox(el) {
     if (el.value === "yes") {
-      const modalElement = document.getElementById('notificationModal');
+      const modalElement = document.getElementById('notificationModalnext');
       if (modalElement) {
         const modal = new bootstrap.Modal(modalElement);
         modal.show();

@@ -6029,6 +6029,7 @@ section.industry_area.forum-bg-border .container {
     gap: 10px; 
     border-bottom: 1px solid var(--Blue-Gray-200, #E2E8F0) !important;
     padding: 10px 0px;
+    flex-direction: column;
 }
 
 .map-pp-main .evn-dte-ll h3 a {
@@ -6238,3 +6239,8 @@ ul.act-icon li img {
     color: #a09165;
 }
 .buyers_and_browsers{ width: 100%;}
+
+.ent-emg {
+  display: flex;
+  gap: 10px;
+}
