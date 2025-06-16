@@ -51,16 +51,16 @@ class RegisterRequest extends FormRequest
     }
 
 
-    public function withValidator($validator)
-    {
-        $validator->after(function ($validator) {
-            if ($this->opt_in_notification === 'yes') {
-                if (!$this->mail && !$this->mobile && !$this->sms) {
-                    $validator->errors()->add('contact', 'At least one of Mail, Mobile, or SMS must be selected if opting in.');
-                }
-            }
-        });
-    }
+    // public function withValidator($validator)
+    // {
+    //     $validator->after(function ($validator) {
+    //         if ($this->opt_in_notification === 'yes') {
+    //             if (!$this->mail && !$this->mobile && !$this->sms) {
+    //                 $validator->errors()->add('contact', 'At least one of Mail, Mobile, or SMS must be selected if opting in.');
+    //             }
+    //         }
+    //     });
+    // }
 
 
     public function failedValidation(Validator $validator)

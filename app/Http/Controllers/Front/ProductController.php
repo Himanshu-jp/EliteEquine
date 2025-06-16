@@ -81,6 +81,10 @@ class ProductController extends Controller
             ->where(['id' => $id, 'deleted_at' => null, 'user_id' => $user->id])
             ->orderBy('id', 'desc')
             ->first();
+        
+        if($products->product_status=="sold"){
+             return redirect()->back()->with('error', 'This product has been sold and can no longer be updated.');
+        }
             
         return view('frontauth/product', compact('products'));
     }
@@ -184,6 +188,9 @@ class ProductController extends Controller
         if (!$productExists) {
             return redirect()->route('product')->with('error', 'This product is not available.');
         }
+        if($productExists->product_status=="sold"){
+             return redirect()->back()->with('error', 'This product has been sold and can no longer be updated.');
+        }
         $productId = $request->query('id'); // Get the product ID from the query string
         $subcategories = SubCategory::where(['category_id' => $productExists->category_id, 'deleted_at' => null])->pluck('name', 'id')->toArray();
 
@@ -233,6 +240,9 @@ class ProductController extends Controller
         if (!$productExists) {
             return redirect()->route('product')->with('error', 'This product is not available.');
         }
+        if($productExists->product_status=="sold"){
+             return redirect()->back()->with('error', 'This product has been sold and can no longer be updated.');
+        }
         $productId = $request->query('id'); // Get the product ID from the query string
 
         $products = Product::with([
@@ -278,6 +288,9 @@ class ProductController extends Controller
         if (!$productExists) {
             return redirect()->route('product')->with('error', 'This product is not available.');
         }
+        if($productExists->product_status=="sold"){
+             return redirect()->back()->with('error', 'This product has been sold and can no longer be updated.');
+        }
         $productId = $request->query('id'); // Get the product ID from the query string
         $subcategories = SubCategory::where(['category_id' => $productExists->category_id, 'deleted_at' => null])->pluck('name', 'id')->toArray();
 
@@ -310,13 +323,16 @@ class ProductController extends Controller
     
 
 
-    //------Barns & Housing------- 0004 //
+    //------Service & jobs------- 0004 //
     public function productServiceDetails(Request $request)
     {
         $user = auth::user();
         $productExists = Product::where(['id' => $request->id, 'deleted_at' => null, 'user_id' => $user->id])->first();
         if (!$productExists) {
             return redirect()->route('product')->with('error', 'This product is not available.');
+        }
+        if($productExists->product_status=="sold"){
+             return redirect()->back()->with('error', 'This product has been sold and can no longer be updated.');
         }
         $productId = $request->query('id'); // Get the product ID from the query string
         $subcategories = SubCategory::where(['category_id' => $productExists->category_id, 'deleted_at' => null])->pluck('name', 'id')->toArray();
@@ -518,7 +534,7 @@ class ProductController extends Controller
         {
             $exits = Order::where(['product_id' => $id, 'user_id'])->first();
             if($exits){
-                return redirect()->back()->with('warning', "You're already purchage this product.");
+                return redirect()->back()->with('warning', "You're already purchase this product.");
             }
         }
         
@@ -527,7 +543,7 @@ class ProductController extends Controller
             $currentDate = Carbon::now()->toDateString();
             $exits = Order::where(['product_id' => $id, 'user_id', 'service_date' => $currentDate])->first();
             if($exits){
-                return redirect()->back()->with('warning', "You're already purchage this product.");
+                return redirect()->back()->with('warning', "You're already purchase this product.");
             }
         }
         $service_date = $data['service_date'] ?? '';

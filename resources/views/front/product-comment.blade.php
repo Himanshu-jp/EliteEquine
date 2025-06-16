@@ -13,8 +13,8 @@
                 
                
                 @if(auth()->check() && auth()->user()->id==$comment->user_id)
-                    <div class="edit-comment-btn" data-id="{{ $comment->id }}" data-product="{{ $comment->product_id }}" data-comment="{{ $comment->comment }}">Edit</div> | 
-                    <div onclick="deleteComment({{$comment->id}})">Delete</div>
+                    <div class="edit-comment-btn comment-btn-act" data-id="{{ $comment->id }}" data-product="{{ $comment->product_id }}" data-comment="{{ $comment->comment }}">Edit</div> | 
+                    <div class="comment-btn-act" onclick="deleteComment({{$comment->id}})">Delete</div>
                 @endif        
             @else
                 <div class="comment-avatar">
@@ -27,11 +27,11 @@
 
                 
                 @if(@$guest['email']==$comment->email)
-                    <div class="edit-comment-btn"
+                    <div class="edit-comment-btn comment-btn-act"
                         data-id="{{ $comment->id }}"
                         data-product="{{ $comment->product_id }}"
                         data-comment="{{ $comment->comment }}">Edit</div> | 
-                    <div onclick="deleteComment({{$comment->id}})">Delete</div>
+                    <div class="comment-btn-act" onclick="deleteComment({{$comment->id}})">Delete</div>
                 @endif 
 
             @endif
@@ -111,11 +111,11 @@
                         
                         @if(auth()->check() && auth()->user()->id==$child->user_id)
 
-                            <div class="edit-comment-btn"
+                            <div class="edit-comment-btn comment-btn-act"
                                     data-id="{{ $child->id }}"
                                     data-product="{{ $child->product_id }}"
                                     data-comment="{{ $child->comment }}">Edit</div> | 
-                            <div onclick="deleteComment({{$child->id}})">Delete</div>
+                            <div class="comment-btn-act" onclick="deleteComment({{$child->id}})">Delete</div>
                         @endif
 
                     @else
@@ -132,7 +132,7 @@
                                     data-id="{{ $child->id }}"
                                     data-product="{{ $child->product_id }}"
                                     data-comment="{{ $child->comment }}">Edit</div> | 
-                            <div onclick="deleteComment({{$child->id}})">Delete</div>
+                            <div class="comment-btn-act" onclick="deleteComment({{$child->id}})">Delete</div>
                         @endif
 
                     @endif

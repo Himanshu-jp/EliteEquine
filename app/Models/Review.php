@@ -15,6 +15,6 @@ class Review extends Model
 
     public function ownerUser()
     {
-        return $this->belongsTo(User::class,'product_owner_id')->select('id','email','name','username');
+        return $this->belongsTo(User::class,'product_owner_id')->select('id','email','name','username','profile_photo_path');
     }
 }

@@ -26,6 +26,7 @@ use App\Models\ChatUser;
 use App\Models\Conveniencs;
 use App\Models\ProductComment;
 use App\Models\ProductReport;
+use App\Models\Review;
 use App\Services\Front\HomeService;
 use App\Services\Front\NewsletterService;
 use Illuminate\Http\Request;
@@ -543,7 +544,13 @@ class HomeController extends Controller
 
     public function review()
     {
-        return view('frontauth/review');
+        $user = Auth::user();
+        $review = Review::where('user_id', $user->id)
+            ->with(['user', 'ownerUser'])
+            ->orderBy('id', 'desc')
+            ->paginate(9);
+
+        return view('frontauth/review', compact('review'));
     }
    
     public function invoice()
@@ -551,8 +558,5 @@ class HomeController extends Controller
         return view('frontauth/invoice');
     }
 
-    public function bidDetails()
-    {
-        return view('frontauth/bidDetails');
-    }
+    
 }

@@ -23,22 +23,23 @@ class CheckoutService
         $user = User::find($userId);
         if($service_date == '')
         {
-            $order = UserAddress::create([
-                'user_id' => auth()->id(),
-                'shipping_name' => @$data['shipping_name'],
-                'shipping_phone' => @$data['shipping_phone'],
-                'shipping_address' => @$data['shipping_address'],
-                'shipping_city' => @$data['shipping_city'],
-                'shipping_state' => @$data['shipping_state'],
-                'shipping_zip' => @$data['shipping_zip'],
-                'billing_name' => @$data['billing_name'],
-                'billing_phone' => @$data['billing_phone'],
-                'billing_address' => @$data['billing_address'],
-                'billing_city' => @$data['billing_city'],
-                'billing_state' => @$data['billing_state'],
-                'billing_zip' => @$data['billing_zip'],
-                'status' => 'pending',
-            ]);
+            // $order = UserAddress::create([
+            //     'user_id' => auth()->id(),
+            //     'shipping_name' => @$data['shipping_name'],
+            //     'shipping_phone' => @$data['shipping_phone'],
+            //     'shipping_address' => @$data['shipping_address'],
+            //     'shipping_city' => @$data['shipping_city'],
+            //     'shipping_state' => @$data['shipping_state'],
+            //     'shipping_zip' => @$data['shipping_zip'],
+            //     'billing_name' => @$data['billing_name'],
+            //     'billing_phone' => @$data['billing_phone'],
+            //     'billing_address' => @$data['billing_address'],
+            //     'billing_city' => @$data['billing_city'],
+            //     'billing_state' => @$data['billing_state'],
+            //     'billing_zip' => @$data['billing_zip'],
+            //     'status' => 'pending',
+            // ]);
+            
         } else {
             $schedule = Schedule::create([
                 'user_id' => $userId,

@@ -28,9 +28,12 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
     protected $fillable = [
         'name',
         'username',
+        'stripe_id',
+        'stripe_connect_data',
         'email',
         'password',
         'role',

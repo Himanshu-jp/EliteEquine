@@ -3275,7 +3275,7 @@ button.bid {
   line-height: normal;
   padding: 12px 27px;
   min-height: 60px;
-  min-width: 273px;
+  min-width: auto;
   white-space: nowrap;
 }
 
@@ -5526,13 +5526,16 @@ section.hero-content-wrapper.about-us-page::before {
 .about_for_buyers .about_area_inner img {
     position: absolute;
     width: 400px;
-    top: -10%;
+    top: -8%;
+    height: 650px;
+    object-fit: contain;
 }
-section.about_for_buyers {
-    position: relative; 
+.about_for_buyers {
+    position: relative;
     background: #f4f0e3;
     padding: 100px 0 72px;
-    min-height: 630px;
+    min-height: 540px;
+    margin-top: 6%;
 }
 .about_horses_img {
     position: absolute;
@@ -6111,7 +6114,7 @@ section.industry_area.forum-bg-border .container {
 }
 .about_for_buyers .about_area_inner img {
         width: 90%;
-        top: 0px;
+        top: -9%;
     }
     .about-extrer-box { 
     padding: 20px;
@@ -6225,3 +6228,13 @@ ul.act-icon li img {
   bottom: 0;
   margin: auto;
 }
+
+.swal2-confirm {
+    border: none;
+}
+ 
+.comment-btn-act {
+    font-size: 14px;
+    color: #a09165;
+}
+.buyers_and_browsers{ width: 100%;}

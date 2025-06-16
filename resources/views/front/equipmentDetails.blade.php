@@ -294,6 +294,12 @@ Product Details
                                 <h2 class="fw-bold">{{ number_format(optional($products->highestBid)->amount ?? $products->productDetail->bid_min_price) }} </h2>
                             </div>
                         @endif
+                        @if(@$products->sale_method == 'standard' && @$products->product_status == 'live')
+                            <div class="pb-3 gap-2">
+                                <span class="text-secondary">Price</span>
+                                <h2 class="fw-bold">{{ $products->currency.' '.number_format($products->price,2) }} </h2>
+                            </div>
+                        @endif
                         <div>
                             <div class="btn-connected gap-2">
                                 @if($products->user_id == auth()->id())

@@ -8,7 +8,12 @@ use App\Models\UserDetails;
 use App\Models\SocailLink;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Stripe\StripeClient;
+use Stripe\Transfer;
+use Stripe\Stripe;
 
+use Stripe\Balance;
+// use Log;
 
 if (!function_exists('social_links')) {
     function social_links($type) {
@@ -553,5 +558,30 @@ if (!function_exists('__getAssistanceUpcomingShows')) {
 		}
     }
 }
+
+
+if (!function_exists('amount_transfer')) {
+    function __transferAmount($account_id,$amount_price)
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $balance = Balance::retrieve();
+                    // Log::info($balance->available[0]->amount);
+   
+                    if ($balance->available[0]->amount >= $amount_price*100 ) {
+                        $transfer = Transfer::create([
+                            'amount' => number_format($amount_price, 2)*100, // Amount in cents
+                            'currency' => 'usd',
+                            'destination' => $account_id,
+                        ]);
+                        // Log::info('Transfer' . json_encode($transfer));
+                        // Log::info('Balance Transfer' . $account_id);
+                    }else{
+                        // Log::info('Insufficient balance');
+                    }
+       return true;
+    }
+}
+
+
 
 ?>

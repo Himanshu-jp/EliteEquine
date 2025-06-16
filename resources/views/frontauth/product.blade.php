@@ -117,7 +117,7 @@ Your Ads
 
                     <div>
                         <label for="description" class="form-label">Description </label>
-                        <textarea class="inner-form form-control" id="description" name="description" rows="8" placeholder="Enter product details here...">{{old('description', @$products->description)}}</textarea>
+                        <textarea class="inner-form form-control h-auto" id="description" name="description" rows="8" placeholder="Enter product details here...">{{old('description', @$products->description)}}</textarea>
                          @if($errors->has('description'))
                             <span class="error text-danger">{{$errors->first('description')}}</span>
                         @endif
@@ -185,41 +185,70 @@ Your Ads
                         @endif
                     </div>
 
-                    {{-- <div class="mb-3">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <label for="exampleFormControlInput1" class="form-label">Height in hands</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="Height_hands">
-                                <label class="form-check-label" for="Height_hands">Value not found?</label>
-                            </div>
+                    
+                    <div class="mb-2">
+                        <label class="form-label">Add External Links</label>
+                        <div id="external-links-wrapper">
+                            @php
+                                $externalLinks = old('external_link', isset($products->external_link) ? (array) $products->external_link : ['']);
+                            @endphp
+                            @foreach($externalLinks as $index => $link)
+                                <div class="position-relative mb-2 external-link-group">
+                                    <input type="text" name="external_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add External Link..." value="{{ $link }}">
+                                    <button type="button" class="btn btn-sm btn-danger remove-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
+                                </div>
+                            @endforeach
                         </div>
-                        <input type="text" class="inner-form form-control mb-0" placeholder="Arena Footing...">
-                    </div> --}}
+                        <button type="button" id="add-link-btn" class="btn btn-sm btn-primary mt-2">+ Add More Link</button>
+                        @error('external_link.*')
+                            <span class="error text-danger d-block">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    
+                    
+                    <div class="mb-2">
+                        <label class="form-label">Add Video Links</label>
+                        <div id="external-video-links-wrapper">
+                            @php
+                                $externalLinks = old('video_link', isset($products->video_link) ? (array) $products->video_link : ['']);
+                            @endphp
+                            @foreach($externalLinks as $index => $link)
+                                <div class="position-relative mb-2 external-video-link-group">
+                                    <input type="text" name="video_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add External Link..." value="{{ $link }}">
+                                    <button type="button" class="btn btn-sm btn-danger remove-video-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
+                                </div>
+                            @endforeach
+                        </div>
+                        <button type="button" id="add-video-link-btn" class="btn btn-sm btn-primary mt-2">+ Add More Link</button>
+                        @error('video_link.*')
+                            <span class="error text-danger d-block">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                    <div class="position-relative">
-                        <label for="external_link" class="form-label">Add External Link</label>
+
+                 
+                    {{-- <div class="position-relative">
+                        <label for="external_link" class="form-label">Add External Links</label>
                         <input type="text" autocomplete="off" class="inner-form form-control mb-0 pe-5" id="external_link" name="external_link"
-                            value="{{old('external_link', @$products->external_link)}}" placeholder="Add External Link...">
+                            value="{{old('external_link', @$products->external_link)}}" placeholder="Add External Links...">
+                        <button type="button" class="add-new-link">+ Add More</button>
                         @if($errors->has('external_link'))
                             <span class="error text-danger">{{$errors->first('external_link')}}</span>
                         @endif
                     </div>
+                    
+                    <div class="position-relative">
+                        <label for="video_link" class="form-label">Add Video Links</label>
+                        <input type="text" autocomplete="off" class="inner-form form-control mb-0 pe-5" id="external_link" name="video_link"
+                            value="{{old('video_link', @$products->video_link)}}" placeholder="Add Vidoe Links...">
+                        <button type="button" class="add-new-link">+ Add More</button>
+                        @if($errors->has('video_link'))
+                            <span class="error text-danger">{{$errors->first('video_link')}}</span>
+                        @endif
 
-                    {{-- <div class="col-md-6 position-relative">
-                        <label for="exampleFormControlInput1" class="form-label">Bid Ending</label>
-
-                        <select class="form-select pe-5 mb-2 inner-form form-control">
-                            <option selected="">10 Days</option>
-                            <option value="active">12 Days</option>
-                            <option value="expired">15 Days</option>
-                        </select>
-                        <i class="fi fi-rr-angle-small-down" style="position: absolute;
-                                    top: 63%;
-                                    right: 30px;
-                                    transform: translateY(-50%);
-                                    pointer-events: none;
-                                    color: #555;"></i>
                     </div> --}}
+
+
                 </div>
 
 
@@ -387,6 +416,42 @@ Your Ads
 
 
 <script>
+
+    //--------for external links----------//
+    $(document).ready(function () {
+        $('#add-link-btn').click(function () {
+            let newField = `
+                <div class="position-relative mb-2 external-link-group">
+                    <input type="text" name="external_link[]" class="inner-form form-control mb-0 pe-5" placeholder="Add External Link...">
+                    <button type="button" class="btn btn-sm btn-danger remove-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
+                </div>`;
+            $('#external-links-wrapper').append(newField);
+        });
+
+        $(document).on('click', '.remove-link', function () {
+            $(this).closest('.external-link-group').remove();
+        });
+    });
+   
+    //---------for video links-------------//
+    $(document).ready(function () {
+        $('#add-video-link-btn').click(function () {
+            let newField = `
+                <div class="position-relative mb-2 external-video-link-group">
+                    <input type="text" name="external_link[]" class="inner-form form-control mb-0 pe-5" placeholder="Add External Link...">
+                    <button type="button" class="btn btn-sm btn-danger remove-video-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
+                </div>`;
+            $('#external-video-links-wrapper').append(newField);
+        });
+
+        $(document).on('click', '.remove-video-link', function () {
+            $(this).closest('.external-video-link-group').remove();
+        });
+    });
+
+
+
+
 // document.getElementById('plusIcon').addEventListener('click', function() {
 //     // Yahan pe aap file upload ya koi bhi action likh sakte ho
 //     alert('Plus icon clicked!');
@@ -613,13 +678,16 @@ function renderVideoPreviews() {
         removeBtn.innerHTML = "&times;";
         removeBtn.classList.add("remove-video");
         removeBtn.style.position = "absolute";
-        removeBtn.style.top = "0";
+        removeBtn.style.top = "5px";
         removeBtn.style.right = "5px";
         removeBtn.style.cursor = "pointer";
         removeBtn.style.fontSize = "18px";
         removeBtn.style.background = "#fff";
         removeBtn.style.padding = "0 5px";
         removeBtn.style.borderRadius = "50%";
+        removeBtn.style.width = "20px";
+        removeBtn.style.height = "20px";
+         removeBtn.style.lineHeight = "20px";
 
         removeBtn.onclick = function () {
             selectedVideos.splice(index, 1);
@@ -788,7 +856,11 @@ $("#productForm").validate({
             extension: "pdf|doc|docx",
             filesize: 4 * 1024 * 1024 // 4 MB
         },
-        external_link: {
+        'external_link[]': {
+            url: true,
+            maxlength: 400
+        },
+        'video_link[]': {
             url: true,
             maxlength: 400
         },
@@ -841,9 +913,13 @@ $("#productForm").validate({
             extension: "Each document must be a file of type: pdf, doc, docx.",
             filesize: "Each document must not exceed 4MB."
         },
-        external_link: {
+        'external_link[]': {
             url: "External link must be a valid URL.",
             maxlength: "External link may not be greater than 400 characters."
+        },
+        'video_link[]': {
+            url: "Video link must be a valid URL.",
+            maxlength: "Video link may not be greater than 400 characters."
         },
         description: {
             required: "Description is required.",

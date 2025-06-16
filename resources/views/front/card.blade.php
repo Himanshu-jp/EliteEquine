@@ -82,11 +82,7 @@
                                         @for ($i = 1; $i <= 5; $i++)
                                             <i class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
                                         @endfor
-                                        <!-- <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i> -->
+
                                     </div>
                                 </div>
                             </div>
@@ -198,6 +194,7 @@
                             </div>
                             <div class="content">
                                     <h4>{{@$value->user->name}}</h4>
+                                    
                                 <div class="stars">
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>

@@ -35,7 +35,12 @@ class ProductRequest extends FormRequest
             'document'   => 'nullable|array',
             'document.*'   => 'mimes:pdf,doc,docx|max:4096',
 
-            'external_link' => 'nullable|url|max:400',
+            'external_link'   => 'nullable|array',
+            'external_link.*' => 'nullable|url|max:400',
+            
+            'video_link'   => 'nullable|array',
+            'video_link.*' => 'nullable|url|max:400',
+
             'description' => 'required|string|max:5000',
             'bid_end_date' => ['required_if:sale_method,auction', 'nullable', 'date', 'after_or_equal:'.now()->addDays(2)->toDateString()],
         ];
@@ -85,8 +90,11 @@ class ProductRequest extends FormRequest
             'document.*.mimes'      => 'Each document must be a file of type: pdf, doc, docx.',
             'document.*.max'        => 'Each document must not exceed 4MB.',
 
-            'external_link.url' => 'External link must be a valid URL.',
-            'external_link.max' => 'External link may not be greater than 400 characters.',
+            'external_link.*.url' => 'External link must be a valid URL.',
+            'external_link.*.max' => 'External link may not be greater than 400 characters.',
+           
+            'video_link.*.url' => 'Video link must be a valid URL.',
+            'video_link.*.max' => 'Video link may not be greater than 400 characters.',
 
             'description.required' => 'Description is required.',
             'description.string' => 'Description must be a valid string.',

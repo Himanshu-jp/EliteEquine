@@ -425,6 +425,7 @@ Your Ads
                             <span class="error text-danger">{{$errors->first('precise_location')}}</span>
                         @endif
                     </div>
+
                     <div class="mt-2 position-relative">
                         <label class="form-label">Country</label>
                         <input type="text" class="inner-form form-control" placeholder="Populate on Google place select.." name="country" id="country" value={{old('country',@$products->productDetail->country)}}>
@@ -453,6 +454,15 @@ Your Ads
                             <span class="error text-danger">{{$errors->first('street')}}</span>
                         @endif
                     </div>
+
+                    <div class="mt-2 position-relative">
+                        <label class="form-label">Trial / Exchange Location</label>
+                        <input type="text" class="inner-form form-control" placeholder="Enter trial / exchange location..." name="trial_location" id="trial_location" value={{old('trial_location',@$products->productDetail->trial_location)}}>
+                        @if($errors->has('trial_location'))
+                            <span class="error text-danger">{{$errors->first('trial_location')}}</span>
+                        @endif
+                    </div>
+
                 </div>
                 <div class="col-md-6">
                     <div class="map">

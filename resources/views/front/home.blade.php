@@ -599,7 +599,7 @@ Home
             </div>
             <div class="row mt-5 align-items-center">
                 <div class="col-lg-6">
-                    <img src="{{asset('storage/'.$buyerBrowserData->image)}}" alt="" />
+                    <img class="buyers_and_browsers" src="{{asset('storage/'.$buyerBrowserData->image)}}" alt="" />
                 </div>
                 <div class="col-lg-6">
                     <div class="accordion my-4" id="simpleAccordion">
@@ -800,7 +800,8 @@ Home
                 <ul class="tag-list" style="--duration: 35.32s;">
                      @foreach($batches as $image)
                     <li>
-                        <div class="greview">
+                        <div class="gr
+                        eview">
                             <img src="{{asset('storage/'. $image->image)}}" alt="logo">
                         </div>
                     </li>

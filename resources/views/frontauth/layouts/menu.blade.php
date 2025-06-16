@@ -12,6 +12,13 @@
         <ul class="navbar-nav">
 
             <li class="nav-item">
+                <a class="nav-link {{ (Request::is('home') || Request::is('home')) ? 'active' : '' }}"
+                    href="{{route('home')}}">
+                    <i class="fi fi-rr-home"></i>
+                    <span class="nav-link-text ms-1">Home</span>
+                </a>
+            </li>
+             <li class="nav-item">
                 <a class="nav-link {{ (Request::is('dashboard') || Request::is('dashboard')) ? 'active' : '' }}"
                     href="{{route('dashboard')}}">
                     <i class="fi fi-rr-apps"></i>
