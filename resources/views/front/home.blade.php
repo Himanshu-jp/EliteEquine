@@ -816,8 +816,7 @@ Home
                 <ul class="tag-list" style="--duration: 35.32s;">
                      @foreach($batches as $image)
                     <li>
-                        <div class="gr
-                        eview">
+                        <div class="greview">
                             <img src="{{asset('storage/'. $image->image)}}" alt="logo">
                         </div>
                     </li>

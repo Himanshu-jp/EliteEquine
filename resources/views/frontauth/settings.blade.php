@@ -330,6 +330,51 @@ User Details
             @endif
         </div> --}}
 
+ @if (Auth::user()->stripe_id != '' &&
+                    Auth::user()->stripe_id != null &&
+                    Auth::user()->stripe_connect_data != '' &&
+                    Auth::user()->stripe_connect_data != null)
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <b>Account ID: {{ Auth::user()->stripe_id }}</b>
+                    </div>
+ 
+                        <div class="col-md-6">
+                       <a href="{{ route('updateAccountDetails') }}" target="_blank" class="btn btn-primary">Update Account Details</a>
+                    </div>
+ 
+                    @php
+ 
+                        $decoded_data = json_decode(Auth::user()->stripe_connect_data, true);
+ 
+                    @endphp
+                    </div>
+                <div class="row mb-2">
+@foreach ($decoded_data as $item)
+   
+                 
+                    <div class="col-md-6">
+                        <b>Bank Name: {{ $item['bank_name'] }}</b>
+                    </div>
+ 
+                    <div class="col-md-6">
+                        <b>Account Number: XXXX-XXXX-XXXX-{{ $item['last4'] }}</b>
+                    </div>
+@endforeach
+ 
+                    </div>
+ 
+               
+ 
+                </div>
+                <hr>
+            @else
+                <div class="text-start my-4 mb-2">
+                    <a href="{{ route('connect_stipe_account') }}" class="btn btn-primary"
+                        id="setting-form-update">Connect Your Stripe Account</a>
+                </div>
+            @endif
+
 
         <div class="form-check pt-2">
             <input class="form-check-input" type="checkbox" name="agree" id="agree" value="1" {{(old('agree')==1 || @$userDetails->agree==1)?'checked':''}}>
@@ -338,6 +383,7 @@ User Details
                 <span class="error text-danger">{{$errors->first('agree')}}</span>
             @endif
         </div>
+
 
         <div class="text-start my-4">
             <button type="submit" class="btn btn-primary" id="setting-form-update">Update Account</button>

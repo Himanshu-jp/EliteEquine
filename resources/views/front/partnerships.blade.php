@@ -38,8 +38,6 @@ Partnerships
                     @endforeach
                 </ul>
                 @endforeach
-
-                
             </div>
         </div>
     </div>
