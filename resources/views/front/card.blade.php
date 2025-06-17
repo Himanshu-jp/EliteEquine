@@ -412,10 +412,10 @@ function reverseGeocode(lat, lng) {
 
                 markerElement.appendChild(markerImage);
 
-                const venueName = document.createElement('span');
+                /* const venueName = document.createElement('span');
                 venueName.className = 'marker-venue-name';
                 venueName.innerText = venue_name;
-                markerElement.appendChild(venueName);
+                markerElement.appendChild(venueName); */
 
                 let marker = new mapboxgl.Marker(markerElement).setLngLat([coordinates[0], coordinates[1]]).addTo(map);
                

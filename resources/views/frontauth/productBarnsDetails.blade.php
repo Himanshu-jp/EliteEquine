@@ -1,4 +1,38 @@
 @extends('frontauth.layouts.main')
+<style>
+        /* body { margin: 0; padding: 0; } */
+        .form-section .col-md-6 { position: relative; }
+        .form-section .col-md-6 #map { position: absolute; top: 0; left: 0; width: 98%; border:0; border-radius: 14px; height:600px; }
+        
+
+    .custom-map-marker {
+        background-image: url("{{asset('images/location-user-mkr.svg')}}");
+        background-size: contain;
+        width: 32px;
+        height: 39px;
+        cursor: pointer;
+    }
+
+    .highlighted {
+        background-color: #f0f0f0;
+    }
+
+    #map-location-list li {
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    #map-location-list {
+        border: 1px solid #ccc;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none;
+        position: absolute;
+        z-index: 999;
+        background: white;
+        width: 100%;
+    }
+    </style>
 @section('title')
 Your Ads
 @endsection
