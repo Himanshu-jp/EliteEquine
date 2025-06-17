@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-             $table->id();
-            $table->integer('type');
+            $table->id();
+            $table->string('type');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('plan_id')->nullable();
             $table->string('session_id')->nullable();
@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('subscription_id')->nullable();
             $table->longText('response_data')->nullable();
             $table->string('status', 100)->nullable();
+            $table->timestamps();
         });
     }
 

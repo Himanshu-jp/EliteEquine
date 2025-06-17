@@ -35,12 +35,12 @@
                         <div class="card-body">
                             <!-- Display Subscription Plan Details -->
                             <div class="row">
-                                <div class="col-md-3">
+                                {{-- <div class="col-md-3">
                                     <h4>Plan Image</h4>
                                     <img src="{{ ($subscriptionPlan->image) ? asset('storage/' . $subscriptionPlan->image) : asset('images/default-blog.png') }}" 
                                     width="150" height="150" alt="Plan Image">
-                                </div>
-                                <div class="col-md-9">
+                                </div> --}}
+                                <div class="col-md-12">
                                     <h4>Plan Information</h4>
                                     <ul class="list-unstyled">
                                         <li><strong>Title:</strong> {{ $subscriptionPlan->title ?? 'N/A' }}</li>

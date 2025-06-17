@@ -300,7 +300,7 @@
                                            
                                                 @endif
                                                     @else
-                                                <a href="{{ route('login') }}" class="btn btn-primary w-100">Login</a>
+                                                <a href="{{ route('login') }}" class="btn btn-primary w-100">Purchase Now</a>
 
                                                 @endif
                                             </div>
@@ -345,7 +345,7 @@
                                            
                                                 @endif
                                                     @else
-                                                <a href="{{ route('login') }}" class="btn btn-primary w-100">Login</a>
+                                                <a href="{{ route('login') }}" class="btn btn-primary w-100">Purchase Now</a>
 
                                                 @endif
                                             </div>

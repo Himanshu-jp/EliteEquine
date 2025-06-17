@@ -19,6 +19,7 @@ return new class extends Migration
             $table->longText('add_on_data')->nullable();
             $table->string('price', 100)->nullable();
             $table->string('status', 100)->nullable();
+            $table->timestamps();
         });
     }
 

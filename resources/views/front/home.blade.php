@@ -460,13 +460,13 @@ Home
                                     </div>
                                 @else
 
-                                    <div class="{{$key==1?'tab-pane fade active show':'tab-pane fade'}}" id="{{$key001}}-tab-pane" role="tabpanel" aria-labelledby="{{$key001}}-tab" tabindex="{{$key==1?'1':'0'}}">
+                                    {{-- <div class="{{$key==1?'tab-pane fade active show':'tab-pane fade'}}" id="{{$key001}}-tab-pane" role="tabpanel" aria-labelledby="{{$key001}}-tab" tabindex="{{$key==1?'1':'0'}}">
                                         <div class="swiper mySwiper">
                                             <div class="swiper-wrapper">     
                                                 <h4>We're updating our featured section. Check back later!</h4> 
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     
                                 @endif
                             @endforeach
