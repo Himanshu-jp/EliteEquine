@@ -225,8 +225,286 @@
             </div>
         @endforeach
     </div>
+ 
 
+<!-- Your map initialization script -->
+ @once
+
+<!-- Your map initialization script -->
+<script>
+(function () {
+    let mapboxAccessToken = '{{ config("config.map_box_access_token") }}';
+mapboxgl.accessToken = mapboxAccessToken;
+
+let map; // global map reference
+let currentPopup = null; // to keep track of the currently opened popup
+
+// Reverse geocode to get human-readable location from lat,lng and set input value
+function reverseGeocode(lat, lng) {
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxAccessToken}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.features && data.features.length > 0) {
+                // Use the place_name of the first feature as the location string
+                const placeName = data.features[0].place_name;
+                const mapLocationInput = document.getElementById('map-location');
+                if(mapLocationInput){
+                    mapLocationInput.value = placeName;
+                }
+
+                const locationInput = document.getElementById('location');
+                if(locationInput){
+                    locationInput.value = placeName;
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Reverse geocoding error:', error);
+        });
+}
+
+alert('onload');
+    const urlParams = new URLSearchParams(window.location.search);
+    // Default or from URL
+    let lat = parseFloat(urlParams.get('latitude')) || 26.8467;
+    let lng = parseFloat(urlParams.get('longitude')) || 75.7647;
+    const selectedCategory = urlParams.get('category') || '1';
+
+    // Elements to store lat and lng values
+    const latInput = document.getElementById('latitude');
+    const lngInput = document.getElementById('longitude');
+
+    // Try to get user's current location via Geolocation API
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                lat = position.coords.latitude;
+                lng = position.coords.longitude;
+
+                // Update lat/lng input fields
+                if (latInput) latInput.value = lat.toFixed(6);
+                if (lngInput) lngInput.value = lng.toFixed(6);
+
+                initializeMap(lat, lng);
+
+                // Reverse geocode to update location input text
+                reverseGeocode(lat, lng);
+
+                fetchEventsByCategory(selectedCategory);
+            },
+            error => {
+                // If geolocation denied or fails, fallback to URL or defaults
+                if (latInput) latInput.value = lat.toFixed(6);
+                if (lngInput) lngInput.value = lng.toFixed(6);
+
+                initializeMap(lat, lng);
+                reverseGeocode(lat, lng);
+                fetchEventsByCategory(selectedCategory);
+            },
+            { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+        );
+    } else {
+        // Geolocation not supported
+        if (latInput) latInput.value = lat.toFixed(6);
+        if (lngInput) lngInput.value = lng.toFixed(6);
+
+        initializeMap(lat, lng);
+        reverseGeocode(lat, lng);
+        fetchEventsByCategory(selectedCategory);
+    }
+
+    // Set active category button
+    /* const buttons = document.querySelectorAll('.category-scroll button[data-id]');
+    let activeButton = document.querySelector(`.category-scroll button[data-id="${selectedCategory}"]`);
+    if (!activeButton) {
+        activeButton = document.querySelector('.category-scroll button[data-id="1"]');
+    }
+    if (activeButton) {
+        activeButton.classList.add('active');
+    } */
+
+    // Handle category click
+    /* document.querySelector('.category-scroll').addEventListener('click', function (e) {
+        const btn = e.target.closest('button[data-id]');
+        if (!btn) return;
+
+        // Remove active class from all buttons, add to clicked one
+        document.querySelectorAll('.category-scroll button[data-id]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const catId = btn.getAttribute('data-id');
+        const url = new URL(window.location);
+        url.searchParams.set('category', catId);
+        window.history.replaceState({}, '', url);
+
+        // Close any open popup before fetching new markers
+        if (currentPopup) {
+            currentPopup.remove();
+            currentPopup = null;
+        }
+
+        // Remove active marker highlight from previous markers
+        document.querySelectorAll('.red-circle-marker').forEach(el => el.classList.remove('active-marker'));
+
+        fetchEventsByCategory(catId);
+    }); */
+
+
+function initializeMap(latitude, longitude) {
+    map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [longitude, latitude],
+        zoom: 10,
+        pitch: 60,
+        bearing: -20
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+}
+
+function fetchEventsByCategory(categoryId = 1) {
+    if (!map) return;
+
+    // Remove all existing markers
+    const oldMarkers = document.querySelectorAll('.mapboxgl-marker');
+    oldMarkers.forEach(m => m.remove());
+
+    // Close any open popup
+    if (currentPopup) {
+        currentPopup.remove();
+        currentPopup = null;
+    }
+
+    // Remove active marker highlights
+    document.querySelectorAll('.red-circle-marker').forEach(el => el.classList.remove('active-marker'));
+
+    let apiUrl = '{{ url("/api/v1/product/mapbox-list?category=") }}' + categoryId;
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(data => {
+            updateMapMarkers(data, categoryId);
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+}
+
+function updateMapMarkers(events, categoryId) {
+    if (!map) return;
+
+    if (!events.length) {
+        // Optionally clear markers or show “no results” message
+        return;
+    }
+
+    const eventGroups = {};
+    const venueDetailRoute = "{{ route('horseDetails', ':id') }}";
+    const activeClass = 'active-marker';
+    
+        events.forEach(event => {
+            const lat = parseFloat(event.product_detail?.latitude);
+            const lng = parseFloat(event.product_detail?.longitude);
+            if (!isNaN(lat) && !isNaN(lng)) {
+                const key = `${lat},${lng}`;
+                if (!eventGroups[key]) eventGroups[key] = [];
+                eventGroups[key].push(event);
+            }
+        });
+
+        for (const latLng in eventGroups) {
+            const [lat, lng] = latLng.split(',').map(Number);
+            const markerEl = document.createElement('div');
+            markerEl.className = 'red-circle-marker';
+
+            const img = document.createElement('img');
+            /* img.src = "{{ asset('images/marker_map_icon.svg') }}";
+            img.className = 'marker-image';
+            markerEl.appendChild(img); */
+
+            const firstProduct = eventGroups[latLng][0];
+            /* const venueName = document.createElement('span');
+            venueName.className = 'marker-venue-name';
+            venueName.innerText = firstProduct.title || 'No Title';
+            markerEl.appendChild(venueName); */
+
+            const marker = new mapboxgl.Marker(markerEl).setLngLat([lng, lat]).addTo(map);
+
+            const popupHTML = eventGroups[latLng].map(product => {
+                img.src = "{{ asset('images/marker_map_icon.svg') }}";
+                img.className = 'marker-image';
+                markerEl.appendChild(img);
+
+                const title = product.title || 'Untitled';
+                const desc = product.description || '';
+                const truncated = desc.length > 40 ? desc.slice(0, 40) + '...' : desc;
+                const imgUrl = product.image?.[0]?.image ? `{{asset('/storage')}}/${product.image[0].image}` : '';
+                const price = product.price || product.product_detail?.sale_price || 'N/A';
+                const fullAddr = [product.product_detail?.street, product.product_detail?.city, product.product_detail?.state, product.product_detail?.country].filter(Boolean).join(', ');
+                const detailUrl = venueDetailRoute.replace(':id', product.id);
+
+                return `
+                    <div class="map-pp-main">
+                        <div class="evn-dte-ll">
+                            <div class="ent-emg">
+                                ${imgUrl ? `<img src="${imgUrl}" style="width:60px;height:60px;" alt="${title}">` : ''}
+                                <div>
+                                    <h3><a href="${detailUrl}" target="_blank">${title}</a></h3>
+                                    <p>${truncated}</p>
+                                </div>
+                            </div>
+                            <div class="venue-name-new-ic">
+                                <img src="{{ asset('images/location-mdl-icon.svg') }}" alt="Location icon" />
+                                ${fullAddr}
+                            </div>
+                            <div class="loc-meta">
+                                <div><strong>Price:</strong> $${price}</div>
+                                <div class="loc-metabutton">
+                                    <a href="${detailUrl}" target="_blank" class="meta-btn">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupHTML);
+
+            marker.setPopup(popup);
+
+            markerEl.addEventListener('click', () => {
+                // Close previously opened popup if different
+                if (currentPopup && currentPopup !== popup) {
+                    currentPopup.remove();
+                }
+
+                // Open clicked popup
+                popup.addTo(map);
+                currentPopup = popup;
+
+                // Update active marker class
+                document.querySelectorAll('.red-circle-marker').forEach(el => el.classList.remove(activeClass));
+                markerEl.classList.add(activeClass);
+            });
+        }
+    
+
+    
+}
+})();
+</script>
+
+
+@endonce
 @endif
+
+
 <script>
     // add favorite
     $('.favorite-btn').on('click', function(e) {
@@ -276,7 +554,7 @@
     });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    /* document.addEventListener('DOMContentLoaded', function () {
         const mapContainer = document.getElementById('map');
         if (mapContainer) {
             const map = new mapboxgl.Map({
@@ -291,5 +569,5 @@
                 .setLngLat([77.2090, 28.6139])
                 .addTo(map);
         }
-    });
+    }); */
 </script>
