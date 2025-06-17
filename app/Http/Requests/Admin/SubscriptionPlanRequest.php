@@ -35,7 +35,7 @@ class SubscriptionPlanRequest extends FormRequest
             'days' => 'required|integer|min:1',
             'description' => 'nullable|string',
             'type' => 'required|in:standard,featured',
-            'post_limit' => 'required|string|min:0',
+            // 'post_limit' => 'required|string|min:0',
         ];
     }
 

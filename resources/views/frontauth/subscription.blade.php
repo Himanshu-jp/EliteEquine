@@ -45,7 +45,7 @@ Your Ads
                                             <hr class="horizontal dark mt-0 mb-2">
                                             <footer class="pricing-footer">
                                                 <p>Expires in {{$value->days}} days </p>
-                                                <a href="#" class="btn btn-primary w-100">Purchase Now</a>
+                                                <a href="{{ route('purchase_plan',base64_encode($value->id)) }}" class="btn btn-primary w-100">Purchase Now</a>
                                             </footer>
                                         </div>
                                     </div>
@@ -130,7 +130,7 @@ Your Ads
                                             <hr class="horizontal dark mt-0 mb-2">
                                             <footer class="pricing-footer">
                                                 <p>Expires in {{$value->days}} days </p>
-                                                <a href="#" class="btn btn-primary w-100">Purchase Now</a>
+                                                <a href="{{ route('purchase_plan',base64_encode($value->id)) }}" class="btn btn-primary w-100">Purchase Now</a>
                                             </footer>
                                         </div>
                                     </div>

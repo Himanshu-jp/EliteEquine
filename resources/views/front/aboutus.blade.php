@@ -10,10 +10,9 @@ About us
 
                 <div class="col-lg-5 mx-auto">
                     <div class="about-title text-start">
-                        <h1>Mobile App On The Way!</h1>
-                        <p>ELITE EQUINE is your One Stop Equestrian Shop and premier destination for high quality
-                            hunter-jumper horses, equine, barn, and rider equipment, boarding barns and equestrian
-                            properties, as well as equine services and jobs. How do we work?</p>
+                        <h1>About Us</h1>
+                        <b>Elite Equine Marketplace is shaping the future of equestrian e-commerce.</b>
+                        <p>Built specifically for the competitive hunter/jumper community, our platform brings together everything you need in one modern, easy-to-use space—from premium horses, high-end equipment, and apparel to expert services, job listings, exclusive barns, properties, and industry events.Whether you’re buying, selling, promoting your business, hiring, or job hunting, Elite Equine equips you with powerful tools and direct connections to help you move faster, smarter, and with confidence. How do we work?</p>
                     </div>
                 </div>
                 <div class="col-lg-7 ">
@@ -91,7 +90,7 @@ About us
             </div>
             <div class="row mt-5 align-items-center">
                 <div class="col-lg-6">
-                    <img src="{{asset('storage/'.$buyerBrowserData->image)}}" alt="" />
+                    <img class="img-fluid" src="{{asset('storage/'.$buyerBrowserData->image)}}" alt="" />
                 </div>
                 <div class="col-lg-6">
                     <div class="accordion my-4" id="simpleAccordion">

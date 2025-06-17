@@ -194,7 +194,7 @@ Your Ads
                             @endphp
                             @foreach($externalLinks as $index => $link)
                                 <div class="position-relative mb-2 external-link-group">
-                                    <input type="text" name="external_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add External Link..." value="{{ $link->link }}" autocomplete="off">
+                                    <input type="text" name="external_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add External Link..." value="{{ @$link->link }}" autocomplete="off">
                                     <button type="button" class="btn btn-sm btn-danger remove-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
                                 </div>
                             @endforeach
@@ -214,7 +214,7 @@ Your Ads
                             @endphp
                             @foreach($externalLinks as $index => $link)
                                 <div class="position-relative mb-2 external-video-link-group">
-                                    <input type="text" name="video_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add Video Link..." value="{{ $link->link }}" autocomplete="off">
+                                    <input type="text" name="video_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add Video Link..." value="{{ @$link->link }}" autocomplete="off">
                                     <button type="button" class="btn btn-sm btn-danger remove-video-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
                                 </div>
                             @endforeach

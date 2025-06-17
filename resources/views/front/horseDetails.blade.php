@@ -31,30 +31,54 @@ Product Details
                                     </div>
                                 @endforeach
                                 
-                                @foreach(@$products->videoLink as $key=>$video)
+                                @foreach(@$products->videoLink as $key => $video)
                                     <div class="swiper-slide">
                                         @php
-                                            preg_match("/v=([^&]+)/", $video->link, $matches);
-                                            $videoId = $matches[1] ?? null;
+                                            $link = $video->link;
+                                            $isYoutube = str_contains($link, 'youtube.com') || str_contains($link, 'youtu.be');
+                                            $isVideoFile = preg_match('/\.(mp4|mov|webm|ogg)$/i', $link);
                                         @endphp
 
-                                        @if($videoId)
+                                        @if($isYoutube)
+                                            @php
+                                                // Extract YouTube ID from either youtu.be or youtube.com
+                                                if (preg_match("/(?:v=|\/)([0-9A-Za-z_-]{11})/", $link, $matches)) {
+                                                    $videoId = $matches[1];
+                                                } else {
+                                                    $videoId = null;
+                                                }
+                                            @endphp
+
+                                            @if($videoId)
+                                                <div class="ratio ratio-16x9">
+                                                    <iframe
+                                                        width="848"
+                                                        height="480"
+                                                        src="https://www.youtube.com/embed/{{ $videoId }}"
+                                                        title="YouTube video player"
+                                                        frameborder="0"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowfullscreen>
+                                                    </iframe>
+                                                </div>
+                                            @else
+                                                <p>Invalid YouTube link.</p>
+                                            @endif
+
+                                        @elseif($isVideoFile)
                                             <div class="ratio ratio-16x9">
-                                                <iframe
-                                                    width="848"
-                                                    height="480"
-                                                    src="https://www.youtube.com/embed/{{ $videoId }}"
-                                                    title="YouTube video player"
-                                                    frameborder="0"
-                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                    allowfullscreen>
-                                                </iframe>
+                                                <video width="848" height="480" controls>
+                                                    <source src="{{ $link }}" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
                                             </div>
+
                                         @else
-                                            <p>Invalid YouTube link.</p>
+                                            <p>Unsupported or invalid video link.</p>
                                         @endif
                                     </div>
                                 @endforeach
+
 
 
                             </div>
@@ -76,7 +100,7 @@ Product Details
                                 @endforeach
                                
                                 @foreach(@$products->videoLink as $key=>$video)
-                                    <div class="swiper-slide"><img src="{{asset('front/auth/assets/img/bg-images/shape-1.svg')}}" alt=""></div>
+                                    <div class="swiper-slide"><img src="{{asset('front/home/assets/images/youtube.jpg')}}" alt=""></div>
                                 @endforeach
 
                                 

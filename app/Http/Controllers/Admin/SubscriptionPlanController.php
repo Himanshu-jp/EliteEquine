@@ -51,6 +51,7 @@ class SubscriptionPlanController extends Controller
 
     public function store(SubscriptionPlanRequest $request)
     {
+     
         $data = $request->validated();
         $this->subsPlanService->create($data);
 

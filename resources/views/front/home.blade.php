@@ -1509,7 +1509,7 @@ function initializeLocationAutocomplete() {
     const buttons = document.querySelectorAll(".toggle-btn");
 
     buttons.forEach(button => {
-      button.addEventListener("click", function () {
+      button.addEventListener("mouseenter", function () {
         const index = this.getAttribute("data-index");
 
         // Hide all toggle contents
@@ -1533,9 +1533,7 @@ function initializeLocationAutocomplete() {
         if (currentSlideBox) {
           currentSlideBox.classList.add("active-toggle");
         }
-
-        // Optional: scroll into view
-        document.querySelector(".more-info-box").scrollIntoView({ behavior: "smooth" });
+ 
       });
     });
   });

@@ -747,7 +747,7 @@ header nav ul li a.active::before {
 .industry_area_sld_bx h3 {
   color: var(--Black-Color, #1d1d1d);
   font-family: var(--magical_font);
-  font-size: 22px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 550;
   line-height: 31px;
@@ -4828,7 +4828,7 @@ section.hero-content-wrapper::after {
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 110px;
+  width: max-content;
 }
 
 .tag-scroller.scrolling .tag-list {
@@ -4860,6 +4860,7 @@ li .greview {
 .greview img {
   width: auto;
   height: 100px;
+  padding: 10px;
 }
 
 .greview h4 {
@@ -5368,7 +5369,7 @@ li .greview {
 
 .forum-box {
   display: flex;
-  align-items: start;
+  align-items: center;
   gap: 10px;
 }
 

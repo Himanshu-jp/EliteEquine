@@ -97,13 +97,13 @@
                     </div>
 
                     <!-- Post Limit -->
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="post_limit">Post Limit</label>
                         <input type="text" class="form-control @error('post_limit') is-invalid @enderror" id="post_limit" name="post_limit" value="{{ old('post_limit') }}" placeholder="Enter post limit">
                         @error('post_limit')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     <!-- Image (Optional) -->
                     <div class="form-group">

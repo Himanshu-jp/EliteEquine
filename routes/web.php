@@ -61,6 +61,7 @@ Route::middleware([
     Route::get('/settings', [AuthController::class, 'settings'])->name('settings');
     Route::post('/settingUpdate', [AuthController::class, 'settingUpdate'])->name('settingUpdate');
     Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription');
+    Route::get('/purchase-plan/{encodeId}', [SubscriptionController::class, 'purchase_plan'])->name('purchase_plan');
 
 
     //Stipe Conenct Code

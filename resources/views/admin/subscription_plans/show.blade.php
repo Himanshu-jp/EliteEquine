@@ -48,7 +48,7 @@
                                         <li><strong>Price:</strong> ${{ number_format($subscriptionPlan->price, 2) ?? 'N/A' }}</li>
                                         <li><strong>Duration (Days):</strong> {{ $subscriptionPlan->days ?? 'N/A' }}</li>
                                         <li><strong>Type:</strong> {{ ucfirst($subscriptionPlan->type) ?? 'N/A' }}</li>
-                                        <li><strong>Post Limit:</strong> {{ $subscriptionPlan->post_limit ?? 'N/A' }}</li>
+                                        {{-- <li><strong>Post Limit:</strong> {{ $subscriptionPlan->post_limit ?? 'N/A' }}</li> --}}
                                         <li><strong>Description:</strong> {!! $subscriptionPlan->description ?? 'N/A' !!}</li>
                                         <li><strong>Created At:</strong> {{ $subscriptionPlan->created_at->format('d M, Y') }}</li>
                                     </ul>

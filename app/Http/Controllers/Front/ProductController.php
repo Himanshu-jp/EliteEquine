@@ -82,7 +82,7 @@ class ProductController extends Controller
             ->orderBy('id', 'desc')
             ->first();
         
-        if($products->product_status=="sold"){
+        if(@$products->product_status=="sold"){
              return redirect()->back()->with('error', 'This product has been sold and can no longer be updated.');
         }            
         return view('frontauth/product', compact('products'));
