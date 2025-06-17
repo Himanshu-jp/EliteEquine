@@ -30,8 +30,16 @@ Dashboard
                 <div class="card-header p-0 pe-3">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <h4>{{ \Carbon\Carbon::now()->format('M d, Y')}}</h4>
+
+                            @if(Auth::user()->plan_expired_on != '' && Auth::user()->plan_expired_on != null)
+                      <h4>{{ \Carbon\Carbon::createFromTimestamp(Auth::user()->plan_expired_on)->format('d M Y h:i A') }}</h4>
+
                             <p>Subscription Expires</p>
+
+                            @else
+                            <h4>Not a valid subscription plan.</h4>
+
+                            @endif
                         </div>
                         <div class="icon">
                             <img src="{{asset('front/auth/assets/img/icons/subscription.svg')}}" width="26" height="26"

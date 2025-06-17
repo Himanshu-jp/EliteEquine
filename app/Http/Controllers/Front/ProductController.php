@@ -33,6 +33,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Front\BidService;
 use Carbon\Carbon;
+use Currency\Util\CurrencySymbolMapping;
+
 
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
@@ -55,6 +57,7 @@ class ProductController extends Controller
 
     public function index()
     {
+        $currencyList =CurrencySymbolMapping::values();
         $user = auth::user();
         if($user->phone_no =="" || $user->country =="" || $user->state=="" || $user->city=="" ){
             return redirect()->route('profile')->with('error', 'Please first complete your Profile details.');
@@ -71,12 +74,13 @@ class ProductController extends Controller
         //     ->first();
         // return view('frontauth/product', compact('products'));
 
-        return view('frontauth/product');
+        return view('frontauth/product',compact('currencyList'));
     }
 
     public function editProduct($id)
     {
         $user = auth::user();
+        $currencyList =CurrencySymbolMapping::values();
         $products = Product::with(['image', 'video', 'document','category','externalLink','videoLink'])
             ->where(['id' => $id, 'deleted_at' => null, 'user_id' => $user->id])
             ->orderBy('id', 'desc')
@@ -85,7 +89,7 @@ class ProductController extends Controller
         if(@$products->product_status=="sold"){
              return redirect()->back()->with('error', 'This product has been sold and can no longer be updated.');
         }            
-        return view('frontauth/product', compact('products'));
+        return view('frontauth/product', compact(['products','currencyList']));
     }
    
     public function removeImage($id)

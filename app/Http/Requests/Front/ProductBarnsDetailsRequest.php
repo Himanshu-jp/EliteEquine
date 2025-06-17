@@ -130,7 +130,7 @@ class ProductBarnsDetailsRequest extends FormRequest
             return !$input->contactSet;
         });
 
-        foreach (['precise_location', 'country', 'state', 'city', 'street'] as $field) {
+        foreach (['precise_location', 'country', 'state', 'city'] as $field) {
             $validator->sometimes($field, 'required|string|max:300', function ($input) {
                 return !$input->addressSet;
             });

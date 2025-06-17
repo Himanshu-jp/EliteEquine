@@ -74,7 +74,7 @@ class SubscriptionPlanController extends Controller
     public function update(SubscriptionPlanRequest $request, SubscriptionPlan $subscriptionPlan)
     {
         $data = $request->validated();
-        $this->subsPlanService->update($subscriptionPlan, $data);
+         $this->subsPlanService->update($subscriptionPlan, $data);
 
         return redirect()->route('subscription_plans.index')
                          ->with('success', 'Subscription plan updated successfully.');

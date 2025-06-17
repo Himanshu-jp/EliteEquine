@@ -61,8 +61,11 @@ Your Ads
                         <label for="exampleFormControlInput1" class="form-label">Currency</label>
                         <select class="form-select pe-5 mb-2 inner-form form-control" name="currency">
                             <option value="">Select an currency</option>
-                            <option value="USD" {{(old('currency')=='USD' || @$products->currency=='USD')?'selected':''}}>USD ($)</option>
-                            <option value="AUD" {{(old('currency')=='AUD' || @$products->currency=='AUD')?'selected':''}}>AUD ($)</option>                
+                            @foreach($currencyList as $key=>$value)
+                                <option value="{{$key}}" {{(old('currency')==$key || @$products->currency==$key)?'selected':''}}>{{$key}}</option>
+                            @endforeach
+                            {{-- <option value="USD" {{(old('currency')=='USD' || @$products->currency=='USD')?'selected':''}}>USD ($)</option>
+                            <option value="AUD" {{(old('currency')=='AUD' || @$products->currency=='AUD')?'selected':''}}>AUD ($)</option> --}}
                         </select>
             
                         <i class="fi fi-rr-angle-small-down" style="position: absolute;
@@ -77,7 +80,7 @@ Your Ads
                     </div>
 
                     <div class="mb-3">
-                        <label for="image" class="form-label">Image</label>
+                        <label for="" class="form-label">Image</label>
                         <div class="file-upload ">
                              <div class="profile mt-2">
                                 <img src="{{(@$products->image)?asset('storage/'.@$products->image):asset('front/auth/assets/img/icons/image.svg')}}" for="image" class="user-img" alt="" id="editImg">
@@ -116,7 +119,9 @@ Your Ads
 
 
                     <div>
-                        <label for="description" class="form-label">Description </label>
+                        <label for="description" class="form-label">Description <span data-toggle="tooltip" data-placement="top" title="Describe your product">
+                            <img src="{{asset('images/letter-i.png')}}" width="15" height="15" alt="" />
+                        </span></label>
                         <textarea class="inner-form form-control h-auto" id="description" name="description" rows="8" placeholder="Enter product details here...">{{old('description', @$products->description)}}</textarea>
                          @if($errors->has('description'))
                             <span class="error text-danger">{{$errors->first('description')}}</span>
@@ -187,7 +192,9 @@ Your Ads
 
                     
                     <div class="mb-2">
-                        <label class="form-label">Add External Links</label>
+                        <label class="form-label">Add External Links <span data-toggle="tooltip" data-placement="top" title="Enter the external link for your product.">
+                            <img src="{{asset('images/letter-i.png')}}" width="15" height="15" alt="" />
+                        </span></label>
                         <div id="external-links-wrapper">
                             @php
                                 $externalLinks = old('external_link', isset($products->externalLink) ? $products->externalLink : ['']);
@@ -207,7 +214,9 @@ Your Ads
                     
                     
                     <div class="mb-2">
-                        <label class="form-label">Add Video Links</label>
+                        <label class="form-label">Add Video Links <span data-toggle="tooltip" data-placement="top" title="Enter the video link for your product.">
+                            <img src="{{asset('images/letter-i.png')}}" width="15" height="15" alt="" />
+                        </span></label>
                         <div id="external-video-links-wrapper">
                             @php
                                 $externalLinks = old('video_link', isset($products->videoLink) ? $products->videoLink : ['']);
@@ -253,7 +262,7 @@ Your Ads
 
 
                 <div class="mb-3">
-                    <label for="image" class="form-label">Videos</label>
+                    <label for="" class="form-label">Videos</label>
                     <div class="file-upload">
                             <div class="profile mt-2">
                             <img src="{{(@$products->video)?asset('storage/'.@$products->video):asset('front/auth/assets/img/icons/video.svg')}}" class="user-img" alt="" id="editVideo">
@@ -290,7 +299,7 @@ Your Ads
 
 
                 <div class="mb-3">
-                    <label for="image" class="form-label">
+                    <label for="" class="form-label">
                         Optional PDF Upload (So you can upload things like health certs, PPES, purchase or pre-purchase docs etc.)
                     </label>
                     <div class="file-upload">
@@ -344,19 +353,30 @@ Your Ads
                 @endif
             </div>
 
-            <div class="mb-3" id="bid_expire">
-                <label for="bid_end_date" class="form-label">Bid End Date</label>
-                <input type="date" autocomplete="off" class="inner-form form-control mb-0" id="bid_end_date" name="bid_end_date"
-                    value="{{old('bid_end_date', @$products->bid_expire_date)}}" placeholder="Please select Bid end date">
-                @if($errors->has('bid_end_date'))
-                    <span class="error text-danger">{{$errors->first('bid_end_date')}}</span>
-                @endif
+                <div class="col-lg-6 mb-3" id="bid_expire">
+                    <label for="bid_end_date" class="form-label">Bid End Date</label>
+                    <input type="date" autocomplete="off" class="inner-form form-control mb-0" id="bid_end_date" name="bid_end_date"
+                        value="{{old('bid_end_date', @$products->bid_expire_date)}}" placeholder="Please select Bid end date">
+                    @if($errors->has('bid_end_date'))
+                        <span class="error text-danger">{{$errors->first('bid_end_date')}}</span>
+                    @endif
+                </div>
+
+                {{-- <div class="col-lg-6 mb-3" id="bid_price">
+                    <label for="bid_min_price" class="form-label">Bid Minimum Price</label>
+                    <input type="text" name="bid_min_price" id="bid_min_price" class="inner-form form-control mb-0 numbervalid" placeholder="Enter bid minimum price" value="{{old('bid_min_price',@$products->productDetail->bid_min_price)}}">
+                    @if($errors->has('bid_min_price'))
+                        <span class="error text-danger">{{$errors->first('bid_min_price')}}</span>
+                    @endif
+                </div> --}}
+
             </div>
-        </div>
+
+           
 
             <div class="d-flex align-items-center justify-content-start gap-2 flex-wrap">
                 <h6>Select Transaction Method:</h6>
-                <div class="form-check">
+                <div class="form-check" id="ourPlatformId">
                     <input class="form-check-input" type="radio" name="transaction_method" id="platform" value="platform" {{(old('transaction_method')=='platform' || @$products->transaction_method=='platform')?'checked':''}}>
                     <label class="form-check-label fw-bold text-dark" for="platform">Our Platform
                         <span data-toggle="tooltip" data-placement="top" title="Our Platform.">
@@ -364,6 +384,7 @@ Your Ads
                         </span>
                     </label>
                 </div>
+
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="transaction_method" id="buyertoseller" value="buyertoseller" {{(old('transaction_method')=='buyertoseller' || @$products->transaction_method=='buyertoseller')?'checked':''}}>
                     <label class="form-check-label fw-bold text-dark" for="buyertoseller">Buyer To Seller Connection Only 
@@ -724,25 +745,38 @@ function updateInputFiles() {
 
     $("#auction").on('click', function() {
         $("#bid_expire").show();
+        $("#bid_price").show();
     });
     $("#standard").on('click', function() {
         $("#bid_end_date").val('');
+        $("#bid_min_price").val('');
         $("#bid_expire").hide();
+        $("#bid_price").hide();
     });
     function toggleSaleMethodBasedOnCategory() {
         const selectedCategoryId = $('#category').val();
 
-        if (selectedCategoryId === '1' || selectedCategoryId === '3') {
+        if (selectedCategoryId === '1') {
+            $("#ourPlatformId").hide();
+            $('#platform').prop('checked', false);
+        }else{
+            $("#ourPlatformId").show();
+        }
+
+        if (selectedCategoryId === '2') {
             $('#auction_action').show();
             $('#standard').prop('checked', true);
-            $("#bid_expire").hide(); // Hide on standard by default
-        } else if (selectedCategoryId === '2' || selectedCategoryId === '4') {
+            $("#bid_expire").hide();
+            $("#bid_price").hide();
+        } else if (selectedCategoryId === '1' || selectedCategoryId === '3' || selectedCategoryId === '4') {
             $('#auction_action').hide();
             $('#standard').prop('checked', true);
             $("#bid_expire").hide();
+            $("#bid_price").hide();
         } else {
             $('#auction_action').hide();
             $("#bid_expire").hide();
+            $("#bid_price").hide();
         }
     }
 
@@ -751,20 +785,31 @@ function updateInputFiles() {
         toggleSaleMethodBasedOnCategory();
 
         const cat = $('#category').data('category-id'); // Use .data instead of .attr
-        if (cat == 1 || cat == 3) {
+        if (cat == 2) {
             $('#auction_action').show();
 
             if ($("#standard").is(':checked')) {
                 $("#bid_expire").hide();
+                $("#bid_price").hide();
                 $('#standard').prop('checked', true);
             } else {
                 $("#bid_expire").show();
+                $("#bid_price").show();
                 $('#auction').prop('checked', true);
             }
         } else {
+            
+             if (cat == '1') {
+                $("#ourPlatformId").hide();
+                $('#platform').prop('checked', false);
+            }else{
+                $("#ourPlatformId").show();
+            }
+            
             $('#auction_action').hide();
             $('#standard').prop('checked', true);
             $("#bid_expire").hide();
+            $("#bid_price").hide();
         }
     });
 
@@ -876,7 +921,12 @@ $("#productForm").validate({
             minDateAfter2Days: function(element) {
                 return $('#auction').is(':checked');
             }
-        }
+        },
+        bid_min_price:{
+            required: function(element) {
+                return $('#auction').is(':checked');
+            }
+        },
     },
     messages: {
         sale_method: {
@@ -928,6 +978,9 @@ $("#productForm").validate({
         bid_end_date: {
             required: "Bid End Date is required.",
             minDateAfter2Days: "Bid End Date must be at least 2 days from today."
+        },
+        bid_min_price: {
+            required: "Minimum Bid price is required.",
         }
     },
     errorClass: 'error text-danger',

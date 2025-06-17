@@ -97,7 +97,7 @@ Product Details
                                 @endforeach
 
                                 @foreach(@$products->videoLink as $key=>$video)
-                                    <div class="swiper-slide"><img src="{{asset('front/home/assets/images/youtube.jpg')}}" alt=""></div>
+                                    <div class="swiper-slide"><img src="{{asset('front/home/assets/images/youtube.png')}}" alt=""></div>
                                 @endforeach
 
                                 

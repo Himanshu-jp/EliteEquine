@@ -109,6 +109,43 @@ Horse Listing
                             @endforeach
                         </div>
                     </div>
+                    
+                    <div class="filter-section ">
+                        <h4>Banners</h4>
+                        <div class="filter-ads-checkbx">
+                            @foreach(__getBannersList() as $key=>$val)
+                                <input 
+                                    type="checkbox" 
+                                    id="banner_{{$key}}" 
+                                    value="{{$key}}" 
+                                    name="banner[]"
+                                    {{ in_array($key, $selectedBanner ?? []) ? 'checked' : '' }}
+                                />
+                                <label for="banner_{{$key}}">{{$val}}</label>
+                            @endforeach
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h4>Ratings</h4>
+                        <div class="filter-ads-checkbx">
+                            @for($i = 1; $i <= 5; $i++)
+                                <input 
+                                    type="checkbox" 
+                                    id="rating_{{ $i }}" 
+                                    value="{{ $i }}" 
+                                    name="rating[]"
+                                    {{ in_array($i, $selectedRatings ?? []) ? 'checked' : '' }}
+                                />
+                                <label for="rating_{{ $i }}">
+                                    {{-- Display ★ symbols --}}
+                                    {!! str_repeat('<i class="fa-solid fa-star"></i>', $i) !!}
+                                </label>
+                            @endfor
+                        </div>
+                    </div>
+
+                    
 
                     {{-- <div class="filter-section">
                         <h4>Year of Born</h4>
@@ -570,6 +607,18 @@ function loadHorses(page = 1) {
     $('input[name="discipline[]"]:checked').each(function () {
         selectedDiscipline.push($(this).val());
     });
+    
+    //------banner--------//
+    let selectedBanner = [];
+    $('input[name="banner[]"]:checked').each(function () {
+        selectedBanner.push($(this).val());
+    });
+   
+    //------rating--------//
+    let selectedRatings = [];
+    $('input[name="rating[]"]:checked').each(function () {
+        selectedRatings.push($(this).val());
+    });
 
     //--------View mode of listing---------//
     let selectedView = $('input[name="view_mode"]:checked').val();
@@ -599,6 +648,8 @@ function loadHorses(page = 1) {
             
             currency:$("#currency").val(),
             discipline:selectedDiscipline,
+            rating:selectedRatings,
+            banner:selectedBanner,
             
             minAge:$("#minAge").val(),
             maxAge:$("#maxAge").val(),

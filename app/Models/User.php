@@ -59,7 +59,13 @@ class User extends Authenticatable
         'is_online',
         'socket_id',
         'customer_id',
-        'payment_method_id'
+        'payment_method_id',
+        'avgRating',
+        'is_subscribed',
+        'plan_activated_on',
+        'plan_expired_on',
+        'plan_id',
+        'subscription_id'
     ];
 
     /**

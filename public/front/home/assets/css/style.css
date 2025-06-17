@@ -741,16 +741,20 @@ header nav ul li a.active::before {
   box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.08);
   padding: 26px 30px;
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   cursor: pointer;
+  width: 100%;
+  height: 100%;
 }
 
 .industry_area_sld_bx h3 {
   color: var(--Black-Color, #1d1d1d);
   font-family: var(--magical_font);
-  font-size: 20px;
+  font-size: 16px;
   font-style: normal;
-  font-weight: 550;
-  line-height: 31px;
+  font-weight: 500;
+  line-height: 1.5;
   /* 140.909% */
   text-align: left;
 }
@@ -1659,6 +1663,7 @@ section.map-locations {
   background: #fff;
   box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.2);
   padding: 5px;
+  border: 2px solid #fff;
 }
 
 .category-scroll .card-list img {
@@ -5982,7 +5987,7 @@ section.industry_area.forum-bg-border .container {
   transition: all 0.3s ease;
   cursor: pointer;
 }
-#map-location-list {
+#map-location-list, #location-list {
     position: absolute;
     left: 0;
     top: 100%;
@@ -5995,7 +6000,7 @@ section.industry_area.forum-bg-border .container {
     border-top: 0px;
 }
 
-#map-location-list li {
+#map-location-list li, #location-list li {
     list-style: none;
     margin-bottom: 10px;
     font-size: 14px;
@@ -6010,7 +6015,7 @@ section.industry_area.forum-bg-border .container {
     left: 50% !important;
     right: 0 !important;
     bottom: 0 !important;
-    transform: translate(-50%, 0%) !important;
+    transform: translate(-50%, -10%) !important;
     width: 100%;
 }
 .mapboxgl-popup-content {
@@ -6028,9 +6033,8 @@ section.industry_area.forum-bg-border .container {
 .map-pp-main .evn-dte-ll {
     display: flex;
     gap: 10px; 
-    border-bottom: 1px solid var(--Blue-Gray-200, #E2E8F0) !important;
-    padding: 10px 0px;
-    flex-direction: column;
+    /* border-bottom: 1px solid var(--Blue-Gray-200, #E2E8F0) !important; */
+    padding: 10px 0px; 
 }
 
 .map-pp-main .evn-dte-ll h3 a {
@@ -6065,7 +6069,16 @@ section.industry_area.forum-bg-border .container {
     text-transform: capitalize;
     margin-bottom: 0;
 }
-
+.price-h-list {
+    color: var(--Neutral-700, #3C4563);
+    font-family: Poppins;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.4;
+    text-transform: capitalize;
+    margin-bottom: 0;
+}
 .venue-name-new-ic {
     color: var(--Neutral-700, #3C4563);
     font-family: Poppins;
@@ -6105,11 +6118,12 @@ section.industry_area.forum-bg-border .container {
     font-weight: bold;
     letter-spacing: 0.3;
 }
-#map-location-message {
+#map-location-message, #location-message  {
     position: absolute;
     bottom: 0;
     left: 10px;
 }
+
 @media (max-width: 768px) {
   .about_horses_img { 
     display: none;
@@ -6244,4 +6258,7 @@ ul.act-icon li img {
 .ent-emg {
   display: flex;
   gap: 10px;
+}
+.filter-ads-checkbx .fa-star {
+    color: #FFA910;
 }
