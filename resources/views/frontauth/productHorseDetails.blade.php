@@ -504,8 +504,8 @@ Your Ads
                             <ul id="trail-location-list" style="display: none;">
                                 <!-- Location suggestions will appear here -->
                             </ul>
-                            <input type="hidden" id="trail-latitude" name="latitude" value="{{ request()->query('latitude')}}">
-                            <input type="hidden" id="trail-longitude" name="longitude" value="{{ request()->query('longitude')}}">
+                            <input type="hidden" id="trail-latitude" name="trail-latitude" value="{{ request()->query('trail-latitude')}}">
+                            <input type="hidden" id="trail-longitude" name="trail-longitude" value="{{ request()->query('trail-longitude')}}">
                         @if($errors->has('trial_location'))
                             <span class="error text-danger">{{$errors->first('trial_location')}}</span>
                         @endif
@@ -625,10 +625,16 @@ Your Ads
 
         const latInput = document.getElementById('map-latitude');
         const lngInput = document.getElementById('map-longitude');
+        
+        const trialLatInput = document.getElementById('trail-latitude');
+        const trialLngInput = document.getElementById('trail-longitude');
 
         const updateLocation = () => {
             if (latInput) latInput.value = lat.toFixed(6);
             if (lngInput) lngInput.value = lng.toFixed(6);
+            
+            if (trialLatInput) trialLatInput.value = lat.toFixed(6);
+            if (trialLngInput) trialLngInput.value = lng.toFixed(6);
             reverseGeocode(lat, lng);
             initializeMap(lat, lng);
             addMapMarker(lat, lng);
@@ -649,6 +655,7 @@ Your Ads
         }
 
         initializeLocationAutocomplete();
+        trialLocationAutocomplete();
     };
 
     function initializeMap(latitude, longitude) {
@@ -858,26 +865,30 @@ Your Ads
 function trialLocationAutocomplete() {
     const sessionToken = Math.random().toString(36).substring(2, 15);
 
-    // Elements for map location (mirrored fields)
-    const triallLocationInput = document.getElementById('trial-location');
+    const trialLocationInput = document.getElementById('trial-location');
     const trialLocationList = document.getElementById('trial-location-list');
     const trialLocationMessage = document.getElementById('trial-location-message');
     const trialLatitudeInput = document.getElementById('trial-latitude');
     const trialLongitudeInput = document.getElementById('trial-longitude');
 
+    if (!trialLocationInput || !trialLocationList || !trialLocationMessage || !trialLatitudeInput || !trialLongitudeInput) {
+        console.warn('One or more required DOM elements are missing.');
+        return;
+    }
+
     let selectedIndex = -1;
     let suggestions = [];
 
     function clearSuggestions() {
-        locationList.innerHTML = '';
-        locationList.style.display = 'none';
-        locationMessage.style.display = 'none';
+        trialLocationList.innerHTML = '';
+        trialLocationList.style.display = 'none';
+        trialLocationMessage.style.display = 'none';
         selectedIndex = -1;
         suggestions = [];
     }
 
     function highlightSuggestion(index) {
-        const items = locationList.querySelectorAll('li');
+        const items = trialLocationList.querySelectorAll('li');
         items.forEach((li, i) => {
             if (i === index) {
                 li.classList.add('highlighted');
@@ -901,15 +912,13 @@ function trialLocationAutocomplete() {
                 if (ctx.id.startsWith('region')) state = ctx.text || ctx.name || '';
                 if (ctx.id.startsWith('country')) country = ctx.text || ctx.name || '';
             });
-        } else if (typeof suggestion.context === 'object') {
-            state = suggestion.context.region?.name || suggestion.context.region?.text || '';
-            country = suggestion.context.country?.country_code || suggestion.context.country?.text || '';
         }
 
         const fullAddress = [name, state, country].filter(Boolean).join(', ');
 
-        locationInput.value = fullAddress;
-        mapLocationInput.value = fullAddress;
+        // Temporarily set full address
+        trialLatitudeInput.value = fullAddress;
+        trialLongitudeInput.value = fullAddress;
 
         clearSuggestions();
 
@@ -925,11 +934,8 @@ function trialLocationAutocomplete() {
                         const lat = coordinates[1];
                         const lon = coordinates[0];
 
-                        latitudeInput.value = lat;
-                        longitudeInput.value = lon;
-
-                        mapLatitudeInput.value = lat;
-                        mapLongitudeInput.value = lon;
+                        trialLatitudeInput.value = lat;
+                        trialLongitudeInput.value = lon;
 
                         if (typeof fetchVenues === 'function') {
                             fetchVenues(lat, lon);
@@ -940,14 +946,14 @@ function trialLocationAutocomplete() {
             .catch(err => console.error('Error fetching coordinates:', err));
     }
 
-    locationInput.addEventListener('input', function () {
-        const query = locationInput.value.trim();
+    trialLocationInput.addEventListener('input', function () {
+        const query = trialLocationInput.value.trim();
 
         if (query.length > 2) {
             fetch(`https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodeURIComponent(query)}&language=en&limit=5&session_token=${sessionToken}&access_token=${mapboxAccessToken}`)
                 .then(response => response.json())
                 .then(data => {
-                    locationList.innerHTML = '';
+                    trialLocationList.innerHTML = '';
                     suggestions = data.suggestions || [];
 
                     if (suggestions.length > 0) {
@@ -970,32 +976,31 @@ function trialLocationAutocomplete() {
                             li.setAttribute('data-index', i);
 
                             li.addEventListener('click', () => selectSuggestion(i));
-                            locationList.appendChild(li);
+                            trialLocationList.appendChild(li);
                         });
-                        locationList.style.display = 'block';
-                        locationMessage.style.display = 'none';
+                        trialLocationList.style.display = 'block';
+                        trialLocationMessage.style.display = 'none';
                         selectedIndex = -1;
                     } else {
-                        locationMessage.style.display = 'block';
-                        locationMessage.textContent = 'No locations found';
-                        locationList.style.display = 'none';
+                        trialLocationMessage.style.display = 'block';
+                        trialLocationMessage.textContent = 'No locations found';
+                        trialLocationList.style.display = 'none';
                     }
                 })
                 .catch(error => {
                     console.error('Error fetching location data:', error);
-                    locationMessage.style.display = 'block';
-                    locationMessage.textContent = 'Failed to fetch location data';
-                    locationList.style.display = 'none';
+                    trialLocationMessage.style.display = 'block';
+                    trialLocationMessage.textContent = 'Failed to fetch location data';
+                    trialLocationList.style.display = 'none';
                 });
         } else {
             clearSuggestions();
         }
     });
 
-    // Keyboard navigation
-    locationInput.addEventListener('keydown', function (e) {
-        const items = locationList.querySelectorAll('li');
-        if (locationList.style.display === 'block' && items.length > 0) {
+    trialLocationInput.addEventListener('keydown', function (e) {
+        const items = trialLocationList.querySelectorAll('li');
+        if (trialLocationList.style.display === 'block' && items.length > 0) {
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 selectedIndex = (selectedIndex + 1) % items.length;
@@ -1015,13 +1020,13 @@ function trialLocationAutocomplete() {
         }
     });
 
-    // Hide suggestions when clicking outside
     document.addEventListener('click', function (e) {
-        if (!locationInput.contains(e.target) && !locationList.contains(e.target)) {
+        if (!trialLocationInput.contains(e.target) && !trialLocationList.contains(e.target)) {
             clearSuggestions();
         }
     });
 }
+
 
 </script>
 <script>

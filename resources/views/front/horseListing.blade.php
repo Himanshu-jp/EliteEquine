@@ -553,7 +553,7 @@ $(function () {
 });
 
 function loadHorses(page = 1) {
-    alert('data')
+    // alert('data')
 
     //------sub category--------//
     let selectedSubCategories = [];

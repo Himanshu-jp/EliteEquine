@@ -463,7 +463,20 @@
                         // const eventImage = event.image && event.image.length > 0  ?"{{ url('/') }}/"+ event.image[0].image : '{{ url('/') }}/public/front/home/assets/images/logo/logo.svg' ;
                         const eventImage = "{{ url('/') }}/front/home/assets/images/logo/logo.svg";
                         const baseUrl = "{{ url('/') }}";
-                        const eventUrl = `${baseUrl}eventdetail/${event.id}`;
+                        const authUserId = '{{auth()->id()}}';
+                        const reviews = event?.user?.reviews;
+
+                        const averageRating = Array.isArray(reviews) && reviews.length > 0
+                            ? Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length)
+                            : 0;
+
+                        const breeds = event.breeds.map(b => b.common_master_id?.name).join(" | ");
+                        const disciplines = event.disciplines.map(d => d.common_master_id?.name).join(" | ");
+                        const trials = event.tried_upcoming_shows.map(t => t.common_master_id?.name).join(" | ");
+
+                        const isFavorited = event.favorites.some(fav => fav.user_id === authUserId);
+
+                        const eventUrl = `${baseUrl}/eventdetail/${event.id}`;
                         const maxLength = 40;
                         const descriptionText = event.description || '';
                         const truncatedDescription = descriptionText.length > maxLength ?
@@ -483,30 +496,51 @@
                         `;
                         }
                         popupContent += `
-                        <div class="map-pp-main">
-                          
-                            <div class="evn-dte-ll">
-                                <div class="ent-emg">
-                                    <img src="${eventImage}" alt="${event.title}" style="width: 45px; height: 45px;">
-                                    <div>
-                                        <h3><a href="${eventUrl}" target="_blank">${event.title}</a></h3>
-                                        <p class="pricetag">Sale : ${event.price}</p>
-                                        <p class="othertag"> ${event.price}</p>
-                                       
-                                    </div>
-                                </div>
-                                ${venueHtml ? `<div class="venue-name">${venueHtml}</div>` : ''}
-                                <div class="loc-prc-tim">
-                                    <div>
-                                        <p> 
-                                        <span style="display:block;"> ${event.product_detail.street} ${event.product_detail.city}</span></p>
-                                    </div>
+                        <div class="feat_card_bx list-page-card">
+                            <a href="${baseUrl}/horseDetails/${event.id}" target="_blank">
+                                <div class="imagelist">
+                                    <img src="${baseUrl}/storage/${event.image[0].image || 'default.svg'}" alt="${event.title}" />
                                     
-                                   
                                 </div>
-                                <div class="loc-meta">
-                                    <div class="loc-metaprc"></div>
-                                    <div class="loc-metabutton"><a href="${eventUrl}" target="_blank" class="meta-btn">Shop for Tickets</a></div>
+                            </a>
+
+                            <div class="content">
+                                <a href="${baseUrl}/horseDetails/${event.id}" target="_blank">
+                                    <h3>
+                                        ${event.title} | ${event.product_detail.age} | ${event.height?.common_master?.name}<br/>
+                                        ${breeds}
+                                    </h3>
+                                </a>
+
+                                <h4>Call For Price</h4>
+
+                                <span class="sp1">${disciplines}</span>
+
+                                <div class="location">
+                                    <img src="${baseUrl}/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
+                                    <span>${event.product_detail.city}, ${event.product_detail.state}, ${event.product_detail.country}<br />
+                                    Trial: ${trials}
+                                    ${event.product_detail.fromdate ? `<br />(${formatDate(event.product_detail.fromdate)} - ${formatDate(event.product_detail.todate)})` : ''}
+                                    </span>
+                                </div>
+
+                                <div class="foot">
+                                    <div class="bx">
+                                        <div class="imagee">
+                                            <img src="${baseUrl}/storage/${event.user.profile_photo_path || 'default-user.png'}" class="user-img" alt="">
+                                        </div>
+                                        <div class="content">
+                                            <h4>${event.user.name}</h4>
+                                            <div class="stars">
+                                                ${[1,2,3,4,5].map(i => 
+                                                    `<i class="bi bi-star-fill ${i <= averageRating ? 'text-warning' : 'text-secondary'}"></i>`).join('')
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bx2">
+                                    <a href="${baseUrl}/horseDetails/${event.id}" target="_blank">Deatil</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -528,6 +562,11 @@
 
 
 
+            }
+
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
             }
 
             function addClusterView() {
@@ -683,7 +722,7 @@
                     this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
                     this.container.innerHTML = `
                     <button id="relocateBtn" type="button" title="Relocate" style="padding:3px;">
-                        <img src="{{ asset('frontend/images/current-location-10.svg') }}">
+                        <img src="{{ asset('images/current-location-10.svg') }}">
                     </button>
                 `;
                     this.container.querySelector('#relocateBtn').addEventListener('click', () => {
