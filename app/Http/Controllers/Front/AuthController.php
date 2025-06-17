@@ -211,4 +211,44 @@ class AuthController extends Controller
         Session::flush();
         return redirect()->route("login")->with('success', 'Logged out');
     }
+    public function mapboxevent(Request $request)
+    {
+         $categoryId = $request->query('category');
+
+        if (!$categoryId) {
+            return response()->json([
+                'error' => 'Category parameter is required'
+            ], 400);
+        }
+        
+        if(in_array($categoryId, [1,2,3,4]))
+        {
+            $data = Product::with(['user', 'productDetail', 'image'])
+                ->where(['product_status' => 'live', 'deleted_at' => null])
+                ->where('category_id', $categoryId)
+                ->orderBy('id', 'desc')
+                ->get();
+        } elseif ($categoryId == 5) {
+            $now = Carbon::now();
+
+            $data = Community::with('user')
+                ->whereNull('deleted_at') // or use softDeletes if applicable
+                ->where(function ($query) use ($now) {
+                    $query->where('date', '>', $now->toDateString())
+                        ->orWhere(function ($q) use ($now) {
+                            $q->where('date', $now->toDateString())
+                                ->where('time', '>=', $now->toTimeString());
+                        });
+                })
+                ->orderBy('date', 'asc')
+                ->orderBy('time', 'asc')
+                ->get();
+        }
+        $html= view("homemapview",compact("data"))->render();
+        // return $html;
+         return response()->json([
+            'html' => $html,
+           
+        ]);
+    }
 }

@@ -29,6 +29,7 @@ Route::get('/admins', function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/universalSearch', [HomeController::class, 'universalSearch'])->name('universalSearch');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/mapboxevent', [AuthController::class, 'mapboxevent'])->name('mapboxevent');
 Route::post('/login', [AuthController::class, 'postLogin'])->name('loginPost');
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'postRegister'])->name('registerPost');
