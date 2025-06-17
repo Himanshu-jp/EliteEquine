@@ -1086,10 +1086,10 @@ function updateMapMarkers(events, categoryId) {
             markerEl.appendChild(img); */
 
             const firstProduct = eventGroups[latLng][0];
-            const venueName = document.createElement('span');
+            /* const venueName = document.createElement('span');
             venueName.className = 'marker-venue-name';
             venueName.innerText = firstProduct.title || 'No Title';
-            markerEl.appendChild(venueName);
+            markerEl.appendChild(venueName); */
 
             const marker = new mapboxgl.Marker(markerEl).setLngLat([lng, lat]).addTo(map);
 
@@ -1168,16 +1168,16 @@ function updateMapMarkers(events, categoryId) {
             markerEl.className = 'red-circle-marker';
             
             const img = document.createElement('img');
-            img.src = "{{ asset('images/marker_map_icon.svg') }}";
+            /* img.src = "{{ asset('images/marker_map_icon.svg') }}";
             img.className = 'marker-image';
-            markerEl.appendChild(img); 
+            markerEl.appendChild(img);  */
 
             const firstProduct = eventGroups[latLng][0];
 
-            const venueName = document.createElement('span');
+            /* const venueName = document.createElement('span');
             venueName.className = 'marker-venue-name';
             venueName.innerText = firstProduct.title || 'No Title';
-            markerEl.appendChild(venueName);
+            markerEl.appendChild(venueName); */
 
             const marker = new mapboxgl.Marker(markerEl).setLngLat([lng, lat]).addTo(map);
 

@@ -227,8 +227,7 @@ class ProductController extends BaseController
                 ->where('category_id', $categoryId)
                 ->orderBy('id', 'desc')
                 ->get();
-        }elseif($categoryId == 5)
-        {
+        } elseif ($categoryId == 5) {
             $now = Carbon::now();
 
             $data = Community::with('user')
