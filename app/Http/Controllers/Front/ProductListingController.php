@@ -311,6 +311,8 @@ class ProductListingController extends Controller
         $data = $data->paginate($limit); // Adjust per page as needed
         $viewMode = $request->view_mode;
         $html = view('front/card', compact(['data','viewMode']))->render();
+        // return view('front/card', compact(['data','viewMode']));
+       
         $pagination = $data->withQueryString()->links('pagination::bootstrap-4')->render();
 
         return response()->json([
