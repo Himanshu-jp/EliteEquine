@@ -429,14 +429,8 @@ Horse Listing
                         </div>
                         
                         <div class="search-box">
-                            <input type="text" placeholder="Located in" class="form-control" value="{{@$filter['location']}}" onkeyup="initializeLocationAutocomplete()" id="location" autocomplete="off" />
+                            <input type="text" placeholder="Located in" class="form-control" value="{{@$filter['location']}}" id="location" autocomplete="off" />
                             <img class="icon-input" src="{{asset('front/home/assets/images/search-icon.svg')}}">
-                            <span id="location-message" class="text-danger" style="display: none; font-size: 12px;"></span>
-                            <ul id="location-list" style="display: none;">
-                                <!-- Location suggestions will appear here -->
-                            </ul>
-                            <input type="hidden" id="latitude" name="latitude" value="{{ request()->query('latitude')}}">
-                            <input type="hidden" id="longitude" name="longitude" value="{{ request()->query('longitude')}}">
                         </div>
 
                         <div class="date-box">
@@ -517,6 +511,8 @@ Horse Listing
 @endsection
 
 @section('script')
+
+
 <script>
     const pages = document.querySelectorAll(".page");
     const prev = document.getElementById("prev");
@@ -594,7 +590,7 @@ $(function () {
 });
 
 function loadHorses(page = 1) {
-    
+    alert('data')
 
     //------sub category--------//
     let selectedSubCategories = [];
