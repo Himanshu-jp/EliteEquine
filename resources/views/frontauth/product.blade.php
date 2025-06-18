@@ -174,23 +174,7 @@ Your Ads
                                 @endif
                             </div>        
                         @endif
-                    
-                     <div class="mb-3">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <label for="price" class="form-label">Price</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="is_negotiable" name="is_negotiable" {{(old('is_negotiable')=='on' || @$products->is_negotiable=='yes')?'checked':''}}>
-                                <label class="form-check-label" for="Height_hands">Is Negotiable?</label>
-                            </div>
-                        </div>
-                        <input type="text" autocomplete="off" class="inner-form form-control mb-0" id="price" name="price"
-                            value="{{old('price', @$products->price)}}" placeholder="Enter Price...">
-                        @if($errors->has('price'))
-                            <span class="error text-danger">{{$errors->first('price')}}</span>
-                        @endif
-                    </div>
-
-                    
+                                        
                     <div class="mb-2">
                         <label class="form-label">Add External Links <span data-toggle="tooltip" data-placement="top" title="Enter the external link for your product.">
                             <img src="{{asset('images/letter-i.png')}}" width="15" height="15" alt="" />
@@ -362,17 +346,15 @@ Your Ads
                     @endif
                 </div>
 
-                {{-- <div class="col-lg-6 mb-3" id="bid_price">
+                <div class="col-lg-6 mb-3" id="bid_price">
                     <label for="bid_min_price" class="form-label">Bid Minimum Price</label>
                     <input type="text" name="bid_min_price" id="bid_min_price" class="inner-form form-control mb-0 numbervalid" placeholder="Enter bid minimum price" value="{{old('bid_min_price',@$products->productDetail->bid_min_price)}}">
                     @if($errors->has('bid_min_price'))
                         <span class="error text-danger">{{$errors->first('bid_min_price')}}</span>
                     @endif
-                </div> --}}
-
+                </div>
             </div>
 
-           
 
             <div class="d-flex align-items-center justify-content-start gap-2 flex-wrap">
                 <h6>Select Transaction Method:</h6>
@@ -395,6 +377,21 @@ Your Ads
                 </div>
                 @if($errors->has('transaction_method'))
                     <span class="error text-danger">{{$errors->first('transaction_method')}}</span>
+                @endif
+            </div>
+
+            <div class="col-lg-6 mb-3" id="priceDiv">
+                <div class="d-flex align-items-center justify-content-between">
+                    <label for="price" class="form-label">Price</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="is_negotiable" name="is_negotiable" {{(old('is_negotiable')=='on' || @$products->is_negotiable=='yes')?'checked':''}}>
+                        <label class="form-check-label" for="Height_hands">Is Negotiable?</label>
+                    </div>
+                </div>
+                <input type="text" autocomplete="off" class="inner-form form-control mb-0 numbervalid" id="price" name="price"
+                    value="{{old('price', @$products->price)}}" placeholder="Enter Price...">
+                @if($errors->has('price'))
+                    <span class="error text-danger">{{$errors->first('price')}}</span>
                 @endif
             </div>
             
@@ -753,6 +750,31 @@ function updateInputFiles() {
         $("#bid_expire").hide();
         $("#bid_price").hide();
     });
+
+
+
+    //------for transcation method-----kamal--------//
+
+    $("input[name='transaction_method']:checked").each(function () {
+        console.log($(this).val());
+        if($(this).val()=="platform"){
+            $("#price").val('');
+            $("#priceDiv").show();
+        }else{
+            $("#price").val('');
+            $("#priceDiv").hide();
+        }
+    });
+
+    $("#platform").on('click', function() {
+        $("#price").val('');
+        $("#priceDiv").show();
+    });
+    $("#buyertoseller").on('click', function() {
+        $("#price").val('');
+        $("#priceDiv").hide();
+    });
+
     function toggleSaleMethodBasedOnCategory() {
         const selectedCategoryId = $('#category').val();
 

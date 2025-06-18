@@ -92,7 +92,7 @@ function initializeVisitChart() {
                         display: false
                     },
                     ticks: {
-                        color: '#666666',
+                        color: '#7C8DB5',
                         font: {
                             size: 12
                         }
@@ -109,7 +109,7 @@ function initializeVisitChart() {
                         display: false
                     },
                     ticks: {
-                        color: '#666666',
+                        color: '#7C8DB5',
                         font: {
                             size: 12
                         },

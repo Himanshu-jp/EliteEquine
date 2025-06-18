@@ -52,6 +52,24 @@ class ProductService
         $product->updated_at = Carbon::now();
         $product->save();
 
+
+        if($data['bid_min_price']!=""){
+            $productDetail = ProductDetail::where('product_id',$product->id)->first();  
+            if (!$productDetail) {
+                $productDetail = new ProductDetail();
+                $productDetail->product_id = $product->id;
+                $productDetail->bid_min_price = $data['bid_min_price'];
+                $productDetail->created_at = Carbon::now();
+                $productDetail->updated_at = Carbon::now();
+                $productDetail->save();
+            }else{
+                $productDetail->bid_min_price = $data['bid_min_price'];
+                $productDetail->created_at = Carbon::now();
+                $productDetail->updated_at = Carbon::now();
+                $productDetail->save();
+            }
+        }
+
         $externalLink=[];
         if (!empty($data['external_link']) && is_array($data['external_link']) && count($data['external_link']) > 0 && !empty($data['external_link'][0]) ) {
             foreach ($data['external_link'] as $key => $link) {

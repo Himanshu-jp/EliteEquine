@@ -67,6 +67,11 @@ class ProductController extends Controller
         {
             return redirect()->route('settings')->with('error', 'Please first complete your Settings details.');
         }
+        if(Auth::user()->is_subscribed != '1')
+        {
+                    return redirect()->route('subscription')->with('error', 'You does not have any valid subscription.');
+
+        }
         
         // $products = Product::with(['image', 'video', 'document'])
         //     ->where(['deleted_at' => null, 'user_id' => $user->id, 'product_status' => null])

@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Stripe\StripeClient;
 use Stripe\Transfer;
 use Stripe\Stripe;
+use Illuminate\Support\Facades\Auth;
 
 use Stripe\Balance;
 // use Log;
@@ -32,7 +33,10 @@ if (!function_exists('checkProfileSettingUpdate')) {
         {
             return ['sauccess' => false, 'message' => 'Please first complete your Settings details.', 'code' => 422];
         }
-
+ if(Auth::user()->is_subscribed != '1')
+        {
+            return ['sauccess' => false, 'message' => 'You does not have any valid subscription.','code' => 422];
+        }
 		return ['success' => true, 'message' => 'success', 'code' => 200];
     }
 }

@@ -86,6 +86,7 @@ class AuthController extends Controller
 
     public function postRegister(RegisterRequest $request)
     {
+   
         $result = $this->authService->register($request->all());
         return redirect()->route('login')->with('success', 'An email has been sent to your email address for verification.!');
     }

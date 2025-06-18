@@ -7,41 +7,8 @@
     .category-scroll button {
         border: none;
     }
-
-    .category-scroll button.active .card-list {
-        background: #d6b868;
-    }
-
-    .location-suggestions {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        max-height: 200px;
-        overflow-y: auto;
-        background: white;
-        border: 1px solid #ccc;
-        border-top: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-    }
-
-    .location-suggestions li {
-        padding: 8px 12px;
-        border-bottom: 1px solid #eee;
-    }
-
-    .location-suggestions li:last-child {
-        border-bottom: none;
-    }
-
-    .location-suggestions li.highlighted,
-    .location-suggestions li:hover {
-        background-color: #0074D9;
-        /* nice blue */
-        color: white;
-    }
-
+ 
+ 
         .category-scroll button {border: none;
         overflow: hidden;
     border-radius: 20px;}
@@ -85,7 +52,7 @@
 
     <!-------------------------------- banner_area ------------------------------------>
     <section class="banner_area">
-        <div class="container">
+        <div class="container-fluid">
             <div class="banner_area_inner">
                 <div class="image_bx">
                     <img src="{{ asset('front/home/assets/images/hource_img_banner.png') }}" alt="" />
@@ -323,7 +290,7 @@
                                             id="{{ $key001 }}-tab-pane" role="tabpanel"
                                             aria-labelledby="{{ $key001 }}-tab"
                                             tabindex="{{ $key001 == 1 ? '1' : '0' }}">
-                                            <div class="swiper mySwiper">
+                                            <div class="swiper FeaturedSwiper">
                                                 <div class="swiper-wrapper">
                                                     @foreach (@$featuredData[$key001] as $key => $value)
                                                         <div class="swiper-slide">
@@ -613,7 +580,7 @@
             </div>
             <div class="col-lg-12">
                 <div class="industry_area_inner2">
-                <div thumbsSlider="" class="swiper mySwiper1">
+                <div thumbsSlider="" class="swiper IndustryMetrics">
                     <div class="swiper-wrapper">
                     @foreach($industryMatricData as $index => $matric)
                     <div class="swiper-slide">
