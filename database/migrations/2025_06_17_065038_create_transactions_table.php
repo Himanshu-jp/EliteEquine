@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('plan_id')->nullable();
             $table->string('session_id')->nullable();
+            $table->string('lister_types')->nullable();
             $table->string('plan_purchase_on')->nullable();
             $table->string('next_renewal_date')->nullable();
             $table->string('expired_on')->nullable();

@@ -12,7 +12,6 @@ class Product extends Model
     protected $fillable = [
         'user_id',
         'category_id',
-        'sub_category',
         'sale_method',
         'return_available',
         'return_days',
@@ -52,6 +51,12 @@ protected $appends = ['disciplines_names'];
         return $this->hasMany(ProductImage::class)->select('id', 'product_id', 'image');
     }
 
+   
+    public function subcategory()
+    {
+        return $this->hasMany(ProductSubCategory::class)->select('id', 'product_id', 'category_id');
+    }
+    
     public function externalLink()
     {
         return $this->hasMany(ProductLink::class)->select('id', 'product_id', 'link')->where('type', 'web');
@@ -80,11 +85,6 @@ protected $appends = ['disciplines_names'];
     public function category()
     {
         return $this->belongsTo(Category::class)->select('id', 'name');
-    }
-
-    public function subcategory()
-    {
-        return $this->belongsTo(SubCategory::class, 'sub_category')->select('id', 'name');
     }
 
     public function disciplines()

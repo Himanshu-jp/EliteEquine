@@ -183,7 +183,8 @@ Community & Events
                                     </svg> 
                                     <h5 class="my-4">No Events found matched your criteria</h5>
                                     <hr>
-                                    <a href="{{route('settings')}}" class="text-gold"><u>Select Your Notifications Settings</u></a>
+                                                                      <a href="javascript:;"  class=" go-to-notify-on text-gold"><u>Select Your Notifications Settings</u></a>
+
                                 </div>
                             </div>
                         @endif

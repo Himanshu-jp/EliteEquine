@@ -27,7 +27,6 @@ class ProductRequest extends FormRequest
             'sale_method' => 'required|in:standard,auction',
             'transaction_method' => 'required|in:platform,buyertoseller',
             'title' => 'required|string|max:500',
-            'price' => 'required|numeric',
             'currency' => 'required|string|max:3',
             'video'   => 'nullable|array',
             'video.*' => 'mimes:mp4,mov,avi,wmv|max:20480',
@@ -43,6 +42,7 @@ class ProductRequest extends FormRequest
 
             'description' => 'required|string|max:5000',
             'bid_end_date' => ['required_if:sale_method,auction', 'nullable', 'date', 'after_or_equal:'.now()->addDays(2)->toDateString()],
+            'price' => ['required_if:transaction_method,platform', 'nullable'],
         ];
         // Only require image if the method is POST (create)
         if ($this->id!=null) {            

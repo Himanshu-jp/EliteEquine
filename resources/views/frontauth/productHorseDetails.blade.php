@@ -81,7 +81,7 @@ Your Ads
 
             <div class="row align-items-baseline cusmt-form-mb">
 
-                <div class="col-md-3 mt-3 position-relative">
+                {{-- <div class="col-md-3 mt-3 position-relative">
                     <label for="sub_category" class="form-label">Sub Category *</label>
                     <select class="form-select pe-5 mb-2 inner-form form-control" name="sub_category" id="sub_category" >
                         <option value="">-- Select Category --</option>
@@ -90,6 +90,24 @@ Your Ads
                         @endforeach
                     </select>
 
+                    @if($errors->has('sub_category'))
+                        <span class="error text-danger">{{$errors->first('sub_category')}}</span>
+                    @endif
+                </div> --}}
+
+                <div class="col-md-3 mt-3 position-relative">
+                    <label for="exampleFormControlInput1" class="form-label">Sub Category</label>
+                    <select class="form-control select2" id="sub_category" name="sub_category[]" multiple="multiple">
+                        @foreach ($subcategories as $key=>$value)
+                            <option value="{{$key}}" {{in_array($key,old('sub_category',@$products->subcategory->pluck('category_id')->toArray()))?'selected':''}} >{{$value}}</option>
+                        @endforeach
+                    </select>
+                    <i class="fi fi-rr-angle-small-down" style="position: absolute;
+                                top: 63%;
+                                right: 30px;
+                                transform: translateY(-50%);
+                                pointer-events: none;
+                                color: #555;"></i>
                     @if($errors->has('sub_category'))
                         <span class="error text-danger">{{$errors->first('sub_category')}}</span>
                     @endif
@@ -1128,8 +1146,7 @@ function trialLocationAutocomplete() {
 
         $('#productDetailsForm').validate({
             rules: {
-                // category: "required",
-                sub_category: "required",
+                'sub_category[]': { required: true },
                 'disciplines[]': { required: true },
                 age: {
                     required: true,
@@ -1166,7 +1183,7 @@ function trialLocationAutocomplete() {
             },
             messages: {
                 category: "Category is required.",
-                sub_category: "Sub-category is required.",
+               'sub_category[]': { required:"Sub category is required."},
                 'disciplines[]': "Please select at least one discipline.",
                 age: {
                     required: "Year of birth is required.",

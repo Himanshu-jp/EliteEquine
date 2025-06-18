@@ -118,7 +118,11 @@ Product Details
                         <h3 class="horse-info-heading">More Details</h3>
                         <div class="horse-info-box">
 
-                            <div class="horse-info-row"><span class="horse-label">Subcategory :</span> {{@$products->subcategory->name}}</div>
+                            <div class="horse-info-row"><span class="horse-label">Subcategory :</span> 
+                               {{ @$products->subcategory->map(function($show) {
+                                    return $show->category->name;
+                                })->filter()->implode(', ') }}
+                            </div>
                             
                             <div class="horse-info-row"><span class="horse-label">Property Types:</span>
                                 {{@$products->propertyTypes->map(function($property_types) {
@@ -329,7 +333,7 @@ Product Details
                                 <h2 class="fw-bold">{{ $products->currency.' '.number_format(optional($products->highestBid)->amount ?? $products->productDetail->bid_min_price) }} </h2>
                             </div>
                         @endif
-                        @if(@$products->sale_method == 'standard' && @$products->product_status == 'live')
+                        @if(@$products->sale_method == 'standard' && @$products->product_status == 'live' && @$products->transaction_method == 'platform')
                             <div class="pb-3 gap-2">
                                 <span class="text-secondary">Price</span>
                                 <h2 class="fw-bold">{{ $products->currency.' '.number_format($products->price,2) }} </h2>
@@ -700,8 +704,7 @@ Product Details
 
  <script>
 
-<script>
-    let mapboxAccessToken = '{{ config("config.map_box_access_token") }}';
+let mapboxAccessToken = '{{ config("config.map_box_access_token") }}';
     mapboxgl.accessToken = mapboxAccessToken;
 
     let currentMarker = null;
@@ -758,7 +761,6 @@ Product Details
 
         map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     }
-</script>
 
 $(document).ready(function () {
 

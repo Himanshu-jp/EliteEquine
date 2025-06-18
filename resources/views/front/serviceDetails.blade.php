@@ -346,10 +346,12 @@ Product Details
                             </div>
                         @endif
 
-                        <div class="pb-3 gap-2">
-                            <span class="text-secondary">Minimum Bid Price</span>
-                            <h2 class="fw-bold">{{ $products->currency.' '.number_format($products->price)}} </h2>
-                        </div>
+                         @if(@$products->sale_method == 'standard' && @$products->product_status == 'live' && @$products->transaction_method == 'platform')
+                            <div class="pb-3 gap-2">
+                                <span class="text-secondary">Price</span>
+                                <h2 class="fw-bold">{{ $products->currency.' '.number_format($products->price,2) }} </h2>
+                            </div>
+                        @endif
 
                         <div>
                             <div class="btn-connected gap-2">

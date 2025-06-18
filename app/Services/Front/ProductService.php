@@ -8,6 +8,7 @@ use App\Models\ProductDocument;
 use App\Models\ProductImage;
 use App\Models\ProductLink;
 use App\Models\ProductRelation;
+use App\Models\ProductSubCategory;
 use App\Models\ProductVideo;
 use App\Models\UserDetails;
 use Illuminate\Support\Facades\Auth;
@@ -32,8 +33,6 @@ class ProductService
             $product = new Product();
             $product->user_id = $user->id;
         }
-        // $product->category_id = $data['category_id'];
-        // $product->sub_category = $data['sub_category'];
         $product->sale_method = $data['sale_method'];
         $product->transaction_method = $data['transaction_method'];
         $product->bid_expire_date = $data['bid_end_date'];
@@ -51,6 +50,24 @@ class ProductService
         $product->created_at = Carbon::now();
         $product->updated_at = Carbon::now();
         $product->save();
+
+
+        if($data['bid_min_price']!=""){
+            $productDetail = ProductDetail::where('product_id',$product->id)->first();  
+            if (!$productDetail) {
+                $productDetail = new ProductDetail();
+                $productDetail->product_id = $product->id;
+                $productDetail->bid_min_price = $data['bid_min_price'];
+                $productDetail->created_at = Carbon::now();
+                $productDetail->updated_at = Carbon::now();
+                $productDetail->save();
+            }else{
+                $productDetail->bid_min_price = $data['bid_min_price'];
+                $productDetail->created_at = Carbon::now();
+                $productDetail->updated_at = Carbon::now();
+                $productDetail->save();
+            }
+        }
 
         $externalLink=[];
         if (!empty($data['external_link']) && is_array($data['external_link']) && count($data['external_link']) > 0 && !empty($data['external_link'][0]) ) {
@@ -261,7 +278,6 @@ class ProductService
         $productDetail->green_eligibilitie_id = $data['green_eligibilitie_id'];
         $productDetail->fromdate = $data['fromdate'];
         $productDetail->todate = $data['todate'];
-        // $productDetail->bid_min_price = $data['bid_min_price'];
         $productDetail->sale_price = $data['sale_price'];
         $productDetail->lease_price = $data['lease_price'];
         $productDetail->trainer = $data['trainer'];
@@ -315,8 +331,6 @@ class ProductService
 
         //-------save product table data & enable product status as live----------------//
         $product = Product::where(['id' => $data['productId'], 'user_id' => $user->id])->first();
-        // $product->category_id = $data['category'];
-        $product->sub_category = $data['sub_category'];
         $product->product_status = 'live';
         $product->updated_at = Carbon::now();
         $product->save();
@@ -326,6 +340,18 @@ class ProductService
         $productId = $product->id;
         $productRemove = ProductRelation::where('product_id',$productId)->delete();
         $insertData = [];
+
+         // Handle sub_category --00--
+        if (isset($data['sub_category'])) {
+           foreach ($data['sub_category'] as $key => $category) {
+                $externalLink[$key]['product_id'] = $productId;
+                $externalLink[$key]['category_id'] = $category;
+                $externalLink[$key]['created_at'] = Carbon::now();
+                $externalLink[$key]['updated_at'] = Carbon::now();
+            }
+            ProductSubCategory::where('product_id', $product->id)->delete();
+            $subCategory = ProductSubCategory::insert($externalLink);
+        }
 
         // Handle disciplines --01--
         if (isset($data['disciplines'])) {
@@ -442,7 +468,7 @@ class ProductService
             ];
         }
         
-        // Handle sex_id single option --09--
+        // Handle sex_id single option --10--
         if (isset($data['sex_id'])) {
             $insertData[] = [
                 'product_id' => $productId,
@@ -453,7 +479,7 @@ class ProductService
             ];
         }
        
-        // Handle sex_id single option --09--
+        // Handle sex_id single option --11--
         if (isset($data['green_eligibilitie_id'])) {
             $insertData[] = [
                 'product_id' => $productId,
@@ -525,8 +551,6 @@ class ProductService
 
         //-------save product table data & enable product status as live----------------//
         $product = Product::where(['id' => $data['productId'], 'user_id' => $user->id])->first();
-        // $product->category_id = $data['category'];
-        // $product->sub_category = $data['sub_category'];
         $product->product_status = 'live';
         $product->updated_at = Carbon::now();
         $product->save();
@@ -701,7 +725,6 @@ class ProductService
         $productDetail->fromdate = $data['fromdate'];
         $productDetail->todate = $data['todate'];
         $productDetail->sleeps = $data['sleeps'];
-        $productDetail->bid_min_price = $data['bid_min_price'];
         $productDetail->daily_board_rental_rate = $data['daily_board_rental_rate'];
         $productDetail->monthly_board_rental_rate = $data['monthly_board_rental_rate'];
         $productDetail->weekly_board_rental_rate = $data['weekly_board_rental_rate'];
@@ -750,8 +773,6 @@ class ProductService
 
         //-------save product table data & enable product status as live----------------//
         $product = Product::where(['id' => $data['productId'], 'user_id' => $user->id])->first();
-        // $product->category_id = $data['category'];
-        $product->sub_category = $data['sub_category'];
         $product->product_status = 'live';
         $product->updated_at = Carbon::now();
         $product->save();
@@ -761,6 +782,18 @@ class ProductService
         $productId = $product->id;
         $productRemove = ProductRelation::where('product_id',$productId)->delete();
         $insertData = [];
+
+         // Handle sub_category --00--
+        if (isset($data['sub_category'])) {
+           foreach ($data['sub_category'] as $key => $category) {
+                $externalLink[$key]['product_id'] = $productId;
+                $externalLink[$key]['category_id'] = $category;
+                $externalLink[$key]['created_at'] = Carbon::now();
+                $externalLink[$key]['updated_at'] = Carbon::now();
+            }
+            ProductSubCategory::where('product_id', $product->id)->delete();
+            $subCategory = ProductSubCategory::insert($externalLink);
+        }
 
         // Handle property_types --01--
         if (isset($data['property_types'])) {

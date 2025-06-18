@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->index();
             $table->foreignId('category_id')->nullable()->index();
-            $table->foreignId('sub_category')->nullable()->index();
             $table->enum("sale_method",['standard',"auction"]);
             $table->enum("return_available",['yes',"no"])->nullable();
             $table->integer("return_days")->nullable();
