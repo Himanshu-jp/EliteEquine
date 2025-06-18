@@ -248,9 +248,7 @@ Community & Event Details
                         </ul>
                     </div> --}}
 
-                    {{-- <div class="card-boxleft p-0">
-                        <img src="{{asset('front/home/assets/images/map-img.png')}}" alt="" />
-                    </div> --}}
+                    <div class="card-boxleft p-0" id="map"></div> 
 
                     @if(count($moreAdd)>0)
                         <div class="card-boxleft feat_card_bx">
@@ -297,7 +295,66 @@ Community & Event Details
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
 
 <script>
+    let mapboxAccessToken = '{{ config("config.map_box_access_token") }}';
+    mapboxgl.accessToken = mapboxAccessToken;
 
+    let currentMarker = null;
+
+    function addMapMarker(lat, lng) {
+        if (currentMarker) currentMarker.remove();
+
+        const el = document.createElement('div');
+        el.className = 'custom-map-marker';
+
+        currentMarker = new mapboxgl.Marker(el)
+            .setLngLat([lng, lat])
+            .addTo(map);
+
+        map.flyTo({ center: [lng, lat], zoom: 14 });
+    }
+
+    window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        let lat = '{{@$products->productDetail->latitude}}' || 26.8467;
+        let lng = '{{@$products->productDetail->longitude}}' || 75.7647;
+
+        const updateLocation = () => {
+            initializeMap(lat, lng);
+            addMapMarker(lat, lng);
+        };
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    lat = position.coords.latitude;
+                    lng = position.coords.longitude;
+                    updateLocation();
+                },
+                () => updateLocation(),
+                { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+            );
+        } else {
+            updateLocation();
+        }
+
+        initializeLocationAutocomplete();
+    };
+
+    function initializeMap(latitude, longitude) {
+        map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [longitude, latitude],
+            zoom: 10,
+            pitch: 60,
+            bearing: -20
+        });
+
+        map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    }
+</script>
+
+<script>
 
 function chatCreate() {
     var formData = new FormData();
