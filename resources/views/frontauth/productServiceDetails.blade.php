@@ -293,17 +293,23 @@ Your Ads
         <div class="d-flex align-items-center justify-content-start gap-2 flex-wrap">
             <h6>Banners:</h6>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="banners" id="GreenEligibility" value="Green Eligibility" {{(old('banners')=='Green Eligibility' || @$products->productDetail->banner=='Green Eligibility')?'checked':''}}>
-                <label class="form-check-label fw-bold text-dark" for="GreenEligibility">Green Eligibility</label>
+                <input class="form-check-input" type="radio" name="banners" id="Around" value="Around" {{(old('banners')=='Around' || @$products->productDetail->banner=='Around')?'checked':''}}>
+                <label class="form-check-label fw-bold text-dark" for="Around">Around</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="banners" id="Qualified_for" value="Qualified for" {{(old('banners')=='Qualified for' || @$products->productDetail->banner=='Qualified for')?'checked':''}}>
-                <label class="form-check-label fw-bold text-dark" for="Qualified_for">Qualified for</label>
+                <input class="form-check-input" type="radio" name="banners" id="Hiring" value="Hiring" {{(old('banners')=='Hiring' || @$products->productDetail->banner=='Hiring')?'checked':''}}>
+                <label class="form-check-label fw-bold text-dark" for="Hiring">Hiring</label>
             </div>
             <div class="form-check">
+                <input class="form-check-input" type="radio" name="banners" id="Seeking Employment" value="Seeking Employment" {{(old('banners')=='Seeking Employment' || @$products->productDetail->banner=='Seeking Employment')?'checked':''}}>
+                <label class="form-check-label fw-bold text-dark" for="Seeking Employment">Seeking Employment</label>
+            </div>
+
+             <div class="form-check">
                 <input class="form-check-input" type="radio" name="banners" id="Negotiable" value="Negotiable" {{(old('banners')=='Negotiable' || @$products->productDetail->banner=='Negotiable')?'checked':''}}>
                 <label class="form-check-label fw-bold text-dark" for="Negotiable">Negotiable</label>
             </div>
+
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="banners" id="Price_Reduced" value="Price Reduced" {{(old('banners')=='Price Reduced' || @$products->productDetail->banner=='Price Reduced')?'checked':''}}>
                 <label class="form-check-label fw-bold text-dark" for="Price_Reduced">Price Reduced</label>
@@ -328,6 +334,7 @@ Your Ads
         </div>
 
         <div class="text-start my-4">
+            <button type="button" class="btn btn-primary" id="back" onclick="window.location.href='{{route('editProduct',$productId)}}'">Back</button>
             <button type="submit" class="btn btn-primary" id="productDetails-form-submit">Submit Ad</button>
         </div>
 
@@ -773,11 +780,11 @@ Your Ads
             const contactSet = $('#contactSet').is(':checked');
 
             if (!addressSet) {
-                $('#precise_location, #country, #state, #city, #street').each(function () {
+                $('#precise_location, #country, #state, #city').each(function () {
                     $(this).rules('add', { required: true, maxlength: 300 });
                 });
             } else {
-                $('#precise_location, #country, #state, #city, #street').each(function () {
+                $('#precise_location, #country, #state, #city').each(function () {
                     $(this).rules('remove', 'required');
                 });
             }

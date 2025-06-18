@@ -5,8 +5,20 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="footer-box">
-                    <p>Focused on the competitive hunter-jumper audience, our platform offers a comprehensive space where equestrians can find premium horses, top-quality equipment and apparel, specialized services and jobs, exclusive boarding barns, and properties—all in one place. Whether you’re buying, selling, promoting, hiring, or job hunting, ELITE EQUINE provides the tools and connections to help you achieve your goals quickly and effectively.</p>
-                    <p>Together, we are building a global network where passion for horses meets cutting-edge technology.</p>
+
+@php
+    use App\Models\HomeAbout;
+
+    if (empty($homeAboutData)) {
+        $homeAboutData = HomeAbout::first();
+    }
+@endphp
+
+@if(!empty($homeAboutData))
+    {!! $homeAboutData->description !!}
+@endif
+
+     
                 </div>
             </div>
             <div class="col-lg-3">

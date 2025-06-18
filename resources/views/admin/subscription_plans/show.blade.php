@@ -35,12 +35,12 @@
                         <div class="card-body">
                             <!-- Display Subscription Plan Details -->
                             <div class="row">
-                                <div class="col-md-3">
+                                {{-- <div class="col-md-3">
                                     <h4>Plan Image</h4>
                                     <img src="{{ ($subscriptionPlan->image) ? asset('storage/' . $subscriptionPlan->image) : asset('images/default-blog.png') }}" 
                                     width="150" height="150" alt="Plan Image">
-                                </div>
-                                <div class="col-md-9">
+                                </div> --}}
+                                <div class="col-md-12">
                                     <h4>Plan Information</h4>
                                     <ul class="list-unstyled">
                                         <li><strong>Title:</strong> {{ $subscriptionPlan->title ?? 'N/A' }}</li>
@@ -48,7 +48,7 @@
                                         <li><strong>Price:</strong> ${{ number_format($subscriptionPlan->price, 2) ?? 'N/A' }}</li>
                                         <li><strong>Duration (Days):</strong> {{ $subscriptionPlan->days ?? 'N/A' }}</li>
                                         <li><strong>Type:</strong> {{ ucfirst($subscriptionPlan->type) ?? 'N/A' }}</li>
-                                        <li><strong>Post Limit:</strong> {{ $subscriptionPlan->post_limit ?? 'N/A' }}</li>
+                                        {{-- <li><strong>Post Limit:</strong> {{ $subscriptionPlan->post_limit ?? 'N/A' }}</li> --}}
                                         <li><strong>Description:</strong> {!! $subscriptionPlan->description ?? 'N/A' !!}</li>
                                         <li><strong>Created At:</strong> {{ $subscriptionPlan->created_at->format('d M, Y') }}</li>
                                     </ul>

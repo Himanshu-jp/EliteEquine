@@ -94,16 +94,16 @@
                     </div>
 
                     <!-- Post Limit -->
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="post_limit">Post Limit</label>
                         <input type="text" class="form-control @error('post_limit') is-invalid @enderror" id="post_limit" name="post_limit" value="{{ old('post_limit', $subscriptionPlan->post_limit) }}" placeholder="Enter post limit">
                         @error('post_limit')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     <!-- Image (Optional) -->
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="image">Plan Image (Optional)</label>
                         <input type="file" name="image" id="image" class="form-control-file @error('image') is-invalid @enderror">
                         @if ($subscriptionPlan->image)
@@ -114,7 +114,7 @@
                         @error('image')
                             <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
-                    </div>
+                    </div> --}}
                 </div>
 
                 <!-- Card Footer -->

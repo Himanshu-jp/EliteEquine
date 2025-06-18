@@ -24,18 +24,22 @@ class SubscriptionPlanService
         }
         
         // Limit to 300 characters
-        $trimmed = substr($data['description'], 0, 300);
 
-        // Find the last full stop within the trimmed text
-        $lastPeriod = strrpos($trimmed, '.');
+  $cleaned = strip_tags($data['description']);
 
-        if ($lastPeriod !== false) {
-            // Cut at the last full stop
-            $result = substr($trimmed, 0, $lastPeriod + 1);
-        } else {
-            // If no period found, just use the trimmed version
-            $result = $trimmed;
-        }
+// Trim to 300 characters
+$trimmed = substr($cleaned, 0, 300);
+
+// Find the last full stop within the trimmed text
+$lastPeriod = strrpos($trimmed, '.');
+
+if ($lastPeriod !== false) {
+    // Cut at the last full stop
+    $result = substr($trimmed, 0, $lastPeriod + 1);
+} else {
+    // If no period found, just use the trimmed version
+    $result = $trimmed;
+}
         // product create on stripe
         $product = Product::create([
             'name' => $data['title'],
@@ -64,40 +68,34 @@ class SubscriptionPlanService
 
     public function update(SubscriptionPlan $subscriptionPlan, $data)
     {
-        // $plan = SubscriptionPlan::findOrFail($id);
+         $oldData = $subscriptionPlan;
+     
         if (isset($data['image'])) {
             if ($subscriptionPlan->image) {
-                Storage::disk('public')->delete($plan->image);
+                Storage::disk('public')->delete($data['image']);
             }
             $data['image'] = $data['image']->store('subscription-plans', 'public');
         }
 
         // Limit to 300 characters
-        $trimmed = substr($data['description'], 0, 300);
+       $cleaned = strip_tags($data['description']);
 
-        // Find the last full stop within the trimmed text
-        $lastPeriod = strrpos($trimmed, '.');
+// Trim to 300 characters
+$trimmed = substr($cleaned, 0, 300);
 
-        if ($lastPeriod !== false) {
-            // Cut at the last full stop
-            $result = substr($trimmed, 0, $lastPeriod + 1);
-        } else {
-            // If no period found, just use the trimmed version
-            $result = $trimmed;
-        }
+// Find the last full stop within the trimmed text
+$lastPeriod = strrpos($trimmed, '.');
 
-        if(!empty(@$subscriptionPlan->stripe_product_id))
-        {
-            // product create on stripe
-            $product = Product::update(@$subscriptionPlan->stripe_product_id, array_filter([
-                'name' => $data['title'],
-                'description' => $result,
-                'metadata' => ['type' => $data['type']],
-                'image' => @$data['image']
-            ]));
-        } else {
-            // product create on stripe
-            $product = Product::create([
+if ($lastPeriod !== false) {
+    // Cut at the last full stop
+    $result = substr($trimmed, 0, $lastPeriod + 1);
+} else {
+    // If no period found, just use the trimmed version
+    $result = $trimmed;
+}
+
+     if($oldData->price != $data['price']){
+               $product = Product::create([
                 'name' => $data['title'],
                 'description' => $result,
                 'metadata' => ['type' => $data['type']],
@@ -105,13 +103,7 @@ class SubscriptionPlanService
             ]);
 
             $data['stripe_product_id'] = $product->id;
-        }
-
-        if(!empty($subscriptionPlan->price_id))
-        {
-            $price = Price::update($subscriptionPlan->price_id, ['active' => false]);
-
-            //add price with 
+      
             $price = Price::create([
                 'unit_amount' => $data['price']*100,
                 'currency' => 'USD',
@@ -123,22 +115,12 @@ class SubscriptionPlanService
             ]);
 
             $data['price_id'] = $price->id;
-        } else {
-            //add price with 
-            $price = Price::create([
-                'unit_amount' => $data['price']*100,
-                'currency' => 'USD',
-                'recurring' => [
-                                'interval' => 'day',
-                                'interval_count' => (int) $data['days'], // e.g. 45
-                            ],
-                'product' => $product->id,
-            ]);
+        }else{
+            $data['price_id'] = $oldData->price_id;
+            $data['stripe_product_id'] = $oldData->stripe_product_id;
 
-            $data['price_id'] = $price->id;
         }
-
-        // $data['price_id'] = $price->id;
+  
 
         $subscriptionPlan->update($data);
         return $subscriptionPlan;

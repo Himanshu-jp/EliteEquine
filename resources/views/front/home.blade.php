@@ -3,8 +3,12 @@
         /* body { margin: 0; padding: 0; }
         .map-locations .col-md-6 { position: relative; }
         .map-locations .col-md-6 #map { position: absolute; top: 0; left: 0; width: 98%; border:0; border-radius: 14px; height:120vh; } */
-        .category-scroll button {border: none;}
-        .category-scroll button.active .card-list {background: #d6b868;}
+        .category-scroll button {border: none;
+        overflow: hidden;
+    border-radius: 20px;}
+       .category-scroll button.active .card-list {
+    border: 2px solid #d6b868;
+}
         .location-suggestions {
     list-style: none;
     margin: 0;
@@ -456,13 +460,13 @@ Home
                                     </div>
                                 @else
 
-                                    {{--<div class="{{$key==1?'tab-pane fade active show':'tab-pane fade'}}" id="{{$key001}}-tab-pane" role="tabpanel" aria-labelledby="{{$key001}}-tab" tabindex="{{$key==1?'1':'0'}}">
+                                    {{-- <div class="{{$key==1?'tab-pane fade active show':'tab-pane fade'}}" id="{{$key001}}-tab-pane" role="tabpanel" aria-labelledby="{{$key001}}-tab" tabindex="{{$key==1?'1':'0'}}">
                                         <div class="swiper mySwiper">
                                             <div class="swiper-wrapper">     
                                                 <h4>We're updating our featured section. Check back later!</h4> 
                                             </div>
                                         </div>
-                                    </div>--}}
+                                    </div> --}}
                                     
                                 @endif
                             @endforeach
@@ -499,10 +503,10 @@ Home
                     <div class="swiper-wrapper">
                     @foreach($industryMatricData as $index => $matric)
                     <div class="swiper-slide">
-                        <div class="industry_area_sld_bx {{ $index === 0 ? 'active-toggle' : '' }}" data-index="{{ $index }}">
+                        <div class="industry_area_sld_bx toggle-btn {{ $index === 0 ? 'active-toggle' : '' }}" data-index="{{ $index }}">
                         <div class="content">
                             <h3>{{ $matric->title }}</h3>
-                            <button class="commen_btn toggle-btn" data-index="{{ $index }}">Read More</button>
+                            <button class="commen_btn " data-index="{{ $index }}">Read More</button>
                         </div>
                         <img src="{{ asset('storage/' . $matric->image) }}" alt="" />
                         </div>
@@ -583,19 +587,19 @@ Home
                         </div>
                         @endforeach
                         <div class="bx1">
-                            <img src="https://v1.checkprojectstatus.com/elite-quaine-marketplace/web/public/storage/seller_business/icons/K9TTHnnVkRHDwQm0R19sqmkKXHs3708kygNNDVBP.svg" alt="">
+                            <img src="{{asset('front/home/assets/images/icons/auctions_icon.svg')}}" alt="">
                             <h3>Flexible Selling: Auctions & Secure Payments</h3>
                             Sell equipment, apparel, and services your way—use our built-in auction tool for competitive bidding or opt for direct sales through our secure, Stripe-powered payment system.
                         </div>
                         <div class="bx1">
-                            <img src="https://v1.checkprojectstatus.com/elite-quaine-marketplace/web/public/storage/seller_business/icons/K9TTHnnVkRHDwQm0R19sqmkKXHs3708kygNNDVBP.svg" alt="">
+                            <img src="{{asset('front/home/assets/images/icons/instant_alerts_icon.svg')}}" alt="">
                             <h3>Real-Time Messaging & Instant Alerts</h3>
                             Connect with buyers directly through our secure in-platform messaging, and stay informed with real-time notifications for new messages, payment updates, subscription reminders, and more.
                         </div>
                     </div>
-                    <div class="forseller_area_inner3">
+                    <!-- <div class="forseller_area_inner3">
                         {!! $sellerBusinessData->description !!}
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -1110,22 +1114,25 @@ function updateMapMarkers(events, categoryId) {
                     <div class="map-pp-main">
                         <div class="evn-dte-ll">
                             <div class="ent-emg">
-                                ${imgUrl ? `<img src="${imgUrl}" style="width:60px;height:60px;" alt="${title}">` : ''}
-                                <div>
+                                ${imgUrl ? `<img src="${imgUrl}" style="width:60px;height:100%;object-fit: cover;border-radius: 5px;" alt="${title}">` : ''}
+                                </div>
+                                 <div class="right-listing-box">
+                                 
+                                <div class="title-listing">
                                     <h3><a href="${detailUrl}" target="_blank">${title}</a></h3>
                                     <p>${truncated}</p>
                                 </div>
-                            </div>
-                            <div class="venue-name-new-ic">
-                                <img src="{{ asset('images/location-mdl-icon.svg') }}" alt="Location icon" />
-                                ${fullAddr}
-                            </div>
-                            <div class="loc-meta">
-                                <div><strong>Price:</strong> $${price}</div>
-                                <div class="loc-metabutton">
-                                    <a href="${detailUrl}" target="_blank" class="meta-btn">View Details</a>
+                                <div class="venue-name-new-ic">
+                                    <img src="{{ asset('images/location-mdl-icon.svg') }}" alt="Location icon" />
+                                    ${fullAddr}
                                 </div>
-                            </div>
+                                <div class="loc-meta">
+                                    <div class="price-h-list"><strong>Price:</strong> $${price}</div>
+                                    <div class="loc-metabutton">
+                                        <a href="${detailUrl}" target="_blank" class="meta-btn">View Details</a>
+                                    </div>
+                                </div>
+                                </div>
                         </div>
                         </div>
                     </div>
@@ -1509,7 +1516,7 @@ function initializeLocationAutocomplete() {
     const buttons = document.querySelectorAll(".toggle-btn");
 
     buttons.forEach(button => {
-      button.addEventListener("click", function () {
+      button.addEventListener("mouseenter", function () {
         const index = this.getAttribute("data-index");
 
         // Hide all toggle contents
@@ -1533,9 +1540,7 @@ function initializeLocationAutocomplete() {
         if (currentSlideBox) {
           currentSlideBox.classList.add("active-toggle");
         }
-
-        // Optional: scroll into view
-        document.querySelector(".more-info-box").scrollIntoView({ behavior: "smooth" });
+ 
       });
     });
   });

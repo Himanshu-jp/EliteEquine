@@ -559,6 +559,62 @@ if (!function_exists('__getAssistanceUpcomingShows')) {
     }
 }
 
+if (!function_exists('__getBannersList')) {
+    function __getBannersList()
+    {
+		$data = [
+			"Green Eligibility"=>"Green Eligibility",
+			"Qualified for"=>"Qualified for",
+			"Negotiable"=>"Negotiable",
+			"Price Reduced"=>"Price Reduced",
+			"Motivated Seller"=>"Motivated Seller"
+		];
+		return $data;
+    }
+}
+
+if (!function_exists('__getBannersServiceList')) {
+    function __getBannersServiceList()
+    {
+		$data = [
+			"Around"=>"Around",
+			"Hiring"=>"Hiring",
+			"Seeking Employment"=>"Seeking Employment",
+			"Negotiable"=>"Negotiable",
+			"Price Reduced"=>"Price Reduced",
+			"Motivated Seller"=>"Motivated Seller"
+		];
+		return $data;
+    }
+}
+
+if (!function_exists('__getBannersBarnsList')) {
+    function __getBannersBarnsList()
+    {
+		$data = [
+			"Around"=>"Around",
+			"Negotiable"=>"Negotiable",
+			"Price Reduced"=>"Price Reduced",
+			"Motivated Seller"=>"Motivated Seller"
+		];
+		return $data;
+    }
+}
+
+
+if (!function_exists('__getBannersEquipmentList')) {
+    function __getBannersEquipmentList()
+    {
+		$data = [
+			"Exchangeable At Devon"=>"Exchangeable At Devon",
+			"Negotiable"=>"Negotiable",
+			"Price Reduced"=>"Price Reduced",
+			"Motivated Seller"=>"Motivated Seller"
+		];
+		return $data;
+    }
+}
+
 
 if (!function_exists('amount_transfer')) {
     function __transferAmount($account_id,$amount_price)

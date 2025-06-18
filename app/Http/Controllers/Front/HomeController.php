@@ -9,11 +9,14 @@ use App\Http\Requests\Front\NewsLetterRequest;
 use App\Http\Requests\Front\ReportAdOwnerRequest;
 use App\Models\Blog;
 use App\Models\HjForum;
+use App\Models\Transaction;
 use App\Models\Product;
 use App\Models\IndustryMatric;
 use App\Models\HomeAbout;
 use App\Models\About;
 use App\Models\Category;
+use App\Models\SubscriptionPlan;
+use App\Models\SubscriptionAddOnPlan;
 use App\Models\PartnershipContent;
 use App\Models\PartnershipWay;
 use App\Models\PartnerShipCollaborate;
@@ -37,6 +40,10 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redis;
+use Stripe\Stripe;
+use Stripe\Price;
+use Stripe\Subscription;
+use Stripe\Checkout\Session as StripeSession;
 
 class HomeController extends Controller
 {
@@ -430,7 +437,13 @@ class HomeController extends Controller
         $buyerFaqData = BuyerFaq::orderBy('id', 'desc')->get();
         // $aboutSellerBusinessData = AboutSellerBusiness::first();
         $hjForumData = HjForum::latest()->take(6)->get();
-        return view('front/aboutus', compact('aboutData', 'hjForumData', 'sellerBusinessData', 'buyerBrowserData', 'buyerFaqData'));
+
+          $subscription = SubscriptionPlan::whereNull('deleted_at')
+            ->get()
+            ->groupBy('type');
+ $addon=SubscriptionAddOnPlan::all();
+
+        return view('front/aboutus', compact('aboutData', 'hjForumData', 'sellerBusinessData', 'buyerBrowserData', 'buyerFaqData','subscription','addon'));
     }
 
     public function partnerships()
@@ -558,8 +571,57 @@ class HomeController extends Controller
    
     public function invoice()
     {
-        return view('frontauth/invoice');
+         $transaction=Transaction::where('user_id',Auth::user()->id)->get();
+
+        return view('frontauth/invoice',compact('transaction'));
     }
 
+    public function invoiceDetails(request $request,$id){
+  $id=base64_decode($id);
+
+         $invoice=Transaction::with(['planData','addonData'])->where('id',$id)->first();
+
+  return view('frontauth.invoice_details',compact('invoice'));
+ 
+
+    }
+
+    public function  charge_add_ons(request $request){
+$xdataarry= $request->addon_prices;
+
+if(count($xdataarry)  == '0'){
+return redirect()->back()->with('error','Please select addons');
+}
+  $priceArray=SubscriptionAddOnPlan::whereIn('id',$request->addon_prices)->pluck('price')->toArray();
+ $exactPrice=array_sum($priceArray);
+
+ Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    $checkoutSession = StripeSession::create([
+        'mode' => 'payment', // ✅ One-time payment mode
+        'payment_method_types' => ['card'],
+        'line_items' => [[
+            'price_data' => [
+                'currency' => 'usd',
+                'product_data' => [
+                    'name' => 'One-Time Service Fee',
+                ],
+                'unit_amount' => $exactPrice*100, // $29.99 in cents
+            ],
+            'quantity' => 1,
+        ]],
+            'customer_email' => Auth::user()->email, // optional
+            'metadata' => [
+                'addon_ids' =>implode(',',$request->addon_prices), // Your hidden ID
+                'type' =>'charge-addons', // Your hidden ID
+                'user_id' => Auth::id(),    // Optional
+            ],
+     'success_url' => route('plan_purchase.success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('plan_purchase.cancel'),
+    ]);
+
+        return redirect()->to($checkoutSession->url);
+
+    }
     
 }

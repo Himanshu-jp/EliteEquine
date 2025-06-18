@@ -46,7 +46,6 @@ class ProductListingController extends Controller
         //-----add horse category condition------//
         $data = $data->where('category_id', 1);
 
-
         $searchString = $request->search;
         if (!empty($searchString)) {
             $data = $data->where(function ($query) use ($searchString) {
@@ -249,6 +248,15 @@ class ProductListingController extends Controller
         }
 
 
+        if (!empty($request->banner)) {
+            $banner = $request->banner;
+            $data = $data->where(function ($query) use ($banner) {
+                $query->orWhereHas('productDetail', function ($q) use ($banner) {
+                    $q->whereIn('banner', $banner);
+                });
+            });
+        }
+        
         if (!empty($request->trainer)) {
             $trainer = $request->trainer;
             $data = $data->where(function ($query) use ($trainer) {
@@ -346,7 +354,9 @@ class ProductListingController extends Controller
             'height',
             'sex',
             'greenEligibilities',
-            'highestBid'
+            'highestBid',
+            'externalLink',
+            'videoLink'
         ]);
         $products = $products->where(['deleted_at' => null, 'id' => $id]);
         // $products = $products->where('product_status', '!=', 'sold');
@@ -476,6 +486,15 @@ class ProductListingController extends Controller
 
         if (!empty($request->currency)) {
             $data->where('currency', $request->currency);
+        }
+
+        if (!empty($request->banner)) {
+            $banner = $request->banner;
+            $data = $data->where(function ($query) use ($banner) {
+                $query->orWhereHas('productDetail', function ($q) use ($banner) {
+                    $q->whereIn('banner', $banner);
+                });
+            });
         }
 
 
@@ -727,6 +746,15 @@ class ProductListingController extends Controller
             });
         }
 
+        if (!empty($request->banner)) {
+            $banner = $request->banner;
+            $data = $data->where(function ($query) use ($banner) {
+                $query->orWhereHas('productDetail', function ($q) use ($banner) {
+                    $q->whereIn('banner', $banner);
+                });
+            });
+        }
+
         if (!empty($request->stableAmenities)) {
             $stableAmenities = $request->stableAmenities; // should be an array of discipline IDs
             $data->whereHas('stableAmenities', function ($q) use ($stableAmenities) {
@@ -959,6 +987,15 @@ class ProductListingController extends Controller
 
         if (!empty($request->category)) {
             $data->where('category_id', $request->category);
+        }
+
+        if (!empty($request->banner)) {
+            $banner = $request->banner;
+            $data = $data->where(function ($query) use ($banner) {
+                $query->orWhereHas('productDetail', function ($q) use ($banner) {
+                    $q->whereIn('banner', $banner);
+                });
+            });
         }
 
 

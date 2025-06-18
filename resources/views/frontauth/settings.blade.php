@@ -350,17 +350,17 @@ User Details
                     @endphp
                     </div>
                 <div class="row mb-2">
-@foreach ($decoded_data as $item)
-   
-                 
-                    <div class="col-md-6">
-                        <b>Bank Name: {{ $item['bank_name'] }}</b>
-                    </div>
- 
-                    <div class="col-md-6">
-                        <b>Account Number: XXXX-XXXX-XXXX-{{ $item['last4'] }}</b>
-                    </div>
-@endforeach
+                        @foreach ($decoded_data as $item)
+                        
+                                        
+                                            <div class="col-md-6">
+                                                <b>Bank Name: {{ $item['bank_name'] }}</b>
+                                            </div>
+                        
+                                            <div class="col-md-6">
+                                                <b>Account Number: XXXX-XXXX-XXXX-{{ $item['last4'] }}</b>
+                                            </div>
+                        @endforeach
  
                     </div>
  
@@ -370,8 +370,7 @@ User Details
                 <hr>
             @else
                 <div class="text-start my-4 mb-2">
-                    <a href="{{ route('connect_stipe_account') }}" class="btn btn-primary"
-                        id="setting-form-update">Connect Your Stripe Account</a>
+                    <a href="{{ route('connect_stipe_account') }}" class="btn btn-primary">Connect Your Stripe Account</a>
                 </div>
             @endif
 
@@ -701,36 +700,36 @@ User Details
                     maxlength: 15,
                     pattern: /^[+]?[0-9]{10,15}$/  // Regular expression to match the phone number format
                 },
-                facebook:{
-                    required: true,
-                    url: true,
-                    maxlength: 300
-                },
-                twitter:{
-                    required: true,
-                    url: true,
-                    maxlength: 300
-                },
-                youtube:{
-                    required: true,
-                    url: true,
-                    maxlength: 300
-                },
-                linkedin:{
-                    required: true,
-                    url: true,
-                    maxlength: 300
-                },
-                instagram:{
-                    required: true,
-                    url: true,
-                    maxlength: 300
-                },
-                website:{
-                    required: true,
-                    url: true,
-                    maxlength: 300
-                },
+                // facebook:{
+                //     required: true,
+                //     url: true,
+                //     maxlength: 300
+                // },
+                // twitter:{
+                //     required: true,
+                //     url: true,
+                //     maxlength: 300
+                // },
+                // youtube:{
+                //     required: true,
+                //     url: true,
+                //     maxlength: 300
+                // },
+                // linkedin:{
+                //     required: true,
+                //     url: true,
+                //     maxlength: 300
+                // },
+                // instagram:{
+                //     required: true,
+                //     url: true,
+                //     maxlength: 300
+                // },
+                // website:{
+                //     required: true,
+                //     url: true,
+                //     maxlength: 300
+                // },
                 description:{
                     required: true,
                     maxlength: 5000

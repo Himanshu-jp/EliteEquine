@@ -30,6 +30,55 @@ Product Details
                                         </video>
                                     </div>
                                 @endforeach
+
+                                 @foreach(@$products->videoLink as $key => $video)
+                                    <div class="swiper-slide">
+                                        @php
+                                            $link = $video->link;
+                                            $isYoutube = str_contains($link, 'youtube.com') || str_contains($link, 'youtu.be');
+                                            $isVideoFile = preg_match('/\.(mp4|mov|webm|ogg)$/i', $link);
+                                        @endphp
+
+                                        @if($isYoutube)
+                                            @php
+                                                // Extract YouTube ID from either youtu.be or youtube.com
+                                                if (preg_match("/(?:v=|\/)([0-9A-Za-z_-]{11})/", $link, $matches)) {
+                                                    $videoId = $matches[1];
+                                                } else {
+                                                    $videoId = null;
+                                                }
+                                            @endphp
+
+                                            @if($videoId)
+                                                <div class="ratio ratio-16x9">
+                                                    <iframe
+                                                        width="848"
+                                                        height="480"
+                                                        src="https://www.youtube.com/embed/{{ $videoId }}"
+                                                        title="YouTube video player"
+                                                        frameborder="0"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowfullscreen>
+                                                    </iframe>
+                                                </div>
+                                            @else
+                                                <p>Invalid YouTube link.</p>
+                                            @endif
+
+                                        @elseif($isVideoFile)
+                                            <div class="ratio ratio-16x9">
+                                                <video width="848" height="480" controls>
+                                                    <source src="{{ $link }}" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            </div>
+
+                                        @else
+                                            <p>Unsupported or invalid video link.</p>
+                                        @endif
+                                    </div>
+                                @endforeach
+
                             </div>
                             <!-- Navigation Arrows -->
 
@@ -46,6 +95,10 @@ Product Details
 
                                 @foreach(@$products->video as $key=>$video)
                                     <div class="swiper-slide"><img src="{{asset('storage/'.$video->thumbnail)}}" alt=""></div>
+                                @endforeach
+
+                                @foreach(@$products->videoLink as $key=>$video)
+                                    <div class="swiper-slide"><img src="{{asset('front/home/assets/images/youtube.png')}}" alt=""></div>
                                 @endforeach
 
                                 
@@ -65,6 +118,11 @@ Product Details
                     <div class="info-desc">
                         <h3 class="horse-info-heading">More Details</h3>
                         <div class="horse-info-box">
+
+                            @if($products->sale_method == 'auction' && $products->product_status == 'live')
+                                <div class="horse-info-row"><span class="horse-label">Auction End Date :</span> {{ \Carbon\Carbon::parse(@$products->bid_expire_date)->format('d M Y') }}</div>
+                            @endif
+
                             <div class="horse-info-row"><span class="horse-label">Horse Apparel:</span>
                                 {{ @$products->horseApparels->map(function($horse_apparel) {
                                     return optional($horse_apparel->commonMaster)->name;
@@ -182,18 +240,20 @@ Product Details
                         </ul>
                     </div>
                     @endif
-                    @if(@$products->external_link)
+
+                   @if(@$products->externalLink->count()>0)
                     <div class="info-desc mt-4">
                         <h3 class="horse-info-heading">External Links</h3>
-                        <div class="links-box">
-                            <a href="{{@$products->external_link}}" target="_blank">
-                                <img src="{{asset('front/home/assets/images/link-icon.svg')}}" alt="" />
-                                <span>{{@$products->external_link}}</span>
-                            </a>                            
-                        </div>
+                        @foreach($products->externalLink as $key=>$link)
+                            <div class="links-box">
+                                <a href="{{@$link->link}}" target="_blank">
+                                    <img src="{{asset('front/home/assets/images/link-icon.svg')}}" alt="" />
+                                    <span>{{@$link->link}}</span>
+                                </a>                            
+                            </div>
+                        @endforeach
                     </div>
                     @endif
-
                     <!------------Comments add / view section---------->
                     <div class="comment-section">                        
                         <!-- Comment Form -->
@@ -294,12 +354,14 @@ Product Details
                                 <h2 class="fw-bold">{{ number_format(optional($products->highestBid)->amount ?? $products->productDetail->bid_min_price) }} </h2>
                             </div>
                         @endif
+
                         @if(@$products->sale_method == 'standard' && @$products->product_status == 'live')
                             <div class="pb-3 gap-2">
                                 <span class="text-secondary">Price</span>
                                 <h2 class="fw-bold">{{ $products->currency.' '.number_format($products->price,2) }} </h2>
                             </div>
                         @endif
+
                         <div>
                             <div class="btn-connected gap-2">
                                 @if($products->user_id == auth()->id())
@@ -308,6 +370,7 @@ Product Details
                                     {{-- @if(@$products->transaction_method == 'platform' && @$products->sale_method == 'auction' && !empty(@$products->bid_expire_date)) --}}
                                     @if(@$products->sale_method == 'auction' && !empty(@$products->bid_expire_date))
                                         @if( @$products->product_status == 'live')
+                                            {{-- <button class="bid w-100" data-bs-target="#PlaceBid" data-bs-toggle="modal">Bid Now</button> --}}
                                             <button class="bid w-100" data-bs-target="#PlaceBid" data-bs-toggle="modal">Bid Now</button>
                                         @elseif(@$products->product_status == 'closed' && auth()->check() == true && @$products->highestBid->user_id == auth()->user()->id)
                                             <a href="{{route('product.checkout', $products->id)}}"><button class="bid w-100">Checkout</button></a>
@@ -627,6 +690,45 @@ Product Details
 </section>
 
 
+
+<!-- Place Bid popup -->
+<div class="modal fade" id="PlaceBid" aria-hidden="true" aria-labelledby="PlaceBid" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-body p-0">
+                <img src="{{asset('/images/place-bid.png')}}" alt="place-bid.png" height="50px">
+                <h1 class="modal-title fs-3 fw-bold mt-4" id="exampleModalLabel">Place Bid</h1>
+                <form method="post" action="{{route('bid.store')}}" id="bid_store">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $products->id }}">
+                @php
+                    $minBid = optional(@$products->highestBid)->amount ?? @$products->productDetail->bid_min_price;
+                @endphp
+                <input type="hidden" name="product_amount" id="product_amount" value="{{ $minBid }}">
+                <div class="py-3">
+                    <input type="number" step="0.01"
+                            name="amount" 
+                            id="bid_amount" 
+                            class="form-control mb-3" 
+                            placeholder="Input custom value"
+                            min="{{ $minBid }}"
+                            required />
+                    <p>
+                            You must bid greater than <strong>${{ number_format($minBid, 2) }}</strong>.
+                        </p>
+                </div>
+
+                <div class="mx-auto d-flex gap-4 mt-3">
+                    <button type="button" class="btn-modal-dialog" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn-modal-primary">Yes, Place My
+                        Bid</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!----------------Edit comment box------------->
 <!-- Edit Comment Modal -->

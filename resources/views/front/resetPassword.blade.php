@@ -53,7 +53,7 @@
                             </div>
 
                             
-                            <div>
+                            <div class="Password-form">
                                 <label for="">Password *</label>
                                 <input class="form-control inner-form" placeholder="Enter Password*" name="password" id="password"
                                     value="" type="password" autocomplete="off">
@@ -68,7 +68,7 @@
                                 @endif
                             </div>
                             
-                            <div>
+                            <div class="Password-form">
                                 <label for="">Confirm Password *</label>
                                 <input class="form-control inner-form" placeholder="Enter Confirm Password*" name="password_confirmation" id="password_confirmation"
                                     value="" type="password" autocomplete="off">

@@ -23,8 +23,8 @@ Your Ads
                 </p>
             </div>
             <!-- Standard section start -->
-            <div id="standard-section">
-                <div class="row">
+            <div >
+                <div class="row " id="standard-section">
 
                     @foreach($subscription['standard'] as $key => $value)
                         <div class="col-md-6 col-lg-6 col-xl-4 col-sm-12  mt-3">
@@ -45,7 +45,12 @@ Your Ads
                                             <hr class="horizontal dark mt-0 mb-2">
                                             <footer class="pricing-footer">
                                                 <p>Expires in {{$value->days}} days </p>
-                                                <a href="#" class="btn btn-primary w-100">Purchase Now</a>
+
+                                                         @if(Auth::user()->is_subscribed == '1' && Auth::user()->plan_id == $value->id)
+                                                <a href="{{ route('cancel_subscription',base64_encode($value->id)) }}" class="btn btn-primary w-100">Cancel Subscription</a>
+                                                @else
+                                                <a href="{{ route('purchase_plan',base64_encode($value->id)) }}" class="btn btn-primary w-100">Purchase Now</a>
+                                                @endif
                                             </footer>
                                         </div>
                                     </div>
@@ -56,60 +61,8 @@ Your Ads
 
                 </div>
 
-                <div class="col-md-12 mt-4">
-                    <div class="bounce-card">
-                        <h4>Add Ons</h4>
-                        <div class="">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="boostAdCheckbox">
-                                <label class="form-check-label" for="boostAdCheckbox">
-                                    Boost Ad back to top of Homepage + Socials – $5/ad
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="customPostCheckbox">
-                                <label class="form-check-label" for="customPostCheckbox">
-                                    Custom post for Socials including "Swipe for Video" with 5 pictures and up to 2
-                                    videos – $10/ad. Socials include Instagram, TikTok, + Facebook
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="bannerSpaceCheckbox">
-                                <label class="form-check-label" for="bannerSpaceCheckbox">
-                                    Banner Space: $200 / year
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="emailBlastCheckbox">
-                                <label class="form-check-label" for="emailBlastCheckbox">
-                                    Email Blast Promotion to our Newsletter – $50 / blast
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="textBlastCheckbox">
-                                <label class="form-check-label" for="textBlastCheckbox">
-                                    Text Blast Promotion to our Community – $150 / blast
-                                </label>
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <a href="#" class="btn btn-primary">$5 Pay Now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 mt-4 mb-5">
-                    <div class="bounce-card d-flex align-items-center flex-wrap justify-content-between">
-                        <h6 class="mb-0">FULL SERVICE PACKAGE: Allow us to fully manage and promote all of your listings
-                            for you</h6>
-                        <a href="#" class="btn btn-primary">Contact us for Pricing</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Standard section end -->
-
-            <!-- Featured section start -->
-            <div id="featured-section" style="display: none;">
-                <div class="row">
+              
+                <div class="row" id="featured-section" style="display: none;">
 
                     @foreach($subscription['featured'] as $key => $value)
                         <div class="col-md-6 col-lg-6 col-xl-4 col-sm-12  mt-3">
@@ -130,7 +83,12 @@ Your Ads
                                             <hr class="horizontal dark mt-0 mb-2">
                                             <footer class="pricing-footer">
                                                 <p>Expires in {{$value->days}} days </p>
-                                                <a href="#" class="btn btn-primary w-100">Purchase Now</a>
+
+                                                @if(Auth::user()->is_subscribed == '1' && Auth::user()->plan_id == $value->id)
+                                                <a href="{{ route('cancel_subscription',base64_encode($value->id)) }}" class="btn btn-primary w-100">Cancel Subscription</a>
+                                                @else
+                                                <a href="{{ route('purchase_plan',base64_encode($value->id)) }}" class="btn btn-primary w-100">Purchase Now</a>
+                                                @endif
                                             </footer>
                                         </div>
                                     </div>
@@ -139,61 +97,56 @@ Your Ads
                         </div>
                     @endforeach
 
-                </div>
-                <div class="col-md-12 mt-4">
+                          <div class="row">
+                         <div class="col-md-12 mt-4">
                     <div class="bounce-card text-center">
                         <h6 class="mb-0">Automatic Social Media Promos for “Featured” Packages include Instagram,
                             Facebook and TikTok. </h6>
                     </div>
                 </div>
+                </div>
+           
+          
 
-                <div class="col-md-12 mt-4">
+             
+                </div>
+
+                <div class="row">
+                       <div class="col-md-12 mt-4">
+                    <form action="{{ route('charge_add_ons') }}" method="post" >
+                        @csrf
+
                     <div class="bounce-card">
                         <h4>Add Ons</h4>
                         <div class="">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="boostAdCheckbox">
-                                <label class="form-check-label" for="boostAdCheckbox">
-                                    Boost Ad back to top of Homepage + Socials – $5/ad
+
+                            @foreach ($addon as $addonitem)
+                                  <div class="form-check">
+                                <input class="form-check-input main_addon_price_adds" name="addon_prices[]" data-price="{{ $addonitem->price }}"  type="checkbox" id="boostAdCheckbox{{ $loop->iteration }}" value="{{ $addonitem->id }}">
+                                <label class="form-check-label" for="boostAdCheckbox{{ $loop->iteration }}" >
+                                 
+                                     {{ $addonitem->description }} 
+
                                 </label>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="customPostCheckbox">
-                                <label class="form-check-label" for="customPostCheckbox">
-                                    Custom post for Socials including "Swipe for Video" with 5 pictures and up to 2
-                                    videos – $10/ad. Socials include Instagram, TikTok, + Facebook
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="bannerSpaceCheckbox">
-                                <label class="form-check-label" for="bannerSpaceCheckbox">
-                                    Banner Space: $200 / year
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="emailBlastCheckbox">
-                                <label class="form-check-label" for="emailBlastCheckbox">
-                                    Email Blast Promotion to our Newsletter – $50 / blast
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="textBlastCheckbox">
-                                <label class="form-check-label" for="textBlastCheckbox">
-                                    Text Blast Promotion to our Community – $150 / blast
-                                </label>
-                            </div>
+                            @endforeach
+                          
+                         
                         </div>
-                        <div class="text-center">
-                            <a href="#" class="btn btn-primary">$5 Pay Now</a>
+                        <div class="text-center price_include_btn" style="display: none;">
+                            <button  type="submit"  class="btn btn-primary">$<span class="price-in">0</span> Pay Now</button>
                         </div>
                     </div>
+                    </form>
+
                 </div>
                 <div class="col-md-12 mt-4 mb-5">
                     <div class="bounce-card d-flex align-items-center flex-wrap justify-content-between">
                         <h6 class="mb-0">FULL SERVICE PACKAGE: Allow us to fully manage and promote all of your listings
                             for you</h6>
-                        <a href="#" class="btn btn-primary">Contact us for Pricing</a>
+                        <a href="{{ route('contact.form') }}"  class="btn btn-primary">Contact us for Pricing</a>
                     </div>
+                </div>
                 </div>
             </div>
             <!-- Featured section end -->
@@ -207,39 +160,52 @@ Your Ads
 @section('script')
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const standardSection = document.getElementById('standard-section');
-    const featuredSection = document.getElementById('featured-section');
+    $('body').on('click','.main_addon_price_adds',function(){
+        var priceAdd=0;
+       $('.main_addon_price_adds:checked').each(function(){
+      priceAdd+=parseFloat($(this).attr('data-price'));
+       })
+       $('.price-in').html(priceAdd)
+     if(priceAdd > 0){
+       $('.price_include_btn').show()
 
-    const radioButtons = document.querySelectorAll('input[name="duration-1"]');
+     }else{
+       $('.price_include_btn').hide()
 
-    function showSection(sectionToShow, sectionToHide) {
-        sectionToHide.classList.remove('show');
-        setTimeout(() => {
-            sectionToHide.style.display = 'none';
-            sectionToShow.style.display = 'block';
-            setTimeout(() => {
-                sectionToShow.classList.add('show');
+     }
+    })
+</script>
+<script>
+$(document).ready(function () {
+    const $standardSection = $('#standard-section');
+    const $featuredSection = $('#featured-section');
+    const $radioButtons = $('input[name="duration-1"]');
+
+    function showSection($sectionToShow, $sectionToHide) {
+        $sectionToHide.removeClass('show');
+        setTimeout(function () {
+            $sectionToHide.css('display', 'none');
+            $sectionToShow.css('display', 'flex');
+            setTimeout(function () {
+                $sectionToShow.addClass('show');
             }, 10); // thoda delay dena zaruri hota hai animation ke liye
         }, 300); // hide animation ke liye time
     }
 
-    radioButtons.forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (this.value === 'standard') {
-                showSection(standardSection, featuredSection);
-            } else if (this.value === 'featured') {
-                showSection(featuredSection, standardSection);
-            }
-        });
+    $radioButtons.on('change', function () {
+        if (this.value === 'standard') {
+            showSection($standardSection, $featuredSection);
+        } else if (this.value === 'featured') {
+            showSection($featuredSection, $standardSection);
+        }
     });
 
     // Initial setup
-    standardSection.classList.add('fade', 'show');
-    featuredSection.classList.add('fade');
+    $standardSection.addClass('fade show');
+    $featuredSection.addClass('fade');
 });
-</script>
 
+</script>
 
 
 @endsection
