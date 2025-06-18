@@ -15,6 +15,7 @@ use App\Http\Controllers\Front\TermPrivacyController;
 use App\Http\Controllers\Front\ContactUsController;
 use App\Http\Controllers\Front\ProductReviewController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\CronController;
 use App\Http\Controllers\MapBoxController;
 
 use App\Http\Controllers\StripeSubscriptionController;
@@ -53,7 +54,7 @@ Route::middleware([
 
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-    
+
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
     Route::get('/profile-edit', [AuthController::class, 'profileEdit'])->name('profile-edit');
     Route::post('/profileUpdate', [AuthController::class, 'profileUpdate'])->name('profileUpdate');
@@ -78,8 +79,8 @@ Route::middleware([
     Route::post('/product', [ProductController::class, 'storeProduct'])->name('product');
     Route::get('/editProduct/{id}', [ProductController::class, 'editProduct'])->name('editProduct');
     Route::get('/productList', [ProductController::class, 'productList'])->name('productList');
-    Route::get('product/delete/{id}', [ProductController::class, 'productDelete'])->name('product/delete'); 
-    Route::post('favorite/{product}', [ProductController::class, 'toggleFavorite'])->name('favorite'); 
+    Route::get('product/delete/{id}', [ProductController::class, 'productDelete'])->name('product/delete');
+    Route::post('favorite/{product}', [ProductController::class, 'toggleFavorite'])->name('favorite');
     Route::post('/update-product-status', [ProductController::class, 'updateStatus'])->name('update.product.status');
     Route::get('/product/bid-detail/{id}', [ProductController::class, 'productBidDetail'])->name('product.bid-detail');
     Route::get('/product/checkout_new/{id}', [ProductController::class, 'checkout'])->name('product.checkout');
@@ -90,31 +91,31 @@ Route::middleware([
     //---------horse product---------//
     Route::get('/productHorseDetails', [ProductController::class, 'productHorseDetails'])->name('productHorseDetails');
     Route::post('/productHorseDetails', [ProductController::class, 'storeProductHorseDetails'])->name('productHorseDetails');
-    
+
     //---------Equipment & Apparel product---------//
     Route::get('/productEquipmentDetails', [ProductController::class, 'productEquipmentDetails'])->name('productEquipmentDetails');
     Route::post('/productEquipmentDetails', [ProductController::class, 'storeProductEquipmentDetails'])->name('productEquipmentDetails');
-    
+
     //---------Barns & Housing product---------//
     Route::get('/productBarnsDetails', [ProductController::class, 'productBarnsDetails'])->name('productBarnsDetails');
     Route::post('/productBarnsDetails', [ProductController::class, 'storeProductBarnsDetails'])->name('productBarnsDetails');
-    
+
     //---------Service & Jobs product---------//
     Route::get('/productServiceDetails', [ProductController::class, 'productServiceDetails'])->name('productServiceDetails');
     Route::post('/productServiceDetails', [ProductController::class, 'storeProductServiceDetails'])->name('productServiceDetails');
 
-    
+
     //----hj forms routes-----//
     Route::resource('hjForum', HjForumController::class);
-    Route::get('hjForum/delete/{id}', [HjForumController::class, 'destroy'])->name('hjForum.delete'); 
-    
+    Route::get('hjForum/delete/{id}', [HjForumController::class, 'destroy'])->name('hjForum.delete');
+
     //------Community & Events routes----------//
     Route::resource('community', CommunityEventsController::class);
     Route::get('community/delete/{id}', [CommunityEventsController::class, 'destroy'])->name('community.delete');
-    
+
     //------------Chat Messanger-------------//
     Route::get('/messages', [HomeController::class, 'chatMessage'])->name('messages');
-    
+
 });
 
 
@@ -134,7 +135,7 @@ Route::get('/event/cancel', [CommunityEventsController::class, 'cancel'])->name(
 Route::get('/horse-listing', [ProductListingController::class, 'horseListing'])->name('horse-listing');
 Route::any('horse-listing/dataTable', [ProductListingController::class, 'getHorseDataTable'])->name('getHorseDataTable');
 Route::get('/horseDetails/{id}', [ProductListingController::class, 'horseDetails'])->name('horseDetails');
-Route::any('product/bids/store', [ProductController::class, 'bidStore'])->name('bid.store'); 
+Route::any('product/bids/store', [ProductController::class, 'bidStore'])->name('bid.store');
 // product owner review
 Route::post('/rate-product', [ProductReviewController::class, 'rate'])->name('product.rate');
 
@@ -230,6 +231,8 @@ Route::get('/invoiceDetails/{id}', [HomeController::class, 'invoiceDetails'])->n
 Route::post('/charge_add_ons', [HomeController::class, 'charge_add_ons'])->name('charge_add_ons');
 Route::get('/notificationModalnextLevel', [HomeController::class, 'notificationModalnextLevel'])->name('notificationModalnextLevel');
 Route::get('/check_seriesCheck', [HomeController::class, 'check_seriesCheck'])->name('check_seriesCheck');
+Route::post('/updateNotificationData', [HomeController::class, 'updateNotificationData'])->name('updateNotificationData');
+
 
 
 // Route::get('/bidDetails', [HomeController::class, 'bidDetails'])->name('bidDetails');
@@ -242,7 +245,12 @@ Route::middleware(['auth:admin'])->group(function () {
 
 
 Route::get('/webhook_stripe_for_connect', [StripeController::class, 'webhook_stripe_for_connect'])->name('webhook_stripe_for_connect');
-    Route::get('/purchase-plan-success', [SubscriptionController::class, 'purchase_plan_success'])->name('plan_purchase.success');
-    Route::get('/purchase-plan-cancel', [SubscriptionController::class, 'purchase_plan_cancel'])->name('plan_purchase.cancel');
+Route::get('/purchase-plan-success', [SubscriptionController::class, 'purchase_plan_success'])->name('plan_purchase.success');
+Route::get('/purchase-plan-cancel', [SubscriptionController::class, 'purchase_plan_cancel'])->name('plan_purchase.cancel');
+
+
+Route::get('/cron-first/{id}', [CronController::class, 'cronFirst'])->name('cronFirst');
+
+
 
 

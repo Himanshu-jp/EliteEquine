@@ -411,6 +411,67 @@
     </div>
 </div>
 
+ <style>
+        .ad-lister-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .ad-lister-checkbox .form-check-input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            border: 1px solid #000;
+        }
+
+        .ad-lister-checkbox span {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .toggle-list {
+            display: none;
+            margin-left: 0;
+            margin-bottom: 0;
+        }
+
+        .toggle-list ul {
+
+            padding-left: 0;
+            list-style: none;
+            margin: 10px 0 !important;
+        }
+
+        .toggle-list ul li {
+            list-style-type: decimal;
+            margin-bottom: 4px;
+            font-size: 15px;
+            color: #000;
+        }
+
+        .toggle-list ul li {
+            list-style: none;
+            margin-bottom: 4px;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .form-check-input:checked[type="checkbox"] {
+            --form-check-bg-image: linear-gradient(195deg, #b2a179 0%, #b2a179 100%);
+        }
+
+        .lister-checkbox-box {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 0px;
+        }
+    </style>
+
 <div class="modal fade" id="notificationModalnextLevel" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 p-3">
@@ -427,11 +488,37 @@
 
 
             <div class="modal-footer border-0 justify-content-end">
-                <button type="button" class="btn btn-save " data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary btn-save testerer">Save</button>
+                {{-- <button type="button" class="btn btn-save " data-bs-dismiss="modal">Close</button> --}}
             </div>
+
+
         </div>
     </div>
 </div>
+
+
+      <div class="modal fade" id="notificationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 p-3">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Select Your Notifications Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+<form action="{{ route("updateNotificationData") }}" method="post" >
+@csrf
+                <div class="modal-body notificationModalnextLevelHtmlInner">
+                
+                </div>
+
+                <div class="modal-footer border-0 justify-content-end">
+                    <button type="submit" class="btn btn-save" 
+                        aria-label="Close">Save</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
 <script>
     $('body').on('click', '.go-to-notify-on', function() {
         
@@ -454,7 +541,7 @@
 
     })
 
-     $('body').on('click', '.check_series', function() {
+     $('body').on('click', '.testerer', function() {
         if($('.check_series:checked').length == '0'){
                      $('.notificationModalnextLevelHtmlInner').html('')
     return false;
@@ -475,6 +562,9 @@
             },
             beforeSend: function() {},
             success: (response) => {
+                     $('#notificationModalnextLevel').modal('hide')
+                     $('#notificationModal').modal('show')
+
            $('.notificationModalnextLevelHtmlInner').html(response.contents)
             },
         })

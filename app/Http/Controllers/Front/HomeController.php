@@ -11,6 +11,7 @@ use App\Models\Blog;
 use App\Models\HjForum;
 use App\Models\Transaction;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\UserDetails;
 use App\Models\UserDetailAlert;
 use App\Models\IndustryMatric;
@@ -634,8 +635,8 @@ class HomeController extends Controller
     public function notificationModalnextLevel(request $request)
     {
       $lister=explode(',',Auth::user()->lister_type);
+      // <p class="w-100 text-center">Current OPT Notification: '.ucfirst(Auth::user()->opt_in_notification).'</p>
         $html = '
-        <p class="w-100 text-center">Current OPT Notification: '.ucfirst(Auth::user()->opt_in_notification).'</p>
         <div class="lister-checkbox-box p-0 d-flex justify-content-center mt-3">
                                                     <div class="m-2">
 
@@ -656,8 +657,7 @@ class HomeController extends Controller
 
                                                     </div>
                                                 </div>
-                                                
-                                                <div class="notificationModalnextLevelHtmlInner"></div>';
+                                                ';
 
         return response()->json([
             'html' => $html
@@ -678,7 +678,7 @@ class HomeController extends Controller
                 ];
             }
 
-         $view     = View::make('frontauth.partials.check_seriesCheck', ['explodeLister' => explode(',',$checkSeries),'alertDetails'=>$alertDetails]);
+         $view     = View::make('frontauth.partials.check_seriesCheck', ['explodeLister' => explode(',',$checkSeries),'alertDetails'=>$alertDetails ?? []]);
         $contents = (string) $view;
 
         $contents = $view->render();
@@ -687,4 +687,53 @@ class HomeController extends Controller
 
     }
 
+    public function updateNotificationData(request $request){
+
+
+    if(!isset($request->lister)){
+ User::where('id',Auth::user()->id)->update(['opt_in_notification'=>'no']);
+
+$request->lister=[];
+      }else{
+ User::where('id',Auth::user()->id)->update(['opt_in_notification'=>'yes']);
+
+      }
+$alerts=[];
+if (is_array($request->lister) && in_array('1', $request->lister)) {
+    array_push($alerts, 'subscription', 'payment');
+}
+
+if (is_array($request->lister) && in_array('2', $request->lister)) {
+    array_push($alerts, 'listMatch', 'biddinItem');
+}
+
+if (count($alerts) > 0) {
+    array_push($alerts, 'auction');
+}
+
+ User::where('id',Auth::user()->id)->update(['lister_types'=>implode(',',$request->lister)]);
+      
+   $userDetails = UserDetails::where('user_id' ,Auth::user()->id)->first();
+      UserDetailAlert::where('user_id',Auth::user()->id)->where('user_detail_id',$userDetails->id)->delete();
+
+    $notifiactionDetails=[];
+         foreach ($alerts as $metaKey) {
+          
+            $notifiactionDetails[] = [
+                'user_id' => Auth::user()->id,
+                'user_detail_id' => $userDetails->id,
+                'meta_key' => $metaKey,
+                'sms' => !empty($request->$metaKey['sms']) ? 1 : 0,
+                'mobile' => !empty($request->$metaKey['mobile']) ? 1 : 0,
+                'email' => !empty($request->$metaKey['email']) ? 1 : 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+    
+         UserDetailAlert::insert($notifiactionDetails);
+    
+         return redirect()->back()->with('success','Your notification setting updated successfully.');
+    }
 }
