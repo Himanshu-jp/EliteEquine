@@ -1025,7 +1025,7 @@ document.getElementById('shareBtn').addEventListener('click', function(event) {
             },
 
             submitHandler: function (form) {
-                //kamal
+        
                 $('#product-comment-form-submit').prop('disabled', true).text('Please wait...');
                 let formData = new FormData(form);
 
@@ -1134,11 +1134,12 @@ document.getElementById('shareBtn').addEventListener('click', function(event) {
                     contentType: false,
                     processData: false,
                     success: function (response) {
-                        $('#product-comment-form-submit')
+                        if (response.status) {
+
+                            $('#product-comment-form-submit-guest')
                             .prop('disabled', false)
                             .text('Post Comment');
-
-                        if (response.status) {
+                            
                             // Optionally reset form and append comment
                             $(form)[0].reset();
                             addProductComment(page);
@@ -1158,8 +1159,7 @@ document.getElementById('shareBtn').addEventListener('click', function(event) {
                         }
                     },
                     error: function (xhr) {
-                        $('#product-comment-form-submit').prop('disabled', false).text('Post Comment');
-
+                        $('#product-comment-form-submit-guest').prop('disabled', false).text('Post Comment');
                         // Show error message
                         alert('Submission failed. Please try again.');
                         console.error(xhr.responseText);

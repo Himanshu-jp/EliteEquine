@@ -1,0 +1,11 @@
+apps:
+  - name: mozaik-queue
+    script: artisan
+    exec_mode: fork
+    interpreter: php
+    instances: 1
+    args:
+      - queue:work
+      - --timeout=0
+      - --sleep=1
+      - --tries=1
