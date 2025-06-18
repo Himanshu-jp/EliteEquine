@@ -128,6 +128,9 @@ class HomeController extends Controller
             $data->where('category_id', $request->category);
         }
         $events = $data->orderBy('id', 'desc')->take(3)->get()->toArray();
+
+        // dd($industryMatricData->toArray());
+        
         return view('front/home', compact(['blogs', 'partnershipCollaborate', 'featuredData', 'industryMatricData', 'homeAboutData', 'sellerBusinessData', 'buyerBrowserData', 'buyerFaqData', 'events', 'coordinate', 'hjForumData']));
     }
 

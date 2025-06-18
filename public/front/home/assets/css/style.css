@@ -6282,10 +6282,10 @@ ul.act-icon li img {
 .list-unstyled li a {
     display: inline-block;
 }
-#map {
+/* #map {
     background-image: url(../images/map-dummy.png);
     border-radius: 20px;
-}
+} */
 .form-check:not(.form-switch) .form-check-input[type=radio]:after {
   transition: opacity 0.25s ease-in-out;
   content: "";
