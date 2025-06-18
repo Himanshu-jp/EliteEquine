@@ -55,7 +55,7 @@ class ProductDetail extends Model
         'haulings_location_to',
         'realtor',
         'property_manager',
-        'time_slot'
+        'time_slot',
         'trail_latitude',
         'trail_longitude',
     ];
