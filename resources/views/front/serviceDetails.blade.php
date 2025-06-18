@@ -134,6 +134,10 @@ Product Details
                                 </svg></div>
                         </div>
                     </div>
+                    
+
+
+
                     <div class="info-desc">
                         <h3 class="horse-info-heading">More Details</h3>
                         <div class="horse-info-box">
@@ -1707,6 +1711,8 @@ var slider = new Swiper('.gallery-slider', {
       }
     });
   </script>
+
+  
 <style>
     .comment-input-form {
     border-radius: 14px;
