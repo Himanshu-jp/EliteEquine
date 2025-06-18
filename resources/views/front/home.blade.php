@@ -1,6 +1,6 @@
 @extends('front.layouts.main')
 <style>
-    /* body { margin: 0; padding: 0; }
+        /* body { margin: 0; padding: 0; }
         .map-locations .col-md-6 { position: relative; }
         .map-locations .col-md-6 #map { position: absolute; top: 0; left: 0; width: 98%; border:0; border-radius: 14px; height:120vh; } */
 
@@ -239,251 +239,221 @@
         </div>
     </section>
 
-    <!-------------------------------- featured_area ------------------------------------>
-    @if (count($featuredData) > 0)
-        <section class="featured_area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="featured_area_inner">
-                            <h2>Featured</h2>
-                            <div class="bx1">
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+<!-------------------------------- featured_area ------------------------------------>
+@if(count($featuredData)>0)
+    <section class="featured_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="featured_area_inner">
+                        <h2>Featured</h2>
+                        <div class="bx1">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
 
-
-                                    @foreach (__categoryData() as $key => $value)
-                                        <li class="nav-item" role="presentation">
-                                            <button class="nav-link {{ $key == 1 ? 'active' : '' }}"
-                                                id="{{ $key }}-tab" data-bs-toggle="tab"
-                                                data-bs-target="#{{ $key }}-tab-pane" type="button"
-                                                role="tab" aria-controls="{{ $key }}-tab-pane"
+                            
+                               @foreach(__categoryData() as $key => $value)
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link {{ $key == 1 ? 'active' : '' }}" 
+                                                id="{{ $key }}-tab" 
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#{{ $key }}-tab-pane" 
+                                                type="button" 
+                                                role="tab"
+                                                aria-controls="{{ $key }}-tab-pane" 
                                                 aria-selected="{{ $key == 1 ? 'true' : 'false' }}">
-                                                {{ $value }}
-                                            </button>
-                                        </li>
-                                    @endforeach
+                                            {{ $value }}
+                                        </button>
+                                    </li>
+                                @endforeach
 
-                                </ul>
-                                <ul class="controal_btns">
-                                    <li>
-                                        <button id="slider-prev">
-                                            <img src="{{ asset('front/home/assets/images/icons/left_arrow.svg') }}"
-                                                alt="left-arrow" />
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button id="slider-next" class="active">
-                                            <img src="{{ asset('front/home/assets/images/icons/right_arrow.svg') }}"
-                                                alt="right-arrow" />
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
+                            </ul>
+                            <ul class="controal_btns">
+                                <li>
+                                    <button id="slider-prev">
+                                        <img src="{{asset('front/home/assets/images/icons/left_arrow.svg')}}"
+                                            alt="left-arrow" />
+                                    </button>
+                                </li>
+                                <li>
+                                    <button id="slider-next" class="active">
+                                        <img src="{{asset('front/home/assets/images/icons/right_arrow.svg')}}"
+                                            alt="right-arrow" />
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="col-lg-12">
-                        <div class="featured_area_inner2">
-                            <div class="tab-content" id="myTabContent">
-                                @foreach (__categoryData() as $key001 => $value)
-                                    @if (@$featuredData[$key001] && count(@$featuredData[$key001]) > 0)
-                                        <div class="{{ $key001 == 1 ? 'tab-pane fade active show' : 'tab-pane fade' }}"
-                                            id="{{ $key001 }}-tab-pane" role="tabpanel"
-                                            aria-labelledby="{{ $key001 }}-tab"
-                                            tabindex="{{ $key001 == 1 ? '1' : '0' }}">
-                                            <div class="swiper FeaturedSwiper">
-                                                <div class="swiper-wrapper">
-                                                    @foreach (@$featuredData[$key001] as $key => $value)
-                                                        <div class="swiper-slide">
-                                                            <div class="feat_card_bx">
-                                                                @if ($value->category_id == 1)
-                                                                    <a href="{{ route('horseDetails', @$value->id) }}">
-                                                                    @elseif($value->category_id == 2)
-                                                                        <a
-                                                                            href="{{ route('equipmentDetails', @$value->id) }}">
-                                                                        @elseif($value->category_id == 3)
-                                                                            <a
-                                                                                href="{{ route('barnsDetails', @$value->id) }}">
-                                                                            @elseif($value->category_id == 4)
-                                                                                <a
-                                                                                    href="{{ route('serviceDetails', @$value->id) }}">
-                                                                @endif
+                </div>
+                <div class="col-lg-12">
+                    <div class="featured_area_inner2">
+                        <div class="tab-content" id="myTabContent">
+                            @foreach(__categoryData() as $key001=>$value)
+                                @if(@$featuredData[$key001] && count(@$featuredData[$key001])>0)
+                                    <div class="{{$key001==1?'tab-pane fade active show':'tab-pane fade'}}" id="{{$key001}}-tab-pane" role="tabpanel" aria-labelledby="{{$key001}}-tab" tabindex="{{$key001==1?'1':'0'}}">
+                                        <div class="swiper mySwiper">
+                                            <div class="swiper-wrapper">
+                                                @foreach (@$featuredData[$key001] as $key => $value)                                        
+                                                    <div class="swiper-slide">
+                                                        <div class="feat_card_bx">
+                                                            @if($value->category_id==1)
+                                                                <a href="{{route('horseDetails',@$value->id)}}">
+                                                            @elseif($value->category_id==2)
+                                                                <a href="{{route('equipmentDetails',@$value->id)}}">
+                                                            @elseif($value->category_id==3)
+                                                                <a href="{{route('barnsDetails',@$value->id)}}">
+                                                            @elseif($value->category_id==4)
+                                                                <a href="{{route('serviceDetails',@$value->id)}}">
+                                                            @endif
+
                                                                 <div class="image">
-                                                                    <img src="{{ @$value->image->first() ? asset('storage/' . @$value->image->first()->image) : asset('front/home/assets/images/logo/logo.svg') }}"
-                                                                        alt="hourse-image">
-                                                                    <span
-                                                                        class="tag-img">{{ @$value->greenEligibilities->commonMaster->name }}
-                                                                    </span>
+                                                                    <img src="{{(@$value->image->first())?asset('storage/'.@$value->image->first()->image):asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
+                                                                    <span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span>
                                                                 </div>
-                                                                </a>
-                                                                <div class="content">
-                                                                    @if ($value->category_id == 1)
-                                                                        <a href="{{ route('horseDetails', @$value->id) }}">
-                                                                            <h3>
-                                                                                {{ @$value->title }} |
-                                                                                {{ @$value->productDetail->age }} |
-                                                                                {{ @$value->height->commonMaster->name }}
-                                                                                <br />
-                                                                                {{ @$value->breeds->map(function ($breed) {
-                                                                                        return optional($breed->commonMaster)->name;
-                                                                                    })->filter()->implode(' | ') }}
+                                                            </a>
+                                                            <div class="content">
+                                                                @if($value->category_id==1)
+                                                                    <a href="{{route('horseDetails',@$value->id)}}">
+                                                                        <h3>
+                                                                            {{@$value->title}} | {{@$value->productDetail->age}} | {{@$value->height->commonMaster->name}} <br />
+                                                                            {{ @$value->breeds->map(function($breed) {
+                                                                                return optional($breed->commonMaster)->name;
+                                                                            })->filter()->implode(' | ') }}
 
+                                                                            
+                                                                        </h3>
+                                                                    </a>
 
-                                                                            </h3>
-                                                                        </a>
+                                                                    <h4 onclick="window.location.href='{{route('sale')}}'">Call For Price</h4>
 
-                                                                        <h4
-                                                                            onclick="window.location.href='{{ route('sale') }}'">
-                                                                            Call For Price</h4>
-
-                                                                        <span class="sp1">
-                                                                            {{ @$value->disciplines->map(function ($disciplines) {
-                                                                                    return optional($disciplines->commonMaster)->name;
-                                                                                })->filter()->implode(' | ') }}
-                                                                        </span>
-                                                                        <div class="location">
-                                                                            <img src="{{ asset('front/home/assets/images/icons/loction_icn.svg') }}"
-                                                                                alt="location-icon" />
-                                                                            <span>{{ @$value->productDetail->city }},
-                                                                                {{ @$value->productDetail->state }},
-                                                                                {{ @$value->productDetail->country }}
-                                                                                <br />
-                                                                                Trial:
-                                                                                {{ @$value->triedUpcomingShows->map(function ($upcoming) {
+                                                                    <span class="sp1">
+                                                                        {{ @$value->disciplines->map(function($disciplines) {
+                                                                            return optional($disciplines->commonMaster)->name;
+                                                                        })->filter()->implode(' | ') }}
+                                                                    </span>
+                                                                    <div class="location">
+                                                                        <img src="{{asset('front/home/assets/images/icons/loction_icn.svg')}}" alt="location-icon" />
+                                                                        <span>{{@$value->productDetail->city}}, {{@$value->productDetail->state}}, {{@$value->productDetail->country}} <br />
+                                                                            Trial: {{ @$value->triedUpcomingShows->map(function($upcoming) {
                                                                                         return optional($upcoming->commonMaster)->name;
                                                                                     })->filter()->implode(' | ') }}
-                                                                                @if (@$value->productDetail->fromdate)
-                                                                                    <br />
-                                                                                    ({{ format_date(@$value->productDetail->fromdate) . ' - ' . format_date(@$value->productDetail->todate) }})
-                                                                                @endif
-                                                                        </div>
-                                                                    @elseif($value->category_id == 2)
-                                                                        <a
-                                                                            href="{{ route('equipmentDetails', @$value->id) }}">
-                                                                            <h3>
-                                                                                {{ @$value->title }}
-                                                                            </h3>
-                                                                        </a>
+                                                                        @if(@$value->productDetail->fromdate)
+                                                                            <br/>
+                                                                            ({{ format_date(@$value->productDetail->fromdate).' - '.format_date(@$value->productDetail->todate)}})
+                                                                        @endif
+                                                                    </div>
+                                                                @elseif($value->category_id==2)
+                                                                    <a href="{{route('equipmentDetails',@$value->id)}}">
+                                                                        <h3>
+                                                                            {{@$value->title}}
+                                                                        </h3>
+                                                                    </a>
 
-                                                                        {{-- <h4>Call For Price</h4> --}}
+                                                                    {{-- <h4>Call For Price</h4> --}}
 
-                                                                        <h4>Price:
-                                                                            ${{ number_format(@$value->productDetail->price) }}
-                                                                        </h4>
-                                                                        {{-- <h4 class="mb-1">Lease: $40,000 - $60,000 / yr</h4> --}}
+                                                                    <h4>Price: ${{number_format(@$value->productDetail->price)}} </h4>
+                                                                    {{-- <h4 class="mb-1">Lease: $40,000 - $60,000 / yr</h4> --}}
 
-                                                                        <span class="sp1">
-                                                                            {{ @$value->disciplines->map(function ($disciplines) {
-                                                                                    return optional($disciplines->commonMaster)->name;
-                                                                                })->filter()->implode(' | ') }}
+                                                                    <span class="sp1">
+                                                                        {{ @$value->disciplines->map(function($disciplines) {
+                                                                            return optional($disciplines->commonMaster)->name;
+                                                                        })->filter()->implode(' | ') }}
                                                                         </span>
-                                                                        <div class="location">
-                                                                            <img src="{{ asset('front/home/assets/images/icons/loction_icn.svg') }}"
-                                                                                alt="location-icon" />
-                                                                            <span>{{ @$value->productDetail->city }},
-                                                                                {{ @$value->productDetail->state }},
-                                                                                {{ @$value->productDetail->country }}
-                                                                            </span>
-                                                                        </div>
-                                                                    @elseif($value->category_id == 3)
-                                                                        <a href="{{ route('barnsDetails', @$value->id) }}">
-                                                                            <h3>
-                                                                                {{ @$value->title }}
-                                                                                {{-- {{@$value->title}} | {{@$value->productDetail->age}} | {{@$value->height->commonMaster->name}} <br />
+                                                                    <div class="location">
+                                                                        <img src="{{asset('front/home/assets/images/icons/loction_icn.svg')}}" alt="location-icon" />
+                                                                        <span>{{@$value->productDetail->city}}, {{@$value->productDetail->state}}, {{@$value->productDetail->country}} </span>                                                                       
+                                                                    </div>
+                                                                @elseif($value->category_id==3)
+                                                                    <a href="{{route('barnsDetails',@$value->id)}}">
+                                                                        <h3>
+                                                                            {{@$value->title}}
+                                                                            {{-- {{@$value->title}} | {{@$value->productDetail->age}} | {{@$value->height->commonMaster->name}} <br />
                                                                             {{ @$value->breeds->map(function($breed) {
                                                                                 return optional($breed->commonMaster)->name;
                                                                             })->filter()->implode(' | ') }} --}}
-                                                                            </h3>
-                                                                        </a>
+                                                                        </h3>
+                                                                    </a>
 
-                                                                        {{-- <h4>Call For Price</h4> --}}
-                                                                        <h4>Daily Rent Price:
-                                                                            ${{ number_format(@$value->productDetail->daily_board_rental_rate) }}
-                                                                        </h4>
-                                                                        <h4>Weekly Rent Price:
-                                                                            ${{ number_format(@$value->productDetail->weekly_board_rental_rate) }}
-                                                                        </h4>
-                                                                        <h4>Monthly Rent Price:
-                                                                            ${{ number_format(@$value->productDetail->monthly_board_rental_rate) }}
-                                                                        </h4>
-                                                                        <h4>Sale Price:
-                                                                            ${{ number_format(@$value->productDetail->sale_cost) }}
-                                                                        </h4>
-                                                                        {{-- <h4 class="mb-1">Lease: $40,000 - $60,000 / yr</h4> --}}
+                                                                    {{-- <h4>Call For Price</h4> --}}
+                                                                    <h4>Daily Rent Price: ${{number_format(@$value->productDetail->daily_board_rental_rate)}} </h4>
+                                                                    <h4>Weekly Rent Price: ${{number_format(@$value->productDetail->weekly_board_rental_rate)}} </h4>
+                                                                    <h4>Monthly Rent Price: ${{number_format(@$value->productDetail->monthly_board_rental_rate)}} </h4>
+                                                                    <h4>Sale Price: ${{number_format(@$value->productDetail->sale_cost)}} </h4>
+                                                                    {{-- <h4 class="mb-1">Lease: $40,000 - $60,000 / yr</h4> --}}
 
-                                                                        <span class="sp1">
-                                                                            {{ @$value->disciplines->map(function ($disciplines) {
-                                                                                    return optional($disciplines->commonMaster)->name;
-                                                                                })->filter()->implode(' | ') }}
+                                                                    <span class="sp1">
+                                                                        {{ @$value->disciplines->map(function($disciplines) {
+                                                                            return optional($disciplines->commonMaster)->name;
+                                                                        })->filter()->implode(' | ') }}
                                                                         </span>
-                                                                        <div class="location">
-                                                                            <img src="{{ asset('front/home/assets/images/icons/loction_icn.svg') }}"
-                                                                                alt="location-icon" />
-                                                                            <span>{{ @$value->productDetail->city }},
-                                                                                {{ @$value->productDetail->state }},
-                                                                                {{ @$value->productDetail->country }}
-                                                                                <br />
-                                                                                Trial:
-                                                                                {{ @$value->triedUpcomingShows->map(function ($upcoming) {
+                                                                    <div class="location">
+                                                                        <img src="{{asset('front/home/assets/images/icons/loction_icn.svg')}}" alt="location-icon" />
+                                                                        <span>{{@$value->productDetail->city}}, {{@$value->productDetail->state}}, {{@$value->productDetail->country}} <br />
+                                                                            Trial: {{ @$value->triedUpcomingShows->map(function($upcoming) {
                                                                                         return optional($upcoming->commonMaster)->name;
                                                                                     })->filter()->implode(' | ') }}
-                                                                                @if (@$value->productDetail->fromdate)
-                                                                                    <br />
-                                                                                    ({{ format_date(@$value->productDetail->fromdate) . ' - ' . format_date(@$value->productDetail->todate) }})
-                                                                                @endif
-                                                                        </div>
-                                                                    @elseif($value->category_id == 4)
-                                                                        <a
-                                                                            href="{{ route('serviceDetails', @$value->id) }}">
-                                                                            <h3>
-                                                                                {{ @$value->title }}
-                                                                                {{-- {{@$value->title}} | {{@$value->productDetail->age}} | {{@$value->height->commonMaster->name}} <br />
+                                                                        @if(@$value->productDetail->fromdate)
+                                                                            <br/>
+                                                                            ({{ format_date(@$value->productDetail->fromdate).' - '.format_date(@$value->productDetail->todate)}})
+                                                                        @endif
+                                                                    </div>
+                                                                @elseif($value->category_id==4)
+                                                                    <a href="{{route('serviceDetails',@$value->id)}}">
+                                                                        <h3>
+                                                                            {{@$value->title}}
+                                                                            {{-- {{@$value->title}} | {{@$value->productDetail->age}} | {{@$value->height->commonMaster->name}} <br />
                                                                             {{ @$value->breeds->map(function($breed) {
                                                                                 return optional($breed->commonMaster)->name;
                                                                             })->filter()->implode(' | ') }} --}}
-                                                                            </h3>
-                                                                        </a>
+                                                                        </h3>
+                                                                    </a>
 
-                                                                        {{-- <h4>Call For Price</h4> --}}
-                                                                        <h4>Houlry Pay:
-                                                                            ${{ number_format(@$value->productDetail->hourly_price) }}
-                                                                        </h4>
-                                                                        <h4>Fixed Pay:
-                                                                            ${{ number_format(@$value->productDetail->fixed_price) }}
-                                                                        </h4>
-                                                                        <h4>Salary Price:
-                                                                            ${{ number_format(@$value->productDetail->salary) }}
-                                                                        </h4>
+                                                                    {{-- <h4>Call For Price</h4> --}}
+                                                                    <h4>Houlry Pay: ${{number_format(@$value->productDetail->hourly_price)}} </h4>
+                                                                    <h4>Fixed Pay: ${{number_format(@$value->productDetail->fixed_price)}} </h4>
+                                                                    <h4>Salary Price: ${{number_format(@$value->productDetail->salary)}} </h4>
 
-                                                                        <span class="sp1">
-                                                                            {{ @$value->disciplines->map(function ($disciplines) {
-                                                                                    return optional($disciplines->commonMaster)->name;
-                                                                                })->filter()->implode(' | ') }}
+                                                                    <span class="sp1">
+                                                                        {{ @$value->disciplines->map(function($disciplines) {
+                                                                            return optional($disciplines->commonMaster)->name;
+                                                                        })->filter()->implode(' | ') }}
                                                                         </span>
-                                                                        <div class="location">
-                                                                            <img src="{{ asset('front/home/assets/images/icons/loction_icn.svg') }}"
-                                                                                alt="location-icon" />
-                                                                            <span>{{ @$value->productDetail->city }},
-                                                                                {{ @$value->productDetail->state }},
-                                                                                {{ @$value->productDetail->country }}
-                                                                                <br />
-                                                                                Dates Available :
-                                                                                {{ @$value->triedUpcomingShows->map(function ($upcoming) {
+                                                                    <div class="location">
+                                                                        <img src="{{asset('front/home/assets/images/icons/loction_icn.svg')}}" alt="location-icon" />
+                                                                        <span>{{@$value->productDetail->city}}, {{@$value->productDetail->state}}, {{@$value->productDetail->country}} <br />
+                                                                            Dates Available : {{ @$value->triedUpcomingShows->map(function($upcoming) {
                                                                                         return optional($upcoming->commonMaster)->name;
                                                                                     })->filter()->implode(' | ') }}
-                                                                                @if (@$value->productDetail->fromdate)
-                                                                                    <br />
-                                                                                    ({{ format_date(@$value->productDetail->fromdate) . ' - ' . format_date(@$value->productDetail->todate) }})
-                                                                                @endif
-                                                                        </div>
-                                                                    @endif
+                                                                        @if(@$value->productDetail->fromdate)
+                                                                            <br/>
+                                                                            ({{ format_date(@$value->productDetail->fromdate).' - '.format_date(@$value->productDetail->todate)}})
+                                                                        @endif
+                                                                    </div>
+                                                                @endif
 
-                                                                    <!----fixed for all category --->
-                                                                    <div class="foot">
-                                                                        <div class="bx">
-                                                                            <div class="imagee">
-                                                                                <img src="{{ @$value->user->profile_photo_path ? asset('storage/' . @$value->user->profile_photo_path) : asset('front/auth/assets/img/user-img.png') }}"
-                                                                                    class="user-img" alt="">
+                                                                <!----fixed for all category --->
+                                                                <div class="foot">
+                                                                    <div class="bx">
+                                                                        <div class="imagee">
+                                                                            <img src="{{(@$value->user->profile_photo_path)?asset('storage/'.@$value->user->profile_photo_path):asset('front/auth/assets/img/user-img.png')}}" class="user-img" alt="">
+                                                                        </div>
+
+                                                                        {{-- <div class="content">
+                                                                            <h4>{{@$value->user->name}}</h4>
+                                                                            <div class="stars">
+                                                                                @php
+                                                                                    $averageRating = round(optional(@$value->user->reviews)->avg('rating'), 1);
+                                                                                    $totalReviews  = optional(@$value->user->reviews)->count();
+                                                                                @endphp 
+                                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                                    <i class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
+                                                                                @endfor
+                                                                                <!-- <i class="fa-solid fa-star"></i>
+                                                                                <i class="fa-solid fa-star"></i>
+                                                                                <i class="fa-solid fa-star"></i>
+                                                                                <i class="fa-solid fa-star"></i>
+                                                                                <i class="fa-solid fa-star"></i> -->
                                                                             </div>
+
                                                                             <div class="content">
                                                                                 <h4>{{ @$value->user->name }}</h4>
                                                                                 <div class="stars">
@@ -509,32 +479,45 @@
                                                                                     <i class="fa-solid fa-star"></i> -->
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="bx2">
-                                                                            <button class="compare-add-button"
-                                                                                data-id="{{ $value->id }}">
-                                                                                <img src="{{ asset('front/home/assets/images/icons/re_icn.svg') }}"
-                                                                                    alt="" />
-                                                                            </button>
-                                                                            <button
-                                                                                class="favorite-btn {{ $value->favorites->where('user_id', auth()->id())->count() ? 'favorited' : '' }}"
-                                                                                data-product-id="{{ $value->id }}">
-                                                                                @if ($value->favorites->where('user_id', auth()->id())->count() > 0)
-                                                                                    <i class="fa-solid fa-heart"></i>
-                                                                                @else
-                                                                                    <i
-                                                                                        class="fa-regular fa-heart favorited"></i>
-                                                                                @endif
-                                                                            </button>
+                                                                        </div> --}}
+
+                                                                        <div class="content">
+                                                                            <h4>{{@$value->user->name}}</h4>
+                                                                            <div class="stars">
+                                                                                @php
+                                                                                    $averageRating = round(optional(@$value->user->reviews)->avg('rating'), 1);
+                                                                                    $totalReviews  = optional(@$value->user->reviews)->count();
+                                                                                @endphp 
+                                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                                    <i class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
+                                                                                @endfor
+                                                                                <!-- <i class="fa-solid fa-star"></i>
+                                                                                <i class="fa-solid fa-star"></i>
+                                                                                <i class="fa-solid fa-star"></i>
+                                                                                <i class="fa-solid fa-star"></i>
+                                                                                <i class="fa-solid fa-star"></i> -->
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-
+                                                                    <div class="bx2">
+                                                                        <button class="compare-add-button" data-id="{{$value->id}}">
+                                                                            <img src="{{asset('front/home/assets/images/icons/re_icn.svg')}}" alt="" />
+                                                                        </button>
+                                                                        <button class="favorite-btn {{ $value->favorites->where('user_id', auth()->id())->count() ? 'favorited' : '' }}" data-product-id="{{ $value->id }}">
+                                                                            @if($value->favorites->where('user_id', auth()->id())->count() > 0)
+                                                                                <i class="fa-solid fa-heart"></i>
+                                                                            @else
+                                                                            <i class="fa-regular fa-heart favorited"></i>
+                                                                            @endif
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
 
                                                             </div>
+
                                                         </div>
-                                                    @endforeach
-                                                </div>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -550,7 +533,7 @@
                                     
                                 @endif
                             @endforeach
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -604,11 +587,13 @@
                         @endforeach
                     </div>
                 </div>
+
+               
             </div>
         </div>
     </section>
 @endif
-
+ 
 
     <!-------------------------------- about_area ------------------------------------>
     @if (!empty($homeAboutData))

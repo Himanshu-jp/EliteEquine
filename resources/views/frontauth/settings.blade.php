@@ -245,17 +245,17 @@ User Details
                                     <td><label class="notife-custom-checkbox">
                                             <input class="form-check-input mx-auto" type="checkbox" id="email1"
                                                 value="1" name="subscription[email]"
-                                                {{ old('subscription.email', @$alertDetails['mobile']['email']) == 1 ? 'checked' : '' }}>
+                                                {{ old('subscription.email', @$alertDetails['subscription']['email']) == 1 ? 'checked' : '' }}>
                                             <span></span></label></td>
                                     <td><label class="notife-custom-checkbox">
                                             <input class="form-check-input mx-auto" type="checkbox" id="sms1"
                                                 value="1" name="subscription[sms]"
-                                                {{ old('subscription.sms', @$alertDetails['mobile']['sms']) == 1 ? 'checked' : '' }}>
+                                                {{ old('subscription.sms', @$alertDetails['subscription']['sms']) == 1 ? 'checked' : '' }}>
                                             <span></span></label></td>
                                     <td><label class="notife-custom-checkbox">
                                             <input class="form-check-input mx-auto" type="checkbox" id="mobile1"
                                                 value="1" name="subscription[mobile]"
-                                                {{ old('subscription.mobile', @$alertDetails['mobile']['mobile']) == 1 ? 'checked' : '' }}>
+                                                {{ old('subscription.mobile', @$alertDetails['subscription']['mobile']) == 1 ? 'checked' : '' }}>
                                             <span></span></label></td>
                                 </tr>
                                 <tr class="tr1">
