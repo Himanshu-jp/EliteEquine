@@ -1,158 +1,24 @@
-@if ($viewMode == 'grid')
-    <div class="row">
-        @foreach ($data as $key => $value)
-            <div class="col-lg-4 mb-3">
-                <div class="feat_card_bx grid-view">
-                    <a href="{{ route('communityDetails', @$value->id) }}">
-                        <div class="image">
-                            <img src="{{ @$value->image ? asset('storage/' . @$value->image) : asset('front/home/assets/images/logo/logo.svg') }}"
-                                alt="hourse-image">
-                            {{-- <span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span> --}}
-                        </div>
-                    </a>
-                    <div class="content">
-                        <a href="{{ route('communityDetails', @$value->id) }}">
-                            <h3>
-                                {{ @$value->title }}
-                            </h3>
-                        </a>
+@php
+    $columnClass = $columnClass ?? 'col-lg-4';
+@endphp
 
-                        <h4>Price : ${{ number_format(@$value->price) }} </h4>
-                        <span class="sp1"></span>
-                        <div class="location">
-                            <img src="{{ asset('front/home/assets/images/icons/loction_icn.svg') }}"
-                                alt="location-icon" />
-                            <span>{{ @$value->location }} <br />
-                                Event Date : {{ format_date(@$value->date) }}
-                            </span>
-                        </div>
-                        <div class="foot">
-                            <div class="bx">
-                                <div class="imagee">
-                                    <img src="{{ @$value->user->profile_photo_path ? asset('storage/' . @$value->user->profile_photo_path) : asset('front/auth/assets/img/user-img.png') }}"
-                                        class="user-img" alt="">
-                                </div>
-                                <div class="content">
-                                    <h4>{{ @$value->user->name }}</h4>
-                                    <div class="stars">
-                                        @php
-                                            $averageRating = round(optional(@$value->user->reviews)->avg('rating'), 1);
-                                            $totalReviews = optional(@$value->user->reviews)->count();
-                                        @endphp
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <i
-                                                class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
-                                        @endfor
-                                        <!-- <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i> -->
-                                    </div>
-                                </div>
-                            </div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    </div>
-@else
     <div class="col-lg-8">
         <div class="map-info">
-            <div>
-                <div class="top-header-map">
-                    <div class="map-locainfo">
-                        <div class="tag-loacinfo">
-                            <span class="blue"></span>
-                            Location
-                        </div>
-                        <div class="tag-loacinfo">
-                            <span class="red"></span>
-                            Trial / Exchange Location
-                        </div>
-                        <div class="tag-loacinfo">
-                            <span class="black"></span>
-                            Transportation
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
             <div id="map">
-                <!-- <div class="onlinebox"><span class="online"><//span> Online</div> -->
+                <!-- <div class="onlinebox"><span class="online"></span> Online</div> -->
             </div>
+
             <!-- Card INSIDE MAP container -->
-            <div class="horsescard-popup" id="popupCard">
-                <div class="inner-box">
-
-                    <img src="{{ asset('front/home/assets/images/featured_hource1.png') }}" id="popupImage" />
-                    <div class="info" id="popupInfo"></div>
-                </div>
-                <span class="close-btn" onclick="closePopup()">×</span>
-
-            </div>
+          
         </div>
     </div>
 
-    <div class="col-lg-4">
-        @foreach ($data as $key => $value)
-            <div class="feat_card_bx list-page-card">
-
-                {{-- <a href="{{route('horseDetails',@$value->id)}}">
-                    <div class="imagelist">
-                        <img src="{{(@$value->image->first())?asset('storage/'.@$value->image->first()->image):asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
-                        <span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span>
-                    </div>
-                </a> --}}
-
-                <a href="{{ route('communityDetails', @$value->id) }}">
-                    <div class="imagelist">
-                        <img src="{{ @$value->image ? asset('storage/' . @$value->image) : asset('front/home/assets/images/logo/logo.svg') }}"
-                            alt="hourse-image">
-                    </div>
-                </a>
-
-                <div class="content">
-                    <a href="{{ route('communityDetails', @$value->id) }}">
-                        <h3>
-                            {{ @$value->title }}
-                        </h3>
-                    </a>
-
-                    <h4>Price : ${{ number_format(@$value->price) }} </h4>
-                    <span class="sp1"></span>
-                    <div class="location">
-                        <img src="{{ asset('front/home/assets/images/icons/loction_icn.svg') }}" alt="location-icon" />
-                        <span>{{ @$value->location }} <br />
-                            Event Date : {{ format_date(@$value->date) }}
-                        </span>
-                    </div>
+  
 
 
-                    <div class="foot">
-                        <div class="bx">
-                            <div class="imagee">
-                                <img src="{{ @$value->user->profile_photo_path ? asset('storage/' . @$value->user->profile_photo_path) : asset('front/auth/assets/img/user-img.png') }}"
-                                    class="user-img" alt="">
-                            </div>
-                            <div class="content">
-                                <h4>{{ @$value->user->name }}</h4>
-                                <div class="stars">
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    </div>
-
+    <!-- Your map initialization script -->
     @once
 
         <!-- Your map initialization script -->
@@ -245,7 +111,7 @@
                     fetchEventsByCategory(selectedCategory);
                 }
             })
-            var userCoordinates = [75.769446, 26.836992];
+            var userCoordinates = ["{{$longitude}}", "{{$latitude}}"];
             mapboxgl.accessToken = '{{ env('MAPBOX_ACCESS_TOKEN') }}';
             var map = new mapboxgl.Map({
                 container: 'map',
@@ -256,12 +122,13 @@
                 /* style: 'mapbox://styles/mapbox/streets-v12', */
                 //center: [-104.8797372146656, 39.76008581046093],
                 zoom: 10,
-                pitch: 62,
-                bearing: -60
+                pitch: 40,
+                bearing: -20
             });
 
             var events = @json($data);
-            var horseList = events.data;
+      
+            var horseList = events;
 
 
 
@@ -281,8 +148,8 @@
                         var object = {};
                         object.title = event.title;
                         object.price = event.price;
-                        object.description = event.description;
-                        object.image = event.image;
+                        object.description = event.requirement;
+                        object.image = event.image ;
                         object.address = event ? (event.street + ' ' + event
                             .city) : '';
                         object.latitude = event ? (event.latitude) : '';
@@ -292,7 +159,7 @@
 
                 }
             });
-            console.log('allData', allData)
+          
 
             function getUniqueFeatures(features, comparatorProperty) {
                 var uniqueIds = new Set();
@@ -318,10 +185,10 @@
                 var features = map.queryRenderedFeatures({
                     layers: ['unclustered-point']
                 });
-                console.log('features', features);
-                var markerIconUrl = "{{ url('/') }}/images/marker_map_icon.svg";
+               
+                var markerIconUrl = "{{url('/')}}/images/marker_map_icon.svg";
                 var uniqueFeatures = getUniqueFeatures(features, 'venue_name');
-                console.log('uniqueFeatures', uniqueFeatures);
+             
                 uniqueFeatures.forEach(feature => {
                     var coordinates = feature.geometry.coordinates;
                     var {
@@ -330,7 +197,7 @@
                         latitude,
                         longitude
                     } = feature.properties;
-                    console.log(coordinates, "coordinates");
+                  
                     // Create a custom HTML element for the marker
                     var markerElement = document.createElement('div');
                     markerElement.className = 'red-circle-marker';
@@ -344,7 +211,7 @@
 
                     var venueName = document.createElement('span');
                     venueName.className = 'marker-venue-name';
-                    // venueName.innerText = venue_name;
+                  //  venueName.innerText = venue_name;
                     markerElement.appendChild(venueName);
 
                     var marker = new mapboxgl.Marker(markerElement).setLngLat([coordinates[0], coordinates[1]]).addTo(
@@ -353,10 +220,7 @@
                     var latLng = `${latitude},${longitude}`;
                     var eventsAtLocation = eventGroups[latLng];
                     var popupContent = '';
-                    console.log(latitude, longitude, "SSSS")
-                    console.log(latLng, 'latLng')
-                    console.log(eventGroups[latLng])
-
+                  
                     eventsAtLocation.forEach(event => {
 
 
@@ -367,31 +231,13 @@
                         // var eventImage = event.image && event.image.length > 0  ?"{{ url('/') }}/"+ event.image[0].image : '{{ url('/') }}/public/front/home/assets/images/logo/logo.svg' ;
                         var eventImage = "{{ url('/') }}/front/home/assets/images/logo/logo.svg";
                         var baseUrl = "{{ url('/') }}";
-                        var authUserId = '{{ auth()->id() }}';
-                        if (event.user && event.user.reviews) {
-                            var averageRating = Math.round(event.user.reviews.reduce((sum, r) => sum + r
-                                .rating, 0) / event.user.reviews.length);
-                        } else {
-                            var averageRating = 0;
-                        }
-
-
-                        var imageSrc = event.image ?
-                            `${baseUrl}/storage/${event.image}` :
-                            `${baseUrl}/front/home/assets/images/logo/logo.svg`;
-
-                        var profileSrc = event.user?.profile_photo_path ?
-                            `${baseUrl}/storage/${event.user.profile_photo_path}` :
-                            `${baseUrl}/front/auth/assets/img/user-img.png`;
-
-
-                        var eventUrl = `${baseUrl}/eventdetail/${event.id}`;
+                        var eventUrl = `${baseUrl}communityDetails/${event.id}`;
                         var maxLength = 40;
-                        var descriptionText = event.description || '';
+                        var descriptionText = event.requirement || '';
                         var truncatedDescription = descriptionText.length > maxLength ?
                             descriptionText.substring(0, maxLength) + "..." :
                             descriptionText;
-                        console.log(event);
+                      
                         var venueHtml = '';
                         if (event.title && event.title) {
                             var venueDetailUrl = "url".replace(':id', event.id);
@@ -405,47 +251,26 @@
                         `;
                         }
                         popupContent += `
-                        <div class="feat_card_bx list-page-card">
-                            <a href="${baseUrl}/communityDetails/${event.id}" target="_blank">
-                                <div class="imagelist">
-                                <img src="${imageSrc}" alt="hourse-image">
-                                </div>
-                            </a>
-
-                            <div class="content">
-                                <a href="${baseUrl}/communityDetails/${event.id}" target="_blank">
-                                <h3>${event.title}</h3>
-                                </a>
-
-                                <h4>Price : $${Number(event.price).toLocaleString()}</h4>
-                                <span class="sp1"></span>
-
-                                <div class="location">
-                                <img src="${baseUrl}/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
-                                <span>
-                                    ${event.location}<br/>
-                                    Event Date : ${formatDate(event.date)}
-                                </span>
-                                </div>
-
-                                <div class="foot">
-                                <div class="bx">
-                                    <div class="imagee">
-                                    <img src="${profileSrc}" class="user-img" alt="">
-                                    </div>
-                                    <div class="content">
-                                    <h4>${event.user.name}</h4>
-                                    <div class="stars">
-                                        ${[1,2,3,4,5].map(() => `<i class="fa-solid fa-star"></i>`).join("")}
-                                    </div>
+                        <div class="map-pp-main">
+                          
+                            <div class="evn-dte-ll">
+                                <div class="ent-emg">
+                                    <img src="${eventImage}" alt="${event.title}" style="width: 45px; height: 45px;">
+                                    <div>
+                                        <h3><a href="${eventUrl}" target="_blank">${event.title}</a></h3>
+                                        <p class="pricetag">Sale : ${event.price}</p>
+                                        <p class="othertag"> ${event.price}</p>
+                                       
                                     </div>
                                 </div>
-                                <div class="bx2">
-                                   <a href="${baseUrl}/communityDetails/${event.id}" target="_blank">Deatil</a>
-                                </div>
+                                ${venueHtml ? `<div class="venue-name">${venueHtml}</div>` : ''}
+                               
+                                <div class="loc-meta">
+                                    <div class="loc-metaprc"></div>
+                                    <div class="loc-metabutton"><a href="${eventUrl}" target="_blank" class="meta-btn">Community Detail</a></div>
                                 </div>
                             </div>
-                            </div>
+                        </div>
                         `;
                     });
                     var popup = new mapboxgl.Popup({
@@ -464,15 +289,6 @@
 
 
 
-            }
-
-            function formatDate(dateString) {
-                var date = new Date(dateString);
-                return date.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                });
             }
 
             function addClusterView() {
@@ -495,7 +311,7 @@
                         longitude: event.longitude || "No Address",
                     },
                 }));
-                console.log("eventsfeature", eventsfeature)
+              
                 map.addSource("clusterEvent", {
                     type: "geojson",
                     data: {
@@ -620,33 +436,32 @@
             var nav = new mapboxgl.NavigationControl();
             map.addControl(nav, 'top-right');
 
-            if (typeof window.RelocateControl === 'undefined') {
-                class RelocateControl {
-                    onAdd(map) {
-                        this.map = map;
-                        this.container = document.createElement('div');
-                        this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
-                        this.container.innerHTML = `
+
+         /*   class RelocateControl {
+                onAdd(map) {
+                    this.map = map;
+                    this.container = document.createElement('div');
+                    this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+                    this.container.innerHTML = `
                     <button id="relocateBtn" type="button" title="Relocate" style="padding:3px;">
-                        <img src="{{ asset('images/current-location-10.svg') }}">
+                        <img src="{{ asset('frontend/images/current-location-10.svg') }}">
                     </button>
                 `;
-                        this.container.querySelector('#relocateBtn').addEventListener('click', () => {
-                            map.easeTo({
-                                center: userCoordinates,
-                                zoom: 10,
-                                duration: 500
-                            });
+                    this.container.querySelector('#relocateBtn').addEventListener('click', () => {
+                        map.easeTo({
+                            center: userCoordinates,
+                            zoom: 10,
+                            duration: 500
                         });
-                        return this.container;
-                    }
-                    onRemove() {
-                        this.container.parentNode.removeChild(this.container);
-                        this.map = undefined;
-                    }
+                    });
+                    return this.container;
                 }
-                map.addControl(new RelocateControl(), 'top-right');
+                onRemove() {
+                    this.container.parentNode.removeChild(this.container);
+                    this.map = undefined;
+                }
             }
+            map.addControl(new RelocateControl(), 'top-right'); */
 
             map.on("load", () => {
 
@@ -674,4 +489,54 @@
         </script>
     @endonce
 
-@endif
+
+
+<script>
+    // add favorite
+    $('.favorite-btn').on('click', function(e) {
+        e.preventDefault();
+
+        var productId = $(this).data('product-id');
+        var url = `{{ url('favorite') }}` + '/' + productId;
+        var $btn = $(this);
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                // alert(response.message);
+                if (response.favorited) {
+                    $btn.addClass('favorited');
+                    $btn.find("i").addClass('fa-solid').removeClass('fa-regular favorited');
+                } else {
+                    $btn.removeClass('favorited');
+                    $btn.find("i").addClass('fa-regular favorited').removeClass('fa-solid');
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    Swal.fire({
+                        title: "Elite Equine",
+                        text: "Please login to add favorite.",
+                        imageUrl: "{{ asset('front/home/assets/images/add-favorite.svg') }}",
+                        imageWidth: 400,
+                        imageHeight: 200,
+                        imageAlt: "Elite Equine",
+                        // This disables the default Swal styling for confirm button
+                        customClass: {
+                            confirmButton: 'commen_btn'
+                        },
+                        buttonsStyling: false, // <--- disables SweetAlert's built-in styling
+                        confirmButtonText: "<a href='{{ route('login') }}' class='commen_btn'>Login</a>"
+                    });
+                } else {
+                    alert('Something went wrong.');
+                }
+            }
+        });
+    });
+</script>
+
