@@ -252,6 +252,8 @@ function loadHorses(page = 1) {
             page: page,
             search:$("#search").val(),
             location:$("#location").val(),
+                latitude: $('#latitude').val(),
+                    longitude: $('#longitude').val(),
             sort: $('#sort').val(),
             limit: $('#limit').val(),
             date:$("#date").val(),
