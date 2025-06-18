@@ -319,7 +319,7 @@
                     layers: ['unclustered-point']
                 });
                 console.log('features', features);
-                var markerIconUrl = "{{ url('/') }}/images/marker_map_icon.svg";
+                var markerIconUrl = "{{ url('/') }}/images/Community Blue.png";
                 var uniqueFeatures = getUniqueFeatures(features, 'venue_name');
                 console.log('uniqueFeatures', uniqueFeatures);
                 uniqueFeatures.forEach(feature => {

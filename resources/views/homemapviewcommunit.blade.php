@@ -186,7 +186,7 @@
                     layers: ['unclustered-point']
                 });
                
-                var markerIconUrl = "{{url('/')}}/images/marker_map_icon.svg";
+                var markerIconUrl = "{{url('/')}}/images/Community Blue.png";
                 var uniqueFeatures = getUniqueFeatures(features, 'venue_name');
              
                 uniqueFeatures.forEach(feature => {

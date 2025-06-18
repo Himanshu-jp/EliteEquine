@@ -6017,11 +6017,11 @@ section.industry_area.forum-bg-border .container {
     pointer-events: none;
     position: absolute;
     /* will-change: transform; */
-    top:auto !important ;
-    left: 50% !important;
+    /* top:auto !important ; */
+    /* left: 50% !important; */
     right: 0 !important;
-    bottom: 0 !important;
-    transform: translate(-50%, -10%) !important;
+    /* bottom: 0 !important;
+    transform: translate(-50%, -10%) !important; */
     width: 100%;
 }
 .mapboxgl-popup-content {
