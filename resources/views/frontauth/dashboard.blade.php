@@ -113,59 +113,84 @@ Dashboard
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-9 col-md-8 mt-4 mb-4">
-            <div class="card ">
-                <div class="card-body">
-                    <!-- <div id="chart_div"></div> -->
-                    <div class="d-flex align-items-center justify-content-between pb-4">
-                        <h6 class="mb-0 ">Visit Chart</h6>
+  <div class="row g-4">
+            <!-- Visit Chart -->
+            <div class="col-12 col-lg-8">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h5 class="chart-title">Visit Chart</h5>
                         <div class="dropdown">
-                            <button class="btn btn-secondary small d-flex align-items-center gap-2" type="button"
-                                id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">Monthly
-                                <i class="fi fi-rr-angle-small-down"></i>
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                Monthly
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li><a class="dropdown-item" href="#">January</a></li>
-                                <li><a class="dropdown-item" href="#">February</a></li>
-                                <li><a class="dropdown-item" href="#">March</a></li>
-                                <li><a class="dropdown-item" href="#">April</a></li>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="updateVisitChart('monthly')">Monthly</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="updateVisitChart('weekly')">Weekly</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="updateVisitChart('daily')">Daily</a></li>
                             </ul>
                         </div>
                     </div>
-                    <img src="{{asset('front/auth/assets/img/visit-chart.svg')}}" width="100%" alt="">
+                    <div class="chart-container">
+                        <canvas id="visitChart"></canvas>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-lg-3 col-md-6 mt-4 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between pb-4">
-                        <h6 class="mb-0 ">Earnings</h6>
-                        <img src="{{asset('front/auth/assets/img/icons/more.svg')}}" alt="">
+            <!-- Earnings Chart -->
+            <div class="col-12 col-lg-4">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h5 class="chart-title">Earnings</h5>
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg>
+                        </button>
                     </div>
-                    <div class="pe-2 text-center">
-                        <img src="{{asset('front/auth/assets/img/Circle-Chart.svg')}}" width="253" alt="">
+                    <div class="earnings-chart-container">
+                        <div class="radial-chart-wrapper">
+                            <svg class="radial-chart" viewBox="0 0 200 200">
+                                <!-- Background circles -->
+                                <circle cx="100" cy="100" r="85" fill="none" stroke="#f0f0f0" stroke-width="8"/>
+                                <circle cx="100" cy="100" r="65" fill="none" stroke="#f0f0f0" stroke-width="8"/>
+                                <circle cx="100" cy="100" r="45" fill="none" stroke="#f0f0f0" stroke-width="8"/>
+                                
+                                <!-- Outer ring - Services & Jobs (Blue) -->
+                                <circle cx="100" cy="100" r="85" fill="none" stroke="#4A90E2" stroke-width="8" 
+                                        stroke-dasharray="267 267" stroke-dashoffset="80" 
+                                        stroke-linecap="round" class="chart-segment outer-ring"/>
+                                
+                                <!-- Middle ring - Equipment & Apparel (Orange) -->
+                                <circle cx="100" cy="100" r="65" fill="none" stroke="#FF9800" stroke-width="8" 
+                                        stroke-dasharray="204 204" stroke-dashoffset="61" 
+                                        stroke-linecap="round" class="chart-segment middle-ring"/>
+                                
+                                <!-- Inner ring - Horses (Green) -->
+                                <circle cx="100" cy="100" r="45" fill="none" stroke="#4CAF50" stroke-width="8" 
+                                        stroke-dasharray="141 141" stroke-dashoffset="28" 
+                                        stroke-linecap="round" class="chart-segment inner-ring"/>
+                            </svg>
+                        </div>
                     </div>
-                    <ul class=" mt-3 mb-0 list-unstyled d-flex align-items-center justify-content-center gap-2">
-                        <li>
-                            <img src="{{asset('front/auth/assets/img/icons/green.svg')}}" alt="">
-                            <small>Horses</small>
-                        </li>
-                        <li>
-                            <img src="{{asset('front/auth/assets/img/icons/orange.svg')}}" alt="">
-                            <small>Equipment & Apparel</small>
-                        </li>
-                        <li>
-                            <img src="{{asset('front/auth/assets/img/icons/blue.svg')}}" alt="">
-                            <small>Services & Jobs</small>
-                        </li>
-                    </ul>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background-color: #4CAF50;"></span>
+                            <span class="legend-text">Horses</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background-color: #FF9800;"></span>
+                            <span class="legend-text">Equipment & Apparel</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background-color: #4A90E2;"></span>
+                            <span class="legend-text">Services & Jobs</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
     <!--  -->
     <div class="row mb-4">

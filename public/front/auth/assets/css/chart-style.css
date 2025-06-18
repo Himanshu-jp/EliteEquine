@@ -1,0 +1,274 @@
+/* Custom Variables */
+:root {
+    --primary-color: #4A90E2;
+    --secondary-color: #FF9800;
+    --success-color: #4CAF50;
+    --background-color: #f8f9fa;
+    --card-background: #ffffff;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --border-color: #e0e0e0;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+} 
+/* Chart Card Styles */
+.chart-card {
+    background: var(--card-background);
+    border-radius: 12px;
+    padding: 1.5rem;
+    height: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+    border: 1px solid #E0E0E0;
+    background: var(--White, #FFF);
+}
+
+.chart-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Chart Header */
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.chart-title {
+    margin: 0;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+}
+
+/* Visit Chart Container */
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin-bottom: 0;
+}
+
+/* Earnings Chart Container */
+.earnings-chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    margin-bottom: 0;
+}
+
+.radial-chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.radial-chart {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+/* Chart Segments Animation */
+.chart-segment {
+    transition: all 0.3s ease;
+    animation: drawSegment 2s ease-in-out forwards;
+}
+
+.chart-segment:hover {
+    filter: brightness(1.1);
+    stroke-width: 10;
+}
+
+/* Individual Ring Animations */
+.outer-ring {
+    animation-delay: 0.5s;
+}
+
+.middle-ring {
+    animation-delay: 1s;
+}
+
+.inner-ring {
+    animation-delay: 1.5s;
+}
+
+@keyframes drawSegment {
+    from {
+        stroke-dashoffset: 100%;
+    }
+    to {
+        stroke-dashoffset: var(--final-offset);
+    }
+}
+
+/* Set final offsets for each ring */
+.outer-ring {
+    --final-offset: 80;
+}
+
+.middle-ring {
+    --final-offset: 61;
+}
+
+.inner-ring {
+    --final-offset: 28;
+}
+
+/* Chart Legend */
+.chart-legend {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 0;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    padding: 0.25rem 0;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.legend-text {
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+.dropdown-menu.show {
+    display: block;
+    right: 0 !important;
+    top: 0 !important;
+    left: auto !important;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chart-container {
+        height: 250px;
+    }
+    
+    .earnings-chart-container {
+        height: 250px;
+    }
+    
+    /* .radial-chart-wrapper {
+        width: 180px;
+        height: 180px;
+    } */
+    
+    .chart-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 576px) {
+    .chart-container {
+        height: 200px;
+    }
+    
+    .earnings-chart-container {
+        height: 200px;
+    }
+    
+    /* .radial-chart-wrapper {
+        width: 160px;
+        height: 160px;
+    } */
+    
+    .chart-card {
+        padding: 1rem;
+    }
+}
+
+/* Dropdown Customization */
+.dropdown-toggle {
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+}
+
+.dropdown-toggle:hover {
+    background-color: var(--background-color);
+    border-color: var(--primary-color);
+}
+
+/* Button Customization */
+.btn-outline-secondary {
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+/* Loading Animation */
+.chart-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    color: var(--text-secondary);
+}
+
+.chart-loading::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-top: 2px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 0.5rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Hover Effects for Radial Chart */
+.radial-chart-wrapper:hover .chart-segment {
+    opacity: 0.8;
+}
+
+.radial-chart-wrapper .chart-segment:hover {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
