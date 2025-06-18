@@ -64,7 +64,7 @@ class AuthService
         $notifiactionDetails = [];
 
      
-        $alerts = ['subscription', 'payment', 'auction','listMatch','auction'];
+        $alerts = ['subscription', 'payment', 'auction','listMatch','biddinItem'];
         foreach ($alerts as $metaKey) {
             // $alert = UserDetailAlert::where([
             //     'meta_key' => $metaKey,
@@ -261,7 +261,7 @@ class AuthService
             $owner = UserDetails::create($data);
         }
 
-         $alerts = ['subscription', 'payment', 'auction','listMatch','auction'];
+         $alerts = ['subscription', 'payment', 'auction','listMatch','biddinItem'];
 
         foreach ($alerts as $metaKey) {
             $alert = UserDetailAlert::where([
