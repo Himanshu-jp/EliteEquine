@@ -224,6 +224,10 @@ class ProductController extends Controller
             ->where(['id' => $request->id, 'deleted_at' => null, 'user_id' => $user->id])
             ->orderBy('id', 'desc')
             ->first();
+
+        // dd($products->toArray());
+        // dd($products->subcategory->pluck('category_id')->toArray());
+            
         return view('frontauth/productHorseDetails', compact(['productId', 'products', 'subcategories']));
     }
 

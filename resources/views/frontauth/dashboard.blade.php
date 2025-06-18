@@ -34,7 +34,7 @@
                             <div>
 
                                 @if(Auth::user()->plan_expired_on != '' && Auth::user()->plan_expired_on != null)
-                                    <h4>{{ \Carbon\Carbon::createFromTimestamp(Auth::user()->plan_expired_on)->format('d M Y h:i A') }}
+                                    <h4>{{ \Carbon\Carbon::createFromTimestamp(Auth::user()->plan_expired_on)->format('d M Y ') }}
                                     </h4>
 
                                     <p>Subscription Expires</p>
@@ -145,14 +145,14 @@
                 <div class="chart-card">
                     <div class="chart-header">
                         <h5 class="chart-title">Earnings</h5>
-                        <button class="btn btn-sm btn-outline-secondary">
+                        <!-- <button class="btn btn-sm btn-outline-secondary">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <circle cx="12" cy="12" r="1"></circle>
                                 <circle cx="19" cy="12" r="1"></circle>
                                 <circle cx="5" cy="12" r="1"></circle>
                             </svg>
-                        </button>
+                        </button> -->
                     </div>
                     <div class="earnings-chart-container">
                         <div class="radial-chart-wrapper">

@@ -12,6 +12,7 @@ use Stripe\StripeClient;
 use Stripe\Transfer;
 use Stripe\Stripe;
 use Illuminate\Support\Facades\Auth;
+use Currency\Util\CurrencySymbolMapping;
 
 use Stripe\Balance;
 // use Log;
@@ -601,6 +602,14 @@ if (!function_exists('__getBannersBarnsList')) {
 			"Price Reduced"=>"Price Reduced",
 			"Motivated Seller"=>"Motivated Seller"
 		];
+		return $data;
+    }
+}
+
+if (!function_exists('__getCurrencyList')) {
+    function __getCurrencyList()
+    {
+		$data = CurrencySymbolMapping::values();;
 		return $data;
     }
 }

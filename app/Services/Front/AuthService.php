@@ -43,6 +43,7 @@ class AuthService
             'name'     => $data['name'],
             'username' => $data['name'],
             'email'    => $data['email'],
+            'lister_types'    => implode(',',$data['lister'] ?? []),
             'role' => 2,
             'opt_in_notification' => $data['opt_in_notification'],
             'sms_notification' => @$data['sms'] ? 1 : 0,
@@ -66,19 +67,7 @@ class AuthService
      
         $alerts = ['subscription', 'payment', 'auction','listMatch','biddinItem'];
         foreach ($alerts as $metaKey) {
-            // $alert = UserDetailAlert::where([
-            //     'meta_key' => $metaKey,
-            //     'user_id' => $user->id,
-            //     'user_detail_id' => $owner->id
-            // ])->first();
-
-            // if ($alert) {
-            //     $alert->email  = !empty($data[$metaKey]['email']) ? 1 : 0;
-            //     $alert->sms    = !empty($data[$metaKey]['sms']) ? 1 : 0;
-            //     $alert->mobile = !empty($data[$metaKey]['mobile']) ? 1 : 0;
-            //     $alert->save();
-            // }
-
+          
             $notifiactionDetails[] = [
                 'user_id' => $user->id,
                 'user_detail_id' => $userDetails->id,
@@ -91,39 +80,7 @@ class AuthService
             ];
         }
 
-        // $notifiactionDetails = [
-        //     [
-        //         'user_id' => $user->id,
-        //         'user_detail_id' => $userDetails->id,
-        //         'meta_key' => $metaKey,
-        //         'sms' => !empty($data[$metaKey]['sms']) ? 1 : 0,
-        //         'mobile' =>!empty($data[$metaKey]['mobile']) ? 1 : 0,
-        //         'email' => !empty($data[$metaKey]['email']) ? 1 : 0,
-        //         'created_at'=> (new DateTime())->format('Y-m-d H:i:s'),
-        //         'updated_at'=> (new DateTime())->format('Y-m-d H:i:s'),
-        //     ],
-        //     [
-        //         'user_id' => $user->id,
-        //         'user_detail_id' => $userDetails->id,
-        //         'meta_key' => 'payment',
-        //         'sms' => @$data['sms'] ? 1 : 0,
-        //         'mobile' => @$data['mobile'] ? 1 : 0,
-        //         'email' => @$data['mail'] ? 1 : 0,
-        //         'created_at'=> (new DateTime())->format('Y-m-d H:i:s'),
-        //         'updated_at'=> (new DateTime())->format('Y-m-d H:i:s'),
-        //     ],
-        //     [
-        //         'user_id' => $user->id,
-        //         'user_detail_id' => $userDetails->id,
-        //         'meta_key' => 'auction',
-        //         'sms' => @$data['sms'] ? 1 : 0,
-        //         'mobile' => @$data['mobile'] ? 1 : 0,
-        //         'email' => @$data['mail'] ? 1 : 0,
-        //         'created_at'=> (new DateTime())->format('Y-m-d H:i:s'),
-        //         'updated_at'=> (new DateTime())->format('Y-m-d H:i:s'),
-        //     ]
-        // ];
-
+      
         $userDetails = UserDetailAlert::insert($notifiactionDetails);
 
         $encryptedEmail = Crypt::encrypt($data['email']);
@@ -261,22 +218,53 @@ class AuthService
             $owner = UserDetails::create($data);
         }
 
-         $alerts = ['subscription', 'payment', 'auction','listMatch','biddinItem'];
+      $alerts = [];
 
-        foreach ($alerts as $metaKey) {
-            $alert = UserDetailAlert::where([
-                'meta_key' => $metaKey,
+      if(!isset($data['lister'])){
+ User::where('id',Auth::user()->id)->update(['opt_in_notification'=>'no']);
+
+$data['lister']=[];
+      }else{
+ User::where('id',Auth::user()->id)->update(['opt_in_notification'=>'yes']);
+
+      }
+
+if (is_array($data['lister']) && in_array('1', $data['lister'])) {
+    array_push($alerts, 'subscription', 'payment');
+}
+
+if (is_array($data['lister']) && in_array('2', $data['lister'])) {
+    array_push($alerts, 'listMatch', 'biddinItem');
+}
+
+if (count($alerts) > 0) {
+    array_push($alerts, 'auction');
+}
+
+ User::where('id',Auth::user()->id)->update(['lister_types'=>implode(',',$data['lister'])]);
+      
+
+   $userDetails = UserDetails::where('user_id' ,$user->id)->first();
+      UserDetailAlert::where('user_id',$user->id)->where('user_detail_id',$userDetails->id)->delete();
+
+    $notifiactionDetails=[];
+         foreach ($alerts as $metaKey) {
+          
+            $notifiactionDetails[] = [
                 'user_id' => $user->id,
-                'user_detail_id' => $owner->id
-            ])->first();
-
-            if ($alert) {
-                $alert->email  = !empty($data[$metaKey]['email']) ? 1 : 0;
-                $alert->sms    = !empty($data[$metaKey]['sms']) ? 1 : 0;
-                $alert->mobile = !empty($data[$metaKey]['mobile']) ? 1 : 0;
-                $alert->save();
-            }
+                'user_detail_id' => $userDetails->id,
+                'meta_key' => $metaKey,
+                'sms' => !empty($data[$metaKey]['sms']) ? 1 : 0,
+                'mobile' => !empty($data[$metaKey]['mobile']) ? 1 : 0,
+                'email' => !empty($data[$metaKey]['email']) ? 1 : 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
         }
+
+    
+         UserDetailAlert::insert($notifiactionDetails);
+
         return $owner;
     }
 }

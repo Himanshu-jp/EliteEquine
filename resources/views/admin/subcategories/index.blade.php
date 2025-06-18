@@ -41,9 +41,11 @@
                             <select name="category" class="form-control">
                                 <option value="">-- Filter by Category --</option>
                                 @foreach($categories as $category)
+                                 @if(in_array($category->id,[1,3]))
                                     <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
                                         {{ $category->name }}
                                     </option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>

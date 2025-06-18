@@ -18,8 +18,11 @@ Horse Listing
                         <label for="currency">Currency</label>
                         <select id="currency" class="form-select form-control" name="currency">    
                             <option value="">Select currency</option>
-                            <option value="USD">USD</option>
-                            <option value="AUD">AUD</option>
+                            @foreach(__getCurrencyList() as $key=>$value)
+                                <option value="{{$key}}" >{{$key}}</option>
+                            @endforeach
+                            {{-- <option value="USD">USD</option>
+                            <option value="AUD">AUD</option> --}}
                         </select>
                     </div>
 
@@ -347,7 +350,8 @@ Horse Listing
                                     </svg> 
                                     <h5 class="my-4">No ads found matched your criteria</h5>
                                     <hr>
-                                    <a href="{{route('settings')}}" class="text-gold"><u>Select Your Notifications Settings</u></a>
+                                                                   <a href="javascript:;"  class=" go-to-notify-on text-gold"><u>Select Your Notifications Settings</u></a>
+
                                 </div>
                             </div>
                         @endif

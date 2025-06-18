@@ -170,7 +170,7 @@ Your Ads
                                             pointer-events: none;
                                             color: #555;"></i>
                                 @if($errors->has('category'))
-                                    <span class="error text-danger">{{$errors->first('category')}}</span>
+                                    <span class="error text-danger ">{{$errors->first('category')}}</span>
                                 @endif
                             </div>        
                         @endif
@@ -186,7 +186,7 @@ Your Ads
                             @foreach($externalLinks as $index => $link)
                                 <div class="position-relative mb-2 external-link-group">
                                     <input type="text" name="external_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add External Link..." value="{{ @$link->link }}" autocomplete="off">
-                                    <button type="button" class="btn btn-sm btn-danger remove-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
+                                    <button type="button" class="remove-link" style="z-index:2;">&times;</button>
                                 </div>
                             @endforeach
                         </div>
@@ -208,7 +208,7 @@ Your Ads
                             @foreach($externalLinks as $index => $link)
                                 <div class="position-relative mb-2 external-video-link-group">
                                     <input type="text" name="video_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add Video Link..." value="{{ @$link->link }}" autocomplete="off">
-                                    <button type="button" class="btn btn-sm btn-danger remove-video-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
+                                    <button type="button" class="remove-video-link " style="z-index:2;">&times;</button>
                                 </div>
                             @endforeach
                         </div>
@@ -380,7 +380,7 @@ Your Ads
                 @endif
             </div>
 
-            <div class="col-lg-6 mb-3" id="priceDiv">
+            <div class="col-lg-6 mb-3" id="priceDiv" style="display: none;">
                 <div class="d-flex align-items-center justify-content-between">
                     <label for="price" class="form-label">Price</label>
                     <div class="form-check">
@@ -441,7 +441,7 @@ Your Ads
             let newField = `
                 <div class="position-relative mb-2 external-link-group">
                     <input type="text" name="external_link[]" class="inner-form form-control mb-0 pe-5" placeholder="Add External Link...">
-                    <button type="button" class="btn btn-sm btn-danger remove-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
+                    <button type="button" class="remove-link " style="z-index:2;">&times;</button>
                 </div>`;
             $('#external-links-wrapper').append(newField);
         });
@@ -457,7 +457,7 @@ Your Ads
             let newField = `
                 <div class="position-relative mb-2 external-video-link-group">
                     <input type="text" name="video_link[]" class="inner-form form-control mb-0 pe-5" placeholder="Add Video Link...">
-                    <button type="button" class="btn btn-sm btn-danger remove-video-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
+                    <button type="button" class="remove-video-link" style="z-index:2;">&times;</button>
                 </div>`;
             $('#external-video-links-wrapper').append(newField);
         });
@@ -758,7 +758,6 @@ function updateInputFiles() {
     $("input[name='transaction_method']:checked").each(function () {
         console.log($(this).val());
         if($(this).val()=="platform"){
-            $("#price").val('');
             $("#priceDiv").show();
         }else{
             $("#price").val('');
@@ -767,7 +766,6 @@ function updateInputFiles() {
     });
 
     $("#platform").on('click', function() {
-        $("#price").val('');
         $("#priceDiv").show();
     });
     $("#buyertoseller").on('click', function() {
@@ -902,10 +900,6 @@ $("#productForm").validate({
             required: true,
             maxlength: 500
         },
-        price: {
-            required: true,
-            number: true
-        },
         currency: {
             required: true,
             maxlength: 3
@@ -934,6 +928,11 @@ $("#productForm").validate({
         description: {
             required: true,
             maxlength: 5000
+        },
+        price: {
+            required: function(element) {
+                return $('#platform').is(':checked');
+            }
         },
         bid_end_date: {
             required: function(element) {

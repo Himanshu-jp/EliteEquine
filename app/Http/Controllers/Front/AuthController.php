@@ -77,6 +77,8 @@ class AuthController extends Controller
 
     public function register()
     {
+
+        
         if (Auth::check()) {
             return redirect()->route('dashboard');
         } else {
@@ -86,7 +88,7 @@ class AuthController extends Controller
 
     public function postRegister(RegisterRequest $request)
     {
-   
+
         $result = $this->authService->register($request->all());
         return redirect()->route('login')->with('success', 'An email has been sent to your email address for verification.!');
     }
@@ -206,8 +208,14 @@ class AuthController extends Controller
 
     public function settingUpdate(UserDetailsUpdateRequest $request)
     {
+
+ 
         $user = auth::user();
         $result = $this->authService->settingUpdate($request->all(), $user);
+
+        if(Auth::user()->is_subscribed  != '1'){
+        return redirect()->route('subscription')->with('success', 'User details Updated Successfully');
+        }
         return redirect()->route('settings')->with('success', 'User details Updated Successfully');
     }
 

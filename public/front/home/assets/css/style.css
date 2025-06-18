@@ -195,6 +195,7 @@ header nav ul li a.active::before {
   background-repeat: no-repeat;
   background-size: cover;
   padding-top: 90px;
+  margin-top: -1px;
 }
 
 .banner_area_inner {
@@ -6311,3 +6312,4 @@ ul.act-icon li img {
 .filter-ads-checkbx .fa-star {
     color: #FFA910;
 }
+

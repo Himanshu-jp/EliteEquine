@@ -158,7 +158,7 @@
 
                                                         <label class="ad-lister-checkbox">
                                                             <input class="form-check-input  check_series" type="checkbox"
-                                                                id="email1" value="1">
+                                                                id="email1" name="lister[]" value="1">
                                                             <span>Ad Lister</span>
                                                         </label>
 
@@ -166,16 +166,16 @@
                                                     <div>
 
                                                         <label class="ad-lister-checkbox">
-                                                            <input class="form-check-input check_series" type="checkbox"
+                                                            <input class="form-check-input check_series" name="lister[]" type="checkbox"
                                                                 id="email2" value="2">
                                                             <span>Ad Viewer</span>
                                                         </label>
 
                                                     </div>
                                                 </div>
-
                                                 <!-- Checkbox 2 -->
                                             </div>
+<p class="w-100 text-center"><strong style="color: red;" class="stongdata">Please select at least one option.</strong></p>
 
                                             <div class="modal-footer border-0 justify-content-end">
                                                 <button type="button" class="btn btn-save check_seriesbtn">Next</button>
@@ -393,6 +393,9 @@
                     opt_in_notification: {
                         required: true,
                     },
+                      lister[]: {
+                        required: true,
+                    },
                     contact_group: {
                         requireOneContact: true
                     }
@@ -414,6 +417,10 @@
                     password_confirmation: {
                         required: "Please confirm your password",
                         equalTo: "Passwords do not match"
+                    },
+                        lister[]: {
+                                            required: "Please select fields.",
+
                     },
                     opt_in_notification: {
                         required: "Option in to notifications is required",
@@ -548,6 +555,8 @@
                 if (modalElement) {
                     const modal = new bootstrap.Modal(modalElement);
                     modal.show();
+                $('.stongdata').hide()
+
                 } else {
                     console.error("Modal element not found");
                 }
@@ -570,10 +579,16 @@
         });
 
         $('body').on('click','.check_seriesbtn',function(){
+            
+if($('.check_series:checked').length == '0'){
+$('.stongdata').show()
+    return false;
+}
             $('#notificationModalnext').modal('hide')
             $('#notificationModal').modal('show')
 
             $('.decline_play tr').hide()
+                $('.decline_play tr').eq(0).show()
 
             $('.check_series:checked').each(function(){
                 $('.tr'+$(this).val()).show()

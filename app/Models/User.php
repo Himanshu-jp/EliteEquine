@@ -65,6 +65,7 @@ class User extends Authenticatable
         'plan_activated_on',
         'plan_expired_on',
         'plan_id',
+        'lister_types',
         'subscription_id'
     ];
 

@@ -125,7 +125,11 @@ Product Details
                             @if($products->sale_method == 'auction' && $products->product_status == 'live')
                             <div class="horse-info-row"><span class="horse-label">Auction End Date :</span> {{ \Carbon\Carbon::parse(@$products->bid_expire_date)->format('d M Y') }}</div>
                             @endif
-                            <div class="horse-info-row"><span class="horse-label">Subcategory :</span> {{@$products->subcategory->name}}</div>
+                            <div class="horse-info-row"><span class="horse-label">Subcategory :</span> 
+                                {{ @$products->subcategory->map(function($show) {
+                                    return $show->category->name;
+                                })->filter()->implode(', ') }}
+                            </div>
                             <div class="horse-info-row"><span class="horse-label">Discipline:</span> 
                                 {{ @$products->disciplines->map(function($disciplines) {
                                     return optional($disciplines->commonMaster)->name;
@@ -264,10 +268,15 @@ Product Details
                         @else
                             <div class="comment-form">
                                 <h4 class="comment-form-title">Write a Comment</h4>
-                                <form action="{{route('productComment')}}" method="post" id="product-comment-form-guest">   
+                                <form action="{{route('productComment')}}" method="post" id="product-comment-form-guest"> 
+                                    <div class="col-md-12 mb-3">
+                                            <label for="name" class="form-label">Title</label>
+                                            <input type="name" class="form-control comment-input-form mb-0" placeholder="Enter your name" name="name" id="name" value="{{old('name', @$guest['name'] ?? '')}}"  autocomplete="off">                                            
+                                    </div>  
                                     @csrf                
                                     <input type="hidden" name="product_id" value="{{$products->id}}">
                                     <div>
+                                        <label for="name" class="form-label">Content</label>
                                         <textarea class="comment-textarea form-control mb-2" rows="6" name="comment" id="comment" placeholder="Write your comment here...">{{old('comment')}}</textarea>    
                                         @if($errors->has('comment'))
                                             <span class="error text-danger">{{$errors->first('comment')}}</span>
@@ -275,6 +284,13 @@ Product Details
                                     </div>
                                     
                                     <div class="row">
+                                         <div class="col-md-12 mt-3">
+                                            <div class="upload-cmt-input">
+                                                <label for="uploadFile">Choose Image</label>
+                                                <input type="file" id="uploadFile" accept="image/*">
+                                                <img id="previewImage" class="preview" alt="Image Preview">
+                                            </div>                             
+                                        </div>
                                         <div class="col-md-4 mt-3">
                                             <label for="name" class="form-label">Name</label>
                                             <input type="name" class="inner-form form-control mb-0" placeholder="Enter your name" name="name" id="name" value="{{old('name', @$guest['name'] ?? '')}}"  autocomplete="off">                                            
@@ -343,7 +359,7 @@ Product Details
                                 <h2 class="fw-bold">{{ $products->currency.' '.number_format(optional($products->highestBid)->amount ?? $products->productDetail->bid_min_price) }} </h2>
                             </div>
                         @endif
-                        @if(@$products->sale_method == 'standard' && @$products->product_status == 'live')
+                        @if(@$products->sale_method == 'standard' && @$products->product_status == 'live' && @$products->transaction_method == 'platform')
                             <div class="pb-3 gap-2">
                                 <span class="text-secondary">Price</span>
                                 <h2 class="fw-bold">{{ $products->currency.' '.number_format($products->price,2) }} </h2>
@@ -1307,4 +1323,25 @@ var slider = new Swiper('.gallery-slider', {
     });
   });
 </script>
+  <script>
+    const fileInput = document.getElementById('uploadFile');
+    const previewImage = document.getElementById('previewImage');
+
+    fileInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+
+        reader.addEventListener('load', function () {
+          previewImage.setAttribute('src', this.result);
+          previewImage.style.display = 'block';
+        });
+
+        reader.readAsDataURL(file);
+      } else {
+        previewImage.setAttribute('src', '');
+        previewImage.style.display = 'none';
+      }
+    });
+  </script>
 @endsection

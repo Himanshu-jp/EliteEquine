@@ -85,10 +85,9 @@ class HomeController extends Controller
         $buyerFaqData = BuyerFaq::orderBy('id', 'desc')->get();
         $partnerShipListing = PartnerShipCollaborate::get();
         $partnershipCollaborate = $partnerShipListing->chunk(15);
-        
+
         $coordinate = ['latitude' => '', 'longitude' => ''];
-        if(Auth::check() == true)
-        {
+        if (Auth::check() == true) {
             $latitude = Auth::user()->getUserDetail->latitude;
             $longitude = Auth::user()->getUserDetail->longitude;
             $coordinate = ['latitude' => $latitude, 'longitude' => $longitude];
@@ -121,34 +120,34 @@ class HomeController extends Controller
                 });
             });
         }
-        
+
         if (!empty($request->category)) {
             $data->where('category_id', $request->category);
         }
         $events = $data->orderBy('id', 'desc')->take(3)->get()->toArray();
-        return view('front/home', compact(['blogs', 'partnershipCollaborate', 'featuredData', 'industryMatricData', 'homeAboutData', 'sellerBusinessData', 'buyerBrowserData', 'buyerFaqData', 'events', 'coordinate','hjForumData']));
+        return view('front/home', compact(['blogs', 'partnershipCollaborate', 'featuredData', 'industryMatricData', 'homeAboutData', 'sellerBusinessData', 'buyerBrowserData', 'buyerFaqData', 'events', 'coordinate', 'hjForumData']));
     }
 
     public function universalSearch(Request $request)
     {
         $search = $request->query('search');
-        $location= $request->query('location');
+        $location = $request->query('location');
         $category = $request->query('category');
-        if($category==1){
-            return redirect()->route('horse-listing',['search'=>$search,'location'=>$location]);
-        }elseif($category==2){
-            return redirect()->route('equipment-listing',['search'=>$search,'location'=>$location]);
-        }elseif($category==3){
-            return redirect()->route('barns-listing',['search'=>$search,'location'=>$location]);
-        }elseif($category==4){
-            return redirect()->route('service-listing',['search'=>$search,'location'=>$location]);
-        }else{
+        if ($category == 1) {
+            return redirect()->route('horse-listing', ['search' => $search, 'location' => $location]);
+        } elseif ($category == 2) {
+            return redirect()->route('equipment-listing', ['search' => $search, 'location' => $location]);
+        } elseif ($category == 3) {
+            return redirect()->route('barns-listing', ['search' => $search, 'location' => $location]);
+        } elseif ($category == 4) {
+            return redirect()->route('service-listing', ['search' => $search, 'location' => $location]);
+        } else {
             return redirect()->back()->with('error', 'This category is not recognized. Try a different one.');
         }
     }
     /** 
      * newsletter subscribe
-    */
+     */
     public function newsletterSubscribe(NewsLetterRequest $request)
     {
         $result = $this->newsletterService->subscribe($request->email);
@@ -259,11 +258,11 @@ class HomeController extends Controller
             ->orderBy('id', 'desc')
             ->limit(5)
             ->get();
-        
+
         //----guest user cookie---//
         $guest = json_decode(Cookie::get('guest', '[]'), true);
 
-        return view('front/horseDetails', compact(['products', 'moreAdd','guest']));
+        return view('front/horseDetails', compact(['products', 'moreAdd', 'guest']));
     }
 
     public function productCommentListing(Request $request, $id)
@@ -279,10 +278,10 @@ class HomeController extends Controller
         $data = $data->paginate(10);
 
         $html = "";
-         //----guest user cookie---//
+        //----guest user cookie---//
         $guest = json_decode(Cookie::get('guest', '[]'), true);
-        if($data->count()>0){
-            $html = view('front/product-comment', compact(['data','productId','guest']))->render();
+        if ($data->count() > 0) {
+            $html = view('front/product-comment', compact(['data', 'productId', 'guest']))->render();
         }
         $pagination = $data->withQueryString()->links('pagination::bootstrap-4')->render();
         $totalPages = ceil($total / 10);
@@ -292,36 +291,36 @@ class HomeController extends Controller
             'html' => $html,
             'pagination' => $pagination,
             'total' => $total,
-            'totalPages'=>$totalPages
+            'totalPages' => $totalPages
         ]);
     }
 
     //----store product comment---//
     public function productComment(CommentRequest $request)
     {
-        if(!Auth::user()){
+        if (!Auth::user()) {
             // \Log::info("message: Guest user comment");
             $compare = [
-                'name'=> $request->name,
-                'email'=> $request->email,
-                'website'=> $request->website
-            ];            
+                'name' => $request->name,
+                'email' => $request->email,
+                'website' => $request->website
+            ];
             // Set updated cookie (120 minutes lifetime)
             Cookie::queue('guest', json_encode($compare), 120);
         }
-            
-        $user = (Auth::user())? Auth::user() : null;
+
+        $user = (Auth::user()) ? Auth::user() : null;
         $validatedData = $request->all();
         $comment = $this->homeService->storeComment($validatedData, $user);
 
         return response()->json([
             'status' => true,
             'comment' => "DONE",
-            'guest'=> [
-                'name'=> $request->name,
-                'email'=> $request->email,
-                'website'=> $request->website
-            ]
+            'guest' => [
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'website' => $request->website
+                ]
         ]);
     }
 
@@ -333,45 +332,45 @@ class HomeController extends Controller
             'comment_id' => 'required|exists:product_comments,id',
         ]);
 
-        $guest = json_decode(Cookie::get('guest', '[]'), true);            
-        $user = (Auth::user())? Auth::user() : null;
+        $guest = json_decode(Cookie::get('guest', '[]'), true);
+        $user = (Auth::user()) ? Auth::user() : null;
 
-        if($user && $user->id != ProductComment::find($request->comment_id)->user_id){
+        if ($user && $user->id != ProductComment::find($request->comment_id)->user_id) {
             return response()->json([
                 'status' => false,
                 'message' => "You are not authorized to update this comment.",
             ]);
         }
 
-        if(!$user && $guest['email'] != ProductComment::find($request->comment_id)->email){
+        if (!$user && $guest['email'] != ProductComment::find($request->comment_id)->email) {
             return response()->json([
                 'status' => false,
                 'message' => "You are not authorized to update this comment.",
             ]);
         }
-        
+
         $comment = ProductComment::find($request->comment_id);
         $comment->comment = $request->comment;
         $comment->save();
 
         return response()->json(['status' => true, 'message' => 'Comment updated.']);
     }
-    
+
     //----store product comment---//
     public function productCommentDelete($id)
     {
-        $guest = json_decode(Cookie::get('guest', '[]'), true);            
-        $user = (Auth::user())? Auth::user() : null;
+        $guest = json_decode(Cookie::get('guest', '[]'), true);
+        $user = (Auth::user()) ? Auth::user() : null;
 
 
-        if($user && $user->id != ProductComment::find($id)->user_id){
+        if ($user && $user->id != ProductComment::find($id)->user_id) {
             return response()->json([
                 'status' => false,
                 'message' => "You are not authorized to delete this comment.",
             ]);
         }
 
-        if(!$user && $guest['email'] != ProductComment::find($id)->email){
+        if (!$user && $guest['email'] != ProductComment::find($id)->email) {
             return response()->json([
                 'status' => false,
                 'message' => "You are not authorized to delete this comment.",
@@ -385,14 +384,14 @@ class HomeController extends Controller
                 'message' => "Comment not found.",
             ]);
         }
-        
+
         // Call the service to remove the comment
-        if(!$this->homeService->removeComment($id, $user)){
+        if (!$this->homeService->removeComment($id, $user)) {
             return response()->json([
                 'status' => false,
                 'message' => "Failed to delete comment.",
             ]);
-        }else{   
+        } else {
             return response()->json([
                 'status' => true,
                 'message' => "Comment deleted.",
@@ -406,16 +405,18 @@ class HomeController extends Controller
 
         $user = Auth::user();
 
-        $chatList = ChatUser::where('user_id',$user->id)->pluck('convenience_id');
-        $list = ChatUser::with(['getUser','room'])
-            ->where('user_id','!=',$user->id)
+        $chatList = ChatUser::where('user_id', $user->id)->pluck('convenience_id');
+        $list = ChatUser::with(['getUser', 'room'])
+            ->where('user_id', '!=', $user->id)
             ->where('is_user_delete', 0)
-            ->whereIn('convenience_id',$chatList->toArray())
-            ->withCount(['chat as total_unread' => function ($q) use ($user) {
-                    $q->whereRaw('NOT FIND_IN_SET(?, is_read)', [$user->id]);
-                }]);
+            ->whereIn('convenience_id', $chatList->toArray())
+            ->withCount([
+                    'chat as total_unread' => function ($q) use ($user) {
+                        $q->whereRaw('NOT FIND_IN_SET(?, is_read)', [$user->id]);
+                    }
+                ]);
 
-        if(isset($request->search) && !empty($request->search) && $request->search != 'all') {
+        if (isset($request->search) && !empty($request->search) && $request->search != 'all') {
             $search = $request->search;
             $list->where(function ($q) use ($search) {
                 return $q->orWhereRelation('getUser', 'username', 'like', '%' . $search . '%');
@@ -423,7 +424,7 @@ class HomeController extends Controller
         }
         $list = $list->orderBy('updated_at', 'desc')->get();
         // dd($list->toArray());
-        return view('frontauth/chat/messages',compact('roomId'));
+        return view('frontauth/chat/messages', compact('roomId'));
     }
 
 
@@ -438,12 +439,12 @@ class HomeController extends Controller
         // $aboutSellerBusinessData = AboutSellerBusiness::first();
         $hjForumData = HjForum::latest()->take(6)->get();
 
-          $subscription = SubscriptionPlan::whereNull('deleted_at')
+        $subscription = SubscriptionPlan::whereNull('deleted_at')
             ->get()
             ->groupBy('type');
- $addon=SubscriptionAddOnPlan::all();
+        $addon = SubscriptionAddOnPlan::all();
 
-        return view('front/aboutus', compact('aboutData', 'hjForumData', 'sellerBusinessData', 'buyerBrowserData', 'buyerFaqData','subscription','addon'));
+        return view('front/aboutus', compact('aboutData', 'hjForumData', 'sellerBusinessData', 'buyerBrowserData', 'buyerFaqData', 'subscription', 'addon'));
     }
 
     public function partnerships()
@@ -463,7 +464,7 @@ class HomeController extends Controller
         $this->homeService->contactAdOwner($data);
         return redirect()->back()->with('success', 'Your message has been sent successfully. Owner will contact you soon.');
     }
-   
+
     public function submitReport(ReportAdOwnerRequest $request)
     {
         $data = $request->all();
@@ -474,7 +475,7 @@ class HomeController extends Controller
         if ($existingReport) {
             return redirect()->back()->with('error', 'You have already reported this.');
         }
-        $this->homeService->submitReport($data,$user);
+        $this->homeService->submitReport($data, $user);
         return redirect()->back()->with('success', 'Success! Your report is on its way—thank you, and we’re proud of your contribution.');
     }
 
@@ -539,7 +540,7 @@ class HomeController extends Controller
         // Sort and paginate
         $favProducts = $query->orderBy('id', $order)->paginate(10);
         // $favProducts = $query->where('category_id', $categoryId)->orderBy('id', $order)->paginate(10);
-        
+
         // AJAX response
         if ($request->ajax()) {
             $html = view('frontauth.partials.favorite-products', compact('favProducts', 'type'))->render();
@@ -568,60 +569,101 @@ class HomeController extends Controller
 
         return view('frontauth/review', compact('review'));
     }
-   
+
     public function invoice()
     {
-         $transaction=Transaction::where('user_id',Auth::user()->id)->get();
+        $transaction = Transaction::where('user_id', Auth::user()->id)->get();
 
-        return view('frontauth/invoice',compact('transaction'));
+        return view('frontauth/invoice', compact('transaction'));
     }
 
-    public function invoiceDetails(request $request,$id){
-  $id=base64_decode($id);
+    public function invoiceDetails(request $request, $id)
+    {
+        $id = base64_decode($id);
 
-         $invoice=Transaction::with(['planData','addonData'])->where('id',$id)->first();
+        $invoice = Transaction::with(['planData', 'addonData'])->where('id', $id)->first();
 
-  return view('frontauth.invoice_details',compact('invoice'));
- 
+        return view('frontauth.invoice_details', compact('invoice'));
+
 
     }
 
-    public function  charge_add_ons(request $request){
-$xdataarry= $request->addon_prices;
+    public function charge_add_ons(request $request)
+    {
+        $xdataarry = $request->addon_prices;
 
-if(count($xdataarry)  == '0'){
-return redirect()->back()->with('error','Please select addons');
-}
-  $priceArray=SubscriptionAddOnPlan::whereIn('id',$request->addon_prices)->pluck('price')->toArray();
- $exactPrice=array_sum($priceArray);
+        if (count($xdataarry) == '0') {
+            return redirect()->back()->with('error', 'Please select addons');
+        }
+        $priceArray = SubscriptionAddOnPlan::whereIn('id', $request->addon_prices)->pluck('price')->toArray();
+        $exactPrice = array_sum($priceArray);
 
- Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey(env('STRIPE_SECRET'));
 
-    $checkoutSession = StripeSession::create([
-        'mode' => 'payment', // ✅ One-time payment mode
-        'payment_method_types' => ['card'],
-        'line_items' => [[
-            'price_data' => [
-                'currency' => 'usd',
-                'product_data' => [
-                    'name' => 'One-Time Service Fee',
-                ],
-                'unit_amount' => $exactPrice*100, // $29.99 in cents
+        $checkoutSession = StripeSession::create([
+            'mode' => 'payment', // ✅ One-time payment mode
+            'payment_method_types' => ['card'],
+            'line_items' => [
+                [
+                    'price_data' => [
+                        'currency' => 'usd',
+                        'product_data' => [
+                            'name' => 'One-Time Service Fee',
+                        ],
+                        'unit_amount' => $exactPrice * 100, // $29.99 in cents
+                    ],
+                    'quantity' => 1,
+                ]
             ],
-            'quantity' => 1,
-        ]],
             'customer_email' => Auth::user()->email, // optional
             'metadata' => [
-                'addon_ids' =>implode(',',$request->addon_prices), // Your hidden ID
-                'type' =>'charge-addons', // Your hidden ID
+                'addon_ids' => implode(',', $request->addon_prices), // Your hidden ID
+                'type' => 'charge-addons', // Your hidden ID
                 'user_id' => Auth::id(),    // Optional
             ],
-     'success_url' => route('plan_purchase.success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'success_url' => route('plan_purchase.success') . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('plan_purchase.cancel'),
-    ]);
+        ]);
 
         return redirect()->to($checkoutSession->url);
 
     }
-    
+
+    public function notificationModalnextLevel(request $request)
+    {
+      $lister=explode(',',Auth::user()->lister_type);
+        $html = '
+        <p class="w-100 text-center">Current OPT Notification: '.ucfirst(Auth::user()->opt_in_notification).'</p>
+        <div class="lister-checkbox-box p-0 d-flex justify-content-center mt-3">
+                                                    <div class="m-2">
+
+                                                        <label class="ad-lister-checkbox">
+                                                            <input class="form-check-input  check_series" type="checkbox"
+                                                                id="email1" name="lister[]" value="1" '.(in_array('1',$lister)?'checked':'').'>
+                                                            <span>Ad Lister</span>
+                                                        </label>
+
+                                                    </div>
+                                                    <div class="m-2">
+
+                                                        <label class="ad-lister-checkbox">
+                                                            <input class="form-check-input check_series" name="lister[]" type="checkbox"
+                                                                id="email2" value="2" '.(in_array('2',$lister)?'checked':'').'>
+                                                            <span>Ad Viewer</span>
+                                                        </label>
+
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="notificationModalnextLevelHtmlInner"></div>';
+
+        return response()->json([
+            'html' => $html
+        ]);
+    }
+
+    public function check_seriesCheck(request $request){
+      return $request;  
+    }
+
 }
