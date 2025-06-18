@@ -285,24 +285,30 @@ Product Details
                                     
                                     <div class="row">
                                          <div class="col-md-12 mt-3">
-                                            <div class="upload-cmt-input">
-                                                <label for="uploadFile">Choose Image</label>
+                                            <div class="upload-cmt-input" onclick="document.getElementById('uploadFile').click();"> 
+                                                <div class="upload-icon"> <img src="{{asset('front/auth/assets/img/icons/image.svg')}}" class="user-img" alt="" id="editDocument"></div>
+                                                    
+                                                     <h5 class="pt-3">Select pdf & document format files. </h5>
+                                                        <div href="#" class="upload-image">
+                                                            <h6>Browse File</h6>
+                                                        </div>
+
                                                 <input type="file" id="uploadFile" accept="image/*">
                                                 <img id="previewImage" class="preview" alt="Image Preview">
-                                            </div>                             
-                                        </div>
+                                            </div>
+                                            </div>
                                         <div class="col-md-4 mt-3">
                                             <label for="name" class="form-label">Name</label>
-                                            <input type="name" class="inner-form form-control mb-0" placeholder="Enter your name" name="name" id="name" value="{{old('name', @$guest['name'] ?? '')}}"  autocomplete="off">                                            
+                                            <input type="name" class="form-control comment-input-form mb-0" placeholder="Enter your name" name="name" id="name" value="{{old('name', @$guest['name'] ?? '')}}"  autocomplete="off">                                            
                                         </div>
 
                                         <div class="col-md-4 mt-3">
                                             <label for="email" class="form-label">Email</label>
-                                            <input type="email" class="inner-form form-control mb-0" placeholder="Enter email address" name="email" id="email" value="{{old('email', @$guest['email'] ?? '')}}" autocomplete="off">
+                                            <input type="email" class="form-control comment-input-form mb-0" placeholder="Enter email address" name="email" id="email" value="{{old('email', @$guest['email'] ?? '')}}" autocomplete="off">
                                         </div>
                                         <div class="col-md-4 mt-3">
                                             <label for="website" class="form-label">Website</label>
-                                            <input type="website" class="inner-form form-control mb-0" placeholder="Enter your website address" name="website" id="website" value="{{old('website', @$guest['website'] ?? '')}}" autocomplete="off">                                            
+                                            <input type="website" class="form-control comment-input-form mb-0" placeholder="Enter your website address" name="website" id="website" value="{{old('website', @$guest['website'] ?? '')}}" autocomplete="off">                                            
                                         </div>
                                     </div>
                                     
@@ -1323,7 +1329,7 @@ var slider = new Swiper('.gallery-slider', {
     });
   });
 </script>
-  <script>
+<script>
     const fileInput = document.getElementById('uploadFile');
     const previewImage = document.getElementById('previewImage');
 
@@ -1332,16 +1338,95 @@ var slider = new Swiper('.gallery-slider', {
       if (file) {
         const reader = new FileReader();
 
-        reader.addEventListener('load', function () {
-          previewImage.setAttribute('src', this.result);
+        reader.onload = function () {
+          previewImage.src = reader.result;
           previewImage.style.display = 'block';
-        });
+        };
 
         reader.readAsDataURL(file);
       } else {
-        previewImage.setAttribute('src', '');
+        previewImage.src = '';
         previewImage.style.display = 'none';
       }
     });
   </script>
+  <style>
+    .comment-input-form {
+    border-radius: 14px;
+    border: 1px solid var(--Border-2, #DDD);
+    background: var(--Color-White, #FFF);
+    padding: 14px 22px;
+    color: #3D3D3D;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 26px;
+}
+
+.upload-cmt-input {
+    width: 100%;
+    padding: 25px 15px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    position: relative;
+    border-radius: 20px;
+    border: 1px dashed #DDD;
+    background: #FFF;
+    padding: 30px;
+}
+.upload-cmt-input h5 {
+    color: #000;
+    text-align: center;
+    font-family: Inter;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%; /* 27px */
+}
+
+.upload-cmt-input .upload-image {
+    color: #A19061;
+    text-align: center;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 150%; /* 22.5px */
+    text-decoration-line: underline !important;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+}
+ 
+
+    .upload-cmt-input input[type="file"] {
+      display: none;
+    }
+
+    .upload-cmt-input .upload-icon {
+      font-size: 36px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .upload-cmt-input .upload-text {
+      font-size: 14px;
+      color: #444;
+    }
+
+    .upload-cmt-input img.preview {
+      margin-top: 15px;
+      max-width: 100%;
+      max-height: 180px;
+      display: none;
+      border-radius: 6px;
+      object-fit: contain;
+      border: 1px solid #ccc;
+    }
+  </style>
 @endsection

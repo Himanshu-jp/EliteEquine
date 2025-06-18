@@ -471,11 +471,11 @@
             type: 'get',
             dataType: "json",
             data: {
-                "check_series": implode(',',check_series),
+                "check_series": check_series.join(','),
             },
             beforeSend: function() {},
             success: (response) => {
-            alert()
+           $('.notificationModalnextLevelHtmlInner').html(response.contents)
             },
         })
 
