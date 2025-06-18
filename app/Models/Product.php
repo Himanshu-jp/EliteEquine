@@ -31,35 +31,35 @@ class Product extends Model
         'product_status',
         'feature'
     ];
-
+protected $appends = ['disciplines_names'];
     public function productDetail()
     {
-         return $this->hasOne(ProductDetail::class);
+        return $this->hasOne(ProductDetail::class);
     }
-    
+
     public function productBids()
     {
-         return $this->hasMany(ProductBid::class)->orderBy('id', 'desc');
+        return $this->hasMany(ProductBid::class)->orderBy('id', 'desc');
     }
-    
+
     public function highestBid()
     {
-         return $this->hasOne(ProductBid::class)->orderByDesc('amount');
+        return $this->hasOne(ProductBid::class)->orderByDesc('amount');
     }
 
     public function image()
     {
         return $this->hasMany(ProductImage::class)->select('id', 'product_id', 'image');
     }
-    
+
     public function externalLink()
     {
-        return $this->hasMany(ProductLink::class)->select('id', 'product_id', 'link')->where('type','web');
+        return $this->hasMany(ProductLink::class)->select('id', 'product_id', 'link')->where('type', 'web');
     }
-    
+
     public function videoLink()
     {
-        return $this->hasMany(ProductLink::class)->select('id', 'product_id', 'link')->where('type','video');
+        return $this->hasMany(ProductLink::class)->select('id', 'product_id', 'link')->where('type', 'video');
     }
 
     public function video()
@@ -74,7 +74,7 @@ class Product extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class)->select('id', 'name','profile_photo_path', 'email', 'phone_no');
+        return $this->belongsTo(User::class)->select('id', 'name', 'profile_photo_path', 'email', 'phone_no');
     }
 
     public function category()
@@ -94,7 +94,7 @@ class Product extends Model
             ->where('type', 'disciplines')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-   
+
     public function breeds()
     {
         return $this->hasMany(ProductRelation::class)
@@ -110,7 +110,7 @@ class Product extends Model
             ->where('type', 'colors')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function trainingShowExperiences()
     {
         return $this->hasMany(ProductRelation::class)
@@ -118,7 +118,7 @@ class Product extends Model
             ->where('type', 'training_show_experiences')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function qualifies()
     {
         return $this->hasMany(ProductRelation::class)
@@ -126,7 +126,7 @@ class Product extends Model
             ->where('type', 'qualifies')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-   
+
     public function currentFenceHeight()
     {
         return $this->hasMany(ProductRelation::class)
@@ -134,7 +134,7 @@ class Product extends Model
             ->where('type', 'current_fence_height')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function potentialFenceHeight()
     {
         return $this->hasMany(ProductRelation::class)
@@ -142,7 +142,7 @@ class Product extends Model
             ->where('type', 'potential_fence_height')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function triedUpcomingShows()
     {
         return $this->hasMany(ProductRelation::class)
@@ -150,7 +150,7 @@ class Product extends Model
             ->where('type', 'tried_upcoming_shows')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function height()
     {
         return $this->hasOne(ProductRelation::class)
@@ -158,7 +158,7 @@ class Product extends Model
             ->where('type', 'heights')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function sex()
     {
         return $this->hasOne(ProductRelation::class)
@@ -166,7 +166,7 @@ class Product extends Model
             ->where('type', 'sexes')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function greenEligibilities()
     {
         return $this->hasOne(ProductRelation::class)
@@ -174,7 +174,7 @@ class Product extends Model
             ->where('type', 'green_eligibilities')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function horseApparels()
     {
         return $this->hasMany(ProductRelation::class)
@@ -182,7 +182,7 @@ class Product extends Model
             ->where('type', 'horse_apparel')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-   
+
     public function horseTacks()
     {
         return $this->hasMany(ProductRelation::class)
@@ -190,7 +190,7 @@ class Product extends Model
             ->where('type', 'horse_tack')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function trailerTrucks()
     {
         return $this->hasMany(ProductRelation::class)
@@ -198,7 +198,7 @@ class Product extends Model
             ->where('type', 'trailer_trucks')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-   
+
     public function riderApparels()
     {
         return $this->hasMany(ProductRelation::class)
@@ -206,7 +206,7 @@ class Product extends Model
             ->where('type', 'rider_apparel')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-   
+
     public function forBarns()
     {
         return $this->hasMany(ProductRelation::class)
@@ -214,7 +214,7 @@ class Product extends Model
             ->where('type', 'for_barns')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-   
+
     public function equineSupplements()
     {
         return $this->hasMany(ProductRelation::class)
@@ -222,7 +222,7 @@ class Product extends Model
             ->where('type', 'equine_supplements')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function brands()
     {
         return $this->hasMany(ProductRelation::class)
@@ -230,7 +230,7 @@ class Product extends Model
             ->where('type', 'brands')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function horseSizes()
     {
         return $this->hasMany(ProductRelation::class)
@@ -238,7 +238,7 @@ class Product extends Model
             ->where('type', 'horse_sizes')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function riderSizes()
     {
         return $this->hasMany(ProductRelation::class)
@@ -246,7 +246,7 @@ class Product extends Model
             ->where('type', 'rider_sizes')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function exchangedUpcomingHorseShows()
     {
         return $this->hasMany(ProductRelation::class)
@@ -254,7 +254,7 @@ class Product extends Model
             ->where('type', 'exchanged_upcoming_horse_shows')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function conditions()
     {
         return $this->hasMany(ProductRelation::class)
@@ -262,7 +262,7 @@ class Product extends Model
             ->where('type', 'conditions')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function propertyTypes()
     {
         return $this->hasMany(ProductRelation::class)
@@ -270,7 +270,7 @@ class Product extends Model
             ->where('type', 'property_types')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-   
+
     public function stableAmenities()
     {
         return $this->hasMany(ProductRelation::class)
@@ -278,7 +278,7 @@ class Product extends Model
             ->where('type', 'stable_amenities')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function housingAmenities()
     {
         return $this->hasMany(ProductRelation::class)
@@ -286,7 +286,7 @@ class Product extends Model
             ->where('type', 'housing_amenities')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-   
+
     public function housingStablesAroundHorseShows()
     {
         return $this->hasMany(ProductRelation::class)
@@ -294,7 +294,7 @@ class Product extends Model
             ->where('type', 'housing_stables_around_horse_shows')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function jobListingType()
     {
         return $this->hasMany(ProductRelation::class)
@@ -302,7 +302,7 @@ class Product extends Model
             ->where('type', 'job_listing_type')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-   
+
     public function service()
     {
         return $this->hasMany(ProductRelation::class)
@@ -310,7 +310,7 @@ class Product extends Model
             ->where('type', 'service')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-    
+
     public function contractTypes()
     {
         return $this->hasMany(ProductRelation::class)
@@ -318,7 +318,7 @@ class Product extends Model
             ->where('type', 'contract_types')
             ->select('id', 'product_id', 'common_master_id', 'type');
     }
-   
+
     public function assistanceUpcomingShows()
     {
         return $this->hasMany(ProductRelation::class)
@@ -331,15 +331,21 @@ class Product extends Model
     {
         return $this->hasMany(Favorite::class, 'product_id');
     }
-    
+
     public function comments()
     {
         return $this->hasMany(ProductComment::class, 'product_id')
-                    ->whereNull('product_comment_id')
-                    ->with('children')
-                    ->orderBy('id', 'desc');
+            ->whereNull('product_comment_id')
+            ->with('children')
+            ->orderBy('id', 'desc');
     }
-
+    public function getDisciplinesNamesAttribute()
+    {
+        return $this->disciplines
+            ->pluck('commonMaster.name')   // Extract the names
+            ->filter()                     // Remove nulls if any
+            ->implode(', ');              // Join by comma
+    }
 
     protected $casts = [
         'price' => 'decimal:2',

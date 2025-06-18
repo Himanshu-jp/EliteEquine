@@ -225,7 +225,8 @@ class AuthController extends Controller
                 'error' => 'Category parameter is required'
             ], 400);
         }
-
+      $latitude=$request->latitude ?? 26.836992;
+        $longitude= $request->longitude ?? 75.769446;
         if (in_array($categoryId, [1, 2, 3, 4])) {
             $data = Product::with(['user', 'productDetail', 'image'])
                 ->where(['product_status' => 'live', 'deleted_at' => null])
@@ -255,6 +256,7 @@ class AuthController extends Controller
             }
             $data = $data->orderBy('id', 'desc')
                 ->get();
+        $html = view("homemapview", compact("data",'latitude','longitude'))->render();
         } elseif ($categoryId == 5) {
             $now = Carbon::now();
 
@@ -270,10 +272,11 @@ class AuthController extends Controller
                 ->orderBy('date', 'asc')
                 ->orderBy('time', 'asc')
                 ->get();
+                  $html = view("homemapviewcommunit", compact("data",'latitude','longitude'))->render();
         }
-        $latitude=$request->latitude ?? 26.836992;
-        $longitude= $request->longitude ?? 75.769446;
-        $html = view("homemapview", compact("data",'latitude','longitude'))->render();
+  
+     
+      
         // return $html;
      
         return response()->json([

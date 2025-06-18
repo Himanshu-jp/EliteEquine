@@ -60,7 +60,7 @@ class ProductListingController extends Controller
         }
 
         if (!empty($request->location)) {
-            $location = $request->location;
+          /*   $location = $request->location;
             $data = $data->where(function ($query) use ($location) {
                 $query->orWhereHas('productDetail', function ($q) use ($location) {
                     $q->where('precise_location', 'like', "%$location%")
@@ -69,7 +69,21 @@ class ProductListingController extends Controller
                         ->orWhere('country', 'like', "%$location%")
                         ->orWhere('street', 'like', "%$location%");
                 });
-            });
+            }); */
+             $latitude = $request->latitude;
+                $longitude = $request->longitude;
+                $radius = 100;
+
+                $data->whereHas('productDetail', function ($query) use ($latitude, $longitude, $radius) {
+                    $haversine = "(6371 * acos(cos(radians($latitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians($longitude)) 
+                        + sin(radians($latitude)) 
+                        * sin(radians(latitude))))";
+
+                    $query->select('*')
+                        ->whereRaw("$haversine < ?", [$radius]);
+                });
         }
 
         if (!empty($request->category)) {
@@ -313,12 +327,14 @@ class ProductListingController extends Controller
         if (!empty($request->limit)) {
             $limit = $request->limit;
         }
-
-
+        // print_r($data->get()->toArray()); exit;
+        
         $total = $data->count();
         $data = $data->paginate($limit); // Adjust per page as needed
         $viewMode = $request->view_mode;
-        $html = view('front/card', compact(['data','viewMode']))->render();
+          $latitude=$request->latitude ?? 26.836992;
+        $longitude= $request->longitude ?? 75.769446;
+        $html = view('front/card', compact(['data','viewMode','longitude','latitude']))->render();
         // return view('front/card', compact(['data','viewMode']));
        
         $pagination = $data->withQueryString()->links('pagination::bootstrap-4')->render();
@@ -434,7 +450,7 @@ class ProductListingController extends Controller
 
         if (!empty($request->location)) {
             $location = $request->location;
-            $data = $data->where(function ($query) use ($location) {
+          /*   $data = $data->where(function ($query) use ($location) {
                 $query->orWhereHas('productDetail', function ($q) use ($location) {
                     $q->where('precise_location', 'like', "%$location%")
                         ->orWhere('city', 'like', "%$location%")
@@ -442,7 +458,21 @@ class ProductListingController extends Controller
                         ->orWhere('country', 'like', "%$location%")
                         ->orWhere('street', 'like', "%$location%");
                 });
-            });
+            }); */
+              $latitude = $request->latitude;
+                $longitude = $request->longitude;
+                $radius = 100;
+
+                $data->whereHas('productDetail', function ($query) use ($latitude, $longitude, $radius) {
+                    $haversine = "(6371 * acos(cos(radians($latitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians($longitude)) 
+                        + sin(radians($latitude)) 
+                        * sin(radians(latitude))))";
+
+                    $query->select('*')
+                        ->whereRaw("$haversine < ?", [$radius]);
+                });
         }
 
         if (!empty($request->date) && !empty($request->date)) {
@@ -695,7 +725,7 @@ class ProductListingController extends Controller
 
         if (!empty($request->location)) {
             $location = $request->location;
-            $data = $data->where(function ($query) use ($location) {
+           /*  $data = $data->where(function ($query) use ($location) {
                 $query->orWhereHas('productDetail', function ($q) use ($location) {
                     $q->where('precise_location', 'like', "%$location%")
                         ->orWhere('city', 'like', "%$location%")
@@ -703,7 +733,21 @@ class ProductListingController extends Controller
                         ->orWhere('country', 'like', "%$location%")
                         ->orWhere('street', 'like', "%$location%");
                 });
-            });
+            }); */
+             $latitude = $request->latitude;
+                $longitude = $request->longitude;
+                $radius = 100;
+
+                $data->whereHas('productDetail', function ($query) use ($latitude, $longitude, $radius) {
+                    $haversine = "(6371 * acos(cos(radians($latitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians($longitude)) 
+                        + sin(radians($latitude)) 
+                        * sin(radians(latitude))))";
+
+                    $query->select('*')
+                        ->whereRaw("$haversine < ?", [$radius]);
+                });
         }
 
         if (!empty($request->date) && !empty($request->date)) {
@@ -960,7 +1004,7 @@ class ProductListingController extends Controller
 
         if (!empty($request->location)) {
             $location = $request->location;
-            $data = $data->where(function ($query) use ($location) {
+            /* $data = $data->where(function ($query) use ($location) {
                 $query->orWhereHas('productDetail', function ($q) use ($location) {
                     $q->where('precise_location', 'like', "%$location%")
                         ->orWhere('city', 'like', "%$location%")
@@ -968,7 +1012,21 @@ class ProductListingController extends Controller
                         ->orWhere('country', 'like', "%$location%")
                         ->orWhere('street', 'like', "%$location%");
                 });
-            });
+            }); */
+             $latitude = $request->latitude;
+                $longitude = $request->longitude;
+                $radius = 100;
+
+                $data->whereHas('productDetail', function ($query) use ($latitude, $longitude, $radius) {
+                    $haversine = "(6371 * acos(cos(radians($latitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians($longitude)) 
+                        + sin(radians($latitude)) 
+                        * sin(radians(latitude))))";
+
+                    $query->select('*')
+                        ->whereRaw("$haversine < ?", [$radius]);
+                });
         }
 
         if (!empty($request->date) && !empty($request->date)) {
