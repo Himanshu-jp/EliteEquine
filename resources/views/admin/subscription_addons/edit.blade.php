@@ -93,7 +93,7 @@
 $(document).ready(function () {
     let descriptionEditor;
 
-    ClassicEditor.create(document.querySelector('#description'), {
+    ClassicEditor.create(document.querySelector('#descriptions'), {
         toolbar: [
             'heading', '|',
             'bold', 'italic', 'link', '|',

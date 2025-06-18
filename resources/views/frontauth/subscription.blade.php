@@ -125,7 +125,7 @@ Your Ads
                                 <input class="form-check-input main_addon_price_adds" name="addon_prices[]" data-price="{{ $addonitem->price }}"  type="checkbox" id="boostAdCheckbox{{ $loop->iteration }}" value="{{ $addonitem->id }}">
                                 <label class="form-check-label" for="boostAdCheckbox{{ $loop->iteration }}" >
                                  
-                                     {{ $addonitem->type }} – ${{ $addonitem->price }}/ad
+                                     {{ $addonitem->description }} 
 
                                 </label>
                             </div>

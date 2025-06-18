@@ -345,7 +345,7 @@
                                            
                                                 @endif
                                                     @else
-                                                <a href="{{ route('login') }}" class="btn btn-primary w-100">Purchase Now</a>
+                                                <a href="{{ route('login') }}" class="btn btn-primary w-100">Purchase Nowaddonitem</a>
 
                                                 @endif
                                             </div>
@@ -384,7 +384,7 @@
                                 <input class="form-check-input main_addon_price_adds" name="addon_prices[]" data-price="{{ $addonitem->price }}"  type="checkbox" id="boostAddCheckbox{{ $loop->iteration }}" value="{{ $addonitem->id }}">
                                 <label class="form-check-label" for="boostAddCheckbox{{ $loop->iteration }}" >
                                  
-                                     {{ $addonitem->type }} – ${{ $addonitem->price }}/ad
+                                     {{ $addonitem->description }} 
 
                                 </label>
                             </div>
