@@ -32423,3 +32423,7 @@ form i.fi.fi-rr-angle-small-down {
 img.user-img {
     border-radius: 50%;
 }
+
+textarea.inner-form.form-control {
+    height: auto !important;
+}
