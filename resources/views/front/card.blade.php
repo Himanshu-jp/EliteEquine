@@ -439,9 +439,9 @@
                     } = feature.properties;
                     console.log(coordinates, "coordinates");
                     if (isTrail == 1) {
-                        var markerIconUrl = "{{ url('/') }}/images/marker_map_icon.svg";
+                        var markerIconUrl = "{{ url('/') }}/images/Horse Red.png";
                     } else {
-                        var markerIconUrl = "{{ url('/') }}/images/marker-blue.svg";
+                        var markerIconUrl = "{{ url('/') }}/images/Horse Blue.png";
                     }
 
 
