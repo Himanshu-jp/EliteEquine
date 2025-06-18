@@ -14,7 +14,9 @@ class ProductComment extends Model
         'product_id',
         'name',
         'email',
+        'title',
         'comment',
+        'image',
         'website',
         'product_comment_id',
     ];

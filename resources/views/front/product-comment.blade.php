@@ -36,9 +36,21 @@
 
             @endif
         </div>
+        @if(@$comment->title)
+            <div class="comment-title">
+                {{ $comment->title }}
+            </div>
+        @endif
+        
         <div class="comment-body">
             {{ $comment->comment }}
         </div>
+
+        @if(@$comment->image)
+            <div class="comment-image">
+                <img src="{{(@$comment->image)?asset('storage/'.@$comment->image):asset('front/auth/assets/img/user-img.png')}}" class="user-img" alt="">
+            </div>
+        @endif
 
        
 

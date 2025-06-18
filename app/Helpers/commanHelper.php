@@ -647,6 +647,11 @@ if (!function_exists('amount_transfer')) {
                     }else{
                         // Log::info('Insufficient balance');
                     }
+
+					   $mainUseData = ['FirsTName'=>Auth::user()->name,'Link'=>route('equipmentDetails',[$product->id])];
+        
+           $data=array('code'=>'auction','email'=>Auth::user()->email,'dataArray'=>$mainUseData,'name'=>Auth::user()->name);
+                EmailSendJob::dispatch($data);
        return true;
     }
 }

@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use App\Jobs\EmailSendJob;
+
 use DateTime;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -186,6 +188,9 @@ class ProductService
         }
         // Store the document paths in the database
         $documentResult = ProductDocument::insert($documentPaths);
+
+
+
         return $product;
     }
 

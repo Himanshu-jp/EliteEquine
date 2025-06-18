@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-       public function planData()
+    public function planData()
     {
         return $this->hasOne(SubscriptionPlan::class, 'id','plan_id');
     }

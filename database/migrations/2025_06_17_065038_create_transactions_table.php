@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('plan_purchase_on')->nullable();
             $table->string('next_renewal_date')->nullable();
             $table->string('expired_on')->nullable();
+            $table->string('cancelled')->nullable();
             $table->string('customer_id')->nullable();
             $table->string('plan_price')->nullable();
             $table->string('payment_status')->nullable();

@@ -32110,15 +32110,21 @@ ul.act-icon li {
     border: 1px solid #f0f0f0;
     border-radius: 12px;
     padding: 10px 15px;
+    min-height: 190px;
+    border: 1px solid var(--Blue-Gray-200, #E2E8F0);
+    background: var(--White, #FFF);
+    box-shadow: -3px 3px 15px -4px rgba(0, 0, 0, 0.10), 0px 0px 6px 0px rgb(0 0 0 / 4%);
 }
 .user-info.modl-view-rating .rating-img-usr {
     width: 100%;
     border-radius: 10px;
 }
 .user-info.modl-view-rating {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
     flex-direction: column;
-    text-align: left;
-    align-items: self-start;
+    min-height: 190px;
 }
 .user-info.modl-view-rating h5 {
     font-size: 16px;
@@ -32412,4 +32418,8 @@ form i.fi.fi-rr-angle-small-down {
 }
 .row.align-items-baseline.cusmt-form-mb i.fi.fi-rr-angle-small-down {
     display: block;
+}
+
+img.user-img {
+    border-radius: 50%;
 }
