@@ -326,11 +326,16 @@
 
                     if (event.product_detail?.latitude && event.product_detail?.longitude) {
                         var latLng = `${event.product_detail?.latitude},${event.product_detail?.longitude}`;
+                          var latLng1 = `${event.product_detail.trail_latitude},${event.product_detail.trail_longitude}`;
 
                         if (!eventGroups[latLng]) {
                             eventGroups[latLng] = [];
                         }
                         eventGroups[latLng].push(event);
+                        if (!eventGroups[latLng1]) {
+                            eventGroups[latLng1] = [];
+                        }
+                        eventGroups[latLng1].push(event);
                         var object = {};
                         object.title = event.title;
                         object.price = event.price;
@@ -340,6 +345,8 @@
                             .product_detail.city) : '';
                         object.latitude = event.product_detail ? (event.product_detail?.latitude) : '';
                         object.longitude = event.product_detail ? (event.product_detail?.longitude) : '';
+                        object.trail_longitude = event.product_detail ? (event.product_detail.trail_longitude) : '';
+                        object.trail_latitude = event.product_detail ? (event.product_detail.trail_latitude) : '';
                         allData.push(object)
                     }
 
@@ -372,7 +379,7 @@
                     layers: ['unclustered-point']
                 });
                 console.log('features', features);
-                var markerIconUrl = "http://192.168.5.41/elit-equine-new/EliteEquine/public/images/marker_map_icon.svg";
+
                 var uniqueFeatures = getUniqueFeatures(features, 'venue_name');
                 console.log('uniqueFeatures', uniqueFeatures);
                 uniqueFeatures.forEach(feature => {
@@ -381,9 +388,15 @@
                         venue_name,
                         venue_address,
                         latitude,
+                        isTrail,
                         longitude
                     } = feature.properties;
                     console.log(coordinates, "coordinates");
+                    if (isTrail == 1) {
+                        var markerIconUrl = "{{ url('/') }}/images/marker_map_icon.svg";
+                    } else {
+                        var markerIconUrl = "{{ url('/') }}/images/marker-blue.svg";
+                    }
                     // Create a custom HTML element for the marker
                     var markerElement = document.createElement('div');
                     markerElement.className = 'red-circle-marker';
@@ -543,23 +556,41 @@
             function addClusterView() {
                 var seenCoords = new Set();
 
-                var eventsfeature = allData.map((event) => ({
-
-                    type: "Feature",
-                    geometry: {
-                        type: "Point",
-                        coordinates: [
-                            parseFloat(event.longitude),
-                            parseFloat(event.latitude),
-                        ],
+                var eventsfeature = allData.flatMap((event) => [{
+                        type: "Feature",
+                        geometry: {
+                            type: "Point",
+                            coordinates: [
+                                parseFloat(event.longitude),
+                                parseFloat(event.latitude),
+                            ],
+                        },
+                        properties: {
+                            venue_name: event.title || "Unknown Venue",
+                            venue_address: event.address || "No Address",
+                            latitude: event.latitude || "No Address",
+                            longitude: event.longitude || "No Address",
+                            isTrail: 0,
+                        },
                     },
-                    properties: {
-                        venue_name: event.title || "Unknown Venue",
-                        venue_address: event.address || "No Address",
-                        latitude: event.latitude || "No Address",
-                        longitude: event.longitude || "No Address",
-                    },
-                }));
+                    {
+                        type: "Feature",
+                        geometry: {
+                            type: "Point",
+                            coordinates: [
+                                parseFloat(event.trail_longitude),
+                                parseFloat(event.trail_latitude),
+                            ],
+                        },
+                        properties: {
+                            venue_name: event.title || "Unknown Venue",
+                            venue_address: event.address || "No Address",
+                            latitude: event.trail_latitude || "No Address",
+                            longitude: event.trail_longitude || "No Address",
+                            isTrail: 1,
+                        },
+                    }
+                ]);
                 console.log("eventsfeature", eventsfeature)
                 map.addSource("clusterEvent", {
                     type: "geojson",

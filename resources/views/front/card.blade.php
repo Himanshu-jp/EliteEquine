@@ -341,7 +341,7 @@
                     fetchEventsByCategory(selectedCategory);
                 }
             })
-               var userCoordinates = ["{{ $longitude }}", "{{ $latitude }}"];
+            var userCoordinates = ["{{ $longitude }}", "{{ $latitude }}"];
             mapboxgl.accessToken = '{{ env('MAPBOX_ACCESS_TOKEN') }}';
             var map = new mapboxgl.Map({
                 container: 'map',
@@ -369,11 +369,19 @@
 
                     if (event.product_detail.latitude && event.product_detail.longitude) {
                         var latLng = `${event.product_detail.latitude},${event.product_detail.longitude}`;
+                        var latLng1 = `${event.product_detail.trail_latitude},${event.product_detail.trail_longitude}`;
 
                         if (!eventGroups[latLng]) {
                             eventGroups[latLng] = [];
                         }
-                        eventGroups[latLng].push(event);
+                           eventGroups[latLng].push(event);
+                        if (!eventGroups[latLng1]) {
+                            eventGroups[latLng1] = [];
+                        }
+                          eventGroups[latLng1].push(event);
+
+                     
+                      
                         var object = {};
                         object.title = event.title;
                         object.price = event.price;
@@ -383,6 +391,8 @@
                             .product_detail.city) : '';
                         object.latitude = event.product_detail ? (event.product_detail.latitude) : '';
                         object.longitude = event.product_detail ? (event.product_detail.longitude) : '';
+                        object.trail_longitude = event.product_detail ? (event.product_detail.trail_longitude) : '';
+                        object.trail_latitude = event.product_detail ? (event.product_detail.trail_latitude) : '';
                         allData.push(object)
                     }
 
@@ -415,7 +425,7 @@
                     layers: ['unclustered-point']
                 });
                 console.log('features', features);
-                var markerIconUrl = "{{url('/')}}/images/marker_map_icon.svg";
+
                 var uniqueFeatures = getUniqueFeatures(features, 'venue_name');
                 console.log('uniqueFeatures', uniqueFeatures);
                 uniqueFeatures.forEach(feature => {
@@ -424,9 +434,17 @@
                         venue_name,
                         venue_address,
                         latitude,
+                        isTrail,
                         longitude
                     } = feature.properties;
                     console.log(coordinates, "coordinates");
+                    if (isTrail == 1) {
+                        var markerIconUrl = "{{ url('/') }}/images/marker_map_icon.svg";
+                    } else {
+                        var markerIconUrl = "{{ url('/') }}/images/marker-blue.svg";
+                    }
+
+
                     // Create a custom HTML element for the marker
                     var markerElement = document.createElement('div');
                     markerElement.className = 'red-circle-marker';
@@ -440,7 +458,7 @@
 
                     var venueName = document.createElement('span');
                     venueName.className = 'marker-venue-name';
-                  //  venueName.innerText = venue_name;
+                    //  venueName.innerText = venue_name;
                     markerElement.appendChild(venueName);
 
                     var marker = new mapboxgl.Marker(markerElement).setLngLat([coordinates[0], coordinates[1]]).addTo(
@@ -463,12 +481,12 @@
                         // var eventImage = event.image && event.image.length > 0  ?"{{ url('/') }}/"+ event.image[0].image : '{{ url('/') }}/public/front/home/assets/images/logo/logo.svg' ;
                         var eventImage = "{{ url('/') }}/front/home/assets/images/logo/logo.svg";
                         var baseUrl = "{{ url('/') }}";
-                        var authUserId = '{{auth()->id()}}';
+                        var authUserId = '{{ auth()->id() }}';
                         var reviews = event?.user?.reviews;
 
-                        var averageRating = Array.isArray(reviews) && reviews.length > 0
-                            ? Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length)
-                            : 0;
+                        var averageRating = Array.isArray(reviews) && reviews.length > 0 ?
+                            Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) :
+                            0;
 
                         var breeds = event.breeds.map(b => b.common_master_id?.name).join(" | ");
                         var disciplines = event.disciplines.map(d => d.common_master_id?.name).join(" | ");
@@ -566,30 +584,56 @@
 
             function formatDate(dateString) {
                 var date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                return date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
             }
 
             function addClusterView() {
                 var seenCoords = new Set();
 
-                var eventsfeature = allData.map((event) => ({
+                var eventsfeature = allData.flatMap((event) => [{
+                        type: "Feature",
+                        geometry: {
+                            type: "Point",
+                            coordinates: [
+                                parseFloat(event.longitude),
+                                parseFloat(event.latitude),
+                            ],
+                        },
+                        properties: {
+                            venue_name: event.title || "Unknown Venue",
+                            venue_address: event.address || "No Address",
+                            latitude: event.latitude || "No Address",
+                            longitude: event.longitude || "No Address",
+                            isTrail: 0,
+                        },
+                    },
+                    {
+                        type: "Feature",
+                        geometry: {
+                            type: "Point",
+                            coordinates: [
+                                parseFloat(event.trail_longitude),
+                                parseFloat(event.trail_latitude),
+                            ],
+                        },
+                        properties: {
+                            venue_name: event.title || "Unknown Venue",
+                            venue_address: event.address || "No Address",
+                            latitude: event.trail_latitude || "No Address",
+                            longitude: event.trail_longitude || "No Address",
+                            isTrail: 1,
+                        },
+                    }
+                ]);
 
-                    type: "Feature",
-                    geometry: {
-                        type: "Point",
-                        coordinates: [
-                            parseFloat(event.longitude),
-                            parseFloat(event.latitude),
-                        ],
-                    },
-                    properties: {
-                        venue_name: event.title || "Unknown Venue",
-                        venue_address: event.address || "No Address",
-                        latitude: event.latitude || "No Address",
-                        longitude: event.longitude || "No Address",
-                    },
-                }));
-                console.log("eventsfeature", eventsfeature)
+
+                console.log("allData", allData)
+                console.log("eventsfeaturelength", eventsfeature.length)
+
                 map.addSource("clusterEvent", {
                     type: "geojson",
                     data: {
@@ -714,34 +758,34 @@
             var nav = new mapboxgl.NavigationControl();
             map.addControl(nav, 'top-right');
 
-    if (typeof window.RelocateControl === 'undefined') {
-            class RelocateControl {
-                onAdd(map) {
-                    this.map = map;
-                    this.container = document.createElement('div');
-                    this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
-                    this.container.innerHTML = `
+            if (typeof window.RelocateControl === 'undefined') {
+                class RelocateControl {
+                    onAdd(map) {
+                        this.map = map;
+                        this.container = document.createElement('div');
+                        this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+                        this.container.innerHTML = `
                     <button id="relocateBtn" type="button" title="Relocate" style="padding:3px;">
                         <img src="{{ asset('images/current-location-10.svg') }}">
                     </button>
                 `;
-                    this.container.querySelector('#relocateBtn').addEventListener('click', () => {
-                        map.easeTo({
-                            center: userCoordinates,
-                            zoom: 10,
-                            duration: 500
+                        this.container.querySelector('#relocateBtn').addEventListener('click', () => {
+                            map.easeTo({
+                                center: userCoordinates,
+                                zoom: 10,
+                                duration: 500
+                            });
                         });
-                    });
-                    return this.container;
+                        return this.container;
+                    }
+                    onRemove() {
+                        this.container.parentNode.removeChild(this.container);
+                        this.map = undefined;
+                    }
                 }
-                onRemove() {
-                    this.container.parentNode.removeChild(this.container);
-                    this.map = undefined;
-                }
+                map.addControl(new RelocateControl(), 'top-right');
             }
-              map.addControl(new RelocateControl(), 'top-right');
-}
-          
+
 
             map.on("load", () => {
 

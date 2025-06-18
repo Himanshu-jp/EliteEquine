@@ -1,82 +1,89 @@
-@if($viewMode=="grid")
-<div class="row">
-    @foreach($data as $key=>$value)
-        <div class="col-lg-4 mb-3">
-            <div class="feat_card_bx grid-view">
-                <a href="{{route('equipmentDetails',@$value->id)}}">
-                    <div class="image">
-                        <img src="{{(@$value->image->first())?asset('storage/'.@$value->image->first()->image):asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
-                        {{-- <span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span> --}}
-                    </div>
-                </a>
-                <div class="content">
-                    <a href="{{route('equipmentDetails',@$value->id)}}">
-                        <h3>
-                            {{@$value->title}}
-                            {{-- {{@$value->title}} | {{@$value->productDetail->age}} | {{@$value->height->commonMaster->name}} <br />
+@if ($viewMode == 'grid')
+    <div class="row">
+        @foreach ($data as $key => $value)
+            <div class="col-lg-4 mb-3">
+                <div class="feat_card_bx grid-view">
+                    <a href="{{ route('equipmentDetails', @$value->id) }}">
+                        <div class="image">
+                            <img src="{{ @$value->image->first() ? asset('storage/' . @$value->image->first()->image) : asset('front/home/assets/images/logo/logo.svg') }}"
+                                alt="hourse-image">
+                            {{-- <span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span> --}}
+                        </div>
+                    </a>
+                    <div class="content">
+                        <a href="{{ route('equipmentDetails', @$value->id) }}">
+                            <h3>
+                                {{ @$value->title }}
+                                {{-- {{@$value->title}} | {{@$value->productDetail->age}} | {{@$value->height->commonMaster->name}} <br />
                             {{ @$value->breeds->map(function($breed) {
                                 return optional($breed->commonMaster)->name;
                             })->filter()->implode(' | ') }} --}}
-                        </h3>
-                    </a>
+                            </h3>
+                        </a>
 
-                    {{-- <h4>Call For Price</h4> --}}
+                        {{-- <h4>Call For Price</h4> --}}
 
-                    <h4>Price: ${{number_format(@$value->productDetail->price)}} </h4>
-                    {{-- <h4 class="mb-1">Lease: $40,000 - $60,000 / yr</h4> --}}
+                        <h4>Price: ${{ number_format(@$value->productDetail->price) }} </h4>
+                        {{-- <h4 class="mb-1">Lease: $40,000 - $60,000 / yr</h4> --}}
 
-                    {{-- <span class="sp1"></span> --}}
-                    <div class="location">
-                        <img src="{{asset('front/home/assets/images/icons/loction_icn.svg')}}" alt="location-icon" />
-                        <span>{{@$value->productDetail->city}}, {{@$value->productDetail->state}}, {{@$value->productDetail->country}} </span>
-                    </div>
-                    <div class="foot">
-                        <div class="bx">
-                            <div class="imagee">
-                                <img src="{{(@$value->user->profile_photo_path)?asset('storage/'.@$value->user->profile_photo_path):asset('front/auth/assets/img/user-img.png')}}" class="user-img" alt="">
-                            </div>
-                            <div class="content">
-                                <h4>{{@$value->user->name}}</h4>
-                                <div class="stars">
-                                    @php
-                                        $averageRating = round(optional(@$value->user->reviews)->avg('rating'), 1);
-                                        $totalReviews  = optional(@$value->user->reviews)->count();
-                                    @endphp 
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <i class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
-                                    @endfor
-                                    <!-- <i class="fa-solid fa-star"></i>
+                        {{-- <span class="sp1"></span> --}}
+                        <div class="location">
+                            <img src="{{ asset('front/home/assets/images/icons/loction_icn.svg') }}"
+                                alt="location-icon" />
+                            <span>{{ @$value->productDetail->city }}, {{ @$value->productDetail->state }},
+                                {{ @$value->productDetail->country }} </span>
+                        </div>
+                        <div class="foot">
+                            <div class="bx">
+                                <div class="imagee">
+                                    <img src="{{ @$value->user->profile_photo_path ? asset('storage/' . @$value->user->profile_photo_path) : asset('front/auth/assets/img/user-img.png') }}"
+                                        class="user-img" alt="">
+                                </div>
+                                <div class="content">
+                                    <h4>{{ @$value->user->name }}</h4>
+                                    <div class="stars">
+                                        @php
+                                            $averageRating = round(optional(@$value->user->reviews)->avg('rating'), 1);
+                                            $totalReviews = optional(@$value->user->reviews)->count();
+                                        @endphp
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <i
+                                                class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
+                                        @endfor
+                                        <!-- <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i> -->
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="bx2">
-                            <button class="compare-add-button" data-id="{{$value->id}}">
-                                <img src="{{asset('front/home/assets/images/icons/re_icn.svg')}}" alt="" />
-                            </button>
+                            <div class="bx2">
+                                <button class="compare-add-button" data-id="{{ $value->id }}">
+                                    <img src="{{ asset('front/home/assets/images/icons/re_icn.svg') }}"
+                                        alt="" />
+                                </button>
 
-                            {{--<button>
+                                {{-- <button>
                                 <img src="{{asset('front/home/assets/images/icons/like_icn.svg')}}" alt="" />
-                            </button>--}}
-                            <button class="favorite-btn {{ $value->favorites->where('user_id', auth()->id())->count() ? 'favorited' : '' }}" data-product-id="{{ $value->id }}">
-                                @if($value->favorites->where('user_id', auth()->id())->count() > 0)
-                                    <i class="fa-solid fa-heart"></i>
-                                @else
-                                <i class="fa-regular fa-heart favorited"></i>
-                                @endif
-                            </button>
+                            </button> --}}
+                                <button
+                                    class="favorite-btn {{ $value->favorites->where('user_id', auth()->id())->count() ? 'favorited' : '' }}"
+                                    data-product-id="{{ $value->id }}">
+                                    @if ($value->favorites->where('user_id', auth()->id())->count() > 0)
+                                        <i class="fa-solid fa-heart"></i>
+                                    @else
+                                        <i class="fa-regular fa-heart favorited"></i>
+                                    @endif
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>              
+                </div>
             </div>
-        </div>
-    @endforeach
-</div>
+        @endforeach
+    </div>
 @else
-
     <div class="col-lg-8">
         <div class="map-info">
             <div>
@@ -104,7 +111,7 @@
             <div class="horsescard-popup" id="popupCard">
                 <div class="inner-box">
 
-                    <img src="{{asset('front/home/assets/images/featured_hource1.png')}}" id="popupImage" />
+                    <img src="{{ asset('front/home/assets/images/featured_hource1.png') }}" id="popupImage" />
                     <div class="info" id="popupInfo"></div>
                 </div>
                 <span class="close-btn" onclick="closePopup()">×</span>
@@ -112,36 +119,39 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-lg-4">
-        @foreach($data as $key=>$value)
+        @foreach ($data as $key => $value)
             <div class="feat_card_bx list-page-card">
-                <a href="{{route('equipmentDetails',@$value->id)}}">
+                <a href="{{ route('equipmentDetails', @$value->id) }}">
                     <div class="imagelist">
-                        <img src="{{(@$value->image->first())?asset('storage/'.@$value->image->first()->image):asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
+                        <img src="{{ @$value->image->first() ? asset('storage/' . @$value->image->first()->image) : asset('front/home/assets/images/logo/logo.svg') }}"
+                            alt="hourse-image">
                     </div>
                 </a>
 
                 <div class="content">
-                    <a href="{{route('equipmentDetails',@$value->id)}}">
+                    <a href="{{ route('equipmentDetails', @$value->id) }}">
                         <h3>
-                            {{@$value->title}}
+                            {{ @$value->title }}
                         </h3>
                     </a>
-                    <h4 class="mb-1">Price: ${{number_format(@$value->productDetail->price)}} </h4>
+                    <h4 class="mb-1">Price: ${{ number_format(@$value->productDetail->price) }} </h4>
 
                     {{-- <span class="sp1"></span> --}}
                     <div class="location">
-                        <img src="{{asset('front/home/assets/images/icons/loction_icn.svg')}}" alt="location-icon" />
-                        <span>{{@$value->productDetail->city}}, {{@$value->productDetail->state}}, {{@$value->productDetail->country}} </span>
+                        <img src="{{ asset('front/home/assets/images/icons/loction_icn.svg') }}" alt="location-icon" />
+                        <span>{{ @$value->productDetail->city }}, {{ @$value->productDetail->state }},
+                            {{ @$value->productDetail->country }} </span>
                     </div>
                     <div class="foot">
                         <div class="bx">
-                             <div class="imagee">
-                                <img src="{{(@$value->user->profile_photo_path)?asset('storage/'.@$value->user->profile_photo_path):asset('front/auth/assets/img/user-img.png')}}" class="user-img" alt="">
+                            <div class="imagee">
+                                <img src="{{ @$value->user->profile_photo_path ? asset('storage/' . @$value->user->profile_photo_path) : asset('front/auth/assets/img/user-img.png') }}"
+                                    class="user-img" alt="">
                             </div>
                             <div class="content">
-                                    <h4>{{@$value->user->name}}</h4>
+                                <h4>{{ @$value->user->name }}</h4>
                                 <div class="stars">
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
@@ -152,15 +162,17 @@
                             </div>
                         </div>
                         <div class="bx2">
-                            <button class="compare-add-button" data-id="{{$value->id}}">
-                                <img src="{{asset('front/home/assets/images/icons/re_icn.svg')}}" alt="" />
+                            <button class="compare-add-button" data-id="{{ $value->id }}">
+                                <img src="{{ asset('front/home/assets/images/icons/re_icn.svg') }}" alt="" />
                             </button>
 
-                            <button class="favorite-btn {{ $value->favorites->where('user_id', auth()->id())->count() ? 'favorited' : '' }}" data-product-id="{{ $value->id }}">
-                                @if($value->favorites->where('user_id', auth()->id())->count() > 0)
+                            <button
+                                class="favorite-btn {{ $value->favorites->where('user_id', auth()->id())->count() ? 'favorited' : '' }}"
+                                data-product-id="{{ $value->id }}">
+                                @if ($value->favorites->where('user_id', auth()->id())->count() > 0)
                                     <i class="fa-solid fa-heart"></i>
                                 @else
-                                <i class="fa-regular fa-heart favorited"></i>
+                                    <i class="fa-regular fa-heart favorited"></i>
                                 @endif
                             </button>
                         </div>
@@ -169,7 +181,7 @@
             </div>
         @endforeach
     </div>
-        @once
+    @once
 
         <!-- Your map initialization script -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -289,11 +301,16 @@
 
                     if (event.product_detail.latitude && event.product_detail.longitude) {
                         var latLng = `${event.product_detail.latitude},${event.product_detail.longitude}`;
+                          var latLng1 = `${event.product_detail.trail_latitude},${event.product_detail.trail_longitude}`;
 
                         if (!eventGroups[latLng]) {
                             eventGroups[latLng] = [];
                         }
                         eventGroups[latLng].push(event);
+                        if (!eventGroups[latLng1]) {
+                            eventGroups[latLng1] = [];
+                        }
+                        eventGroups[latLng1].push(event);
                         var object = {};
                         object.title = event.title;
                         object.price = event.price;
@@ -303,6 +320,8 @@
                             .product_detail.city) : '';
                         object.latitude = event.product_detail ? (event.product_detail.latitude) : '';
                         object.longitude = event.product_detail ? (event.product_detail.longitude) : '';
+                        object.trail_longitude = event.product_detail ? (event.product_detail.trail_longitude) : '';
+                        object.trail_latitude = event.product_detail ? (event.product_detail.trail_latitude) : '';
                         allData.push(object)
                     }
 
@@ -335,7 +354,7 @@
                     layers: ['unclustered-point']
                 });
                 console.log('features', features);
-                var markerIconUrl = "{{url('/')}}/images/marker_map_icon.svg";
+
                 var uniqueFeatures = getUniqueFeatures(features, 'venue_name');
                 console.log('uniqueFeatures', uniqueFeatures);
                 uniqueFeatures.forEach(feature => {
@@ -344,9 +363,15 @@
                         venue_name,
                         venue_address,
                         latitude,
+                        isTrail,
                         longitude
                     } = feature.properties;
                     console.log(coordinates, "coordinates");
+                    if (isTrail == 1) {
+                        var markerIconUrl = "{{ url('/') }}/images/marker_map_icon.svg";
+                    } else {
+                        var markerIconUrl = "{{ url('/') }}/images/marker-blue.svg";
+                    }
                     // Create a custom HTML element for the marker
                     var markerElement = document.createElement('div');
                     markerElement.className = 'red-circle-marker';
@@ -360,7 +385,7 @@
 
                     var venueName = document.createElement('span');
                     venueName.className = 'marker-venue-name';
-                  //  venueName.innerText = venue_name;
+                    //  venueName.innerText = venue_name;
                     markerElement.appendChild(venueName);
 
                     var marker = new mapboxgl.Marker(markerElement).setLngLat([coordinates[0], coordinates[1]]).addTo(
@@ -383,20 +408,20 @@
                         // var eventImage = event.image && event.image.length > 0  ?"{{ url('/') }}/"+ event.image[0].image : '{{ url('/') }}/public/front/home/assets/images/logo/logo.svg' ;
                         var eventImage = "{{ url('/') }}/front/home/assets/images/logo/logo.svg";
                         var baseUrl = "{{ url('/') }}";
-                        var authUserId = '{{auth()->id()}}';
+                        var authUserId = '{{ auth()->id() }}';
                         var reviews = event?.user?.reviews;
 
-                        var averageRating = Array.isArray(reviews) && reviews.length > 0
-                            ? Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length)
-                            : 0;
+                        var averageRating = Array.isArray(reviews) && reviews.length > 0 ?
+                            Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) :
+                            0;
 
-                        var imageSrc = event.image?.[0]?.image
-                            ? `${baseUrl}/storage/${event.image[0].image}`
-                            : `${baseUrl}/front/home/assets/images/logo/logo.svg`;
+                        var imageSrc = event.image?.[0]?.image ?
+                            `${baseUrl}/storage/${event.image[0].image}` :
+                            `${baseUrl}/front/home/assets/images/logo/logo.svg`;
 
-                        var profileSrc = event.user?.profile_photo_path
-                            ? `${baseUrl}/storage/${event.user.profile_photo_path}`
-                            : `${baseUrl}/front/auth/assets/img/user-img.png`;
+                        var profileSrc = event.user?.profile_photo_path ?
+                            `${baseUrl}/storage/${event.user.profile_photo_path}` :
+                            `${baseUrl}/front/auth/assets/img/user-img.png`;
 
                         var isFavorited = event.favorites?.some(fav => fav.user_id === authUserId);
 
@@ -480,29 +505,51 @@
 
             function formatDate(dateString) {
                 var date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                return date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
             }
 
             function addClusterView() {
                 var seenCoords = new Set();
 
-                var eventsfeature = allData.map((event) => ({
-
-                    type: "Feature",
-                    geometry: {
-                        type: "Point",
-                        coordinates: [
-                            parseFloat(event.longitude),
-                            parseFloat(event.latitude),
-                        ],
+                var eventsfeature = allData.flatMap((event) => [{
+                        type: "Feature",
+                        geometry: {
+                            type: "Point",
+                            coordinates: [
+                                parseFloat(event.longitude),
+                                parseFloat(event.latitude),
+                            ],
+                        },
+                        properties: {
+                            venue_name: event.title || "Unknown Venue",
+                            venue_address: event.address || "No Address",
+                            latitude: event.latitude || "No Address",
+                            longitude: event.longitude || "No Address",
+                            isTrail: 0,
+                        },
                     },
-                    properties: {
-                        venue_name: event.title || "Unknown Venue",
-                        venue_address: event.address || "No Address",
-                        latitude: event.latitude || "No Address",
-                        longitude: event.longitude || "No Address",
-                    },
-                }));
+                    {
+                        type: "Feature",
+                        geometry: {
+                            type: "Point",
+                            coordinates: [
+                                parseFloat(event.trail_longitude),
+                                parseFloat(event.trail_latitude),
+                            ],
+                        },
+                        properties: {
+                            venue_name: event.title || "Unknown Venue",
+                            venue_address: event.address || "No Address",
+                            latitude: event.trail_latitude || "No Address",
+                            longitude: event.trail_longitude || "No Address",
+                            isTrail: 1,
+                        },
+                    }
+                ]);
                 console.log("eventsfeature", eventsfeature)
                 map.addSource("clusterEvent", {
                     type: "geojson",
@@ -628,33 +675,33 @@
             var nav = new mapboxgl.NavigationControl();
             map.addControl(nav, 'top-right');
 
-   if (typeof window.RelocateControl === 'undefined') {
-            class RelocateControl {
-                onAdd(map) {
-                    this.map = map;
-                    this.container = document.createElement('div');
-                    this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
-                    this.container.innerHTML = `
+            if (typeof window.RelocateControl === 'undefined') {
+                class RelocateControl {
+                    onAdd(map) {
+                        this.map = map;
+                        this.container = document.createElement('div');
+                        this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+                        this.container.innerHTML = `
                     <button id="relocateBtn" type="button" title="Relocate" style="padding:3px;">
                         <img src="{{ asset('images/current-location-10.svg') }}">
                     </button>
                 `;
-                    this.container.querySelector('#relocateBtn').addEventListener('click', () => {
-                        map.easeTo({
-                            center: userCoordinates,
-                            zoom: 10,
-                            duration: 500
+                        this.container.querySelector('#relocateBtn').addEventListener('click', () => {
+                            map.easeTo({
+                                center: userCoordinates,
+                                zoom: 10,
+                                duration: 500
+                            });
                         });
-                    });
-                    return this.container;
+                        return this.container;
+                    }
+                    onRemove() {
+                        this.container.parentNode.removeChild(this.container);
+                        this.map = undefined;
+                    }
                 }
-                onRemove() {
-                    this.container.parentNode.removeChild(this.container);
-                    this.map = undefined;
-                }
+                map.addControl(new RelocateControl(), 'top-right');
             }
-            map.addControl(new RelocateControl(), 'top-right');
-   }
 
             map.on("load", () => {
 
@@ -684,49 +731,49 @@
 @endif
 <script>
     // add favorite
-        $('.favorite-btn').on('click', function(e) {
-            e.preventDefault();
+    $('.favorite-btn').on('click', function(e) {
+        e.preventDefault();
 
-            var productId = $(this).data('product-id');
-            var url = `{{ url('favorite') }}`+'/'+ productId;
-            var $btn = $(this);
+        var productId = $(this).data('product-id');
+        var url = `{{ url('favorite') }}` + '/' + productId;
+        var $btn = $(this);
 
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    // alert(response.message);
-                    if (response.favorited) {
-                        $btn.addClass('favorited');  
-                        $btn.find("i").addClass('fa-solid').removeClass('fa-regular favorited');
-                    } else {
-                        $btn.removeClass('favorited');
-                        $btn.find("i").addClass('fa-regular favorited').removeClass('fa-solid');
-                    }
-                },
-                error: function(xhr) {
-                    if (xhr.status === 401) {
-                        Swal.fire({
-                            title: "Elite Equine",
-                            text: "Please login to add favorite.",
-                            imageUrl: "{{ asset('front/home/assets/images/add-favorite.svg') }}",
-                            imageWidth: 400,
-                            imageHeight: 200,
-                            imageAlt: "Elite Equine",
-                            // This disables the default Swal styling for confirm button
-                            customClass: {
-                                confirmButton: 'commen_btn'
-                            },
-                            buttonsStyling: false, // <--- disables SweetAlert's built-in styling
-                            confirmButtonText: "<a href='{{ route('login') }}' class='commen_btn'>Login</a>"
-                        });
-                    } else {
-                        alert('Something went wrong.');
-                    }
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                // alert(response.message);
+                if (response.favorited) {
+                    $btn.addClass('favorited');
+                    $btn.find("i").addClass('fa-solid').removeClass('fa-regular favorited');
+                } else {
+                    $btn.removeClass('favorited');
+                    $btn.find("i").addClass('fa-regular favorited').removeClass('fa-solid');
                 }
-            });
+            },
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    Swal.fire({
+                        title: "Elite Equine",
+                        text: "Please login to add favorite.",
+                        imageUrl: "{{ asset('front/home/assets/images/add-favorite.svg') }}",
+                        imageWidth: 400,
+                        imageHeight: 200,
+                        imageAlt: "Elite Equine",
+                        // This disables the default Swal styling for confirm button
+                        customClass: {
+                            confirmButton: 'commen_btn'
+                        },
+                        buttonsStyling: false, // <--- disables SweetAlert's built-in styling
+                        confirmButtonText: "<a href='{{ route('login') }}' class='commen_btn'>Login</a>"
+                    });
+                } else {
+                    alert('Something went wrong.');
+                }
+            }
         });
+    });
 </script>

@@ -55,6 +55,8 @@ class ProductDetail extends Model
         'haulings_location_to',
         'realtor',
         'property_manager',
+        'trail_latitude',
+        'trail_longitude',
     ];
 
     public function product()
