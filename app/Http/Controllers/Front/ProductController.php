@@ -443,7 +443,7 @@ class ProductController extends Controller
     {
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
-            'product_status' => 'required|string|in:live,sold'
+            'product_status' => 'required|string'
         ]);
 
         $product = Product::find($request->product_id);

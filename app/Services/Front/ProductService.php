@@ -47,6 +47,7 @@ class ProductService
         // $product->price_reduced = ($data['price_reduced'] == 'on') ? 1 : 0;
         $product->currency = $data['currency'];
         $product->description = $data['description'];
+        $product->product_status = ($product->product_status)?$product->product_status:'pending';
         $product->created_at = Carbon::now();
         $product->updated_at = Carbon::now();
         $product->save();
@@ -331,7 +332,7 @@ class ProductService
 
         //-------save product table data & enable product status as live----------------//
         $product = Product::where(['id' => $data['productId'], 'user_id' => $user->id])->first();
-        $product->product_status = 'live';
+        $product->product_status = ($product->product_status=="pending")?'live':$product->product_status;
         $product->updated_at = Carbon::now();
         $product->save();
 
@@ -551,7 +552,7 @@ class ProductService
 
         //-------save product table data & enable product status as live----------------//
         $product = Product::where(['id' => $data['productId'], 'user_id' => $user->id])->first();
-        $product->product_status = 'live';
+        $product->product_status = ($product->product_status=="pending")?'live':$product->product_status;        
         $product->updated_at = Carbon::now();
         $product->save();
 
@@ -773,7 +774,7 @@ class ProductService
 
         //-------save product table data & enable product status as live----------------//
         $product = Product::where(['id' => $data['productId'], 'user_id' => $user->id])->first();
-        $product->product_status = 'live';
+        $product->product_status = ($product->product_status=="pending")?'live':$product->product_status;
         $product->updated_at = Carbon::now();
         $product->save();
 
@@ -913,8 +914,7 @@ class ProductService
 
         //-------save product table data & enable product status as live----------------//
         $product = Product::where(['id' => $data['productId'], 'user_id' => $user->id])->first();
-        // $product->category_id = $data['category'];
-        $product->product_status = 'live';
+        $product->product_status = ($product->product_status=="pending")?'live':$product->product_status;
         $product->updated_at = Carbon::now();
         $product->save();
 
@@ -1002,7 +1002,7 @@ class ProductService
             'height',
             'sex',
             'greenEligibilities'
-        ])->where('product_status', 'sold');
+        ])->whereIn('product_status', ['sold','']);
 
         $total = $data->get()->count();
         $data = $data->paginate($limit);

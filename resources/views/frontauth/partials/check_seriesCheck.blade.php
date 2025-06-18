@@ -14,6 +14,9 @@
                                 Mobile App</th>
                         </tr>
                     </thead>
+@foreach ($explodeLister as $item)
+<input type="hidden" name="lister[{{ $item }}]">
+@endforeach
                     <tbody>
                         <tr class="tr1"
                             style="{{ !in_array('1', $explodeLister) ? 'display: none;' : '' }}">

@@ -493,6 +493,8 @@
                     page: page,
                     search: $("#search").val(),
                     location: $("#location").val(),
+                    latitude: $("#latitude").val(),
+                    longitude: $("#longitude").val(),
                     category: $('#category').val(),
                     sort: $('#sort').val(),
                     limit: $('#limit').val(),

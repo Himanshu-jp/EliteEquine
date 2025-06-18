@@ -236,7 +236,9 @@
                                             Price</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Category</th>
-                                        <th
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Price Method</th>
+                                            <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Status</th>
                                         {{-- <th
@@ -255,6 +257,11 @@
                                 </thead>
                                 <tbody>
                                     @foreach($products as $key => $value)
+                                        @php
+                                            $status = @$value->product_status;
+                                            $method = @$value->transaction_method;
+                                            $sale = @$value->sale_method;
+                                        @endphp
                                         <tr>
                                             <td>
                                                 <div class="d-flex px-2 py-1">
@@ -268,8 +275,19 @@
                                                 </div>
 
                                             </td>
-                                            <td><span class="text-xs font-weight-bold">$ {{number_format(@$value->price, 2)}}
-                                                    ({{@$value->currency}})</span></td>
+                                           
+                                            <td>
+
+                                                @if($value->transaction_method=="platform")
+                                                    <span class="text-xs font-weight-bold">$ {{number_format(@$value->price,2)}}
+                                                    ({{@$value->currency}})</span>
+                                                @else
+                                                    <span class="text-xs font-weight-bold">Call For Price</span>
+                                                @endif
+                                                
+                                            
+                                            </td>
+
                                             <td class="align-middle text-sm">
                                                 {{-- <span class="text-xs font-weight-bold" style="color:#A19061;">
                                                     {{ @$value->disciplines->map(function($disciplines) {
@@ -280,6 +298,17 @@
                                                     {{@$value->category->name}}
                                                 </span>
                                             </td>
+
+                                            <td class="align-middle text-center text-sm">
+                                                @if(@$value->transaction_method=='platform')
+                                                <span class="badge transaction-methods"
+                                                    >{{(@$value->transaction_method)?@$value->transaction_method:'N/A'}}</span>
+                                                @else
+                                                <span class="badge transaction-methods"
+                                                >{{(@$value->transaction_method)?@$value->transaction_method:'N/A'}}</span>
+                                                @endif
+                                            </td>
+
                                             <td class="align-middle text-center text-sm">
                                                 @if(@$value->product_status == 'live')
                                                     <span class="badge"
@@ -307,13 +336,24 @@
                                                 <span
                                                     class="text-xs font-weight-bold">{{@$value->sex->commonMaster->name}}</span>
                                             </td> --}}
-                                            <td class="align-middle text-center">
-                                                <a href="{{ route('editProduct', @$value->id)}}" class="text-dark me-2"><i
+                                             <td class="align-middle text-center">
+                                        
+                                                @if($sale == 'auction')
+                                                    @if($status == 'live' && $method == 'platform')
+                                                        <a href="{{ route('product.bid-detail',@$value->id)}}" class="text-dark me-2" data-toggle="tooltip" data-placement="top" title="Bid Detail"><i class="fi fi-rr-eye"></i></a>                       
+                                                    @elseif($status == 'live' && $method == 'buyertoseller')
+                                                        <a href="{{ route('product.bid-detail',@$value->id)}}" class="text-dark me-2" data-toggle="tooltip" data-placement="top" title="Bid Detail"><i class="fi fi-rr-eye"></i></a>
+                                                    @endif
+                                                @endif
+
+                                                @if($status !== 'sold')
+                                                <a href="{{ route('editProduct',@$value->id)}}" class="text-dark me-2"><i
                                                         class="fi fi-rr-pencil"></i></a>
                                                 <span class="text-dark confirm-button"
-                                                    data-href="{{route('product/delete', $value->id)}}">
+                                                    data-href="{{route('product/delete',$value->id)}}">
                                                     <i class="fi fi-rr-trash"></i>
                                                 </span>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
