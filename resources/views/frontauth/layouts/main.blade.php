@@ -20,6 +20,7 @@
     <!-- new -->
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
     <link rel='stylesheet' href="{{asset('front/auth/assets/css/custom.css')}}">
+    <link rel='stylesheet' href="{{asset('front/auth/assets/css/chart-style.css')}}">
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
     <!-- map box -->
@@ -97,6 +98,7 @@
 
     <script src="{{asset('front/auth/assets/select2/select2.full.min.js')}}"></script>
     <script src="{{asset('front/auth/assets/select2/select2.js')}}"></script>
+    <script src="{{asset('front/auth/assets/js/chart-main.js')}}"></script>
 
     @yield('script')    
 

@@ -1,4 +1,38 @@
 @extends('frontauth.layouts.main')
+<style>
+        /* body { margin: 0; padding: 0; } */
+        .form-section .col-md-6 { position: relative; }
+        .form-section .col-md-6 #map { position: absolute; top: 0; left: 0; width: 98%; border:0; border-radius: 14px; height:600px; }
+        
+
+    .custom-map-marker {
+        background-image: url("{{asset('images/location-user-mkr.svg')}}");
+        background-size: contain;
+        width: 32px;
+        height: 39px;
+        cursor: pointer;
+    }
+
+    .highlighted {
+        background-color: #f0f0f0;
+    }
+
+    #map-location-list li {
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    #map-location-list {
+        border: 1px solid #ccc;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none;
+        position: absolute;
+        z-index: 999;
+        background: white;
+        width: 100%;
+    }
+    </style>
 @section('title')
 Your Ads
 @endsection
@@ -465,7 +499,13 @@ Your Ads
 
                     <div class="mt-4 position-relative">
                         <label class="form-label">Trial / Exchange Location</label>
-                        <input type="text" class="inner-form form-control" placeholder="Enter trial / exchange location..." name="trial_location" id="trial_location" value={{old('trial_location',@$products->productDetail->trial_location)}}>
+                        <input type="text" class="inner-form form-control" placeholder="Enter trial / exchange location..." name="trial_location" id="trial_location" onkeyup="trialLocationAutocomplete()" value={{old('trial_location',@$products->productDetail->trial_location)}}>
+                        <span id="trail-location-message" class="text-danger" style="display: none; font-size: 12px;"></span>
+                            <ul id="trail-location-list" style="display: none;">
+                                <!-- Location suggestions will appear here -->
+                            </ul>
+                            <input type="hidden" id="trail-latitude" name="trail-latitude" value="{{ request()->query('trail-latitude')}}">
+                            <input type="hidden" id="trail-longitude" name="trail-longitude" value="{{ request()->query('trail-longitude')}}">
                         @if($errors->has('trial_location'))
                             <span class="error text-danger">{{$errors->first('trial_location')}}</span>
                         @endif
@@ -586,10 +626,16 @@ Your Ads
 
         const latInput = document.getElementById('map-latitude');
         const lngInput = document.getElementById('map-longitude');
+        
+        const trialLatInput = document.getElementById('trail-latitude');
+        const trialLngInput = document.getElementById('trail-longitude');
 
         const updateLocation = () => {
             if (latInput) latInput.value = lat.toFixed(6);
             if (lngInput) lngInput.value = lng.toFixed(6);
+            
+            if (trialLatInput) trialLatInput.value = lat.toFixed(6);
+            if (trialLngInput) trialLngInput.value = lng.toFixed(6);
             reverseGeocode(lat, lng);
             initializeMap(lat, lng);
             addMapMarker(lat, lng);
@@ -610,6 +656,7 @@ Your Ads
         }
 
         initializeLocationAutocomplete();
+        trialLocationAutocomplete();
     };
 
     function initializeMap(latitude, longitude) {
@@ -815,6 +862,172 @@ Your Ads
             }
         });
     }
+
+function trialLocationAutocomplete() {
+    const sessionToken = Math.random().toString(36).substring(2, 15);
+
+    const trialLocationInput = document.getElementById('trial-location');
+    const trialLocationList = document.getElementById('trial-location-list');
+    const trialLocationMessage = document.getElementById('trial-location-message');
+    const trialLatitudeInput = document.getElementById('trial-latitude');
+    const trialLongitudeInput = document.getElementById('trial-longitude');
+
+    if (!trialLocationInput || !trialLocationList || !trialLocationMessage || !trialLatitudeInput || !trialLongitudeInput) {
+        console.warn('One or more required DOM elements are missing.');
+        return;
+    }
+
+    let selectedIndex = -1;
+    let suggestions = [];
+
+    function clearSuggestions() {
+        trialLocationList.innerHTML = '';
+        trialLocationList.style.display = 'none';
+        trialLocationMessage.style.display = 'none';
+        selectedIndex = -1;
+        suggestions = [];
+    }
+
+    function highlightSuggestion(index) {
+        const items = trialLocationList.querySelectorAll('li');
+        items.forEach((li, i) => {
+            if (i === index) {
+                li.classList.add('highlighted');
+                li.scrollIntoView({ block: 'nearest' });
+            } else {
+                li.classList.remove('highlighted');
+            }
+        });
+    }
+
+    function selectSuggestion(index) {
+        if (index < 0 || index >= suggestions.length) return;
+        const suggestion = suggestions[index];
+
+        const name = suggestion.name || '';
+        let state = '';
+        let country = '';
+
+        if (suggestion.context && Array.isArray(suggestion.context)) {
+            suggestion.context.forEach(ctx => {
+                if (ctx.id.startsWith('region')) state = ctx.text || ctx.name || '';
+                if (ctx.id.startsWith('country')) country = ctx.text || ctx.name || '';
+            });
+        }
+
+        const fullAddress = [name, state, country].filter(Boolean).join(', ');
+
+        // Temporarily set full address
+        trialLatitudeInput.value = fullAddress;
+        trialLongitudeInput.value = fullAddress;
+
+        clearSuggestions();
+
+        const mapbox_id = suggestion.mapbox_id;
+
+        fetch(`https://api.mapbox.com/search/searchbox/v1/retrieve/${mapbox_id}?session_token=${sessionToken}&access_token=${mapboxAccessToken}`)
+            .then(response => response.json())
+            .then(data => {
+                const features = data.features;
+                if (features && features.length > 0) {
+                    const coordinates = features[0].geometry.coordinates;
+                    if (coordinates) {
+                        const lat = coordinates[1];
+                        const lon = coordinates[0];
+
+                        trialLatitudeInput.value = lat;
+                        trialLongitudeInput.value = lon;
+
+                        if (typeof fetchVenues === 'function') {
+                            fetchVenues(lat, lon);
+                        }
+                    }
+                }
+            })
+            .catch(err => console.error('Error fetching coordinates:', err));
+    }
+
+    trialLocationInput.addEventListener('input', function () {
+        const query = trialLocationInput.value.trim();
+
+        if (query.length > 2) {
+            fetch(`https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodeURIComponent(query)}&language=en&limit=5&session_token=${sessionToken}&access_token=${mapboxAccessToken}`)
+                .then(response => response.json())
+                .then(data => {
+                    trialLocationList.innerHTML = '';
+                    suggestions = data.suggestions || [];
+
+                    if (suggestions.length > 0) {
+                        suggestions.forEach((suggestion, i) => {
+                            const li = document.createElement('li');
+
+                            const name = suggestion.name || '';
+                            let state = '';
+                            let country = '';
+
+                            if (suggestion.context && Array.isArray(suggestion.context)) {
+                                suggestion.context.forEach(ctx => {
+                                    if (ctx.id.startsWith('region')) state = ctx.text || ctx.name || '';
+                                    if (ctx.id.startsWith('country')) country = ctx.text || ctx.name || '';
+                                });
+                            }
+
+                            const fullAddress = [name, state, country].filter(Boolean).join(', ');
+                            li.textContent = fullAddress;
+                            li.setAttribute('data-index', i);
+
+                            li.addEventListener('click', () => selectSuggestion(i));
+                            trialLocationList.appendChild(li);
+                        });
+                        trialLocationList.style.display = 'block';
+                        trialLocationMessage.style.display = 'none';
+                        selectedIndex = -1;
+                    } else {
+                        trialLocationMessage.style.display = 'block';
+                        trialLocationMessage.textContent = 'No locations found';
+                        trialLocationList.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching location data:', error);
+                    trialLocationMessage.style.display = 'block';
+                    trialLocationMessage.textContent = 'Failed to fetch location data';
+                    trialLocationList.style.display = 'none';
+                });
+        } else {
+            clearSuggestions();
+        }
+    });
+
+    trialLocationInput.addEventListener('keydown', function (e) {
+        const items = trialLocationList.querySelectorAll('li');
+        if (trialLocationList.style.display === 'block' && items.length > 0) {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex + 1) % items.length;
+                highlightSuggestion(selectedIndex);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+                highlightSuggestion(selectedIndex);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (selectedIndex >= 0 && selectedIndex < items.length) {
+                    selectSuggestion(selectedIndex);
+                }
+            } else if (e.key === 'Escape') {
+                clearSuggestions();
+            }
+        }
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!trialLocationInput.contains(e.target) && !trialLocationList.contains(e.target)) {
+            clearSuggestions();
+        }
+    });
+}
+
 
 </script>
 <script>

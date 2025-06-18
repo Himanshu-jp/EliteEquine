@@ -798,6 +798,7 @@ Product Details
         } else {
             updateLocation();
         }
+
     };
 
     function initializeMap(latitude, longitude) {
@@ -811,7 +812,6 @@ Product Details
         });
 
         map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-        map.setConfigProperty( 'dusk');
     }
 </script>
 

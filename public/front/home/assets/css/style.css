@@ -6295,6 +6295,19 @@ ul.act-icon li img {
   display: flex;
   gap: 10px;
 }
+.mapboxgl-popup-content .feat_card_bx.list-page-card {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0px;
+}
+.mapboxgl-popup-content .feat_card_bx.list-page-card .imagelist img {
+    width: 150px;
+    min-height: 210px;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
 .filter-ads-checkbx .fa-star {
     color: #FFA910;
 }
