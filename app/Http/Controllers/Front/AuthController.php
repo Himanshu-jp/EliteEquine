@@ -11,11 +11,13 @@ use App\Http\Requests\Front\ResetPasswordRequest;
 use App\Http\Requests\Front\UserProfileUpdateRequest;
 use App\Http\Requests\Front\UserDetailsUpdateRequest;
 use App\Http\Requests\Front\ChangePasswordRequest;
+use App\Models\Community;
 use App\Models\Product;
 use App\Models\UserDetailAlert;
 use App\Models\UserDetails;
 use App\Models\Favorite;
 use App\Services\Front\AuthService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,9 +35,9 @@ class AuthController extends Controller
     public function dashboard()
     {
         $user = auth::user();
-        $products = Product::with(['productDetail', 'image', 'disciplines', 'height', 'sex','category'])
+        $products = Product::with(['productDetail', 'image', 'disciplines', 'height', 'sex', 'category'])
             ->where(
-                ['deleted_at' => null,'user_id' => $user->id]
+                ['deleted_at' => null, 'user_id' => $user->id]
             )
             ->orderBy('id', 'desc')
             ->limit(6)
@@ -57,7 +59,7 @@ class AuthController extends Controller
     public function postLogin(LoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
-       
+
         $credentials['role'] = 2; // Optional but helpful
 
         if (Auth::guard('web')->attempt($credentials)) {
@@ -66,7 +68,7 @@ class AuthController extends Controller
                 Auth::logout();
                 return redirect()->back()->with('error', 'Please verify your email before logging in.')->withInput();
             }
-             $remember = $request->filled('remember');
+            $remember = $request->filled('remember');
             Auth::attempt($credentials, $remember);
             return redirect()->route('dashboard')->with('success', 'Login successful!');
         }
@@ -213,20 +215,42 @@ class AuthController extends Controller
     }
     public function mapboxevent(Request $request)
     {
-         $categoryId = $request->query('category');
+        $categoryId = $request->query('category');
 
         if (!$categoryId) {
             return response()->json([
                 'error' => 'Category parameter is required'
             ], 400);
         }
-        
-        if(in_array($categoryId, [1,2,3,4]))
-        {
+
+        if (in_array($categoryId, [1, 2, 3, 4])) {
             $data = Product::with(['user', 'productDetail', 'image'])
                 ->where(['product_status' => 'live', 'deleted_at' => null])
-                ->where('category_id', $categoryId)
-                ->orderBy('id', 'desc')
+                ->where('category_id', $categoryId);
+            if ($request->name) {
+                $data = $data->where("title", 'like', "%" . $request->name . "%");
+            }
+            if ($request->latitude && $request->longitude) {
+                $latitude = $request->latitude;
+                $longitude = $request->longitude;
+                $radius = 100;
+
+                $data->whereHas('productDetail', function ($query) use ($latitude, $longitude, $radius) {
+                    $haversine = "(6371 * acos(cos(radians($latitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians($longitude)) 
+                        + sin(radians($latitude)) 
+                        * sin(radians(latitude))))";
+
+                    $query->select('*')
+                        ->whereRaw("$haversine < ?", [$radius]);
+                });
+            }
+            if ($request->date) {
+                $searchDate=date("Y-m-d",strtotime($request->date));
+                $data = $data->whereDate("created_at", $searchDate);
+            }
+            $data = $data->orderBy('id', 'desc')
                 ->get();
         } elseif ($categoryId == 5) {
             $now = Carbon::now();
@@ -244,11 +268,14 @@ class AuthController extends Controller
                 ->orderBy('time', 'asc')
                 ->get();
         }
-        $html= view("homemapview",compact("data"))->render();
+        $latitude=$request->latitude ?? 26.836992;
+        $longitude= $request->longitude ?? 75.769446;
+        $html = view("homemapview", compact("data",'latitude','longitude'))->render();
         // return $html;
-         return response()->json([
+     
+        return response()->json([
             'html' => $html,
-           
+
         ]);
     }
 }
