@@ -63,83 +63,99 @@ Your Ads
                         </div>
                     </div>
 
-                <div class="info-desc">
+                    <div class="info-desc">
                         <h3 class="horse-info-heading">More Details</h3>
-                         <div class="horse-info-box">
+                        <div class="horse-info-box">
 
                             @if($product->sale_method == 'auction' && $product->product_status == 'live')
-                            <div class="horse-info-row"><span class="horse-label">Auction End Date :</span> {{ \Carbon\Carbon::parse(@$product->bid_expire_date)->format('d M Y') }}</div>
+                                <div class="horse-info-row"><span class="horse-label">Auction End Date :</span> {{ \Carbon\Carbon::parse(@$product->bid_expire_date)->format('d M Y') }}</div>
                             @endif
-                            <div class="horse-info-row"><span class="horse-label">Subcategory :</span> {{@$product->subcategory->name}}</div>
-                            <div class="horse-info-row"><span class="horse-label">Discipline:</span> 
-                                {{ @$product->disciplines->map(function($disciplines) {
-                                    return optional($disciplines->commonMaster)->name;
-                                })->filter()->implode(', ') }}
-                            </div>
-                            <div class="horse-info-row"><span class="horse-label">Age:</span> 
-                                {{ (@$product->productDetail->age)?\Carbon\Carbon::parse("01-01-".@$product->productDetail->age)->age:0}} Years
-                            </div>
-                            <div class="horse-info-row"><span class="horse-label">Height in hands:</span> 
-                                {{@$product->height->commonMaster->name}}
-                            </div>
-                            <div class="horse-info-row"><span class="horse-label">Breed:</span> 
-                                {{ @$product->breeds->map(function($breeds) {
-                                    return optional($breeds->commonMaster)->name;
-                                })->filter()->implode(', ') }}
-                            </div>
-                            <div class="horse-info-row"><span class="horse-label">Sex:</span> {{@$product->sex->commonMaster->name}}</div>
-                            <div class="horse-info-row"><span class="horse-label">Colors:</span>
-                                {{ @$product->colors->map(function($colors) {
-                                    return optional($colors->commonMaster)->name;
-                                })->filter()->implode(', ') }}
-                            </div>
-                            <div class="horse-info-row"><span class="horse-label">Training & Show Experience:</span>
-                                {{ @$product->trainingShowExperiences->map(function($show) {
-                                    return optional($show->commonMaster)->name;
+
+                            <div class="horse-info-row"><span class="horse-label">Horse Apparel:</span>
+                                {{ @$product->horseApparels->map(function($horse_apparel) {
+                                    return optional($horse_apparel->commonMaster)->name;
                                 })->filter()->implode(', ') }}
                             </div>
 
-                            <div class="horse-info-row"><span class="horse-label">Green Eligibility:</span> {{@$product->greenEligibilities->commonMaster->name}}</div>
-
-                            <div class="horse-info-row"><span class="horse-label">Qualified For:</span>
-                                {{ @$product->qualifies->map(function($height) {
-                                    return optional($height->commonMaster)->name;
-                                })->filter()->implode(', ') }}
-                            </div>
-                            <div class="horse-info-row"><span class="horse-label">Current Fence Height:</span>
-                                {{ @$product->currentFenceHeight->map(function($height) {
-                                    return optional($height->commonMaster)->name;
-                                })->filter()->implode(', ') }}
-                            </div>
-                            <div class="horse-info-row"><span class="horse-label">Potential Fence Height:</span>
-                                {{ @$product->potentialFenceHeight->map(function($height) {
-                                    return optional($height->commonMaster)->name;
-                                })->filter()->implode(', ') }}
-                            </div>
-                            <div class="horse-info-row"><span class="horse-label">Can Be Tried at Upcoming Show :</span>
-                                {{ @$product->triedUpcomingShows->map(function($height) {
-                                    return optional($height->commonMaster)->name;
+                            <div class="horse-info-row"><span class="horse-label">Rider Apparel:</span>
+                                {{ @$product->riderApparels->map(function($rider_apparel) {
+                                    return optional($rider_apparel->commonMaster)->name;
                                 })->filter()->implode(', ') }}
                             </div>
 
-                            <div class="horse-info-row"><span class="horse-label">Trial Dates Available:</span>
-                                {{ \Carbon\Carbon::parse(@$product->productDetail->fromdate)->format('d M Y') }} - {{ \Carbon\Carbon::parse(@$product->productDetail->todate)->format('d M Y') }}
+                            <div class="horse-info-row"><span class="horse-label">Horse Tack:</span>
+                                {{ @$product->horseTacks->map(function($horse_tack) {
+                                    return optional($horse_tack->commonMaster)->name;
+                                })->filter()->implode(', ') }}
                             </div>
-                            <div class="horse-info-row"><span class="horse-label">Trainer:</span>
-                                {{@$product->productDetail->trainer}}
+
+                            <div class="horse-info-row"><span class="horse-label">Trailer Trucks:</span>
+                                {{ @$product->trailerTrucks->map(function($trailer_trucks) {
+                                    return optional($trailer_trucks->commonMaster)->name;
+                                })->filter()->implode(', ') }}
                             </div>
-                            <div class="horse-info-row"><span class="horse-label">Facility:</span>
-                                {{@$product->productDetail->facility}}
+
+                            <div class="horse-info-row"><span class="horse-label">For Barns:</span>
+                                {{@$product->forBarns->map(function($for_barns) {
+                                    return optional($for_barns->commonMaster)->name;
+                                })->filter()->implode(', ') }}
                             </div>
-                            <div class="horse-info-row"><span class="horse-label">Sire Bloodlines:</span>
-                                {{@$product->productDetail->sirebloodline}}
+                            
+                            <div class="horse-info-row"><span class="horse-label">Equine Supplements:</span>
+                                {{@$product->equineSupplements->map(function($equine_supplements) {
+                                    return optional($equine_supplements->commonMaster)->name;
+                                })->filter()->implode(', ') }}
                             </div>
-                            <div class="horse-info-row"><span class="horse-label">Dam Bloodlines:</span>
-                                {{@$product->productDetail->dambloodline}}
+                            
+                            <div class="horse-info-row"><span class="horse-label">Conditions:</span>
+                                {{@$product->conditions->map(function($conditions) {
+                                    return optional($conditions->commonMaster)->name;
+                                })->filter()->implode(', ') }}
                             </div>
-                            <div class="horse-info-row"><span class="horse-label">USEF:</span>
-                                {{@$product->productDetail->usef}}
+
+                            <div class="horse-info-row"><span class="horse-label">Brands:</span>
+                                {{@$product->brands->map(function($brands) {
+                                    return optional($brands->commonMaster)->name;
+                                })->filter()->implode(', ') }}
                             </div>
+                            
+                            <div class="horse-info-row"><span class="horse-label">Horse Sizes:</span>
+                                {{@$product->horseSizes->map(function($horse_sizes) {
+                                    return optional($horse_sizes->commonMaster)->name;
+                                })->filter()->implode(', ') }}
+                            </div>
+                            
+                            <div class="horse-info-row"><span class="horse-label">Rider Sizes:</span>
+                                {{@$product->riderSizes->map(function($rider_sizes) {
+                                    return optional($rider_sizes->commonMaster)->name;
+                                })->filter()->implode(', ') }}
+                            </div>
+                            
+                            <div class="horse-info-row"><span class="horse-label">Exchanged Upcoming Horse Shows:</span>
+                                {{@$product->equineSupplements->map(function($equine_supplements) {
+                                    return optional($equine_supplements->commonMaster)->name;
+                                })->filter()->implode(', ') }}
+                            </div>
+
+                            <div class="horse-info-row"><span class="horse-label">Hourly Price :</span> {{@$product->productDetail->hourly_price}}</div>
+                            <div class="horse-info-row"><span class="horse-label">Fixed Price:</span> 
+                                {{ @$product->productDetail->fixed_price }}
+                            </div>
+                            <div class="horse-info-row"><span class="horse-label">Precise Location:</span> 
+                                {{ @$product->productDetail->precise_location }}
+                            </div>
+
+                            <div class="horse-info-row"><span class="horse-label">Street:</span> {{@$product->productDetail->street}}</div>
+                            
+                            <div class="horse-info-row"><span class="horse-label">City:</span> {{@$product->productDetail->city}}</div>
+                            <div class="horse-info-row"><span class="horse-label">State:</span> 
+                                {{ @$product->productDetail->state }}
+                            </div>
+
+                            <div class="horse-info-row"><span class="horse-label">Country:</span> 
+                                {{@$product->productDetail->country}}
+                            </div>
+                            
                         </div>
                         <h3 class="horse-info-heading">Listing Description</h3>
                         
@@ -149,8 +165,7 @@ Your Ads
                             </p>
                         </div>
                         @if(@$product->productDetail->pedigree_chart)
-                        <h3 class="horse-info-heading">Pedigree Chart</h3>
-                        <img class="pedigreechart" src="{{asset('storage/'.@$product->productDetail->pedigree_chart)}}" alt="" />
+                        
                         <div class="info-desc-footer">
                             <ul>
                                 <li><span> <img src="{{asset('front/home/assets/images/location-icon.svg')}}" alt="" /></span> {{@$product->productDetail->city}}, {{@$product->productDetail->state}}, {{@$product->productDetail->country}}</li>
@@ -163,6 +178,8 @@ Your Ads
                         </div>
                         @endif
                     </div>
+
+                
                     <div class="info-desc mt-4">
                         <h3 class="horse-info-heading">More Details</h3>
                         <ul class="list-unstyled d-flex gap-3">

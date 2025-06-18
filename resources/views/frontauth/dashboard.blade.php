@@ -5,26 +5,27 @@
 @endsection
 @section('content')
 
-    <div class="container-fluid mt-4">
-        <div class="ms-0 mb-3  d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="h5 font-weight-bolder">Dashboard</h4>
-            <div class="d-flex align-items-center gap-3 ">
-                <a href="{{route('product')}}" class="btn btn-primary">Submit Ad</a>
-                <div class="dropdown">
-                    <button class="btn btn-secondary d-flex align-items-center gap-2" type="button" id="dropdownMenuButton"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        This Month
-                        <i class="fi fi-rr-angle-small-down"></i>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="#">January</a></li>
-                        <li><a class="dropdown-item" href="#">February</a></li>
-                        <li><a class="dropdown-item" href="#">March</a></li>
-                        <li><a class="dropdown-item" href="#">April</a></li>
-                    </ul>
-                </div>
+<div class="container-fluid mt-4">
+    <div class="ms-0 mb-3  d-flex align-items-center justify-content-between flex-wrap">
+        <h4 class="h5 font-weight-bolder">Dashboard</h4>
+        <div class="d-flex align-items-center gap-3 ">
+            <a href="{{route('product')}}" class="btn btn-primary">Submit Ad</a>
+            <div class="dropdown">
+                <button class="btn btn-secondary d-flex align-items-center gap-2" type="button" id="dropdownMenuButton"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    This Month
+                    <i class="fi fi-rr-angle-small-down"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="#">January</a></li>
+                    <li><a class="dropdown-item" href="#">February</a></li>
+                    <li><a class="dropdown-item" href="#">March</a></li>
+                    <li><a class="dropdown-item" href="#">April</a></li>
+                </ul>
             </div>
         </div>
+    </div>
+   
         <div class="row dashboard-box">
             <div class="col-12 col-sm-12 col-md-6 col-xl-3">
                 <div class="dashboard-card border-end remove-border-md">
@@ -33,7 +34,7 @@
                             <div>
 
                                 @if(Auth::user()->plan_expired_on != '' && Auth::user()->plan_expired_on != null)
-                                    <h4>{{ \Carbon\Carbon::createFromTimestamp(Auth::user()->plan_expired_on)->format('d M Y h:i A') }}
+                                    <h4>{{ \Carbon\Carbon::createFromTimestamp(Auth::user()->plan_expired_on)->format('d M Y ') }}
                                     </h4>
 
                                     <p>Subscription Expires</p>
@@ -115,7 +116,7 @@
             </div>
         </div>
 
-        <div class="row g-4">
+        <div class="row g-4 my-3">
             <!-- Visit Chart -->
             <div class="col-12 col-lg-8">
                 <div class="chart-card">
@@ -144,14 +145,14 @@
                 <div class="chart-card">
                     <div class="chart-header">
                         <h5 class="chart-title">Earnings</h5>
-                        <button class="btn btn-sm btn-outline-secondary">
+                        <!-- <button class="btn btn-sm btn-outline-secondary">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <circle cx="12" cy="12" r="1"></circle>
                                 <circle cx="19" cy="12" r="1"></circle>
                                 <circle cx="5" cy="12" r="1"></circle>
                             </svg>
-                        </button>
+                        </button> -->
                     </div>
                     <div class="earnings-chart-container">
                         <div class="radial-chart-wrapper">

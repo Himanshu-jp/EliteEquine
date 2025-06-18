@@ -75,8 +75,12 @@
                             <label for="currency">Currency</label>
                             <select id="currency" class="form-select form-control" name="currency">
                                 <option value="">Select currency</option>
-                                <option value="USD">USD</option>
-                                <option value="AUD">AUD</option>
+
+                                @foreach(__getCurrencyList() as $key=>$value)
+                                    <option value="{{$key}}" >{{$key}}</option>
+                                @endforeach
+                                {{-- <option value="USD">USD</option>
+                                <option value="AUD">AUD</option> --}}
                             </select>
                         </div>
 

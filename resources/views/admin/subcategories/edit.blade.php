@@ -53,10 +53,12 @@
                                             id="category_id" name="category_id">
                                         <option value="">Select Category</option>
                                         @foreach($categories as $category)
+                                             @if(in_array($category->id,[1,3]))
                                             <option value="{{ $category->id }}"
                                               {{ old('category_id', $subCategory->category_id) == $category->id ? 'selected' : '' }}>
                                               {{ $category->name }}
                                             </option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     @error('category_id')

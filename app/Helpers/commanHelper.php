@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use Stripe\StripeClient;
 use Stripe\Transfer;
 use Stripe\Stripe;
+use Illuminate\Support\Facades\Auth;
+use Currency\Util\CurrencySymbolMapping;
 
 use Stripe\Balance;
 // use Log;
@@ -32,7 +34,10 @@ if (!function_exists('checkProfileSettingUpdate')) {
         {
             return ['sauccess' => false, 'message' => 'Please first complete your Settings details.', 'code' => 422];
         }
-
+ if(Auth::user()->is_subscribed != '1')
+        {
+            return ['sauccess' => false, 'message' => 'You does not have any valid subscription.','code' => 422];
+        }
 		return ['success' => true, 'message' => 'success', 'code' => 200];
     }
 }
@@ -597,6 +602,14 @@ if (!function_exists('__getBannersBarnsList')) {
 			"Price Reduced"=>"Price Reduced",
 			"Motivated Seller"=>"Motivated Seller"
 		];
+		return $data;
+    }
+}
+
+if (!function_exists('__getCurrencyList')) {
+    function __getCurrencyList()
+    {
+		$data = CurrencySymbolMapping::values();;
 		return $data;
     }
 }

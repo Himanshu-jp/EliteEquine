@@ -91,7 +91,10 @@ class ProductListingController extends Controller
         }
 
         if (!empty($request->subCategory)) {
-            $data->whereIn('sub_category', $request->subCategory);
+            $subCategory = $request->subCategory;
+            $data->whereHas('subCategory', function ($q) use ($subCategory) {
+                $q->whereIn('category_id', $subCategory);
+            });
         }
 
         if (!empty($request->minPrice) && !empty($request->maxPrice)) {
@@ -360,7 +363,7 @@ class ProductListingController extends Controller
             'video',
             'document',
             'category',
-            'subcategory',
+            'subcategory.category',
             'disciplines',
             'breeds',
             'colors',
@@ -771,7 +774,10 @@ class ProductListingController extends Controller
         }
 
         if (!empty($request->subCategory)) {
-            $data->whereIn('sub_category', $request->subCategory);
+            $subCategory = $request->subCategory;
+            $data->whereHas('subCategory', function ($q) use ($subCategory) {
+                $q->whereIn('category_id', $subCategory);
+            });
         }
 
         if (!empty($request->propertyTypes)) {

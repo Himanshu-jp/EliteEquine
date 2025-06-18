@@ -355,7 +355,7 @@ Product Details
                             </div>
                         @endif
 
-                        @if(@$products->sale_method == 'standard' && @$products->product_status == 'live')
+                        @if(@$products->sale_method == 'standard' && @$products->product_status == 'live' && @$products->transaction_method == 'platform')
                             <div class="pb-3 gap-2">
                                 <span class="text-secondary">Price</span>
                                 <h2 class="fw-bold">{{ $products->currency.' '.number_format($products->price,2) }} </h2>

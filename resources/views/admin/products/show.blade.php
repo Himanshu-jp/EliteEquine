@@ -50,7 +50,14 @@
                                 <li><strong>Negotiable:</strong> {{ $product->is_negotiable ? 'Yes' : 'No' }}</li>
                                 <li><strong>Sale Method:</strong> {{ ucfirst($product->sale_method) }}</li>
                                 <li><strong>Category:</strong> {{ $product->category->name ?? 'N/A' }}</li>
-                                <li><strong>Subcategory:</strong> {{ $product->subcategory->name ?? 'N/A' }}</li>
+                                @if(in_array($product->category_id,[1,3]))
+                                    <li><strong>Subcategory:</strong> {{
+                                        @$product->subcategory->map(function($show) {
+                                            return $show->category->name;
+                                        })->filter()->implode(', ')
+                                    
+                                    }}</li>
+                                @endif
                                 <li><strong>Description:</strong> {!! $product->description !!}</li>
                                 <li><strong>External Link:</strong>
                                     <a href="{{ $product->external_link }}" target="_blank">{{ $product->external_link }}</a>

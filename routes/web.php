@@ -228,6 +228,9 @@ Route::get('/review', [HomeController::class, 'review'])->name('review');
 Route::get('/invoice', [HomeController::class, 'invoice'])->name('invoice');
 Route::get('/invoiceDetails/{id}', [HomeController::class, 'invoiceDetails'])->name('invoiceDetails');
 Route::post('/charge_add_ons', [HomeController::class, 'charge_add_ons'])->name('charge_add_ons');
+Route::get('/notificationModalnextLevel', [HomeController::class, 'notificationModalnextLevel'])->name('notificationModalnextLevel');
+Route::get('/check_seriesCheck', [HomeController::class, 'check_seriesCheck'])->name('check_seriesCheck');
+
 
 // Route::get('/bidDetails', [HomeController::class, 'bidDetails'])->name('bidDetails');
 

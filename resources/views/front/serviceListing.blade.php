@@ -297,21 +297,11 @@ Horse Listing
                             <img class="icon-input" src="{{asset('front/home/assets/images/search-icon.svg')}}">
                         </div>
                         
-                      <div class="search-box">
-                                <input type="text" placeholder="Located in" class="form-control"
-                                    value="{{ @$filter['location'] }}" onkeyup="initializeLocationAutocomplete()"
-                                    id="location" autocomplete="off" />
-                                <img class="icon-input" src="{{ asset('front/home/assets/images/search-icon.svg') }}">
-                                <span id="location-message" class="text-danger"
-                                    style="display: none; font-size: 12px;"></span>
-                                <ul id="location-list" style="display: none;">
-                                    <!-- Location suggestions will appear here -->
-                                </ul>
-                                <input type="hidden" id="latitude" name="latitude"
-                                    value="{{ request()->query('latitude') }}">
-                                <input type="hidden" id="longitude" name="longitude"
-                                    value="{{ request()->query('longitude') }}">
-                            </div>
+                        <div class="search-box">
+                            <input type="text" placeholder="Located in" class="form-control" value="{{@$filter['location']}}" id="location" />
+                            <img class="icon-input" src="{{asset('front/home/assets/images/search-icon.svg')}}">
+                        </div>
+
                         <div class="date-box">
                              <input type="text" class="inner-form form-control mb-0 datepicker" autocomplete="off" name="date" id="date" placeholder="Date">
                             <img class="icon-input date" src="{{asset('front/home/assets/images/date-icon.svg')}}">
@@ -391,7 +381,7 @@ Horse Listing
 
 @section('script')
 
-@include("front.autocompletescript")
+
 
 <script>
     document.querySelectorAll('input[name="view_mode"]').forEach((radio) => {
@@ -466,8 +456,6 @@ function loadHorses(page = 1) {
             search:$("#search").val(),
             location:$("#location").val(),
             category: $('#category').val(),
-                latitude: $('#latitude').val(),
-                    longitude: $('#longitude').val(),
             sort: $('#sort').val(),
             limit: $('#limit').val(),
             date:$("#date").val(),

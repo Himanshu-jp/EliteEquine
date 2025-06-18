@@ -12,242 +12,260 @@
 
                     <!-- Filter Sidebar -->
                     <div class="filter-sidebar" id="filterSidebar">
+<div class="filter-section">
+                        <label for="currency">Currency</label>
+                        <select id="currency" class="form-select form-control" name="currency">    
+                            <option value="">Select currency</option>
+                            @foreach(__getCurrencyList() as $key=>$value)
+                                <option value="{{$key}}" >{{$key}}</option>
+                            @endforeach
+                            {{-- <option value="USD">USD</option>
+                            <option value="AUD">AUD</option> --}}
+                        </select>
+                    </div>
 
-                        <div class="filter-section">
-                            <label for="currency">Currency</label>
-                            <select id="currency" class="form-select form-control" name="currency">
-                                <option value="">Select currency</option>
-                                <option value="USD">USD</option>
-                                <option value="AUD">AUD</option>
-                            </select>
+                    <div class="filter-section ">
+                        <h4>Sub Category</h4>
+                        <div class="filter-ads-checkbx">
+                            @foreach(__subCategoryBarnsData() as $key=>$val)
+                                <input 
+                                    type="checkbox" 
+                                    id="subCategory_{{$key}}" 
+                                    value="{{$key}}" 
+                                    name="subCategory[]"
+                                    {{ in_array($key, $selectedSubCategories ?? []) ? 'checked' : '' }}
+                                />
+                                <label for="subCategory_{{$key}}">{{$val}}</label>
+                            @endforeach
                         </div>
+                    </div>
+                   
+                    <div class="filter-section ">
+                        <h4>Property Types</h4>
+                        <div class="filter-ads-checkbx">
+                            @foreach(__getPropertyTypesData() as $key=>$val)
+                                <input 
+                                    type="checkbox" 
+                                    id="propertyTypes_{{$key}}" 
+                                    value="{{$key}}" 
+                                    name="propertyTypes[]"
+                                    {{ in_array($key, $selectedPropertyTypes ?? []) ? 'checked' : '' }}
+                                />
+                                <label for="propertyTypes_{{$key}}">{{$val}}</label>
+                            @endforeach
+                        </div>
+                    </div>
 
-                        <div class="filter-section ">
-                            <h4>Sub Category</h4>
-                            <div class="filter-ads-checkbx">
-                                @foreach (__subCategoryBarnsData() as $key => $val)
-                                    <input type="checkbox" id="subCategory_{{ $key }}" value="{{ $key }}"
-                                        name="subCategory[]"
-                                        {{ in_array($key, $selectedSubCategories ?? []) ? 'checked' : '' }} />
-                                    <label for="subCategory_{{ $key }}">{{ $val }}</label>
-                                @endforeach
+                    <div class="filter-section ">
+                        <h4>Banners</h4>
+                        <div class="filter-ads-checkbx">
+                            @foreach(__getBannersBarnsList() as $key=>$val)
+                                <input 
+                                    type="checkbox" 
+                                    id="banner_{{$key}}" 
+                                    value="{{$key}}" 
+                                    name="banner[]"
+                                    {{ in_array($key, $selectedBanner ?? []) ? 'checked' : '' }}
+                                />
+                                <label for="banner_{{$key}}">{{$val}}</label>
+                            @endforeach
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h4>Ratings</h4>
+                        <div class="filter-ads-checkbx">
+                            @for($i = 1; $i <= 5; $i++)
+                                <input 
+                                    type="checkbox" 
+                                    id="rating_{{ $i }}" 
+                                    value="{{ $i }}" 
+                                    name="rating[]"
+                                    {{ in_array($i, $selectedRatings ?? []) ? 'checked' : '' }}
+                                />
+                                <label for="rating_{{ $i }}">
+                                    {{-- Display ★ symbols --}}
+                                    {!! str_repeat('<i class="fa-solid fa-star"></i>', $i) !!}
+                                </label>
+                            @endfor
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h4>Stalls Available </h4>
+                        <div class="price-range-min-max">
+                            <div>
+                                <label for="keyword">Min</label>
+                                <input type="text" class="input-filter numbervalid" id="minStall" name="minStall" />
+                            </div>
+                            <span>
+                                <label for="keyword">&nbsp</label>
+                                -
+                            </span>
+                            <div>
+                                <label for="keyword">Max</label>
+                                <input type="text" class="input-filter numbervalid" id="maxStall" name="maxStall"/>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="filter-section ">
-                            <h4>Property Types</h4>
-                            <div class="filter-ads-checkbx">
-                                @foreach (__getPropertyTypesData() as $key => $val)
-                                    <input type="checkbox" id="propertyTypes_{{ $key }}"
-                                        value="{{ $key }}" name="propertyTypes[]"
-                                        {{ in_array($key, $selectedPropertyTypes ?? []) ? 'checked' : '' }} />
-                                    <label for="propertyTypes_{{ $key }}">{{ $val }}</label>
-                                @endforeach
+                     <div class="filter-section ">
+                        <h4>Stable Amenities</h4>
+                        <div class="filter-ads-checkbx">
+                            @foreach(__getStableAmenitiesData() as $key=>$val)
+                                <input 
+                                    type="checkbox" 
+                                    id="stableAmenities_{{$key}}" 
+                                    value="{{$key}}" 
+                                    name="stableAmenities[]"
+                                    {{ in_array($key, $selectedStableAmenities ?? []) ? 'checked' : '' }}
+                                />
+                                <label for="stableAmenities_{{$key}}">{{$val}}</label>
+                            @endforeach
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <label for="housingStablesAroundHorseShows">Housing or Stables around Horse Show</label>
+                        <select id="housingStablesAroundHorseShows" class="form-select form-control select2" name="housingStablesAroundHorseShows[]" multiple>
+                            @foreach(__getHousingStable() as $key=>$val)
+                            <option value="{{$key}}">{{$val}}</option>
+                            @endforeach          
+                        </select>
+                    </div>
+
+                    <div class="filter-section">
+                         <h4>Dates Available From</h4>
+                        <div class="price-range-min-max">
+                            <div>
+                                <label for="trial_from">From</label>
+                                <input type="text" class="form-control datepicker" id="ftrial_from" name="trial_from" />
+                            </div>
+                            <span>
+                                <label for="keyword">&nbsp</label>
+                                -
+                            </span>
+                            <div>
+                                <label for="trial_to">To</label>
+                                <input type="text" class="form-control datepicker" id="ftrial_to" name="ftrial_to"/>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="filter-section ">
-                            <h4>Banners</h4>
-                            <div class="filter-ads-checkbx">
-                                @foreach (__getBannersBarnsList() as $key => $val)
-                                    <input type="checkbox" id="banner_{{ $key }}" value="{{ $key }}"
-                                        name="banner[]" {{ in_array($key, $selectedBanner ?? []) ? 'checked' : '' }} />
-                                    <label for="banner_{{ $key }}">{{ $val }}</label>
-                                @endforeach
+
+                    <div class="filter-section">
+                        <h4>Sleeps</h4>
+                        <div class="price-range-min-max">
+                            <div>
+                                <label for="keyword">Min</label>
+                                <input type="text" class="input-filter numbervalid" id="minSleep" name="minSleep" />
+                            </div>
+                            <span>
+                                <label for="keyword">&nbsp</label>
+                                -
+                            </span>
+                            <div>
+                                <label for="keyword">Max</label>
+                                <input type="text" class="input-filter numbervalid" id="maxSleep" name="maxSleep"/>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="filter-section">
-                            <h4>Ratings</h4>
-                            <div class="filter-ads-checkbx">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <input type="checkbox" id="rating_{{ $i }}" value="{{ $i }}"
-                                        name="rating[]" {{ in_array($i, $selectedRatings ?? []) ? 'checked' : '' }} />
-                                    <label for="rating_{{ $i }}">
-                                        {{-- Display ★ symbols --}}
-                                        {!! str_repeat('<i class="fa-solid fa-star"></i>', $i) !!}
-                                    </label>
-                                @endfor
+
+                    <div class="filter-section ">
+                        <h4>Housing Amenities</h4>
+                        <div class="filter-ads-checkbx">
+                            @foreach(__getHousingAmenitiesData() as $key=>$val)
+                                <input 
+                                    type="checkbox" 
+                                    id="housingAmenities_{{$key}}" 
+                                    value="{{$key}}" 
+                                    name="housingAmenities[]"
+                                    {{ in_array($key, $selectedHousingAmenities ?? []) ? 'checked' : '' }}
+                                />
+                                <label for="housingAmenities_{{$key}}">{{$val}}</label>
+                            @endforeach
+                        </div>
+                    </div>
+                   
+                    <div class="filter-section">
+                        <h4>Daily Board or Rental Rate</h4>
+                        <div class="price-range-min-max">
+                            <div>
+                                <label for="keyword">Min</label>
+                                <input type="text" class="input-filter numbervalid" id="minDailyPrice" name="minDailyPrice" />
+                            </div>
+                            <span>
+                                <label for="keyword">&nbsp</label>
+                                -
+                            </span>
+                            <div>
+                                <label for="keyword">Max</label>
+                                <input type="text" class="input-filter numbervalid" id="maxDailyPrice" name="maxDailyPrice"/>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="filter-section">
-                            <h4>Stalls Available </h4>
-                            <div class="price-range-min-max">
-                                <div>
-                                    <label for="keyword">Min</label>
-                                    <input type="text" class="input-filter numbervalid" id="minStall" name="minStall" />
-                                </div>
-                                <span>
-                                    <label for="keyword">&nbsp</label>
-                                    -
-                                </span>
-                                <div>
-                                    <label for="keyword">Max</label>
-                                    <input type="text" class="input-filter numbervalid" id="maxStall" name="maxStall" />
-                                </div>
+                    <div class="filter-section">
+                        <h4>Monthly Board or Rental Rate</h4>
+                        <div class="price-range-min-max">
+                            <div>
+                                <label for="keyword">Min</label>
+                                <input type="text" class="input-filter numbervalid" id="minMonthlyPrice" name="minMonthlyPrice" />
+                            </div>
+                            <span>
+                                <label for="keyword">&nbsp</label>
+                                -
+                            </span>
+                            <div>
+                                <label for="keyword">Max</label>
+                                <input type="text" class="input-filter numbervalid" id="maxMonthlyPrice" name="maxMonthlyPrice"/>
                             </div>
                         </div>
-
-                        <div class="filter-section ">
-                            <h4>Stable Amenities</h4>
-                            <div class="filter-ads-checkbx">
-                                @foreach (__getStableAmenitiesData() as $key => $val)
-                                    <input type="checkbox" id="stableAmenities_{{ $key }}"
-                                        value="{{ $key }}" name="stableAmenities[]"
-                                        {{ in_array($key, $selectedStableAmenities ?? []) ? 'checked' : '' }} />
-                                    <label for="stableAmenities_{{ $key }}">{{ $val }}</label>
-                                @endforeach
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h4>Weekly Board or Rental Rate</h4>
+                        <div class="price-range-min-max">
+                            <div>
+                                <label for="keyword">Min</label>
+                                <input type="text" class="input-filter numbervalid" id="minWeeklyPrice" name="minWeeklyPrice" />
+                            </div>
+                            <span>
+                                <label for="keyword">&nbsp</label>
+                                -
+                            </span>
+                            <div>
+                                <label for="keyword">Max</label>
+                                <input type="text" class="input-filter numbervalid" id="maxWeeklyPrice" name="maxWeeklyPrice"/>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="filter-section">
-                            <label for="housingStablesAroundHorseShows">Housing or Stables around Horse Show</label>
-                            <select id="housingStablesAroundHorseShows" class="form-select form-control select2"
-                                name="housingStablesAroundHorseShows[]" multiple>
-                                @foreach (__getHousingStable() as $key => $val)
-                                    <option value="{{ $key }}">{{ $val }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="filter-section">
-                            <h4>Dates Available From</h4>
-                            <div class="price-range-min-max">
-                                <div>
-                                    <label for="trial_from">From</label>
-                                    <input type="text" class="form-control datepicker" id="ftrial_from"
-                                        name="trial_from" />
-                                </div>
-                                <span>
-                                    <label for="keyword">&nbsp</label>
-                                    -
-                                </span>
-                                <div>
-                                    <label for="trial_to">To</label>
-                                    <input type="text" class="form-control datepicker" id="ftrial_to" name="ftrial_to" />
-                                </div>
+                    <div class="filter-section">
+                        <h4>Sale Cost</h4>
+                        <div class="price-range-min-max">
+                            <div>
+                                <label for="keyword">Min</label>
+                                <input type="text" class="input-filter numbervalid" id="minSalePrice" name="minSalePrice" />
+                            </div>
+                            <span>
+                                <label for="keyword">&nbsp</label>
+                                -
+                            </span>
+                            <div>
+                                <label for="keyword">Max</label>
+                                <input type="text" class="input-filter numbervalid" id="maxSalePrice" name="maxSalePrice" />
                             </div>
                         </div>
-
-
-                        <div class="filter-section">
-                            <h4>Sleeps</h4>
-                            <div class="price-range-min-max">
-                                <div>
-                                    <label for="keyword">Min</label>
-                                    <input type="text" class="input-filter numbervalid" id="minSleep" name="minSleep" />
-                                </div>
-                                <span>
-                                    <label for="keyword">&nbsp</label>
-                                    -
-                                </span>
-                                <div>
-                                    <label for="keyword">Max</label>
-                                    <input type="text" class="input-filter numbervalid" id="maxSleep" name="maxSleep" />
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="filter-section ">
-                            <h4>Housing Amenities</h4>
-                            <div class="filter-ads-checkbx">
-                                @foreach (__getHousingAmenitiesData() as $key => $val)
-                                    <input type="checkbox" id="housingAmenities_{{ $key }}"
-                                        value="{{ $key }}" name="housingAmenities[]"
-                                        {{ in_array($key, $selectedHousingAmenities ?? []) ? 'checked' : '' }} />
-                                    <label for="housingAmenities_{{ $key }}">{{ $val }}</label>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        <div class="filter-section">
-                            <h4>Daily Board or Rental Rate</h4>
-                            <div class="price-range-min-max">
-                                <div>
-                                    <label for="keyword">Min</label>
-                                    <input type="text" class="input-filter numbervalid" id="minDailyPrice"
-                                        name="minDailyPrice" />
-                                </div>
-                                <span>
-                                    <label for="keyword">&nbsp</label>
-                                    -
-                                </span>
-                                <div>
-                                    <label for="keyword">Max</label>
-                                    <input type="text" class="input-filter numbervalid" id="maxDailyPrice"
-                                        name="maxDailyPrice" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="filter-section">
-                            <h4>Monthly Board or Rental Rate</h4>
-                            <div class="price-range-min-max">
-                                <div>
-                                    <label for="keyword">Min</label>
-                                    <input type="text" class="input-filter numbervalid" id="minMonthlyPrice"
-                                        name="minMonthlyPrice" />
-                                </div>
-                                <span>
-                                    <label for="keyword">&nbsp</label>
-                                    -
-                                </span>
-                                <div>
-                                    <label for="keyword">Max</label>
-                                    <input type="text" class="input-filter numbervalid" id="maxMonthlyPrice"
-                                        name="maxMonthlyPrice" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="filter-section">
-                            <h4>Weekly Board or Rental Rate</h4>
-                            <div class="price-range-min-max">
-                                <div>
-                                    <label for="keyword">Min</label>
-                                    <input type="text" class="input-filter numbervalid" id="minWeeklyPrice"
-                                        name="minWeeklyPrice" />
-                                </div>
-                                <span>
-                                    <label for="keyword">&nbsp</label>
-                                    -
-                                </span>
-                                <div>
-                                    <label for="keyword">Max</label>
-                                    <input type="text" class="input-filter numbervalid" id="maxWeeklyPrice"
-                                        name="maxWeeklyPrice" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="filter-section">
-                            <h4>Sale Cost</h4>
-                            <div class="price-range-min-max">
-                                <div>
-                                    <label for="keyword">Min</label>
-                                    <input type="text" class="input-filter numbervalid" id="minSalePrice"
-                                        name="minSalePrice" />
-                                </div>
-                                <span>
-                                    <label for="keyword">&nbsp</label>
-                                    -
-                                </span>
-                                <div>
-                                    <label for="keyword">Max</label>
-                                    <input type="text" class="input-filter numbervalid" id="maxSalePrice"
-                                        name="maxSalePrice" />
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                        <button type="button" class="apply-flitter w-100" onclick="loadHorsesAndScroll()">Apply
-                            Filters</button>
 
                     </div>
+                    
+
+                    <button type="button" class="apply-flitter w-100" onclick="loadHorsesAndScroll()">Apply Filters</button>
+
+                </div>
+
 
                     <!-- Main Content -->
 
@@ -376,8 +394,8 @@
                                     </svg>
                                     <h5 class="my-4">No ads found matched your criteria</h5>
                                     <hr>
-                                    <a href="{{ route('settings') }}" class="text-gold"><u>Select Your Notifications
-                                            Settings</u></a>
+
+                                    <a href="javascript:;"  class=" go-to-notify-on text-gold"><u>Select Your Notifications Settings</u></a>
                                 </div>
                             </div>
                         @endif
