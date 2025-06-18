@@ -1,4 +1,24 @@
 @extends('front.layouts.main')
+<style>
+.slot.selected-slot {
+    background-color: #a19061 !important;
+    color: white !important;
+    border: 2px solid #a19061 !important;
+    line-height: 1;
+    padding: 5px 0px;
+}
+#calendar strong {
+    color: #a19061;
+}
+.border-top-custom {
+    border-top: 4px solid #a19061;
+    border-radius: 4px;
+    padding-top: 4px;
+}
+.time-box-brder {
+    border-right: 1px solid #cccccc73;
+}
+</style>
 @section('title')
 Product Details
 @endsection
@@ -311,14 +331,16 @@ Product Details
                                     <!-- Populated by JS -->
                                 </select>
                                 </div>
-                                {{--<div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2">
                                 <button id="prevWeek" class="custom-dropdown bg-white px-3"><img src="{{asset('front/home/assets/images/icons/arrow-left.svg')}}" alt="" width="24" /></button>
                                 <div id="dateRange" class="custom-dropdown date-range">9 Feb - 15 Feb</div>
                                 <button id="nextWeek" class="custom-dropdown bg-white px-3"><img src="{{asset('front/home/assets/images/icons/arrow-right.svg')}}" alt="" width="24" /></button>
-                                </div>--}}
+                                </div>
                             </div>
                             <div id="calendar" class="row gx-1 text-center">
                                     <!-- Week header and time slots will be populated here -->
+                            <!-- Time Slot Display -->
+                            <div id="timeSlotsContainer" class="mt-3"></div>
                             </div>
                             <div class="text-end mt-4">
                                 <button class="apply-flitter" id="continue_btn">Continue to Payment</button>
@@ -986,159 +1008,246 @@ function chatCreate() {
   renderCalendar(currentDate); */
 @php
     use Carbon\Carbon;
-    $from = optional($products->productDetail)->fromdate;
-    $to = optional($products->productDetail)->todate;
-    $availableDates = collect($selectedDate)->pluck('service_date')->filter()->map(fn($d) => \Carbon\Carbon::parse($d)->format('Y-m-d'))->values();
 
-    $fromDateJs = $from ? Carbon::parse($from)->format('Y-m-d') : null;
-    $toDateJs = $to ? Carbon::parse($to)->format('Y-m-d') : null;
-//    echo $selectDateJs = $selected ? Carbon::parse($selected)->format('Y-m-d') : null;
+    // Retrieve product details
+    $productDetail = optional($products->productDetail);
+
+    // Extract dates and time slots
+    $timeSlots = json_decode($productDetail->time_slot, true);
 @endphp
 
-const fromDate = "{{ $fromDateJs }}"; 
-const toDate = "{{ $toDateJs }}";     
-const availableDates = @json($availableDates);
-     
-console.log('selectDate:' + availableDates);
-const calendar = document.getElementById("calendar");
-const monthSelect = document.getElementById("monthSelect");
-const options = { weekday: "short", day: "2-digit", month: "short" };
-const now = new Date();
-let selectedDate = null;
 
-// Helper to format date as YYYY-MM-DD
-function formatDateLocal(date) {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, "0");
-    const d = String(date.getDate()).padStart(2, "0");
-    return `${y}-${m}-${d}`;
-}
+document.addEventListener('DOMContentLoaded', function () {
+  let timeSlot;
+  try {
+    timeSlot = @json($timeSlots);
+  } catch (e) {
+    console.error('Invalid JSON for timeSlots:', e);
+    timeSlot = {};
+  }
 
-// Populate month dropdown (next 12 months)
-function populateMonthSelect() {
-    const today = new Date();
-    for (let i = 0; i < 12; i++) {
-        const date = new Date(today.getFullYear(), today.getMonth() + i, 1);
-        const monthYear = date.toLocaleString("default", { month: "long", year: "numeric" });
-        const value = `${date.getFullYear()}-${String(date.getMonth()).padStart(2, '0')}`;
-        const option = new Option(monthYear, value);
-        monthSelect.appendChild(option);
-    }
-    monthSelect.value = `${now.getFullYear()}-${String(now.getMonth()).padStart(2, '0')}`;
-}
+  const scheduleArr = @json($schedulesArr);
 
-// Render all days of the selected month
-function renderMonth(year, month) {
-    calendar.innerHTML = "";
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const prevWeek = document.getElementById('prevWeek');
+  const nextWeek = document.getElementById('nextWeek');
+  const dateRange = document.getElementById('dateRange');
+  const calendar = document.getElementById('calendar');
+  const continueBtn = document.getElementById('continue_btn');
+  const monthSelect = document.getElementById('monthSelect');
 
-    for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(year, month, day);
-        const formattedDate = formatDateLocal(date);
-        const display = date.toLocaleDateString("en-US", options);
+  if (!prevWeek || !nextWeek || !dateRange || !calendar || !continueBtn || !monthSelect) {
+    console.error("Missing DOM elements");
+    return;
+  }
 
-        const isPast = date < new Date(new Date().setHours(0, 0, 0, 0));
-        const isDisabled =
-            isPast ||
-            (fromDate && toDate && formattedDate >= fromDate && formattedDate <= toDate);
+  const availableDates = Object.keys(timeSlot)
+    .sort((a, b) => new Date(a) - new Date(b));
 
-        const isAvailable = availableDates.includes(formattedDate);
+  let filteredDates = [...availableDates]; // Dates filtered by month
+  let currentWeekStartIndex = 0;
+  let selectedSlot = null;
 
-        // const isDisabled = isPast || !isAvailable;
+  function getMonthKey(dateStr) {
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+  }
 
-        const col = document.createElement("div");
-        col.className = "col-4 col-sm-2 mb-3";
+  function populateMonthOptions() {
+    const monthSet = new Set(availableDates.map(getMonthKey));
+    const monthList = [...monthSet].sort();
 
-       /*  col.innerHTML = `
-            <button class="btn w-100 date-btn ${isDisabled ? 'disabled' : 'selectabled'}"
-                    data-date="${formattedDate}"
-                    ${isDisabled ? 'disabled' : ''}>
-                ${display}
-            </button>
-        `; */
-
-        col.innerHTML = `
-            <button class="btn w-100 date-btn ${isPast ? 'disabled' : ''} ${isDisabled ? 'selectabled' : 'disabled'} ${isAvailable ? 'disabled' : 'selectabled'}" 
-                    data-date="${formattedDate}">
-                ${display}
-            </button>
-        `;
-
-        calendar.appendChild(col);
-    }
-
-    attachDateListeners();
-}
-
-
-// Listen for month change
-monthSelect.addEventListener("change", () => {
-    const [year, month] = monthSelect.value.split("-").map(Number);
-    renderMonth(year, month);
-});
-
-// Handle date button click
-function attachDateListeners() {
-    document.querySelectorAll(".date-btn").forEach((btn) => {
-        btn.addEventListener("click", function () {
-            if (btn.classList.contains("disabled")) return;
-
-            document.querySelectorAll(".date-btn").forEach((b) =>
-                b.classList.remove("btn-primary")
-            );
-
-            this.classList.add("btn-primary");
-            selectedDate = this.getAttribute("data-date");
-        });
+    monthList.forEach(monthKey => {
+      const [year, month] = monthKey.split('-');
+      const option = document.createElement('option');
+      const date = new Date(`${year}-${month}-01`);
+      option.value = monthKey;
+      option.text = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+      monthSelect.appendChild(option);
     });
-}
+  }
 
-// Handle "Continue" button click
-document.getElementById("continue_btn").addEventListener("click", () => {
-    if (selectedDate) {
-        const url = "{{ route('product.checkout.process', $products->id) }}";
-        $.ajax({
-            url: url,
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                service_job: true,
-                service_date: selectedDate
-            },
-            success: function (response) {
-                if (response.success && response.redirect_url) {
-                    window.location.href = response.redirect_url;
-                } else {
-                    alert('Something went wrong. Please try again.');
-                }
-            },
-            error: function (xhr) {
-                alert('Submission failed. Please try again.');
-                console.error('Error:', xhr.responseText);
-            }
-        });
-    } else {
-        Swal.fire({
-            toast: true,
-            title: 'Please select a date first.',
-            icon: 'error',
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
+  function filterDatesByMonth(monthKey) {
+    filteredDates = availableDates.filter(dateStr => getMonthKey(dateStr) === monthKey);
+    currentWeekStartIndex = 0;
+    renderCalendar();
+  }
+
+  function getWeekDates(startIndex) {
+    return filteredDates.slice(startIndex, startIndex + 7);
+  }
+
+  function isSlotBooked(dateStr, from, to) {
+    return scheduleArr.some(s =>
+      s.service_date === dateStr &&
+      s.time_slot_from === from &&
+      s.time_slot_to === to
+    );
+  }
+
+  function renderCalendar() {
+    calendar.innerHTML = '';
+
+    const week = getWeekDates(currentWeekStartIndex);
+    if (!week.length) {
+      calendar.innerHTML = '<div class="text-muted">No time slots available.</div>';
+      dateRange.textContent = '';
+      prevWeek.disabled = true;
+      nextWeek.disabled = true;
+      continueBtn.disabled = true;
+      return;
     }
+
+    const headerRow = document.createElement('div');
+    headerRow.className = 'row text-center mb-2';
+    const slotRow = document.createElement('div');
+    slotRow.className = 'row';
+
+    week.forEach(dateStr => {
+      const dateObj = new Date(dateStr);
+      const slots = Array.isArray(timeSlot[dateStr]) ? timeSlot[dateStr] : [];
+
+      const headerCol = document.createElement('div');
+      headerCol.className = 'col border-top-custom';
+      headerCol.innerHTML = `
+        ${dateObj.toLocaleDateString('en-GB', { weekday: 'short' })}<br>
+        <strong>${dateObj.getDate()}</strong>
+      `;
+      headerRow.appendChild(headerCol);
+
+      const slotCol = document.createElement('div');
+      slotCol.className = 'col time-box-brder p-2';
+
+      if (slots.length === 0) {
+        const noSlotDiv = document.createElement('div');
+        noSlotDiv.className = 'text-muted small';
+        noSlotDiv.textContent = 'No slots';
+        slotCol.appendChild(noSlotDiv);
+      } else {
+        slots.forEach(([from, to]) => {
+          const isBooked = isSlotBooked(dateStr, from, to);
+          const slotDiv = document.createElement('div');
+          slotDiv.className = 'slot my-1 p-1 rounded';
+          slotDiv.textContent = `${from} - ${to}`;
+
+          if (isBooked) {
+            slotDiv.classList.add('bg-secondary', 'text-white');
+            slotDiv.style.cursor = 'not-allowed';
+          } else {
+            slotDiv.classList.add('bg-light');
+            slotDiv.style.cursor = 'pointer';
+
+            if (selectedSlot &&
+              selectedSlot.dateStr === dateStr &&
+              selectedSlot.from === from &&
+              selectedSlot.to === to) {
+              slotDiv.classList.add('selected-slot');
+            }
+
+            slotDiv.addEventListener('click', () => {
+              document.querySelectorAll('.slot.selected-slot').forEach(el => {
+                el.classList.remove('selected-slot');
+              });
+              slotDiv.classList.add('selected-slot');
+              selectedSlot = { dateStr, from, to };
+              console.log('Selected slot:', selectedSlot);
+              continueBtn.disabled = false;
+            });
+          }
+
+          slotCol.appendChild(slotDiv);
+        });
+      }
+
+      slotRow.appendChild(slotCol);
+    });
+
+    calendar.appendChild(headerRow);
+    calendar.appendChild(slotRow);
+
+    const start = new Date(week[0]).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    const end = new Date(week[week.length - 1]).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    dateRange.textContent = `${start} - ${end}`;
+
+    prevWeek.disabled = currentWeekStartIndex <= 0;
+    nextWeek.disabled = currentWeekStartIndex + 7 >= filteredDates.length;
+    continueBtn.disabled = !selectedSlot;
+  }
+
+  prevWeek.onclick = () => {
+    if (currentWeekStartIndex >= 7) {
+      currentWeekStartIndex -= 7;
+      renderCalendar();
+    }
+  };
+
+  nextWeek.onclick = () => {
+    if (currentWeekStartIndex + 7 < filteredDates.length) {
+      currentWeekStartIndex += 7;
+      renderCalendar();
+    }
+  };
+
+  continueBtn.addEventListener("click", () => {
+    if (selectedSlot) {
+      const url = "{{ route('product.checkout.process', $products->id) }}";
+      continueBtn.disabled = true;
+      continueBtn.textContent = 'Please wait...';
+
+      $.ajax({
+        url: url,
+        method: 'POST',
+        data: {
+          _token: '{{ csrf_token() }}',
+          service_job: true,
+          service_date: selectedSlot.dateStr,
+          time_slot_from: selectedSlot.from,
+          time_slot_to: selectedSlot.to
+        },
+        success: function (response) {
+          if (response.success && response.redirect_url) {
+            window.location.href = response.redirect_url;
+          } else {
+            alert('Something went wrong. Please try again.');
+            continueBtn.disabled = false;
+            continueBtn.textContent = 'Continue to Payment';
+          }
+        },
+        error: function (xhr) {
+          alert('Submission failed. Please try again.');
+          console.error('Error:', xhr.responseText);
+          continueBtn.disabled = false;
+          continueBtn.textContent = 'Continue to Payment';
+        }
+      });
+    } else {
+      Swal.fire({
+        toast: true,
+        title: 'Please select a time slot first.',
+        icon: 'error',
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer);
+          toast.addEventListener('mouseleave', Swal.resumeTimer);
+        }
+      });
+    }
+  });
+
+  monthSelect.addEventListener('change', function () {
+    const selectedMonth = this.value;
+    filterDatesByMonth(selectedMonth);
+  });
+
+  populateMonthOptions();
+  const defaultMonth = getMonthKey(availableDates[0]);
+  monthSelect.value = defaultMonth;
+  filterDatesByMonth(defaultMonth);
 });
 
-// Initialize calendar on page load
-document.addEventListener("DOMContentLoaded", () => {
-    populateMonthSelect();
-    renderMonth(now.getFullYear(), now.getMonth());
-});
+
 
 // share
 document.getElementById('shareBtn').addEventListener('click', function(event) {

@@ -38,6 +38,19 @@ class ProductServiceDetailsRequest extends FormRequest
             
             'fromdate' => 'required|date',
             'todate' => 'required|date|after_or_equal:fromdate',
+            'time_slot' => 'required',
+            /* 'time_slot' => [
+                            'required',
+                            function ($attribute, $value, $fail) {
+                                $from = strtotime($this->input('fromdate'));
+                                $to = strtotime($this->input('todate'));
+                                $selected = strtotime($value);
+
+                                if ($from && $to && $selected && ($selected < $from || $selected > $to)) {
+                                    $fail('The selected slot must be between From Date and To Date.');
+                                }
+                            },
+                        ], */
 
             'haulings_location_from' => 'required|string',
             'haulings_location_to' => 'required|string',

@@ -550,7 +550,9 @@ class ProductController extends Controller
             }
         }
         $service_date = $data['service_date'] ?? '';
-        $result = $this->checkoutService->process($data, $product, $user->id, $service_date);
+        $time_slot_from = $data['time_slot_from'] ?? '';
+        $time_slot_to = $data['time_slot_to'] ?? '';
+        $result = $this->checkoutService->process($data, $product, $user->id, $service_date, $time_slot_from, $time_slot_to);
         if($result['success'] == false)
         {
             return redirect()->back()->with('error', $result['message']);
