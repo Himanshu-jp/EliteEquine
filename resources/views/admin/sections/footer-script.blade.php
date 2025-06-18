@@ -57,6 +57,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 <!-- SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script src="{{asset('admin_assets/plugins/chart.js/Chart.min.js')}}"></script>
         <script>
     function alertMessage(type, message) {
         Swal.fire({

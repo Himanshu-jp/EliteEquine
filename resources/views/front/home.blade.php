@@ -572,6 +572,7 @@
 @endif
 
 <!-------------------------------- industry_area ------------------------------------>
+<!-------------------------------- industry_area ------------------------------------>
 @if($industryMatricData->isNotEmpty())
 <section class="industry_area industry_multiplat_data">
     <div class="container">
@@ -1547,9 +1548,9 @@
                     }
 
                     // Optional: scroll into view
-                    document.querySelector(".more-info-box").scrollIntoView({
-                        behavior: "smooth"
-                    });
+                    // document.querySelector(".more-info-box").scrollIntoView({
+                    //     behavior: "smooth"
+                    // });
                 });
             });
         });
@@ -1561,3 +1562,4 @@
 
 
 @endsection
+
