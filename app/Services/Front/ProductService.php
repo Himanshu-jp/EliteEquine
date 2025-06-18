@@ -870,6 +870,7 @@ class ProductService
         //-------save product details table data----------------//
         $productDetail->fromdate = $data['fromdate'];
         $productDetail->todate = $data['todate'];
+        $productDetail->time_slot = $data['time_slot'];
         $productDetail->haulings_location_from = $data['haulings_location_from'];
         $productDetail->haulings_location_to = $data['haulings_location_to'];
         $productDetail->stalls_available_haulings = $data['stalls_available_haulings'];

@@ -331,7 +331,6 @@ protected $appends = ['disciplines_names'];
     {
         return $this->hasMany(Favorite::class, 'product_id');
     }
-
     public function comments()
     {
         return $this->hasMany(ProductComment::class, 'product_id')

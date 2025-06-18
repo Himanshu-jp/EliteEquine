@@ -18,7 +18,7 @@ Stripe::setApiKey(env('STRIPE_SECRET'));
 
 class CheckoutService
 {
-    public function process(array $data, $product, $userId, $service_date)
+    public function process(array $data, $product, $userId, $service_date, $time_slot_from, $time_slot_to)
     {
         $user = User::find($userId);
         if($service_date == '')
@@ -45,6 +45,8 @@ class CheckoutService
                 'user_id' => $userId,
                 'product_id' => $product->id,
                 'service_date' => $service_date,
+                'time_slot_from' => $time_slot_from,
+                'time_slot_to' => $time_slot_to,
                 'status' => '0'
             ]);
         }

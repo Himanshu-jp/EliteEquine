@@ -1234,7 +1234,7 @@ class ProductListingController extends Controller
             'triedUpcomingShows',
             'height',
             'sex',
-            'greenEligibilities'
+            'greenEligibilities',
         ]);
         $products = $products->where(['deleted_at' => null, 'id' => $id]);
         $products = $products->where('product_status', '!=', 'sold');
@@ -1251,14 +1251,19 @@ class ProductListingController extends Controller
 
         //----guest user cookie---//
         $guest = json_decode(Cookie::get('guest', '[]'), true);
-
+        $schedulesArr = [];
+        $schedules = Schedule::where('product_id', $products->id)->get();
+        if($schedules->isNotEmpty())
+        {
+            $schedulesArr = $schedules->toArray();
+        }
         $selectedDate = null;
         if(auth()->check() == true)
         {
             $selectedDate = Schedule::where(['product_id' => @$products->id, 'user_id' => auth()->id(), 'status' => '1'])->orderBy('id', 'desc')->get();
         }
 
-        return view('front/serviceDetails', compact(['products', 'moreAdd', 'guest', 'selectedDate']));
+        return view('front/serviceDetails', compact(['products', 'moreAdd', 'guest', 'selectedDate', 'schedulesArr']));
     }
 
     // category search
