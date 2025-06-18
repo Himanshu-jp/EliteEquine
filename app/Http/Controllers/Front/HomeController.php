@@ -11,6 +11,8 @@ use App\Models\Blog;
 use App\Models\HjForum;
 use App\Models\Transaction;
 use App\Models\Product;
+use App\Models\UserDetails;
+use App\Models\UserDetailAlert;
 use App\Models\IndustryMatric;
 use App\Models\HomeAbout;
 use App\Models\About;
@@ -663,7 +665,26 @@ class HomeController extends Controller
     }
 
     public function check_seriesCheck(request $request){
-      return $request;  
+      $checkSeries= $request->check_series;  
+   
+        $userDetails = UserDetails::where('user_id', Auth::user()->id)->first();
+
+         $userDetailAlert = UserDetailAlert::where(['user_id' => Auth::user()->id, 'user_detail_id' => $userDetails->id])->get()->toArray();
+            foreach ($userDetailAlert as $item) {
+                $alertDetails[$item['meta_key']] = [
+                    'sms' => $item['sms'],
+                    'mobile' => $item['mobile'],
+                    'email' => $item['email'],
+                ];
+            }
+
+         $view     = View::make('frontauth.partials.check_seriesCheck', ['explodeLister' => explode(',',$checkSeries),'alertDetails'=>$alertDetails]);
+        $contents = (string) $view;
+
+        $contents = $view->render();
+
+        return response()->json(['status' => 1, 'contents' => $contents], 200);
+
     }
 
 }

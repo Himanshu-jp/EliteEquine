@@ -272,9 +272,9 @@
                     <div class="col-md-6">
                         <div class="map" id="map">
                             <!-- <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d113874.30006216935!2d75.70815698269863!3d26.88533996496087!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1745411421280!5m2!1sen!2sin"
-                                width="100%" height="600px" style="border:0; border-radius: 14px;" allowfullscreen=""
-                                loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d113874.30006216935!2d75.70815698269863!3d26.88533996496087!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1745411421280!5m2!1sen!2sin"
+                                    width="100%" height="600px" style="border:0; border-radius: 14px;" allowfullscreen=""
+                                    loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
                         </div>
                     </div>
                 </div>
@@ -283,7 +283,7 @@
             <div class="card-body px-0 mt-4">
                 <?php $explodeLister = explode(',', Auth::user()->lister_types); ?>
 
-              
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -291,22 +291,23 @@
                         <div class="form-check">
 
                             <label class="ad-lister-checkbox">
-                                <input class="form-check-input  check_series" type="checkbox" id="email1" name="lister[]"
-                                    value="1" {{ Auth::user()->opt_in_notification == 'no' || in_array('1', $explodeLister) ? 'checked' : '' }}>
+                                <input class="form-check-input  check_series" type="checkbox" id="email1"
+                                    name="lister[]" value="1"
+                                    {{ Auth::user()->opt_in_notification == 'no' || in_array('1', $explodeLister) ? 'checked' : '' }}>
                                 <span>Ad Lister</span>
                             </label>
                         </div>
                     </div>
                     <div class="col-md-6">
 
-                    <div class="form-check">
-                        <label class="ad-lister-checkbox">
-                            <input class="form-check-input check_series" name="lister[]" type="checkbox" id="email2"
-                                value="2" {{ in_array('2', $explodeLister) ? 'checked' : '' }}>
-                            <span>Ad Viewer</span>
-                        </label>
+                        <div class="form-check">
+                            <label class="ad-lister-checkbox">
+                                <input class="form-check-input check_series" name="lister[]" type="checkbox"
+                                    id="email2" value="2" {{ in_array('2', $explodeLister) ? 'checked' : '' }}>
+                                <span>Ad Viewer</span>
+                            </label>
 
-                    </div>
+                        </div>
 
 
                     </div>
@@ -329,100 +330,103 @@
                         </tr>
                     </thead>
                     <tbody>
-                   <tr class="tr1" style="{{Auth::user()->opt_in_notification != 'no' && !in_array('1', $explodeLister) ? 'display: none;' : '' }}">
-    <td class="text-start">Subscription Expiring</td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="email1"
-            value="1" name="subscription[email]"
-            {{ old('subscription.email', @$alertDetails['subscription']['email']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="sms1"
-            value="1" name="subscription[sms]"
-            {{ old('subscription.sms', @$alertDetails['subscription']['sms']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="mobile1"
-            value="1" name="subscription[mobile]"
-            {{ old('subscription.mobile', @$alertDetails['subscription']['mobile']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-</tr>
+                        <tr class="tr1"
+                            style="{{ Auth::user()->opt_in_notification != 'no' && !in_array('1', $explodeLister) ? 'display: none;' : '' }}">
+                            <td class="text-start">Subscription Expiring</td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="email1"
+                                        value="1" name="subscription[email]"
+                                        {{ old('subscription.email', @$alertDetails['subscription']['email']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="sms1"
+                                        value="1" name="subscription[sms]"
+                                        {{ old('subscription.sms', @$alertDetails['subscription']['sms']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="mobile1"
+                                        value="1" name="subscription[mobile]"
+                                        {{ old('subscription.mobile', @$alertDetails['subscription']['mobile']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                        </tr>
 
-<tr class="tr1" style="{{Auth::user()->opt_in_notification != 'no' && !in_array('1', $explodeLister) ? 'display: none;' : '' }}">
-    <td class="text-start">Payment Received</td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="email2"
-            value="1" name="payment[email]"
-            {{ old('payment.email', @$alertDetails['payment']['email']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="sms2"
-            value="1" name="payment[sms]"
-            {{ old('payment.sms', @$alertDetails['payment']['sms']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="mobile2"
-            value="1" name="payment[mobile]"
-            {{ old('payment.mobile', @$alertDetails['payment']['mobile']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-</tr>
+                        <tr class="tr1"
+                            style="{{ Auth::user()->opt_in_notification != 'no' && !in_array('1', $explodeLister) ? 'display: none;' : '' }}">
+                            <td class="text-start">Payment Received</td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="email2"
+                                        value="1" name="payment[email]"
+                                        {{ old('payment.email', @$alertDetails['payment']['email']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="sms2"
+                                        value="1" name="payment[sms]"
+                                        {{ old('payment.sms', @$alertDetails['payment']['sms']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="mobile2"
+                                        value="1" name="payment[mobile]"
+                                        {{ old('payment.mobile', @$alertDetails['payment']['mobile']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                        </tr>
 
-<tr class="tr2" style="{{ !in_array('2', $explodeLister) ? 'display: none;' : '' }}">
-    <td class="text-start">Auction Ending on Bidding Item</td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="email3s"
-            value="1" name="biddinItem[email]"
-            {{ old('biddinItem.email', @$alertDetails['biddinItem']['email']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="emwail3s"
-            value="1" name="biddinItem[sms]"
-            {{ old('biddinItem.sms', @$alertDetails['biddinItem']['sms']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="emdail3s"
-            value="1" name="biddinItem[mobile]"
-            {{ old('biddinItem.mobile', @$alertDetails['biddinItem']['mobile']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-</tr>
+                        <tr class="tr2" style="{{ !in_array('2', $explodeLister) ? 'display: none;' : '' }}">
+                            <td class="text-start">Auction Ending on Bidding Item</td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="email3s"
+                                        value="1" name="biddinItem[email]"
+                                        {{ old('biddinItem.email', @$alertDetails['biddinItem']['email']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="emwail3s"
+                                        value="1" name="biddinItem[sms]"
+                                        {{ old('biddinItem.sms', @$alertDetails['biddinItem']['sms']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="emdail3s"
+                                        value="1" name="biddinItem[mobile]"
+                                        {{ old('biddinItem.mobile', @$alertDetails['biddinItem']['mobile']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                        </tr>
 
-<tr class="tr2" style="{{ !in_array('2', $explodeLister) ? 'display: none;' : '' }}">
-    <td class="text-start">Listing Matching Saved Search Appears</td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="emasil3"
-            value="1" name="listMatch[email]"
-            {{ old('listMatch.email', @$alertDetails['listMatch']['email']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="ssms3"
-            value="1" name="listMatch[sms]"
-            {{ old('listMatch.sms', @$alertDetails['listMatch']['sms']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="mosbile3"
-            value="1" name="listMatch[mobile]"
-            {{ old('listMatch.mobile', @$alertDetails['listMatch']['mobile']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-</tr>
+                        <tr class="tr2" style="{{ !in_array('2', $explodeLister) ? 'display: none;' : '' }}">
+                            <td class="text-start">Listing Matching Saved Search Appears</td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="emasil3"
+                                        value="1" name="listMatch[email]"
+                                        {{ old('listMatch.email', @$alertDetails['listMatch']['email']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="ssms3"
+                                        value="1" name="listMatch[sms]"
+                                        {{ old('listMatch.sms', @$alertDetails['listMatch']['sms']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="mosbile3"
+                                        value="1" name="listMatch[mobile]"
+                                        {{ old('listMatch.mobile', @$alertDetails['listMatch']['mobile']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                        </tr>
 
-<tr class="tr1 tr2" style="{{Auth::user()->opt_in_notification != 'no' && !in_array('1', $explodeLister) && !in_array('2', $explodeLister) ? 'display: none;' : '' }}">
-    <td class="text-start">Direct Messaging</td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="email3"
-            value="1" name="auction[email]"
-            {{ old('auction.email', @$alertDetails['auction']['email']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="sms3"
-            value="1" name="auction[sms]"
-            {{ old('auction.sms', @$alertDetails['auction']['sms']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-    <td><label class="notife-custom-checkbox">
-        <input class="form-check-input mx-auto" type="checkbox" id="mobile3"
-            value="1" name="auction[mobile]"
-            {{ old('auction.mobile', @$alertDetails['auction']['mobile']) == 1 ? 'checked' : '' }}>
-        <span></span></label></td>
-</tr>
+                        <tr class="tr1 tr2"
+                            style="{{ Auth::user()->opt_in_notification != 'no' && !in_array('1', $explodeLister) && !in_array('2', $explodeLister) ? 'display: none;' : '' }}">
+                            <td class="text-start">Direct Messaging</td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="email3"
+                                        value="1" name="auction[email]"
+                                        {{ old('auction.email', @$alertDetails['auction']['email']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="sms3"
+                                        value="1" name="auction[sms]"
+                                        {{ old('auction.sms', @$alertDetails['auction']['sms']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                            <td><label class="notife-custom-checkbox">
+                                    <input class="form-check-input mx-auto" type="checkbox" id="mobile3"
+                                        value="1" name="auction[mobile]"
+                                        {{ old('auction.mobile', @$alertDetails['auction']['mobile']) == 1 ? 'checked' : '' }}>
+                                    <span></span></label></td>
+                        </tr>
 
                     </tbody>
                 </table>
@@ -714,7 +718,8 @@
 
                     const mapbox_id = suggestion.mapbox_id;
                     fetch(
-                            `https://api.mapbox.com/search/searchbox/v1/retrieve/${mapbox_id}?session_token=${sessionToken}&access_token=${mapboxAccessToken}`)
+                            `https://api.mapbox.com/search/searchbox/v1/retrieve/${mapbox_id}?session_token=${sessionToken}&access_token=${mapboxAccessToken}`
+                            )
                         .then(response => response.json())
                         .then(data => {
                             const feature = data.features?.[0];
@@ -755,7 +760,8 @@
                     }
 
                     fetch(
-                            `https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodeURIComponent(query)}&language=en&limit=5&session_token=${sessionToken}&access_token=${mapboxAccessToken}`)
+                            `https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodeURIComponent(query)}&language=en&limit=5&session_token=${sessionToken}&access_token=${mapboxAccessToken}`
+                            )
                         .then(response => response.json())
                         .then(data => {
                             cache[query] = data;
@@ -1030,18 +1036,18 @@
             });
         </script>
         <script>
-               $('body').on('click','.check_series',function(){
-            
+            $('body').on('click', '.check_series', function() {
 
 
-            $('.dynamicTable tr').hide()
+
+                $('.dynamicTable tr').hide()
                 $('.dynamicTable tr').eq(0).show()
 
-            $('.check_series:checked').each(function(){
-                $('.tr'+$(this).val()).show()
+                $('.check_series:checked').each(function() {
+                    $('.tr' + $(this).val()).show()
+                })
+
+
             })
-
-
-        })
         </script>
     @endsection
