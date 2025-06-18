@@ -25,13 +25,16 @@ class HomeService
     // Store a new comment
     public function storeComment($data,$user)
     {
+        if (isset($data['file'])) {
+            $data['image'] = $data['file']->store('comment', 'public');
+        }
         if($user){
             $data['user_id'] = $user->id;
         }else{
             $data['user_id'] = null;
         }
         return ProductComment::create($data);
-    }
+    }   
     
     // Store a new comment
     public function removeComment($id,$user)

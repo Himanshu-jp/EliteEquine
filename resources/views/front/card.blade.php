@@ -258,12 +258,12 @@
             (function() {
 
 
-                let map; // global map reference
-                let currentPopup = null; // to keep track of the currently opened popup
+                var map; // global map reference
+                var currentPopup = null; // to keep track of the currently opened popup
 
                 // Reverse geocode to get human-readable location from lat,lng and set input value
                 function reverseGeocode(lat, lng) {
-                    const url =
+                    var url =
                         `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxAccessToken}`;
 
                     fetch(url)
@@ -271,13 +271,13 @@
                         .then(data => {
                             if (data.features && data.features.length > 0) {
                                 // Use the place_name of the first feature as the location string
-                                const placeName = data.features[0].place_name;
-                                const mapLocationInput = document.getElementById('map-location');
+                                var placeName = data.features[0].place_name;
+                                var mapLocationInput = document.getElementById('map-location');
                                 if (mapLocationInput) {
                                     mapLocationInput.value = placeName;
                                 }
 
-                                const locationInput = document.getElementById('location');
+                                var locationInput = document.getElementById('location');
                                 if (locationInput) {
                                     locationInput.value = placeName;
                                 }
@@ -289,15 +289,15 @@
                 }
 
 
-                const urlParams = new URLSearchParams(window.location.search);
+                var urlParams = new URLSearchParams(window.location.search);
                 // Default or from URL
-                let lat = parseFloat(urlParams.get('latitude')) || 26.8467;
-                let lng = parseFloat(urlParams.get('longitude')) || 75.7647;
-                const selectedCategory = urlParams.get('category') || '1';
+                var lat = parseFloat(urlParams.get('latitude')) || 26.8467;
+                var lng = parseFloat(urlParams.get('longitude')) || 75.7647;
+                var selectedCategory = urlParams.get('category') || '1';
 
                 // Elements to store lat and lng values
-                const latInput = document.getElementById('latitude');
-                const lngInput = document.getElementById('longitude');
+                var latInput = document.getElementById('latitude');
+                var lngInput = document.getElementById('longitude');
 
                 // Try to get user's current location via Geolocation API
                 if (navigator.geolocation) {
@@ -341,9 +341,9 @@
                     fetchEventsByCategory(selectedCategory);
                 }
             })
-            let userCoordinates = [75.769446, 26.836992];
+            var userCoordinates = ["{{ $longitude }}", "{{ $latitude }}"];
             mapboxgl.accessToken = '{{ env('MAPBOX_ACCESS_TOKEN') }}';
-            const map = new mapboxgl.Map({
+            var map = new mapboxgl.Map({
                 container: 'map',
                 center: userCoordinates,
                 style: "mapbox://styles/mapbox/standard",
@@ -356,25 +356,33 @@
                 bearing: -60
             });
 
-            const events = @json($data);
-            let horseList = events.data;
+            var events = @json($data);
+            var horseList = events.data;
+            console.log(horseList)
 
 
-
-            const eventGroups = {};
-            const allData = [];
+            var eventGroups = {};
+            var allData = [];
             horseList.forEach(event => {
 
                 if (event.product_detail) {
 
                     if (event.product_detail.latitude && event.product_detail.longitude) {
-                        const latLng = `${event.product_detail.latitude},${event.product_detail.longitude}`;
+                        var latLng = `${event.product_detail.latitude},${event.product_detail.longitude}`;
+                        var latLng1 = `${event.product_detail.trail_latitude},${event.product_detail.trail_longitude}`;
 
                         if (!eventGroups[latLng]) {
                             eventGroups[latLng] = [];
                         }
-                        eventGroups[latLng].push(event);
-                        let object = {};
+                           eventGroups[latLng].push(event);
+                        if (!eventGroups[latLng1]) {
+                            eventGroups[latLng1] = [];
+                        }
+                          eventGroups[latLng1].push(event);
+
+                     
+                      
+                        var object = {};
                         object.title = event.title;
                         object.price = event.price;
                         object.description = event.description;
@@ -383,6 +391,8 @@
                             .product_detail.city) : '';
                         object.latitude = event.product_detail ? (event.product_detail.latitude) : '';
                         object.longitude = event.product_detail ? (event.product_detail.longitude) : '';
+                        object.trail_longitude = event.product_detail ? (event.product_detail.trail_longitude) : '';
+                        object.trail_latitude = event.product_detail ? (event.product_detail.trail_latitude) : '';
                         allData.push(object)
                     }
 
@@ -391,10 +401,10 @@
             console.log('allData', allData)
 
             function getUniqueFeatures(features, comparatorProperty) {
-                const uniqueIds = new Set();
-                const uniqueFeatures = [];
-                for (const feature of features) {
-                    const id = feature.properties[comparatorProperty];
+                var uniqueIds = new Set();
+                var uniqueFeatures = [];
+                for (var feature of features) {
+                    var id = feature.properties[comparatorProperty];
                     if (!uniqueIds.has(id)) {
                         uniqueIds.add(id);
                         uniqueFeatures.push(feature);
@@ -411,44 +421,52 @@
 
                 }
                 customMarkers = [];
-                const features = map.queryRenderedFeatures({
+                var features = map.queryRenderedFeatures({
                     layers: ['unclustered-point']
                 });
                 console.log('features', features);
-                const markerIconUrl = "http://192.168.5.41/elit-equine-new/EliteEquine/public/images/marker_map_icon.svg";
-                const uniqueFeatures = getUniqueFeatures(features, 'venue_name');
+
+                var uniqueFeatures = getUniqueFeatures(features, 'venue_name');
                 console.log('uniqueFeatures', uniqueFeatures);
                 uniqueFeatures.forEach(feature => {
-                    const coordinates = feature.geometry.coordinates;
-                    const {
+                    var coordinates = feature.geometry.coordinates;
+                    var {
                         venue_name,
                         venue_address,
                         latitude,
+                        isTrail,
                         longitude
                     } = feature.properties;
                     console.log(coordinates, "coordinates");
+                    if (isTrail == 1) {
+                        var markerIconUrl = "{{ url('/') }}/images/Horse Red.png";
+                    } else {
+                        var markerIconUrl = "{{ url('/') }}/images/Horse Blue.png";
+                    }
+
+
                     // Create a custom HTML element for the marker
-                    const markerElement = document.createElement('div');
+                    var markerElement = document.createElement('div');
                     markerElement.className = 'red-circle-marker';
 
-                    const markerImage = document.createElement('img');
+                    var markerImage = document.createElement('img');
                     markerImage.src = markerIconUrl;
                     markerImage.alt = "Marker";
                     markerImage.className = "marker-image";
 
                     markerElement.appendChild(markerImage);
 
-                    const venueName = document.createElement('span');
+                    var venueName = document.createElement('span');
                     venueName.className = 'marker-venue-name';
-                    venueName.innerText = venue_name;
+                    //  venueName.innerText = venue_name;
                     markerElement.appendChild(venueName);
 
-                    let marker = new mapboxgl.Marker(markerElement).setLngLat([coordinates[0], coordinates[1]]).addTo(
+                    var marker = new mapboxgl.Marker(markerElement).setLngLat([coordinates[0], coordinates[1]]).addTo(
                         map);
 
-                    const latLng = `${latitude},${longitude}`;
-                    const eventsAtLocation = eventGroups[latLng];
-                    let popupContent = '';
+                    var latLng = `${latitude},${longitude}`;
+                    var eventsAtLocation = eventGroups[latLng];
+                    var popupContent = '';
                     console.log(latitude, longitude, "SSSS")
                     console.log(latLng, 'latLng')
                     console.log(eventGroups[latLng])
@@ -456,36 +474,36 @@
                     eventsAtLocation.forEach(event => {
 
 
-                        const ticketPrice = event.price ? `Starts from $${event.price}` :
+                        var ticketPrice = event.price ? `Starts from $${event.price}` :
                             'Price not available';
 
-                        //const ticketUrl = isAuthenticated ? (event.ticket_sale_link || '#') : loginRoute;
-                        // const eventImage = event.image && event.image.length > 0  ?"{{ url('/') }}/"+ event.image[0].image : '{{ url('/') }}/public/front/home/assets/images/logo/logo.svg' ;
-                        const eventImage = "{{ url('/') }}/front/home/assets/images/logo/logo.svg";
-                        const baseUrl = "{{ url('/') }}";
-                        const authUserId = '{{auth()->id()}}';
-                        const reviews = event?.user?.reviews;
+                        //var ticketUrl = isAuthenticated ? (event.ticket_sale_link || '#') : loginRoute;
+                        // var eventImage = event.image && event.image.length > 0  ?"{{ url('/') }}/"+ event.image[0].image : '{{ url('/') }}/public/front/home/assets/images/logo/logo.svg' ;
+                        var eventImage = "{{ url('/') }}/front/home/assets/images/logo/logo.svg";
+                        var baseUrl = "{{ url('/') }}";
+                        var authUserId = '{{ auth()->id() }}';
+                        var reviews = event?.user?.reviews;
 
-                        const averageRating = Array.isArray(reviews) && reviews.length > 0
-                            ? Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length)
-                            : 0;
+                        var averageRating = Array.isArray(reviews) && reviews.length > 0 ?
+                            Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) :
+                            0;
 
-                        const breeds = event.breeds.map(b => b.common_master_id?.name).join(" | ");
-                        const disciplines = event.disciplines.map(d => d.common_master_id?.name).join(" | ");
-                        const trials = event.tried_upcoming_shows.map(t => t.common_master_id?.name).join(" | ");
+                        var breeds = event.breeds.map(b => b.common_master_id?.name).join(" | ");
+                        var disciplines = event.disciplines.map(d => d.common_master_id?.name).join(" | ");
+                        var trials = event.tried_upcoming_shows.map(t => t.common_master_id?.name).join(" | ");
 
-                        const isFavorited = event.favorites.some(fav => fav.user_id === authUserId);
+                        var isFavorited = event.favorites.some(fav => fav.user_id === authUserId);
 
-                        const eventUrl = `${baseUrl}/eventdetail/${event.id}`;
-                        const maxLength = 40;
-                        const descriptionText = event.description || '';
-                        const truncatedDescription = descriptionText.length > maxLength ?
+                        var eventUrl = `${baseUrl}/eventdetail/${event.id}`;
+                        var maxLength = 40;
+                        var descriptionText = event.description || '';
+                        var truncatedDescription = descriptionText.length > maxLength ?
                             descriptionText.substring(0, maxLength) + "..." :
                             descriptionText;
                         console.log(event);
-                        let venueHtml = '';
+                        var venueHtml = '';
                         if (event.title && event.title) {
-                            const venueDetailUrl = "url".replace(':id', event.id);
+                            var venueDetailUrl = "url".replace(':id', event.id);
                             venueHtml = `
                             <div class="venue-name-new">
                                 <a href="${venueDetailUrl}" target="_blank" class="venue-name-new-ic">
@@ -508,13 +526,13 @@
                                 <a href="${baseUrl}/horseDetails/${event.id}" target="_blank">
                                     <h3>
                                         ${event.title} | ${event.product_detail.age} | ${event.height?.common_master?.name}<br/>
-                                        ${breeds}
+                                        ${breeds} | ${event.sex?.common_master?.name}
                                     </h3>
                                 </a>
 
                                 <h4>Call For Price</h4>
 
-                                <span class="sp1">${disciplines}</span>
+                                <span class="sp1">${event.disciplines_names}</span>
 
                                 <div class="location">
                                     <img src="${baseUrl}/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
@@ -527,10 +545,10 @@
                                 <div class="foot">
                                     <div class="bx">
                                         <div class="imagee">
-                                            <img src="${baseUrl}/storage/${event.user.profile_photo_path || 'default-user.png'}" class="user-img" alt="">
+                                            <img src="${baseUrl}/storage/${event.user?.profile_photo_path || 'default-user.png'}" class="user-img" alt="">
                                         </div>
                                         <div class="content">
-                                            <h4>${event.user.name}</h4>
+                                            <h4>${event.user?.name}</h4>
                                             <div class="stars">
                                                 ${[1,2,3,4,5].map(i => 
                                                     `<i class="bi bi-star-fill ${i <= averageRating ? 'text-warning' : 'text-secondary'}"></i>`).join('')
@@ -546,13 +564,13 @@
                         </div>
                         `;
                     });
-                    const popup = new mapboxgl.Popup({
+                    var popup = new mapboxgl.Popup({
                             offset: 25
                         })
                         .setHTML(popupContent);
                     popup.on('open', () => {
 
-                        const popupElement = document.querySelector('.mapboxgl-popup-content');
+                        var popupElement = document.querySelector('.mapboxgl-popup-content');
                     });
                     marker.setPopup(popup);
 
@@ -565,31 +583,57 @@
             }
 
             function formatDate(dateString) {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                var date = new Date(dateString);
+                return date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
             }
 
             function addClusterView() {
-                const seenCoords = new Set();
+                var seenCoords = new Set();
 
-                const eventsfeature = allData.map((event) => ({
+                var eventsfeature = allData.flatMap((event) => [{
+                        type: "Feature",
+                        geometry: {
+                            type: "Point",
+                            coordinates: [
+                                parseFloat(event.longitude),
+                                parseFloat(event.latitude),
+                            ],
+                        },
+                        properties: {
+                            venue_name: event.title || "Unknown Venue",
+                            venue_address: event.address || "No Address",
+                            latitude: event.latitude || "No Address",
+                            longitude: event.longitude || "No Address",
+                            isTrail: 0,
+                        },
+                    },
+                    {
+                        type: "Feature",
+                        geometry: {
+                            type: "Point",
+                            coordinates: [
+                                parseFloat(event.trail_longitude),
+                                parseFloat(event.trail_latitude),
+                            ],
+                        },
+                        properties: {
+                            venue_name: event.title || "Unknown Venue",
+                            venue_address: event.address || "No Address",
+                            latitude: event.trail_latitude || "No Address",
+                            longitude: event.trail_longitude || "No Address",
+                            isTrail: 1,
+                        },
+                    }
+                ]);
 
-                    type: "Feature",
-                    geometry: {
-                        type: "Point",
-                        coordinates: [
-                            parseFloat(event.longitude),
-                            parseFloat(event.latitude),
-                        ],
-                    },
-                    properties: {
-                        venue_name: event.title || "Unknown Venue",
-                        venue_address: event.address || "No Address",
-                        latitude: event.latitude || "No Address",
-                        longitude: event.longitude || "No Address",
-                    },
-                }));
-                console.log("eventsfeature", eventsfeature)
+
+                console.log("allData", allData)
+                console.log("eventsfeaturelength", eventsfeature.length)
+
                 map.addSource("clusterEvent", {
                     type: "geojson",
                     data: {
@@ -667,10 +711,10 @@
                 }, 1000);
                 // inspect a cluster on click
                 map.on('click', 'clusters', (e) => {
-                    const features = map.queryRenderedFeatures(e.point, {
+                    var features = map.queryRenderedFeatures(e.point, {
                         layers: ['clusters']
                     });
-                    const clusterId = features[0].properties.cluster_id;
+                    var clusterId = features[0].properties.cluster_id;
                     map.getSource('clusterEvent').getClusterExpansionZoom(
                         clusterId,
                         (err, zoom) => {
@@ -689,9 +733,9 @@
                 // the location of the feature, with
                 // description HTML from its properties.
                 map.on('click', 'unclustered-point', (e) => {
-                    const coordinates = e.features[0].geometry.coordinates.slice();
-                    const mag = e.features[0].properties.mag;
-                    const tsunami =
+                    var coordinates = e.features[0].geometry.coordinates.slice();
+                    var mag = e.features[0].properties.mag;
+                    var tsunami =
                         e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
 
                     // Ensure that if the map is zoomed out such that
@@ -711,35 +755,37 @@
                         .addTo(map);
                 });
             }
-            const nav = new mapboxgl.NavigationControl();
+            var nav = new mapboxgl.NavigationControl();
             map.addControl(nav, 'top-right');
 
-
-            class RelocateControl {
-                onAdd(map) {
-                    this.map = map;
-                    this.container = document.createElement('div');
-                    this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
-                    this.container.innerHTML = `
+            if (typeof window.RelocateControl === 'undefined') {
+                class RelocateControl {
+                    onAdd(map) {
+                        this.map = map;
+                        this.container = document.createElement('div');
+                        this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+                        this.container.innerHTML = `
                     <button id="relocateBtn" type="button" title="Relocate" style="padding:3px;">
                         <img src="{{ asset('images/current-location-10.svg') }}">
                     </button>
                 `;
-                    this.container.querySelector('#relocateBtn').addEventListener('click', () => {
-                        map.easeTo({
-                            center: userCoordinates,
-                            zoom: 10,
-                            duration: 500
+                        this.container.querySelector('#relocateBtn').addEventListener('click', () => {
+                            map.easeTo({
+                                center: userCoordinates,
+                                zoom: 10,
+                                duration: 500
+                            });
                         });
-                    });
-                    return this.container;
+                        return this.container;
+                    }
+                    onRemove() {
+                        this.container.parentNode.removeChild(this.container);
+                        this.map = undefined;
+                    }
                 }
-                onRemove() {
-                    this.container.parentNode.removeChild(this.container);
-                    this.map = undefined;
-                }
+                map.addControl(new RelocateControl(), 'top-right');
             }
-            map.addControl(new RelocateControl(), 'top-right');
+
 
             map.on("load", () => {
 
@@ -748,18 +794,18 @@
 
             });
             map.on('moveend', () => {
-                const zoomLevel = map.getZoom();
+                var zoomLevel = map.getZoom();
                 this.makeMarker();
 
-                const bounds = map.getBounds();
-                const southWest = bounds.getSouthWest();
-                const northEast = bounds.getNorthEast();
-                const latRange = [southWest.lat, northEast.lat];
-                const lngRange = [southWest.lng, northEast.lng];
+                var bounds = map.getBounds();
+                var southWest = bounds.getSouthWest();
+                var northEast = bounds.getNorthEast();
+                var latRange = [southWest.lat, northEast.lat];
+                var lngRange = [southWest.lng, northEast.lng];
 
 
-                const urlParams = new URLSearchParams(window.location.search);
-                const datetimes = urlParams.get('datetimes') || '';
+                var urlParams = new URLSearchParams(window.location.search);
+                var datetimes = urlParams.get('datetimes') || '';
 
 
 
@@ -774,9 +820,9 @@
     $('.favorite-btn').on('click', function(e) {
         e.preventDefault();
 
-        let productId = $(this).data('product-id');
-        let url = `{{ url('favorite') }}` + '/' + productId;
-        let $btn = $(this);
+        var productId = $(this).data('product-id');
+        var url = `{{ url('favorite') }}` + '/' + productId;
+        var $btn = $(this);
 
         $.ajax({
             url: url,
@@ -819,9 +865,9 @@
 </script>
 <script>
     /* document.addEventListener('DOMContentLoaded', function () {
-        const mapContainer = document.getElementById('map');
+        var mapContainer = document.getElementById('map');
         if (mapContainer) {
-            const map = new mapboxgl.Map({
+            var map = new mapboxgl.Map({
                 container: 'map',
                 style: 'mapbox://styles/mapbox/streets-v11',
                 center: [77.2090, 28.6139],

@@ -26,7 +26,6 @@ class SoldController extends Controller
         $total = $result['total'];
         $data = $result['data'];
         $viewMode = 'grid';
-        // $viewMode = $request->view_mode;
         $html = view('front/card', compact('data', 'total', 'viewMode'))->with('columnClass', 'col-lg-3')->render();
         $pagination = $data->withQueryString()->links('pagination::bootstrap-4')->render();
  

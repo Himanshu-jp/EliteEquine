@@ -21,7 +21,7 @@ class ProductListRequest extends FormRequest
             // 'limit' => 'required|integer|min:1',
             'user_id' => 'nullable|integer',
             'category_id' => 'nullable|integer|exists:categories,id',
-            'product_status' => 'nullable|string|in:all,live,expired,sold',
+            'product_status' => 'nullable|string',
         ];
     }
 

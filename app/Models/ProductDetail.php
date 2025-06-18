@@ -56,6 +56,8 @@ class ProductDetail extends Model
         'realtor',
         'property_manager',
         'time_slot'
+        'trail_latitude',
+        'trail_longitude',
     ];
 
     public function product()

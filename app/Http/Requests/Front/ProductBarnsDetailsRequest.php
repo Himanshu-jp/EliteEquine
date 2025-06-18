@@ -41,7 +41,7 @@ class ProductBarnsDetailsRequest extends FormRequest
             'sale_cost'=> "required",
             'realtor'=> "required",
             'property_manager'=> "required",  
-            'bid_min_price' => 'required',
+            // 'bid_min_price' => 'required',
             
             'addressSet' => 'nullable',
             'contactSet' => 'nullable',

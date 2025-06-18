@@ -383,3 +383,7 @@ icon.addEventListener('click', () => {
 */
 
 
+
+function toggleFilter() {
+  document.getElementById("filterSidebar").classList.toggle("show");
+}
