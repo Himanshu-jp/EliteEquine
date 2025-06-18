@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->index();
             $table->foreignId('category_id')->nullable()->index();
-            $table->foreignId('sub_category')->nullable()->index();
             $table->enum("sale_method",['standard',"auction"]);
             $table->enum("return_available",['yes',"no"])->nullable();
             $table->integer("return_days")->nullable();
@@ -32,7 +31,7 @@ return new class extends Migration
             $table->integer("auc_winner_pay_in")->nullable();
             $table->integer("bid_end_days")->nullable();
             $table->enum("mark_as",['sold','lease','rented'])->nullable();
-            $table->enum("product_status",['pending','live','expire','sold'])->nullable();
+            $table->string("product_status")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

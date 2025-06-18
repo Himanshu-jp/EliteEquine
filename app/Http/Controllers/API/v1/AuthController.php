@@ -18,6 +18,7 @@ use Illuminate\Http\JsonResponse;
 use App\Models\User;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\EmailSendJob;
 
 // use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -219,5 +220,21 @@ class AuthController extends BaseController
         // auth()->user()?->currentAccessToken()?->delete();
 
         return $this->sendResponse([], 'User logged out successfully.');
+    }
+
+    public function AuthController(request $request){
+$usre_id=$request->usre_id;
+$snder_name=$request->sender_name;
+
+
+$userdetails=User::where('id',$usre_id)->first();
+    $mainUseData = ['FirstName'=>$userdetails->name,'snder_name'=>$snder_name];
+
+
+           $data=array('code'=>'new_messsage','email'=>$userdetails->email,'dataArray'=>$mainUseData,'name'=>$userdetails->name);
+                EmailSendJob::dispatch($data);
+
+                    return $this->sendResponse([], 'Thanks');
+
     }
 }

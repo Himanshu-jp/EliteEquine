@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\SubscriptionAddOnPlan;
 use App\Models\TransactionAddon;
+use App\Jobs\EmailSendJob;
 
 use App\Services\Front\SubscriptionService;
 use Illuminate\Support\Facades\Session;
@@ -74,8 +75,12 @@ class SubscriptionController extends Controller
 
     public function purchase_plan_success(request $request)
     {
+    $mainUseData = ['FirstName'=>Auth::user()->name];
 
-       
+           $data=array('code'=>'payment','email'=>Auth::user()->email,'dataArray'=>$mainUseData,'name'=>Auth::user()->name);
+                EmailSendJob::dispatch($data);
+
+
         $sessionId = $request->get('session_id');
 
         Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -136,6 +141,7 @@ TransactionAddon::insert(['user_id'=>$plan_trans->user_id,'transaction_id'=>$pla
         return redirect()->route('subscription')->with('success', 'Plan activated successfully.');
 }
         
+
 
 
     }

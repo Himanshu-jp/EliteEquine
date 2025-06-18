@@ -9,7 +9,7 @@ Your Ads
         <h4 class="h5">Subscription</h4>
     </div>
     <div>
-        <div class="col-xxl-8 mx-auto">
+        <div class="col-lg-10 mx-auto">
             <div class="section-heading">
                 <h2 class="text-center fw-bold">Subscription Plans</h2>
             </div>
@@ -207,5 +207,15 @@ $(document).ready(function () {
 
 </script>
 
-
+<style>
+    .form-check:not(.form-switch) .form-check-input {
+    margin-left: 0 !important;
+}
+.bounce-card .form-check {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+}
+</style>
 @endsection

@@ -31,7 +31,7 @@
     <!-------------------------------- Header ------------------------------------>
     <header class="header-inner position-sticky">
         <nav class="navbar navbar-expand-xl">
-            <div class="container">
+            <div class="container-fluid">
                 <a class="navbar-brand" href="{{route('home')}}">
                     <img src="{{asset('front/home/assets/images/logo/logo.svg')}}" alt="" /></a>
                 <div class="d-lg-none">
