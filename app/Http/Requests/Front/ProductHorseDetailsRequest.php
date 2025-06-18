@@ -45,7 +45,7 @@ class ProductHorseDetailsRequest extends FormRequest
             'tried_upcoming_shows.*' => 'exists:common_masters,id',
             'fromdate' => 'required',
             'todate' => 'required',
-            'bid_min_price' => 'required',
+            // 'bid_min_price' => 'required',
             'sale_price' => 'required',
             'lease_price' => 'required',
             'trainer' => 'required',
@@ -116,7 +116,7 @@ class ProductHorseDetailsRequest extends FormRequest
             'tried_upcoming_shows.*.exists' => 'One or more selected upcoming shows are invalid.',
             'fromdate.required' => 'The from date field is required.',
             'todate.required' => 'The to date field is required.',
-            'bid_min_price.required' => 'The bid minimum price field is required.',
+            // 'bid_min_price.required' => 'The bid minimum price field is required.',
             'sale_price.required' => 'The sale price field is required.',
             'lease_price.required' => 'The lease price field is required.',
             'trainer.required' => 'The trainer field is required.',
@@ -147,7 +147,7 @@ class ProductHorseDetailsRequest extends FormRequest
             return !$input->contactSet;
         });
 
-        foreach (['precise_location', 'country', 'state', 'city', 'street'] as $field) {
+        foreach (['precise_location', 'country', 'state', 'city'] as $field) {
             $validator->sometimes($field, 'required|string|max:300', function ($input) {
                 return !$input->addressSet;
             });

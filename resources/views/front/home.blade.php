@@ -3,6 +3,7 @@
     /* body { margin: 0; padding: 0; }
         .map-locations .col-md-6 { position: relative; }
         .map-locations .col-md-6 #map { position: absolute; top: 0; left: 0; width: 98%; border:0; border-radius: 14px; height:120vh; } */
+
     .category-scroll button {
         border: none;
     }
@@ -40,7 +41,43 @@
         /* nice blue */
         color: white;
     }
-</style>
+
+        .category-scroll button {border: none;
+        overflow: hidden;
+    border-radius: 20px;}
+       .category-scroll button.active .card-list {
+    border: 2px solid #d6b868;
+}
+        .location-suggestions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.location-suggestions li {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.location-suggestions li:last-child {
+    border-bottom: none;
+}
+
+.location-suggestions li.highlighted,
+.location-suggestions li:hover {
+    background-color: #0074D9; /* nice blue */
+    color: white;
+}
+    </style>
+
 @section('title')
     Home
 @endsection
@@ -533,41 +570,58 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @else
-                                        {{-- <div class="{{$key==1?'tab-pane fade active show':'tab-pane fade'}}" id="{{$key001}}-tab-pane" role="tabpanel" aria-labelledby="{{$key001}}-tab" tabindex="{{$key==1?'1':'0'}}">
+                                    </div>
+                                @else
+
+                                    {{-- <div class="{{$key==1?'tab-pane fade active show':'tab-pane fade'}}" id="{{$key001}}-tab-pane" role="tabpanel" aria-labelledby="{{$key001}}-tab" tabindex="{{$key==1?'1':'0'}}">
                                         <div class="swiper mySwiper">
                                             <div class="swiper-wrapper">     
                                                 <h4>We're updating our featured section. Check back later!</h4> 
                                             </div>
                                         </div>
                                     </div> --}}
-                                    @endif
-                                @endforeach
-
+                                    
+                                @endif
+                            @endforeach
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-    @endif
+        </div>
+    </section>
+@endif
 
-    <!-------------------------------- industry_area ------------------------------------>
-    @if ($industryMatricData->isNotEmpty())
-        <section class="industry_area industry_multiplat_data">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="industry_area_inner">
-                            <h2>Industry Metrics</h2>
-                            <div class="industry_slider_controal">
-                                <button id="slider-prev1">
-                                    <i class="fa-solid fa-arrow-left-long"></i>
-                                </button>
-                                <button id="slider-next1">
-                                    <i class="fa-solid fa-arrow-right-long"></i>
-                                </button>
-                            </div>
+<!-------------------------------- industry_area ------------------------------------>
+@if($industryMatricData->isNotEmpty())
+<section class="industry_area industry_multiplat_data">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="industry_area_inner">
+                    <h2>Industry Metrics</h2> 
+                    <div class="industry_slider_controal">
+                        <button id="slider-prev1">
+                            <i class="fa-solid fa-arrow-left-long"></i>
+                        </button>
+                        <button id="slider-next1">
+                            <i class="fa-solid fa-arrow-right-long"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="industry_area_inner2">
+                <div thumbsSlider="" class="swiper mySwiper1">
+                    <div class="swiper-wrapper">
+                    @foreach($industryMatricData as $index => $matric)
+                    <div class="swiper-slide">
+                        <div class="industry_area_sld_bx toggle-btn {{ $index === 0 ? 'active-toggle' : '' }}" data-index="{{ $index }}">
+                        <div class="content">
+                            <h3>{{ $matric->title }}</h3>
+                            <button class="commen_btn " data-index="{{ $index }}">Read More</button>
+                        </div>
+                        <img src="{{ asset('storage/' . $matric->image) }}" alt="" />
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -630,68 +684,58 @@
         </section>
     @endif
 
-    <!-------------------------------- forseller_area ------------------------------------>
-    @if (!empty($sellerBusinessData))
-        <section class="forseller_area">
-            <div class="container-fluid ps-lg-0">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="forseller_area_head">
-                            <h2>For Sellers and Businesses</h2>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 ps-0 my-auto">
-                        <div class="forseller_area_inner">
-                            <img src="{{ asset('storage/' . $sellerBusinessData->image) }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-xxl-5 col-lg-6">
-                        <div class="forseller_area_inner2">
-                            @php
-                                $sections = [
-                                    'listing' => 'Listing',
-                                    'track' => 'Track',
-                                    'featured' => 'Featured',
-                                    'post' => 'Post',
-                                ];
-                            @endphp
-                            @foreach ($sections as $key => $label)
-                                @php
-                                    $title = $key . '_title';
-                                    $icon = $key . '_icon';
-                                    $content = $key . '_content';
-                                @endphp
-
-                                <div class="bx1">
-                                    <img src="{{ asset('storage/' . $sellerBusinessData->$icon) }}" alt="" />
-                                    <h3>{{ $sellerBusinessData->$title }}</h3>
-                                    {{ $sellerBusinessData->$content }}
-                                </div>
-                            @endforeach
-                            <div class="bx1">
-                                <img src="https://v1.checkprojectstatus.com/elite-quaine-marketplace/web/public/storage/seller_business/icons/K9TTHnnVkRHDwQm0R19sqmkKXHs3708kygNNDVBP.svg"
-                                    alt="">
-                                <h3>Flexible Selling: Auctions & Secure Payments</h3>
-                                Sell equipment, apparel, and services your way—use our built-in auction tool for competitive
-                                bidding or opt for direct sales through our secure, Stripe-powered payment system.
-                            </div>
-                            <div class="bx1">
-                                <img src="https://v1.checkprojectstatus.com/elite-quaine-marketplace/web/public/storage/seller_business/icons/K9TTHnnVkRHDwQm0R19sqmkKXHs3708kygNNDVBP.svg"
-                                    alt="">
-                                <h3>Real-Time Messaging & Instant Alerts</h3>
-                                Connect with buyers directly through our secure in-platform messaging, and stay informed
-                                with real-time notifications for new messages, payment updates, subscription reminders, and
-                                more.
-                            </div>
-                        </div>
-                        <div class="forseller_area_inner3">
-                            {!! $sellerBusinessData->description !!}
-                        </div>
+   <!-------------------------------- forseller_area ------------------------------------>
+@if(!empty($sellerBusinessData))
+    <section class="forseller_area">
+        <div class="container-fluid ps-lg-0">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="forseller_area_head">
+                        <h2>For Sellers and Businesses</h2>
                     </div>
                 </div>
+                <div class="col-lg-6 ps-0 my-auto">
+                    <div class="forseller_area_inner">
+                        <img src="{{ asset('storage/' . $sellerBusinessData->image) }}" alt="" />
+                    </div>
+                </div>
+                <div class="col-xxl-5 col-lg-6">
+                    <div class="forseller_area_inner2">
+                        @php
+                            $sections = ['listing' => 'Listing', 'track' => 'Track', 'featured' => 'Featured', 'post' => 'Post'];
+                        @endphp
+                        @foreach ($sections as $key => $label) 
+                        @php 
+                            $title = $key.'_title'; 
+                            $icon = $key.'_icon'; 
+                            $content = $key.'_content'; 
+                        @endphp
+                        
+                        <div class="bx1">
+                            <img src="{{asset('storage/'. $sellerBusinessData->$icon)}}" alt="" />
+                            <h3>{{$sellerBusinessData->$title}}</h3>
+                            {{$sellerBusinessData->$content}}
+                        </div>
+                        @endforeach
+                        <div class="bx1">
+                            <img src="{{asset('front/home/assets/images/icons/auctions_icon.svg')}}" alt="">
+                            <h3>Flexible Selling: Auctions & Secure Payments</h3>
+                            Sell equipment, apparel, and services your way—use our built-in auction tool for competitive bidding or opt for direct sales through our secure, Stripe-powered payment system.
+                        </div>
+                        <div class="bx1">
+                            <img src="{{asset('front/home/assets/images/icons/instant_alerts_icon.svg')}}" alt="">
+                            <h3>Real-Time Messaging & Instant Alerts</h3>
+                            Connect with buyers directly through our secure in-platform messaging, and stay informed with real-time notifications for new messages, payment updates, subscription reminders, and more.
+                        </div>
+                    </div>
+                    <!-- <div class="forseller_area_inner3">
+                        {!! $sellerBusinessData->description !!}
+                    </div> -->
+                </div>
             </div>
-        </section>
-    @endif
+        </div>
+    </section>
+@endif
 
     <!-------------------------------- forbuyer_area ------------------------------------>
     @if (!empty($buyerBrowserData) && !empty($buyerFaqData))

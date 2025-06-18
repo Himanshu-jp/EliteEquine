@@ -328,13 +328,13 @@ Your Ads
                     @endif
                 </div>
 
-                <div class="col-md-3 mt-3 position-relative">
+                {{-- <div class="col-md-3 mt-3 position-relative">
                     <label for="bid_min_price" class="form-label">Bid Minimum Price</label>
                     <input type="text" name="bid_min_price" id="bid_min_price" class="inner-form form-control mb-0 numbervalid" placeholder="Enter bid minimum price" value="{{old('bid_min_price',@$products->productDetail->bid_min_price)}}">
                     @if($errors->has('bid_min_price'))
                         <span class="error text-danger">{{$errors->first('bid_min_price')}}</span>
                     @endif
-                </div>
+                </div> --}}
                 
                 <div class="col-md-3 mt-3 position-relative">
                     <label for="sale_price" class="form-label">Sale Price Range</label>
@@ -563,6 +563,7 @@ Your Ads
         </div>
 
         <div class="text-start my-4">
+            <button type="button" class="btn btn-primary" id="back" onclick="window.location.href='{{route('editProduct',$productId)}}'">Back</button>
             <button type="submit" class="btn btn-primary" id="productDetails-form-submit">Submit Ad</button>
         </div>
 
@@ -1147,7 +1148,7 @@ function trialLocationAutocomplete() {
                 'tried_upcoming_shows[]': { required: true },
                 fromdate: "required",
                 todate: "required",
-                bid_min_price: "required",
+                // bid_min_price: "required",
                 sale_price: "required",
                 lease_price: "required",
                 trainer: "required",
@@ -1184,7 +1185,7 @@ function trialLocationAutocomplete() {
                 'tried_upcoming_shows[]': "Please select at least one upcoming show.",
                 fromdate: "Start date is required.",
                 todate: "End date is required.",
-                bid_min_price: "Minimum bid price is required.",
+                // bid_min_price: "Minimum bid price is required.",
                 sale_price: "Sale price is required.",
                 lease_price: "Lease price is required.",
                 trainer: "Trainer name is required.",
@@ -1230,11 +1231,11 @@ function trialLocationAutocomplete() {
             const contactSet = $('#contactSet').is(':checked');
 
             if (!addressSet) {
-                $('#precise_location, #country, #state, #city, #street').each(function () {
+                $('#precise_location, #country, #state, #city').each(function () {
                     $(this).rules('add', { required: true, maxlength: 300 });
                 });
             } else {
-                $('#precise_location, #country, #state, #city, #street').each(function () {
+                $('#precise_location, #country, #state, #city').each(function () {
                     $(this).rules('remove', 'required');
                 });
             }

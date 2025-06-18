@@ -22,7 +22,41 @@ Horse Listing
                             <option value="AUD">AUD</option>
                         </select>
                     </div>
-
+                    
+                    <div class="filter-section ">
+                        <h4>Banners</h4>
+                        <div class="filter-ads-checkbx">
+                            @foreach(__getBannersServiceList() as $key=>$val)
+                                <input 
+                                    type="checkbox" 
+                                    id="banner_{{$key}}" 
+                                    value="{{$key}}" 
+                                    name="banner[]"
+                                    {{ in_array($key, $selectedBanner ?? []) ? 'checked' : '' }}
+                                />
+                                <label for="banner_{{$key}}">{{$val}}</label>
+                            @endforeach
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h4>Ratings</h4>
+                        <div class="filter-ads-checkbx">
+                            @for($i = 1; $i <= 5; $i++)
+                                <input 
+                                    type="checkbox" 
+                                    id="rating_{{ $i }}" 
+                                    value="{{ $i }}" 
+                                    name="rating[]"
+                                    {{ in_array($i, $selectedRatings ?? []) ? 'checked' : '' }}
+                                />
+                                <label for="rating_{{ $i }}">
+                                    {{-- Display ★ symbols --}}
+                                    {!! str_repeat('<i class="fa-solid fa-star"></i>', $i) !!}
+                                </label>
+                            @endfor
+                        </div>
+                    </div>
 
                     <div class="filter-section">
                         <label for="jobListingType">Job Listing Type</label>
@@ -397,6 +431,18 @@ function loadHorses(page = 1) {
         selectedHousingAmenities.push($(this).val());
     });
 
+    //------banner--------//
+    let selectedBanner = [];
+    $('input[name="banner[]"]:checked').each(function () {
+        selectedBanner.push($(this).val());
+    });
+   
+    //------rating--------//
+    let selectedRatings = [];
+    $('input[name="rating[]"]:checked').each(function () {
+        selectedRatings.push($(this).val());
+    });
+
     //--------View mode of listing---------//
     let selectedView = $('input[name="view_mode"]:checked').val();
 
@@ -440,6 +486,8 @@ function loadHorses(page = 1) {
             minFixedPay:$("#minFixedPay").val(),
             maxFixedPay:$("#maxFixedPay").val(),
             view_mode:selectedView,
+            rating:selectedRatings,
+            banner:selectedBanner,
         },
         success: function(response) { 
             window.scrollTo({ top: 0, behavior: 'smooth' });    

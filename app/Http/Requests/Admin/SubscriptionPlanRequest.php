@@ -22,20 +22,14 @@ class SubscriptionPlanRequest extends FormRequest
             'title' => [
                 'required',
                 'string',
-                'max:255',
-                Rule::unique('subscription_plans')
-                    ->where(function ($query) {
-                        return $query->where('type', $this->input('type'))
-                                     ->whereNull('deleted_at');
-                    })
-                    ->ignore($subscriptionPlanId),
+                'max:255'
             ],
             'subtitle' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
             'days' => 'required|integer|min:1',
             'description' => 'nullable|string',
             'type' => 'required|in:standard,featured',
-            'post_limit' => 'required|string|min:0',
+            // 'post_limit' => 'required|string|min:0',
         ];
     }
 

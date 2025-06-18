@@ -32153,15 +32153,17 @@ ul.act-icon li {
     margin: auto;
     border: 1px solid #ddd;
     padding: 20px;
+    border-radius: 10px;
 }
 
 .info-invoice .header {
-    background-color: #7a8b99;
+    background-color: #a09165;
     color: white;
     padding: 20px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    border-radius: 10px;
 }
 
 .info-invoice .header h1 {
@@ -32169,7 +32171,19 @@ ul.act-icon li {
     font-size: 28px;
     color: #fff;
 }
-
+.invoice-tbl .table thead th {
+padding: 0.75rem 1.5rem;
+    text-transform: capitalize;
+    letter-spacing: 0px;
+    background: #a09165;
+    /* border-radius: 10px; */
+    border: none;
+    color: #fff;
+}
+.table-responsive.invoice-tbl table {
+    border-radius: 10px;
+    overflow: hidden;
+}
 .info-invoice .company-info {
     text-align: right;
     font-size: 14px;

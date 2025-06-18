@@ -62,14 +62,14 @@ Route::middleware([
     Route::get('/settings', [AuthController::class, 'settings'])->name('settings');
     Route::post('/settingUpdate', [AuthController::class, 'settingUpdate'])->name('settingUpdate');
     Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription');
+    Route::get('/purchase-plan/{encodeId}', [SubscriptionController::class, 'purchase_plan'])->name('purchase_plan');
+    Route::get('/cancel-subscription', [SubscriptionController::class, 'cancel_subscription'])->name('cancel_subscription');
 
 
     //Stipe Conenct Code
-Route::get('/connect_stipe_account', [StripeController::class, 'connect_stipe_account'])->name('connect_stipe_account');
-Route::get('/updateAccountDetails', [StripeController::class, 'updateAccountDetails'])->name('updateAccountDetails');
+    Route::get('/connect_stipe_account', [StripeController::class, 'connect_stipe_account'])->name('connect_stipe_account');
+    Route::get('/updateAccountDetails', [StripeController::class, 'updateAccountDetails'])->name('updateAccountDetails');
 
-
-    
     //---------------below route is related to add products---------------------///
     Route::get('/product', [ProductController::class, 'index'])->name('product');
     Route::get('/removeImage/{id}', [ProductController::class, 'removeImage'])->name('removeImage');
@@ -226,6 +226,9 @@ Route::post('/submitReport', [HomeController::class, 'submitReport'])->name('sub
 Route::get('/favorite', [HomeController::class, 'favorite'])->name('favorite');
 Route::get('/review', [HomeController::class, 'review'])->name('review');
 Route::get('/invoice', [HomeController::class, 'invoice'])->name('invoice');
+Route::get('/invoiceDetails/{id}', [HomeController::class, 'invoiceDetails'])->name('invoiceDetails');
+Route::post('/charge_add_ons', [HomeController::class, 'charge_add_ons'])->name('charge_add_ons');
+
 // Route::get('/bidDetails', [HomeController::class, 'bidDetails'])->name('bidDetails');
 
 
@@ -236,5 +239,7 @@ Route::middleware(['auth:admin'])->group(function () {
 
 
 Route::get('/webhook_stripe_for_connect', [StripeController::class, 'webhook_stripe_for_connect'])->name('webhook_stripe_for_connect');
+    Route::get('/purchase-plan-success', [SubscriptionController::class, 'purchase_plan_success'])->name('plan_purchase.success');
+    Route::get('/purchase-plan-cancel', [SubscriptionController::class, 'purchase_plan_cancel'])->name('plan_purchase.cancel');
 
 

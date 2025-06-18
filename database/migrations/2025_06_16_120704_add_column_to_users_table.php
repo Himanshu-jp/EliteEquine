@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('stripe_id')->nullable();
+            $table->boolean('is_subscribed')->default(0);
+            $table->string('plan_activated_on')->nullable();
+            $table->string('plan_expired_on')->nullable();
+            $table->string('plan_id')->nullable();
+            $table->string('subscription_id')->nullable();
             $table->longText('stripe_connect_data')->nullable();
+            $table->integer('avgRating')->default(0);
         });
     }
 
@@ -23,7 +29,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['stripe_id', 'stripe_connect_data']);
+            $table->dropColumn(['stripe_id','is_subscribed','plan_activated_on','plan_expired_on','plan_id','subscription_id','stripe_connect_data','avgRating']);
         });
     }
 };

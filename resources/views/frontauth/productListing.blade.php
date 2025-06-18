@@ -44,7 +44,7 @@ Product Listing
             <h4 class="h5 fw-bold mb-3 mb-md-0">Product Listing</h4>
             <a href="{{ route('product') }}" class="btn btn-primary">Submit Ad</a>
         </div>
-        <div class="col-lg-6 ms-auto">
+        <div class="col-lg-8 ms-auto">
             <form method="GET" action="{{ route('productList') }}">
                 <div class="row gy-3 gx-3 align-items-end">
                     <div class="col-12 col-md-4">

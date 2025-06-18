@@ -3,54 +3,42 @@
     Invoices
 @endsection
 @section('content')
-
     <div class="container-fluid mt-4">
-        
 
-        <div class="row"> 
-                <h4 class="mb-3">Your Invoice</h4> 
-                <div class="table-responsive invoice-tbl">
-                    <table class="table table-bordered table-hover align-middle text-strat">
-                        <thead class="table-light">
-                            <tr>
-                                <th>invoice</th>
-                                <th class="text-end">Action</th>
-                                 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td >Order 1234567</td> 
-                                <td class="text-end"><a href="" class="btn btn-primary ">View invoice</a></td>
-                            </tr>
-                             <tr>
-                                <td >Order 1234567</td> 
-                                <td class="text-end"><a href="" class="btn btn-primary ">View invoice</a></td>
-                            </tr>
-                             <tr>
-                                <td >Order 1234567</td> 
-                                <td class="text-end"><a href="" class="btn btn-primary ">View invoice</a></td>
-                            </tr>
-                             <tr>
-                                <td >Order 1234567</td> 
-                                <td class="text-end"><a href="" class="btn btn-primary ">View invoice</a></td>
-                            </tr>
-                             <tr>
-                                <td >Order 1234567</td> 
-                                <td class="text-end"><a href="" class="btn btn-primary ">View invoice</a></td>
-                            </tr>
-                             <tr>
-                                <td >Order 1234567</td> 
-                                <td class="text-end"><a href="" class="btn btn-primary ">View invoice</a></td>
-                            </tr>
-                             
-                        </tbody>
-                    </table>
-                </div>
-            
-        </div>
+
         <div class="row">
-             <div class="invoice-wrapper info-invoice">
+            <h4 class="mb-3">Your Invoice</h4>
+            <div class="table-responsive invoice-tbl">
+                <table class="table table-bordered table-hover align-middle text-strat">
+                    <thead class="table-light">
+                        <tr>
+                            {{-- <th>S/No</th> --}}
+                            <th>Invoice</th>
+                            {{-- <th>Subscription ID</th> --}}
+                            <th>Plan Name</th>
+                            <th class="text-end">Invoice</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($transaction as $item)
+                            <tr>
+                                {{-- <td>{{ $loop->iteration }}</td> --}}
+                                <td>Order-{{ $item->plan_purchase_on }}</td>
+                                {{-- <td>{{ $item->subscription_id }}</td> --}}
+                                <td>{{ @$item->planData->title ?? 'Addon Invoice' }}</td>
+                                <td class="text-end"><a href="{{ route('invoiceDetails',[ base64_encode($item->id)]) }}"  target="_blank"
+                                        class="btn btn-primary btbn">View invoice</a></td>
+                            </tr>
+                        @endforeach
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="row invoiceData">
+            {{-- <div class="invoice-wrapper info-invoice">
     <!-- Header -->
     <div class="header">
       <h1>INVOICE</h1>
@@ -101,23 +89,23 @@
 
     <!-- Total -->
     <div class="text-right total">Total Amount &nbsp;&nbsp; $0.00</div>
-  </div>
+  </div> --}}
         </div>
     </div>
 @endsection
 
 @section('script')
     <script>
-        document.querySelectorAll('.text-box').forEach(function (box) {
+        document.querySelectorAll('.text-box').forEach(function(box) {
             const textContainer = box.querySelector('.text-container');
             const toggleBtn = box.querySelector('.toggle-btn');
 
-            toggleBtn.addEventListener('click', function () {
+            toggleBtn.addEventListener('click', function() {
                 textContainer.classList.toggle('expanded');
-                toggleBtn.textContent = textContainer.classList.contains('expanded') ? 'Show less' : 'Show more';
+                toggleBtn.textContent = textContainer.classList.contains('expanded') ? 'Show less' :
+                    'Show more';
             });
         });
     </script>
-
-
+   
 @endsection

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\ProductDocument;
 use App\Models\ProductImage;
+use App\Models\ProductLink;
 use App\Models\ProductRelation;
 use App\Models\ProductVideo;
 use App\Models\UserDetails;
@@ -47,15 +48,36 @@ class ProductService
         // $product->price_reduced = ($data['price_reduced'] == 'on') ? 1 : 0;
         $product->currency = $data['currency'];
         $product->description = $data['description'];
-        // $product->external_link = $data['external_link'];
-        // $product->transaction_method = $data['transaction_method'];
-        // $product->auc_winner_pay_in = ($data['auc_winner_pay_in'] == 'on') ? 1 : 0;
-        // $product->bid_end_days = $data['bid_end_days'];
-        // $product->mark_as = $data['mark_as'];
-        // $product->product_status = 'live';
         $product->created_at = Carbon::now();
         $product->updated_at = Carbon::now();
         $product->save();
+
+        $externalLink=[];
+        if (!empty($data['external_link']) && is_array($data['external_link']) && count($data['external_link']) > 0 && !empty($data['external_link'][0]) ) {
+            foreach ($data['external_link'] as $key => $link) {
+                $externalLink[$key]['product_id'] = $product->id;
+                $externalLink[$key]['link'] = $link;
+                $externalLink[$key]['type'] = "web";
+                $externalLink[$key]['created_at'] = Carbon::now();
+                $externalLink[$key]['updated_at'] = Carbon::now();
+            }
+            ProductLink::where('product_id', $product->id)->where('type','web')->delete();
+            $linkResult = ProductLink::insert($externalLink);
+        }
+
+        $videoLink=[];
+        if (!empty($data['video_link']) && is_array($data['video_link']) && count($data['video_link']) > 0 && !empty($data['video_link'][0])) {
+            foreach ($data['video_link'] as $key => $link) {
+                $videoLink[$key]['product_id'] = $product->id;
+                $videoLink[$key]['link'] = $link;
+                $videoLink[$key]['type'] = "video";
+                $videoLink[$key]['created_at'] = Carbon::now();
+                $videoLink[$key]['updated_at'] = Carbon::now();
+            }
+            ProductLink::where('product_id', $product->id)->where('type','video')->delete();
+            $videoLinkResult = ProductLink::insert($videoLink);
+        }
+
 
 
         // Handle file uploads
@@ -149,7 +171,7 @@ class ProductService
         return $product;
     }
 
-     public function updateProduct($data)
+    public function updateProduct($data)
     {
         $product = Product::find($data['product_id']);
 
@@ -162,7 +184,7 @@ class ProductService
         $product->price = $data['price'] ?? $product->price;
         $product->currency = $data['currency'] ?? $product->currency;
         $product->description = $data['description'] ?? $product->description;
-        $product->external_link = $data['external_link'] ?? $product->external_link;
+        // $product->external_link = $data['external_link'] ?? $product->external_link;
         $product->is_negotiable = (isset($data['is_negotiable']) && $data['is_negotiable'] == 'on') ? 'yes' : 'no';
         $product->updated_at = now();
         $product->save();
@@ -239,7 +261,7 @@ class ProductService
         $productDetail->green_eligibilitie_id = $data['green_eligibilitie_id'];
         $productDetail->fromdate = $data['fromdate'];
         $productDetail->todate = $data['todate'];
-        $productDetail->bid_min_price = $data['bid_min_price'];
+        // $productDetail->bid_min_price = $data['bid_min_price'];
         $productDetail->sale_price = $data['sale_price'];
         $productDetail->lease_price = $data['lease_price'];
         $productDetail->trainer = $data['trainer'];

@@ -24,7 +24,6 @@ class Product extends Model
         'price_reduced',
         'currency',
         'description',
-        'external_link',
         'transaction_method',
         'auc_winner_pay_in',
         'bid_end_days',
@@ -51,6 +50,16 @@ class Product extends Model
     public function image()
     {
         return $this->hasMany(ProductImage::class)->select('id', 'product_id', 'image');
+    }
+    
+    public function externalLink()
+    {
+        return $this->hasMany(ProductLink::class)->select('id', 'product_id', 'link')->where('type','web');
+    }
+    
+    public function videoLink()
+    {
+        return $this->hasMany(ProductLink::class)->select('id', 'product_id', 'link')->where('type','video');
     }
 
     public function video()

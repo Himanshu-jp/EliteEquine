@@ -60,7 +60,7 @@
                                         <th>Subtitle</th>
                                         <th>Price</th>
                                         <th>Duration (Days)</th>
-                                        <th>Post Limit</th>
+                                        {{-- <th>Post Limit</th> --}}
                                         <th>Type</th>
                                         <th>Action</th>
                                     </tr>
@@ -73,7 +73,7 @@
                                             <td>{{ $plan->subtitle }}</td>
                                             <td>${{ number_format($plan->price, 2) }}</td>
                                             <td>{{ $plan->days }} Days</td>
-                                            <td>{{ $plan->post_limit }}</td>
+                                            {{-- <td>{{ $plan->post_limit }}</td> --}}
                                             <td>{{ ucfirst($plan->type) }}</td>
                                             <td>
                                                 <a href="{{ route('subscription_plans.edit', $plan->id) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>

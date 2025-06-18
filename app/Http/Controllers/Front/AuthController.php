@@ -21,8 +21,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
-
-
 class AuthController extends Controller
 {
     protected $authService;
@@ -162,6 +160,11 @@ class AuthController extends Controller
     {
         $user = auth::user();
         $result = $this->authService->profileUpdate($request->all(), $user);
+        $settingDetails = UserDetails::where('user_id',$user->id)->where('phone','!=',null)->first();
+        if(!$settingDetails)
+        {
+            return redirect()->route('settings');
+        }
         return redirect()->route('profile')->with('success', 'Profile details Updated Successfully');
     }
 
