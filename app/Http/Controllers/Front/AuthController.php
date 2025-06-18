@@ -234,6 +234,34 @@ class AuthController extends Controller
                 'error' => 'Category parameter is required'
             ], 400);
         }
+           $markerImageTrail="Horse Red.png";
+         $markerImage="Horse Blue.png";
+        if($categoryId==1)
+        {
+            $markerImageTrail="Horse Red.png";
+             $markerImage="Horse Blue.png";
+        }
+        else if($categoryId==2)
+        {
+            $markerImageTrail="Equipment Red.png";
+             $markerImage="Equipment Blue.png";
+        }
+        else if($categoryId==3)
+        {
+            $markerImage="Barn and housing Blue.png";
+             $markerImageTrail="Barn and housing Red.png";
+        }
+         elseif($categoryId==4)
+        {
+            $markerImageTrail="Services Jobs Red.png";
+             $markerImage="Services Jobs Blue.png";
+        }
+         elseif($categoryId==5)
+        {
+            $markerImage="Community Blue.png";
+             $markerImageTrail="Community Red.png";
+        }
+  
       $latitude=$request->latitude ?? 26.836992;
         $longitude= $request->longitude ?? 75.769446;
         if (in_array($categoryId, [1, 2, 3, 4])) {
@@ -265,10 +293,11 @@ class AuthController extends Controller
             }
             $data = $data->orderBy('id', 'desc')
                 ->get();
-        $html = view("homemapview", compact("data",'latitude','longitude'))->render();
+        $html = view("homemapview", compact("data",'latitude','longitude','markerImage','markerImageTrail'))->render();
         } elseif ($categoryId == 5) {
             $now = Carbon::now();
-
+  $markerImage="Community Blue.png";
+             $markerImageTrail="Community Red.png";
             $data = Community::with('user')
                 ->whereNull('deleted_at') // or use softDeletes if applicable
                 ->where(function ($query) use ($now) {
@@ -281,15 +310,16 @@ class AuthController extends Controller
                 ->orderBy('date', 'asc')
                 ->orderBy('time', 'asc')
                 ->get();
-                  $html = view("homemapviewcommunit", compact("data",'latitude','longitude'))->render();
+                  $html = view("homemapviewcommunit", compact("data",'latitude','longitude','markerImage','markerImageTrail'))->render();
         }
-  
+      
      
       
         // return $html;
      
         return response()->json([
             'html' => $html,
+           
 
         ]);
     }

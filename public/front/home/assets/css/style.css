@@ -6034,17 +6034,18 @@ section.industry_area.forum-bg-border .container {
     font-size: 14px;
     cursor: pointer;
 }
- /* .mapboxgl-popup {
+ .mapboxgl-popup {
     display: flex;
     pointer-events: none;
-    position: absolute; 
-    top:auto !important ;
-    left: 50% !important;
+    position: absolute;
+    /* will-change: transform; */
+    /* top:auto !important ; */
+    /* left: 50% !important; */
     right: 0 !important;
-    bottom: 0 !important;
-    transform: translate(-50%, -10%) !important;
+    /* bottom: 0 !important;
+    transform: translate(-50%, -10%) !important; */
     width: 100%;
-} */
+}
 .mapboxgl-popup-content {
     width: 440px;
     max-height: 220px;
