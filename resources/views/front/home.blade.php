@@ -593,6 +593,7 @@
 @endif
 
 <!-------------------------------- industry_area ------------------------------------>
+<!-------------------------------- industry_area ------------------------------------>
 @if($industryMatricData->isNotEmpty())
 <section class="industry_area industry_multiplat_data">
     <div class="container">
@@ -624,41 +625,22 @@
                         <img src="{{ asset('storage/' . $matric->image) }}" alt="" />
                         </div>
                     </div>
-                    <div class="col-lg-12">
-                        <div class="industry_area_inner2">
-                            <div thumbsSlider="" class="swiper mySwiper1">
-                                <div class="swiper-wrapper">
-                                    @foreach ($industryMatricData as $index => $matric)
-                                        <div class="swiper-slide">
-                                            <div class="industry_area_sld_bx {{ $index === 0 ? 'active-toggle' : '' }}"
-                                                data-index="{{ $index }}">
-                                                <div class="content">
-                                                    <h3>{{ $matric->title }}</h3>
-                                                    <button class="commen_btn toggle-btn"
-                                                        data-index="{{ $index }}">Read More</button>
-                                                </div>
-                                                <img src="{{ asset('storage/' . $matric->image) }}" alt="" />
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-
-                            <div class="more-info-box">
-                                @foreach ($industryMatricData as $index => $matric)
-                                    <div class="industry_area_sld_bx1 toggle-content {{ $index === 0 ? 'active' : '' }}"
-                                        data-index="{{ $index }}">
-                                        <p>{!! $matric->description !!}</p>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-
-
+                    @endforeach
                     </div>
                 </div>
-        </section>
-    @endif
+
+                    <div class="more-info-box">
+                        @foreach($industryMatricData as $index => $matric)
+                        <div class="industry_area_sld_bx1 toggle-content {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}">
+                        <p>{!! $matric->description !!}</p>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+@endif
 
 
     <!-------------------------------- about_area ------------------------------------>
@@ -1585,9 +1567,9 @@
                     }
 
                     // Optional: scroll into view
-                    document.querySelector(".more-info-box").scrollIntoView({
-                        behavior: "smooth"
-                    });
+                    // document.querySelector(".more-info-box").scrollIntoView({
+                    //     behavior: "smooth"
+                    // });
                 });
             });
         });
@@ -1599,3 +1581,4 @@
 
 
 @endsection
+
