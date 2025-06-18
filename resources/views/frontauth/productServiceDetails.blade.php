@@ -66,7 +66,7 @@ Your Ads
     margin-bottom: 0px;
 }
 .form-select-time {
-    width: 80px;
+    width: 100px;
     border: 1px solid #ccc;
     border-radius: 10px;
 }   
