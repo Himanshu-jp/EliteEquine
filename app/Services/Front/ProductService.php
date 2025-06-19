@@ -905,6 +905,7 @@ class ProductService
             $longitude = $data['longitude'];
         }
 
+     
         $productDetail->phone = $phone; 
         $productDetail->precise_location = $precise_location;
         $productDetail->country = $country;
@@ -912,6 +913,12 @@ class ProductService
         $productDetail->city = $city;
         $productDetail->latitude = $latitude;
         $productDetail->longitude = $longitude;
+        $productDetail->trial_location = @$data['trial_location'];
+        $productDetail->trail_latitude = @$data['trail_latitude'];
+        $productDetail->trail_longitude = @$data['trail_longitude'];
+
+          
+
         $productDetail->street = $street;
         $productDetail->banner = $data['banners'];
         $productDetail->agree = $data['agree'];

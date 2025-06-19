@@ -167,8 +167,6 @@ Route::get('/productCommentDelete/{id}', [HomeController::class, 'productComment
 
 
 
-
-
 //------community events & details routes -----//
 // Route::get('/community-events', [HomeController::class, 'communityEvents'])->name('community-events');
 

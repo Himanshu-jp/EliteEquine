@@ -58,6 +58,9 @@ class ProductDetail extends Model
         'time_slot',
         'trail_latitude',
         'trail_longitude',
+        'trial_location',
+
+        
     ];
 
     public function product()

@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('website')->nullable();
+            $table->text('title')->nullable();
             $table->text('comment');
+            $table->text('image')->nullable();
             $table->foreignId('forum_comment_id')->nullable();
             $table->timestamps();
             $table->softDeletes();

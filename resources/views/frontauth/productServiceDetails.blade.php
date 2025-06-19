@@ -349,14 +349,22 @@ Your Ads
                         @endif
                     </div>
 
-                     <div class="mb-4 position-relative">
-                        <label class="form-label">Trial / Exchange Location</label>
-                        <input type="text" class="inner-form form-control" placeholder="Enter trial / exchange location ..." name="trial_location" id="trial_location" value={{old('trial_location',@$products->productDetail->trial_location)}}>
+              
+
+                      <div class="mb-4 position-relative">
+                        <label class="form-label">Trial Location</label>
+                        <input type="text" class="inner-form form-control" placeholder="Enter trial / exchange location ..." name="trial_location" onkeyup="SecondAutocomplete()" id="secondprecise_location" value={{old('trial_location',@$products->productDetail->trial_location)}}>
+                        <span id="secondmap-location-message" class="text-danger" style="display: none; font-size: 12px;"></span>
+                            <ul id="secondmap-location-list" style="display: none;">
+                                <!-- Location suggestions will appear here -->
+                            </ul>
+                            <input type="hidden" id="secondmap-latitude" name="secondlatitude" value="{{ request()->query('latitude')}}">
+                            <input type="hidden" id="secondmap-longitude" name="secondlongitude" value="{{ request()->query('longitude')}}">
                         @if($errors->has('trial_location'))
                             <span class="error text-danger">{{$errors->first('trial_location')}}</span>
+                            
                         @endif
                     </div>
-
                 </div>
                 <div class="col-md-6">
                     <div class="map" id="map">
@@ -1051,6 +1059,203 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+
+function SecondAutocomplete() {
+    const secondlocationInput = document.getElementById('secondprecise_location');
+    const secondlocationList = document.getElementById('secondmap-location-list');
+    const secondlocationMessage = document.getElementById('secondmap-location-message');
+    const secondlatitudeInput = document.getElementById('secondmap-latitude');
+    const secondlongitudeInput = document.getElementById('secondmap-longitude');
+    // const secondcountryInput = document.getElementById('secondcountry');
+    // const secondstateInput = document.getElementById('secondstate');
+    // const secondcityInput = document.getElementById('secondcity');
+    // const secondstreetInput = document.getElementById('secondstreet');
+
+    const secondsessionToken = Math.random().toString(36).substring(2, 15);
+    const secondcache = {};
+    let secondselectedIndex = -1;
+    let secondsuggestions = [];
+    let seconddebounceTimer;
+
+    function secondclearSuggestions() {
+        secondlocationList.innerHTML = '';
+        secondlocationList.style.display = 'none';
+        secondlocationMessage.style.display = 'none';
+        secondselectedIndex = -1;
+        secondsuggestions = [];
+    }
+
+    function highlightSuggestion(index) {
+        const seconditems = secondlocationList.querySelectorAll('li');
+        seconditems.forEach((li, i) => {
+            li.classList.toggle('highlighted', i === index);
+            if (i === index) li.scrollIntoView({ block: 'nearest' });
+        });
+    }
+
+    function parseContext(context) {
+        let secondstate = '', secondcountry = '', secondcity = '', secondstreet = '';
+
+        if (Array.isArray(context)) {
+            context.forEach(ctx => {
+                const id = ctx.id || '';
+                if (id.startsWith('region')) secondstate = ctx.text || ctx.name || '';
+                else if (id.startsWith('country')) secondcountry = ctx.text || ctx.name || '';
+                else if (id.startsWith('place') || id.startsWith('district')) secondcity = ctx.text || ctx.name || '';
+                else if (id.startsWith('locality') && !secondcity) secondcity = ctx.text || ctx.name || '';
+                else if (id.startsWith('address') || id.startsWith('street')) secondstreet = ctx.text || ctx.name || '';
+            });
+        } else if (typeof context === 'object' && context !== null) {
+            if (context.region) secondstate = context.region.text || context.region.name || '';
+            if (context.country) secondcountry = context.country.text || context.country.name || '';
+            if (context.place) secondcity = context.place.text || context.place.name || '';
+            if (!secondcity && context.district) secondcity = context.district.text || context.district.name || '';
+            if (!secondcity && context.locality) secondcity = context.locality.text || context.locality.name || '';
+            if (context.address) secondstreet = context.address.text || context.address.name || '';
+            if (!secondstreet && context.street) secondstreet = context.street.text || context.street.name || '';
+        }
+
+        return { secondstate, secondcountry, secondcity, secondstreet };
+    }
+
+    function selectSuggestion(index) {
+        if (index < 0 || index >= secondsuggestions.length) return;
+
+        const suggestion = secondsuggestions[index];
+        const secondname = suggestion.name || '';
+        const mapbox_id = suggestion.mapbox_id;
+
+        const { secondstate, secondcountry, secondcity, secondstreet } = parseContext(suggestion.context);
+        const secondfinalStreet = secondstreet || (suggestion.place_type?.includes('address') ? secondname : '');
+        const secondfinalCity = secondcity || (suggestion.place_type?.includes('place') ? secondname : '');
+
+        secondlocationInput.value = [secondname, secondstate, secondcountry].filter(Boolean).join(', ');
+        // secondcountryInput.value = secondcountry;
+        // secondstateInput.value = secondstate;
+        // secondcityInput.value = secondfinalCity;
+        // secondstreetInput.value = secondfinalStreet;
+
+        secondclearSuggestions();
+
+        fetch(`https://api.mapbox.com/search/searchbox/v1/retrieve/${mapbox_id}?session_token=${secondsessionToken}&access_token=${mapboxAccessToken}`)
+            .then(response => response.json())
+            .then(data => {
+                const feature = data.features?.[0];
+                if (!feature) return;
+
+                const coords = feature.geometry?.coordinates;
+                if (coords) {
+                    const lat = coords[1];
+                    const lng = coords[0];
+                    secondlatitudeInput.value = lat;
+                    secondlongitudeInput.value = lng;
+
+                    if (typeof addMapMarker === 'function') addMapMarker(lat, lng);
+                    if (typeof fetchVenues === 'function') fetchVenues(lat, lng);
+                }
+
+                let { secondstate: rState, secondcountry: rCountry, secondcity: rCity, secondstreet: rStreet } = parseContext(feature.context);
+
+                if (feature.properties?.address && !rStreet) {
+                    rStreet = feature.properties.address;
+                }
+
+                // if (!secondcountryInput.value) secondcountryInput.value = rCountry;
+                // if (!secondstateInput.value) secondstateInput.value = rState;
+                // if (!secondcityInput.value) secondcityInput.value = rCity;
+                // if (!secondstreetInput.value) secondstreetInput.value = rStreet;
+            })
+            .catch(err => console.error('Error fetching coordinates:', err));
+    }
+
+    function fetchSuggestions(query) {
+        if (secondcache[query]) {
+            renderSuggestions(secondcache[query]);
+            return;
+        }
+
+        fetch(`https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodeURIComponent(query)}&language=en&limit=5&session_token=${secondsessionToken}&access_token=${mapboxAccessToken}`)
+            .then(response => response.json())
+            .then(data => {
+                secondcache[query] = data;
+                renderSuggestions(data);
+            })
+            .catch(error => {
+                console.error('Error fetching location data:', error);
+                secondlocationMessage.style.display = 'block';
+                secondlocationMessage.textContent = 'Failed to fetch location data';
+                secondlocationList.style.display = 'none';
+            });
+    }
+
+    function renderSuggestions(data) {
+        secondlocationList.innerHTML = '';
+        secondsuggestions = data.suggestions || [];
+
+        if (secondsuggestions.length > 0) {
+            secondsuggestions.forEach((suggestion, i) => {
+                const li = document.createElement('li');
+                const secondname = suggestion.name || '';
+                const { secondstate, secondcountry } = parseContext(suggestion.context);
+                const secondfullAddress = [secondname, secondstate, secondcountry].filter(Boolean).join(', ');
+
+                li.textContent = secondfullAddress;
+                li.setAttribute('data-index', i);
+                li.addEventListener('click', () => selectSuggestion(i));
+                secondlocationList.appendChild(li);
+            });
+
+            secondlocationList.style.display = 'block';
+            secondlocationMessage.style.display = 'none';
+            secondselectedIndex = -1;
+        } else {
+            secondlocationMessage.style.display = 'block';
+            secondlocationMessage.textContent = 'No locations found';
+            secondlocationList.style.display = 'none';
+        }
+    }
+
+    secondlocationInput.addEventListener('input', function () {
+        clearTimeout(seconddebounceTimer);
+        seconddebounceTimer = setTimeout(() => {
+            const query = secondlocationInput.value.trim();
+            if (query.length > 2) {
+                fetchSuggestions(query);
+            } else {
+                secondclearSuggestions();
+            }
+        }, 600);
+    });
+
+    secondlocationInput.addEventListener('keydown', function (e) {
+        const seconditems = secondlocationList.querySelectorAll('li');
+        if (secondlocationList.style.display === 'block' && seconditems.length > 0) {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                secondselectedIndex = (secondselectedIndex + 1) % seconditems.length;
+                highlightSuggestion(secondselectedIndex);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                secondselectedIndex = (secondselectedIndex - 1 + seconditems.length) % seconditems.length;
+                highlightSuggestion(secondselectedIndex);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (secondselectedIndex >= 0) selectSuggestion(secondselectedIndex);
+            } else if (e.key === 'Escape') {
+                secondclearSuggestions();
+            }
+        }
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!secondlocationInput.contains(e.target) && !secondlocationList.contains(e.target)) {
+            secondclearSuggestions();
+        }
+    });
+}
+
+
 
 </script>
 

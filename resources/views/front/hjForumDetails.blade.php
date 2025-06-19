@@ -51,12 +51,28 @@ HJ Forum Details
                     <form action="{{route('forumComment')}}" method="post" id="forum-comment-form">   
                         @csrf                
                         <input type="hidden" name="forum_id" value="{{$forum->id}}">
-                        <div>
+                        <div class="col-md-12 mb-3">
+                            <label for="name" class="form-label">Title</label>
+                            <input type="text" class="form-control comment-input-form mb-0" placeholder="Enter your title" name="title" id="title" autocomplete="off">                                            
+                        </div>  
+                        <div>  
+                            <label for="name" class="form-label">Content</label>                                      
                             <textarea class="comment-textarea form-control mb-2" rows="6" name="comment" id="comment" placeholder="Write your comment here...">{{old('comment')}}</textarea>    
                             @if($errors->has('comment'))
                                 <span class="error text-danger">{{$errors->first('comment')}}</span>
-                            @endif  
+                            @endif
                         </div>                                    
+                        <div class="col-md-12 mt-3">
+                            <div class="upload-cmt-input" onclick="document.getElementById('uploadFile').click();"> 
+                                <div class="upload-icon"> <img src="{{asset('front/auth/assets/img/icons/image.svg')}}" class="user-img" alt="" id="editDocument"></div>
+                                        <h5 class="pt-3">Select pdf & document format files. </h5>
+                                        <div href="#" class="upload-image">
+                                            <h6>Browse File</h6>
+                                        </div>
+                                <input type="file" name="file" id="uploadFile" accept="image/*">
+                                <img id="previewImage" class="preview" alt="Image Preview">
+                            </div>
+                        </div>                                  
                         <button type="submit" class="comment-submit-btn" id="forum-comment-form-submit">Post Comment</button>
                     </form>
                 </div>
@@ -66,11 +82,28 @@ HJ Forum Details
                     <form action="{{route('forumComment')}}" method="post" id="forum-comment-form-guest">   
                         @csrf                
                         <input type="hidden" name="forum_id" value="{{$forum->id}}">
+                        <div class="col-md-12 mb-3">
+                            <label for="name" class="form-label">Title</label>
+                            <input type="text" class="form-control comment-input-form mb-0" placeholder="Enter your title" name="title" id="title" autocomplete="off">                                            
+                        </div>  
                         <div>
+                            <label for="name" class="form-label">Content</label>
                             <textarea class="comment-textarea form-control mb-2" rows="6" name="comment" id="comment" placeholder="Write your comment here...">{{old('comment')}}</textarea>    
                             @if($errors->has('comment'))
                                 <span class="error text-danger">{{$errors->first('comment')}}</span>
                             @endif  
+                        </div>
+
+                        <div class="col-md-12 mt-3">
+                            <div class="upload-cmt-input" onclick="document.getElementById('uploadFile').click();"> 
+                                <div class="upload-icon"> <img src="{{asset('front/auth/assets/img/icons/image.svg')}}" class="user-img" alt="" id="editDocument"></div>
+                                        <h5 class="pt-3">Select pdf & document format files. </h5>
+                                        <div href="#" class="upload-image">
+                                            <h6>Browse File</h6>
+                                        </div>
+                                <input type="file" name="file" id="uploadFile" accept="image/*">
+                                <img id="previewImage" class="preview" alt="Image Preview">
+                            </div>
                         </div>
                         
                         <div class="row">
@@ -89,7 +122,7 @@ HJ Forum Details
                             </div>
                         </div>
                         
-                        <button type="submit" class="comment-submit-btn" id="forum-comment-form-submit">Post Comment</button>
+                        <button type="submit" class="comment-submit-btn" id="forum-comment-form-guest-submit">Post Comment</button>
                     </form>
                 </div>
             @endif
@@ -166,12 +199,20 @@ HJ Forum Details
     $(document).ready(function () {
         $("#forum-comment-form").validate({
             rules: {
+                 title:{
+                    required: true,
+                    maxlength: 500
+                },
                 comment: {
                     required: true,
                     maxlength: 5000
                 }
             },
             messages: {
+                 title: {
+                    required: "Title field is required.",
+                    maxlength: "The title field must not be greater than 500 characters"
+                },
                 comment: {
                     required: "Content field is required.",
                     maxlength: "The Content field must not be greater than 5000 characters"
@@ -189,12 +230,14 @@ HJ Forum Details
 
             submitHandler: function (form) {
                 $('#forum-comment-form-submit').prop('disabled', true).text('Please wait...');
-                let formData = $(form).serialize();
+                let formData = new FormData(form);
 
                 $.ajax({
                     url: $(form).attr('action'),
                     method: 'POST',
                     data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function (response) {
                         $('#forum-comment-form-submit')
                             .prop('disabled', false)
@@ -206,6 +249,11 @@ HJ Forum Details
                             addforumComment(page);
                             $("#noComments").hide();
                             $("#data-wrapper").show();
+
+                            const previewImageDiv = document.getElementById('previewImage');
+                            previewImageDiv.src="";
+                            previewImageDiv.style.display = 'none';
+
 
                         } else {
                             alert(response.message || 'Something went wrong');
@@ -239,6 +287,10 @@ HJ Forum Details
                     maxlength: 255,
                     url: true,
                 },
+                 title:{
+                    required: true,
+                    maxlength: 500
+                },
                 comment: {
                     required: true,
                     maxlength: 5000
@@ -258,6 +310,10 @@ HJ Forum Details
                     required: "Please enter your web address",
                     maxlength: "Website must not exceed 255 characters"
                 },  
+                 title: {
+                    required: "Title field is required.",
+                    maxlength: "The title field must not be greater than 500 characters"
+                },  
                 comment: {
                     required: "Content field is required.",
                     maxlength: "The Content field must not be greater than 5000 characters"
@@ -274,15 +330,17 @@ HJ Forum Details
             },
 
             submitHandler: function (form) {
-                $('#forum-comment-form-submit').prop('disabled', true).text('Please wait...');
-                let formData = $(form).serialize();
+                $('#forum-comment-form-guest-submit').prop('disabled', true).text('Please wait...');
+                let formData = new FormData(form);
 
                 $.ajax({
                     url: $(form).attr('action'),
                     method: 'POST',
                     data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function (response) {
-                        $('#forum-comment-form-submit')
+                        $('#forum-comment-form-guest-submit')
                             .prop('disabled', false)
                             .text('Post Comment');
 
@@ -292,6 +350,10 @@ HJ Forum Details
                             addforumComment(page);
                             $("#noComments").hide();
                             $("#data-wrapper").show();
+
+                            const previewImageDiv = document.getElementById('previewImage');
+                            previewImageDiv.src="";
+                            previewImageDiv.style.display = 'none';
 
                             //----guest user-----//
                             $("#name").val(response.guest['name']);
@@ -303,7 +365,7 @@ HJ Forum Details
                         }
                     },
                     error: function (xhr) {
-                        $('#forum-comment-form-submit').prop('disabled', false).text('Post Comment');
+                        $('#forum-comment-form-guest-submit').prop('disabled', false).text('Post Comment');
 
                         // Show error message
                         alert('Submission failed. Please try again.');
@@ -453,5 +515,106 @@ HJ Forum Details
 
 
 </script>
+
+<script>
+    const fileInput = document.getElementById('uploadFile');
+    const previewImage = document.getElementById('previewImage');
+
+    fileInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function () {
+          previewImage.src = reader.result;
+          previewImage.style.display = 'block';
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        previewImage.src = '';
+        previewImage.style.display = 'none';
+      }
+    });
+  </script>
+  <style>
+    .comment-input-form {
+    border-radius: 14px;
+    border: 1px solid var(--Border-2, #DDD);
+    background: var(--Color-White, #FFF);
+    padding: 14px 22px;
+    color: #3D3D3D;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 26px;
+}
+
+.upload-cmt-input {
+    width: 100%;
+    padding: 25px 15px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    position: relative;
+    border-radius: 20px;
+    border: 1px dashed #DDD;
+    background: #FFF;
+    padding: 30px;
+}
+.upload-cmt-input h5 {
+    color: #000;
+    text-align: center;
+    font-family: Inter;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%; /* 27px */
+}
+
+.upload-cmt-input .upload-image {
+    color: #A19061;
+    text-align: center;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 150%; /* 22.5px */
+    text-decoration-line: underline !important;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+}
+ 
+
+    .upload-cmt-input input[type="file"] {
+      display: none;
+    }
+
+    .upload-cmt-input .upload-icon {
+      font-size: 36px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .upload-cmt-input .upload-text {
+      font-size: 14px;
+      color: #444;
+    }
+
+    .upload-cmt-input img.preview {
+      margin-top: 15px;
+      max-width: 100%;
+      max-height: 180px;
+      display: none;
+      border-radius: 6px;
+      object-fit: contain;
+      border: 1px solid #ccc;
+    }
+  </style>
 
 @endsection

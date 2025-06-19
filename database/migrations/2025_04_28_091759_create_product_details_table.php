@@ -45,6 +45,9 @@ return new class extends Migration
             $table->string('street')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
+            $table->string('trail_latitude')->nullable();
+            $table->string('trail_longitude')->nullable();
+            $table->string('trial_location')->nullable();
             $table->string('banner')->nullable();
             $table->string('agree')->nullable();
             $table->timestamps();

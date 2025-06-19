@@ -27,7 +27,7 @@
 
                 
                 @if(@$guest['email']==$comment->email)
-                    <div class="comment-btn-act"
+                    <div class="edit-comment-btn comment-btn-act"
                         data-id="{{ $comment->id }}"
                         data-forum="{{ $comment->forum_id }}"
                         data-comment="{{ $comment->comment }}">Edit</div> | 
@@ -36,9 +36,22 @@
 
             @endif
         </div>
+
+        @if(@$comment->title)
+            <div class="comment-title">
+                {{ $comment->title }}
+            </div>
+        @endif
+        
         <div class="comment-body">
             {{ $comment->comment }}
         </div>
+
+        @if(@$comment->image)
+            <div class="comment-image">
+                <img src="{{(@$comment->image)?asset('storage/'.@$comment->image):asset('front/auth/assets/img/user-img.png')}}" class="user-img" alt="">
+            </div>
+        @endif
 
        
 
