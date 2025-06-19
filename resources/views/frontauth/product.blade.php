@@ -1156,6 +1156,9 @@ function recurringImage() {
     } else {
         total_skip = 0;
 
+        $('.fullscreen-cover').hide();
+return false;
+
         $('.fullscreen-cover').html('Submitting Your Form, Please Wait!')
 
         // Build form data from the form element
@@ -1189,7 +1192,7 @@ function recurringImage() {
 
     
     $('#productForm').on('submit', function(e) {
-        if ($("#productForm").valid()) {
+        // if ($("#productForm").valid()) {
              $('.fullscreen-cover').css('display','flex')
         e.preventDefault(); // Prevent default form submission
 
@@ -1208,7 +1211,7 @@ function recurringImage() {
             };
             recurringImage();
         }
-    }
+    // }
         // else: form will submit normally if no file
     });
 </script>
