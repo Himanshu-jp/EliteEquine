@@ -1,5 +1,5 @@
 apps:
-  - name: mozaik-queue
+  - name: EliteQuine-queue
     script: artisan
     exec_mode: fork
     interpreter: php

@@ -870,9 +870,14 @@ class ProductService
         //-------save product details table data----------------//
         $productDetail->fromdate = $data['fromdate'];
         $productDetail->todate = $data['todate'];
-        $productDetail->time_slot = $data['time_slot'];
+        $productDetail->time_slot = $data['time_slot'] ?? '';
         $productDetail->haulings_location_from = $data['haulings_location_from'];
+        $productDetail->haulings_location_from_lat = $data['haulings_location_from_lat'];
+        $productDetail->haulings_location_from_lng = $data['haulings_location_from_lng'];
         $productDetail->haulings_location_to = $data['haulings_location_to'];
+        $productDetail->haulings_location_to_lat = $data['haulings_location_to_lat'];
+        $productDetail->haulings_location_to_lng = $data['haulings_location_to_lng'];
+
         $productDetail->stalls_available_haulings = $data['stalls_available_haulings'];
         $productDetail->salary = $data['salary'];
         $productDetail->hourly_price = $data['hourly_price'];
@@ -905,6 +910,7 @@ class ProductService
             $longitude = $data['longitude'];
         }
 
+     
         $productDetail->phone = $phone; 
         $productDetail->precise_location = $precise_location;
         $productDetail->country = $country;
@@ -912,6 +918,12 @@ class ProductService
         $productDetail->city = $city;
         $productDetail->latitude = $latitude;
         $productDetail->longitude = $longitude;
+        $productDetail->trial_location = @$data['trial_location'];
+        $productDetail->trail_latitude = @$data['trail_latitude'];
+        $productDetail->trail_longitude = @$data['trail_longitude'];
+
+          
+
         $productDetail->street = $street;
         $productDetail->banner = $data['banners'];
         $productDetail->agree = $data['agree'];
@@ -1008,7 +1020,9 @@ class ProductService
             'height',
             'sex',
             'greenEligibilities'
-        ])->whereIn('product_status', ['sold','']);
+        ])
+        ->where('category_id','1')
+        ->whereNotIn('product_status', ['pending','live','expire']);
 
         $total = $data->get()->count();
         $data = $data->paginate($limit);

@@ -992,182 +992,182 @@ document.getElementById('shareBtn').addEventListener('click', function(event) {
 });
 
 
-    $(document).ready(function () {
-        $("#product-comment-form").validate({
-            rules: {
-                title:{
-                    required: true,
-                    maxlength: 500
-                },
-                comment: {
-                    required: true,
-                    maxlength: 5000
-                }
+$(document).ready(function () {
+    $("#product-comment-form").validate({
+        rules: {
+            title:{
+                required: true,
+                maxlength: 500
             },
-            messages: {
-                title: {
-                    required: "Title field is required.",
-                    maxlength: "The title field must not be greater than 500 characters"
-                },
-                comment: {
-                    required: "Content field is required.",
-                    maxlength: "The Content field must not be greater than 5000 characters"
-                }
-            },
-            errorClass: 'error text-danger',
-            errorElement: 'span',
-
-            highlight: function (element) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function (element) {
-                $(element).removeClass('is-invalid');
-            },
-
-            submitHandler: function (form) {
-        
-                $('#product-comment-form-submit').prop('disabled', true).text('Please wait...');
-                let formData = new FormData(form);
-
-                $.ajax({
-                    url: $(form).attr('action'),
-                    method: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        $('#product-comment-form-submit')
-                            .prop('disabled', false)
-                            .text('Post Comment');
-                        
-                        if (response.status) {
-                            // Optionally reset form and append comment
-                            $(form)[0].reset();
-                            addProductComment(page);
-                            $("#noComments").hide();
-                            $("#data-wrapper").show();
-                            const previewImageDiv = document.getElementById('previewImage');
-                            previewImageDiv.src="";
-                            previewImageDiv.style.display = 'none';
-
-                        } else {
-                            alert(response.message || 'Something went wrong');
-                        }
-                    },
-                    error: function (xhr) {
-                        $('#product-comment-form-submit').prop('disabled', false).text('Post Comment');
-
-                        // Show error message
-                        alert('Submission failed. Please try again.');
-                        console.error(xhr.responseText);
-                    }
-                });
+            comment: {
+                required: true,
+                maxlength: 5000
             }
-        });
-       
-       //-----for guest user comment form validation----//
-        $("#product-comment-form-guest").validate({
-            rules: {
-                name: {
-                    required: true,
-                    maxlength: 255
-                },
-                email: {
-                    required: true,
-                    email: true,
-                    maxlength: 255
-                },
-                website: {
-                    required: false,
-                    maxlength: 255,
-                    url: true,
-                },
-                title:{
-                    required: true,
-                    maxlength: 500
-                },
-                comment: {
-                    required: true,
-                    maxlength: 5000
-                }
+        },
+        messages: {
+            title: {
+                required: "Title field is required.",
+                maxlength: "The title field must not be greater than 500 characters"
             },
-            messages: {
-                name: {
-                    required: "Please enter your name",
-                    maxlength: "Name must not exceed 255 characters"
-                },
-                email: {
-                    required: "Please enter your email address",
-                    email: "The email should be in the format: john@domain.tld",
-                    maxlength: "Email must not exceed 255 characters"
-                },
-                website: {
-                    required: "Please enter your web address",
-                    maxlength: "Website must not exceed 255 characters"
-                },
-                title: {
-                    required: "Title field is required.",
-                    maxlength: "The title field must not be greater than 500 characters"
-                },  
-                comment: {
-                    required: "Content field is required.",
-                    maxlength: "The Content field must not be greater than 5000 characters"
-                }
-            },
-            errorClass: 'error text-danger',
-            errorElement: 'span',
-
-            highlight: function (element) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function (element) {
-                $(element).removeClass('is-invalid');
-            },
-
-            submitHandler: function (form) {
-                $('#product-comment-form-submit-guest').prop('disabled', true).text('Please wait...');
-                let formData = new FormData(form);
-                $.ajax({
-                    url: $(form).attr('action'),
-                    method: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        if (response.status) {
-
-                            $('#product-comment-form-submit-guest')
-                            .prop('disabled', false)
-                            .text('Post Comment');
-                            
-                            // Optionally reset form and append comment
-                            $(form)[0].reset();
-                            addProductComment(page);
-                            $("#noComments").hide();
-                            $("#data-wrapper").show();
-                            const previewImageDiv = document.getElementById('previewImage');
-                            previewImageDiv.src="";
-                            previewImageDiv.style.display = 'none';
-
-                            //----guest user-----//
-                            $("#name").val(response.guest['name']);
-                            $("#email").val(response.guest['email']);
-                            $("#website").val(response.guest['website']);
-
-                        } else {
-                            alert(response.message || 'Something went wrong');
-                        }
-                    },
-                    error: function (xhr) {
-                        $('#product-comment-form-submit-guest').prop('disabled', false).text('Post Comment');
-                        // Show error message
-                        alert('Submission failed. Please try again.');
-                        console.error(xhr.responseText);
-                    }
-                });
+            comment: {
+                required: "Content field is required.",
+                maxlength: "The Content field must not be greater than 5000 characters"
             }
-        });
+        },
+        errorClass: 'error text-danger',
+        errorElement: 'span',
+
+        highlight: function (element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('is-invalid');
+        },
+
+        submitHandler: function (form) {
+    
+            $('#product-comment-form-submit').prop('disabled', true).text('Please wait...');
+            let formData = new FormData(form);
+
+            $.ajax({
+                url: $(form).attr('action'),
+                method: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    $('#product-comment-form-submit')
+                        .prop('disabled', false)
+                        .text('Post Comment');
+                    
+                    if (response.status) {
+                        // Optionally reset form and append comment
+                        $(form)[0].reset();
+                        addProductComment(page);
+                        $("#noComments").hide();
+                        $("#data-wrapper").show();
+                        const previewImageDiv = document.getElementById('previewImage');
+                        previewImageDiv.src="";
+                        previewImageDiv.style.display = 'none';
+
+                    } else {
+                        alert(response.message || 'Something went wrong');
+                    }
+                },
+                error: function (xhr) {
+                    $('#product-comment-form-submit').prop('disabled', false).text('Post Comment');
+
+                    // Show error message
+                    alert('Submission failed. Please try again.');
+                    console.error(xhr.responseText);
+                }
+            });
+        }
     });
+    
+    //-----for guest user comment form validation----//
+    $("#product-comment-form-guest").validate({
+        rules: {
+            name: {
+                required: true,
+                maxlength: 255
+            },
+            email: {
+                required: true,
+                email: true,
+                maxlength: 255
+            },
+            website: {
+                required: false,
+                maxlength: 255,
+                url: true,
+            },
+            title:{
+                required: true,
+                maxlength: 500
+            },
+            comment: {
+                required: true,
+                maxlength: 5000
+            }
+        },
+        messages: {
+            name: {
+                required: "Please enter your name",
+                maxlength: "Name must not exceed 255 characters"
+            },
+            email: {
+                required: "Please enter your email address",
+                email: "The email should be in the format: john@domain.tld",
+                maxlength: "Email must not exceed 255 characters"
+            },
+            website: {
+                required: "Please enter your web address",
+                maxlength: "Website must not exceed 255 characters"
+            },
+            title: {
+                required: "Title field is required.",
+                maxlength: "The title field must not be greater than 500 characters"
+            },  
+            comment: {
+                required: "Content field is required.",
+                maxlength: "The Content field must not be greater than 5000 characters"
+            }
+        },
+        errorClass: 'error text-danger',
+        errorElement: 'span',
+
+        highlight: function (element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('is-invalid');
+        },
+
+        submitHandler: function (form) {
+            $('#product-comment-form-submit-guest').prop('disabled', true).text('Please wait...');
+            let formData = new FormData(form);
+            $.ajax({
+                url: $(form).attr('action'),
+                method: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.status) {
+
+                        $('#product-comment-form-submit-guest')
+                        .prop('disabled', false)
+                        .text('Post Comment');
+                        
+                        // Optionally reset form and append comment
+                        $(form)[0].reset();
+                        addProductComment(page);
+                        $("#noComments").hide();
+                        $("#data-wrapper").show();
+                        const previewImageDiv = document.getElementById('previewImage');
+                        previewImageDiv.src="";
+                        previewImageDiv.style.display = 'none';
+
+                        //----guest user-----//
+                        $("#name").val(response.guest['name']);
+                        $("#email").val(response.guest['email']);
+                        $("#website").val(response.guest['website']);
+
+                    } else {
+                        alert(response.message || 'Something went wrong');
+                    }
+                },
+                error: function (xhr) {
+                    $('#product-comment-form-submit-guest').prop('disabled', false).text('Post Comment');
+                    // Show error message
+                    alert('Submission failed. Please try again.');
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    });
+});
 
 </script>
 

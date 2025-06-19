@@ -53,11 +53,18 @@ class ProductDetail extends Model
         'salary', 
         'haulings_location_from', 
         'haulings_location_to',
+        'haulings_location_to_lat',
+        'haulings_location_to_lng',
+        'haulings_location_from_lat',
+        'haulings_location_from_lng',
         'realtor',
         'property_manager',
         'time_slot',
         'trail_latitude',
         'trail_longitude',
+        'trial_location',
+
+        
     ];
 
     public function product()
