@@ -629,7 +629,9 @@ class ProductListingController extends Controller
         $total = $data->count();
         $data = $data->paginate($limit); // Adjust per page as needed
         $viewMode = $request->view_mode;
-        $html = view('front/equipmentCard', compact(['data','viewMode']))->render();
+            $latitude=$request->latitude ?? 26.836992;
+        $longitude= $request->longitude ?? 75.769446;
+        $html = view('front/equipmentCard', compact(['data','viewMode','longitude','latitude']))->render();
         $pagination = $data->withQueryString()->links('pagination::bootstrap-4')->render();
 
         return response()->json([
@@ -912,7 +914,9 @@ class ProductListingController extends Controller
         $total = $data->count();
         $data = $data->paginate($limit); // Adjust per page as needed
         $viewMode = $request->view_mode;
-        $html = view('front/barnsCard', compact(['data','viewMode']))->render();
+            $latitude=$request->latitude ?? 26.836992;
+        $longitude= $request->longitude ?? 75.769446;
+        $html = view('front/barnsCard', compact(['data','viewMode','longitude','latitude']))->render();
         $pagination = $data->withQueryString()->links('pagination::bootstrap-4')->render();
 
         return response()->json([
@@ -1199,7 +1203,9 @@ class ProductListingController extends Controller
         $total = $data->count();
         $data = $data->paginate($limit); // Adjust per page as needed
         $viewMode = $request->view_mode;
-        $html = view('front/serviceCard', compact(['data','viewMode']))->render();
+            $latitude=$request->latitude ?? 26.836992;
+        $longitude= $request->longitude ?? 75.769446;
+        $html = view('front/serviceCard', compact(['data','viewMode','longitude','latitude']))->render();
         $pagination = $data->withQueryString()->links('pagination::bootstrap-4')->render();
 
         return response()->json([

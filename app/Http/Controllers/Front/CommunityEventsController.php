@@ -223,7 +223,9 @@ class CommunityEventsController extends Controller
         $total = $data->count();
         $data = $data->paginate($limit); // Adjust per page as needed
         $viewMode = $request->view_mode;
-        $html = view('front/communityCard', compact(['data','viewMode']))->render();
+            $latitude=$request->latitude ?? 26.836992;
+        $longitude= $request->longitude ?? 75.769446;
+        $html = view('front/communityCard', compact(['data','viewMode','longitude','latitude']))->render();
         $pagination = $data->withQueryString()->links('pagination::bootstrap-4')->render();
 
         return response()->json([
