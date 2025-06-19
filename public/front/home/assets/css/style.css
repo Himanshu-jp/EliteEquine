@@ -6614,3 +6614,6 @@ ul.act-icon li img {
   font-weight: 600;
   color: #000;
 }
+.comment-btn-act{
+  cursor: pointer;
+}

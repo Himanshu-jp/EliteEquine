@@ -41,6 +41,9 @@ class HJForumService
     // Store a new comment
     public function storeComment($data,$user)
     {
+        if (isset($data['file'])) {
+            $data['image'] = $data['file']->store('comment', 'public');
+        }
         if($user){
             $data['user_id'] = $user->id;
         }else{

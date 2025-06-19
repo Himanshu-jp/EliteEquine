@@ -83,6 +83,7 @@
                                 </a>
                                 <ul class="dropdown-menu text-small">
                                     <li><a class="dropdown-item" href="{{route('dashboard')}}">Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{{route('product')}}">Submit Ad</a></li>
                                     <li><a class="dropdown-item" href="{{route('profile')}}">Profile</a></li>
                                     <li><a class="dropdown-item" href="{{route('settings')}}">Settings</a></li>
                                     <li><a class="dropdown-item" href="{{route('logout')}}">Sign out</a></li>
@@ -131,6 +132,7 @@
                         </a>
                         <ul class="dropdown-menu text-small">
                             <li><a class="dropdown-item" href="{{route('dashboard')}}">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="{{route('product')}}">Submit Ad</a></li>
                             <li><a class="dropdown-item" href="{{route('profile')}}">Profile</a></li>
                             <li><a class="dropdown-item" href="{{route('settings')}}">Settings</a></li>
                             <li><a class="dropdown-item" href="{{route('logout')}}">Sign out</a></li>

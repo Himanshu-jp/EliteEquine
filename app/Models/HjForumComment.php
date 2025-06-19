@@ -12,7 +12,9 @@ class HjForumComment extends Model
     protected $fillable = [
         'user_id',
         'forum_id',
+        'title',
         'comment',
+        'image',
         'name',
         'email',
         'website',
