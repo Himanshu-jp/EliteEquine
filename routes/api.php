@@ -20,6 +20,7 @@ use App\Http\Controllers\API\v1\ChatController;
 // })->middleware('auth:sanctum');
 
 Route::prefix('v1')->group(function () {
+    Route::post('chatJobTrigger', [AuthController::class, 'chatJobTrigger']);
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
     Route::post('user/forgot/password', [AuthController::class, 'forgotPassword']);

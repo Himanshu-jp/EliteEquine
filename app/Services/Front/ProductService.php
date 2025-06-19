@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use App\Jobs\EmailSendJob;
+
 use DateTime;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -186,6 +188,9 @@ class ProductService
         }
         // Store the document paths in the database
         $documentResult = ProductDocument::insert($documentPaths);
+
+
+
         return $product;
     }
 
@@ -865,6 +870,7 @@ class ProductService
         //-------save product details table data----------------//
         $productDetail->fromdate = $data['fromdate'];
         $productDetail->todate = $data['todate'];
+        $productDetail->time_slot = $data['time_slot'];
         $productDetail->haulings_location_from = $data['haulings_location_from'];
         $productDetail->haulings_location_to = $data['haulings_location_to'];
         $productDetail->stalls_available_haulings = $data['stalls_available_haulings'];

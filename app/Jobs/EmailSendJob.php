@@ -42,41 +42,37 @@ class EmailSendJob implements ShouldQueue
      */
     public function handle()
     {
-
-                   $data=array('code'=>$code,'email'=>$email);
-                EmailSendJob::dispatch($data);
-
+            
+          
         $main_data = $this->data;
 
-      
+            $code = $main_data['code'];
+            $email = $main_data['email'];
+            $name=$main_data['name'];
 
-            $type = $main_data['type'];
-            $useData = $main_data['mainUseData'];
-            $email = $main_data['toEmail'];
-            $name = $main_data['toName'];
-
-
-
+                $dataArray = $main_data['dataArray'];
+       
             if ($email != '' && $email != null) {
 
-                $mainDBDATA = DB::table('email_template')->where('email_type', $type)->first();
-                $config = array('mail_email' => 'support@riderrescue.com', 'mail_from_name' => 'Rider Rescue');
-                $content = $mainDBDATA->content;
+                $mainDBDATA = DB::table('templates')->where('code', $code)->first();
+                $config = array('mail_email' => 'support@elitequeen.com', 'mail_from_name' => 'Elite Queen');
+                $content = $mainDBDATA->email_template;
 
-                foreach ($useData as $mainKey => $mainVal) {
-                    $content = str_replace('{{' . $mainKey . '}}', $mainVal, $content);
+                foreach ($dataArray as $mainKey => $mainVal) {
+                    $content = str_replace('[' . $mainKey . ']', $mainVal, $content);
 
                 }
                 $data2 = array('content' => $content);
-                $subject = $mainDBDATA->email_subject;
+                $subject = $mainDBDATA->subject;
                 Mail::send('emails.dynamic_mail', $data2, function ($message) use ($subject, $config, $name, $email) {
                     $message->to($email, $name)->subject($subject);
                     $message->from($config['mail_email'], $config['mail_from_name']);
                 });
+
+                
             }
-        }
 
-
+       
 
     }
 

@@ -16,40 +16,44 @@ use App\Models\User;
 use App\Models\UserDetails;
 use App\Models\UserDetailAlert;
 use App\Jobs\EmailSendJob;
-
+use Mail,Log;
 
 class CronController extends Controller
 {
 
     public function cronFirst(request $request,$id){
 
+
         // sms
         // email
         // mobile
-
+    
 $myGraphs=['auction','listMatch', 'biddinItem', 'subscription', 'payment'];
 
 $usergraphArray=[];
 foreach($myGraphs as $graphName){
 $usergraphArray[$graphName]=UserDetailAlert::where('meta_key',$graphName)->where($id,'1')->pluck('user_id')->toArray();
 }
-//For Subscription
- $getUser=User::where('is_subscribed','1')->whereIn('id',$usergraphArray['subscription'] ?? [])->get();
+
+
+
+$getUser=User::where('is_subscribed','!=','1')->whereIn('id',$usergraphArray['subscription'] ?? [])->get();
 foreach($getUser as $users){
 $expired= $users->plan_expired_on;
 $alertTime= $users->plan_expired_on - 86400;
+// if($alertTime == time()){
 
-if($alertTime == time()){
-Self::emailAddJob('SubscriptionExpiringSoon',$users->email);
-}
-}
-// JOb Data
+    $mainUseData = ['Date' => date('d F,Y H:i',$expired),'UserName'=>$users->name];
+Self::emailAddJob('SubscriptionExpiringSoon',$users->email,$mainUseData,$users->name);
+// }
 
+}
     }
   
-    public function emailAddJob($code,$email){
+    public function emailAddJob($code,$email,$dataArray,$name){
 
-           $data=array('code'=>$code,'email'=>$email);
+        
+           $data=array('code'=>$code,'email'=>$email,'dataArray'=>$dataArray,'name'=>$name);
                 EmailSendJob::dispatch($data);
     }
 }

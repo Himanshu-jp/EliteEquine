@@ -32,6 +32,8 @@
         background: white;
         width: 100%;
     }
+    
+
     </style>
 @section('title')
 Your Ads
@@ -41,7 +43,45 @@ Your Ads
 <style>
     .category-fields {
         display: none;
-    }    
+    } 
+    #calendar strong {
+    color: #a19061;
+}
+.border-top-custom {
+    border-top: 4px solid #a19061;
+    border-radius: 4px;
+    padding-top: 4px;
+}
+.time-box-brder {
+    border-right: 1px solid #cccccc73;
+}
+.btn-close-time {
+    background: #a19061;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    padding: 0px;
+    flex: 0 0 20px;
+    color: #fff;
+    margin-bottom: 0px;
+}
+.form-select-time {
+    width: 100px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}   
+#calendar .row.text-center {
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+ 
+.row.box-time-slot-clnder {
+    flex-wrap: nowrap;
+}
+.btn-black-box {
+    background: #000;
+    color: #fff;
+}
 </style>
 
    
@@ -168,6 +208,8 @@ Your Ads
                     @endif
                 </div>                
                 
+                              
+                
                 <div class="col-md-3 mt-3 position-relative">
                     <label for="haulings_location_from" class="form-label">Haulings: From Location</label>
                     <input type="text" name="haulings_location_from" id="haulings_location_from" class="inner-form form-control mb-0" placeholder="Enter from location" value="{{old('haulings_location_from',@$products->productDetail->haulings_location_from)}}">
@@ -215,7 +257,12 @@ Your Ads
                         <span class="error text-danger">{{$errors->first('fixed_price')}}</span>
                     @endif
                 </div>
-
+                <div class="col-md-3 mt-3 position-relative">
+                    <label for="todate" class="form-label"></label>
+                    <button type="button" class="btn d-flex btn-primary " id="timeSlot" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fi fi-rr-calendar me-2 mt-1 "></i> Schedule Your Time Slot</button>
+                    <!-- Hidden input to store selected slots as JSON -->
+                            <input type="hidden" id="time_slot" name="time_slot" value="{{@$products->productDetail->time_slot??''}}">
+                </div> 
             </div>
         </div>
 
@@ -375,10 +422,355 @@ Your Ads
     </form>
 </div>
 
+<!-- time slot model -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                                <h3>Book Service</h3>
+                                <button class="btn bg-light rounded-pill px-4 mt-2 mt-md-0" data-bs-dismiss="modal" aria-label="Close">X</button>
+                            </div>
+
+                            <div class="header-popup mb-3">
+                                <div>
+                                <label class="form-label">Select Time Slot</label><br>
+                                <select id="monthSelect" class="form-select custom-dropdown w-auto d-inline-block">
+                                    <!-- Populated by JS -->
+                                </select>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                <button id="prevWeek" class="custom-dropdown bg-white px-3"><img src="{{asset('front/home/assets/images/icons/arrow-left.svg')}}" alt="" width="24" /></button>
+                                <div id="dateRange" class="custom-dropdown date-range">9 Feb - 15 Feb</div>
+                                <button id="nextWeek" class="custom-dropdown bg-white px-3"><img src="{{asset('front/home/assets/images/icons/arrow-right.svg')}}" alt="" width="24" /></button>
+                                </div>
+                            </div>
+                            <div id="calendar" class="row gx-1 text-center" style="overflow: scroll; height:300px;">
+                                    <!-- Week header and time slots will be populated here -->
+                            </div>
+                            
+                            <div class="text-end mt-4">
+                                <button class="apply-flitter btn btn-sm btn-primary mt-2" id="continue_btn">Set</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 @endsection
 
 
 @section('script')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  let fromdateStr = document.getElementById('fromdate').value;
+  let todateStr = document.getElementById('todate').value;
+
+  // Load previously saved slots if exist
+  let selectedSlots = {};
+  const hiddenInput = document.getElementById('time_slot');
+  if (hiddenInput && hiddenInput.value) {
+    try {
+      selectedSlots = JSON.parse(hiddenInput.value);
+    } catch (e) {
+      console.error('Invalid JSON in time_slot input', e);
+      selectedSlots = {};
+    }
+  }
+
+  document.getElementById('fromdate').addEventListener('change', function () {
+    fromdateStr = this.value;
+    resetCalendar();
+  });
+
+  document.getElementById('todate').addEventListener('change', function () {
+    todateStr = this.value;
+    resetCalendar();
+  });
+
+  const calendar = document.getElementById('calendar');
+  const dateRange = document.getElementById('dateRange');
+  const monthSelect = document.getElementById('monthSelect');
+  const prevWeek = document.getElementById('prevWeek');
+  const nextWeek = document.getElementById('nextWeek');
+
+  const slots = generateTimeSlots("00:00", "23:00", 30); // 30-minute intervals
+  let currentDate = null;
+
+  function generateTimeSlots(start, end, interval) {
+    const result = [];
+    let [startHour, startMin] = start.split(':').map(Number);
+    let [endHour, endMin] = end.split(':').map(Number);
+    let startTime = new Date(0, 0, 0, startHour, startMin);
+    const endTime = new Date(0, 0, 0, endHour, endMin);
+
+    while (startTime <= endTime) {
+      let label = startTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+      result.push(label);
+      startTime.setMinutes(startTime.getMinutes() + interval);
+    }
+    return result;
+  }
+
+  function resetCalendar() {
+    if (!fromdateStr || !todateStr) {
+      calendar.innerHTML = '<div class="text-muted">Please select both From Date and To Date.</div>';
+      monthSelect.innerHTML = '';
+      dateRange.textContent = '';
+      currentDate = null;
+      return;
+    }
+    const fromdate = new Date(fromdateStr);
+    const todate = new Date(todateStr);
+    if (isNaN(fromdate) || isNaN(todate) || fromdate > todate) {
+      calendar.innerHTML = '<div class="text-danger">Invalid date range.</div>';
+      monthSelect.innerHTML = '';
+      dateRange.textContent = '';
+      currentDate = null;
+      return;
+    }
+    currentDate = new Date(fromdate);
+    updateMonthOptions(fromdate, todate);
+    renderCalendar(currentDate, fromdate, todate);
+  }
+
+  function updateMonthOptions(fromdate, todate) {
+    monthSelect.innerHTML = '';
+    const startMonth = fromdate.getMonth();
+    const endMonth = todate.getMonth();
+    const startYear = fromdate.getFullYear();
+    const endYear = todate.getFullYear();
+
+    for (let year = startYear; year <= endYear; year++) {
+      const mStart = (year === startYear) ? startMonth : 0;
+      const mEnd = (year === endYear) ? endMonth : 11;
+      for (let m = mStart; m <= mEnd; m++) {
+        const option = document.createElement('option');
+        option.value = `${year}-${m}`;
+        option.textContent = new Date(year, m).toLocaleString('default', { month: 'long', year: 'numeric' });
+        monthSelect.appendChild(option);
+      }
+    }
+
+    // Set current month select to currentDate
+    monthSelect.value = `${currentDate.getFullYear()}-${currentDate.getMonth()}`;
+  }
+
+  function isWithinRange(date, fromdate, todate) {
+    return date >= fromdate && date <= todate;
+  }
+
+  function getWeekDates(date, fromdate, todate) {
+    const start = new Date(date);
+    start.setDate(date.getDate() - date.getDay()); // Sunday
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+      return isWithinRange(d, fromdate, todate) ? d : null;
+    });
+  }
+
+  function renderCalendar(date, fromdate, todate) {
+    currentDate = new Date(date);
+    calendar.innerHTML = '';
+
+    const week = getWeekDates(currentDate, fromdate, todate);
+    if (!week.some(Boolean)) {
+      calendar.innerHTML = '<div class="text-muted">No valid dates in this week.</div>';
+      dateRange.textContent = '';
+      prevWeek.disabled = true;
+      nextWeek.disabled = true;
+      return;
+    }
+
+    prevWeek.disabled = week[0] && week[0] <= fromdate;
+    nextWeek.disabled = week[6] && week[6] >= todate;
+
+    // Render header
+    const headerRow = document.createElement('div');
+    headerRow.classList.add('row', 'text-center', 'mb-2');
+    week.forEach(d => {
+      const col = document.createElement('div');
+      col.className = 'col day-header';
+      if (d) {
+        col.innerHTML = `${d.toLocaleDateString('en-GB', { weekday: 'short' })}<br><strong>${d.getDate()}</strong>`;
+      } else {
+        col.classList.add('text-muted');
+        col.style.opacity = 0.4;
+        col.textContent = 'N/A';
+      }
+      headerRow.appendChild(col);
+    });
+    calendar.appendChild(headerRow);
+
+    // Render slots
+    const slotRow = document.createElement('div');
+    slotRow.className = 'row box-time-slot-clnder';
+
+    week.forEach(day => {
+      const col = document.createElement('div');
+      col.className = 'col time-box-brder p-2';
+
+      if (day) {
+        const dayKey = day.toISOString().split('T')[0];
+        const container = document.createElement('div');
+        container.className = 'slot-container';
+        container.dataset.day = dayKey;
+
+        if (selectedSlots[dayKey]) {
+          selectedSlots[dayKey].forEach(([from, to]) => addSlotRow(container, dayKey, from, to));
+        }
+
+        const addBtn = document.createElement('button');
+        addBtn.textContent = 'Add Slot';
+        addBtn.className = 'btn btn-sm btn-black-box mb-2';
+        addBtn.onclick = () => {
+          addSlotRow(container, dayKey);
+          saveSelectedSlots(dayKey, container);
+        };
+
+        col.appendChild(container);
+        col.appendChild(addBtn);
+      } else {
+        col.innerHTML = '<div class="text-muted text-center">Out of Range</div>';
+      }
+
+      slotRow.appendChild(col);
+    });
+    calendar.appendChild(slotRow);
+
+    // Update dateRange text
+    const validDates = week.filter(Boolean);
+    const start = validDates[0].toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    const end = validDates[validDates.length - 1].toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    dateRange.textContent = `${start} - ${end}`;
+  }
+
+  function addSlotRow(container, dayKey, fromVal = '', toVal = '') {
+    const row = document.createElement('div');
+    row.className = 'd-flex align-items-center gap-2 mb-2 time-box-main';
+
+    const fromSelect = createTimeSelect('from', fromVal);
+    const toSelect = createTimeSelect('to', toVal);
+
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = '×';
+    removeBtn.className = 'btn btn-close-time';
+    removeBtn.onclick = () => {
+      row.remove();
+      saveSelectedSlots(dayKey, container);
+    };
+
+    fromSelect.addEventListener('change', () => {
+      validateSlot(fromSelect, toSelect);
+      saveSelectedSlots(dayKey, container);
+    });
+
+    toSelect.addEventListener('change', () => {
+      validateSlot(fromSelect, toSelect);
+      saveSelectedSlots(dayKey, container);
+    });
+
+    row.appendChild(fromSelect);
+    row.appendChild(toSelect);
+    row.appendChild(removeBtn);
+    container.appendChild(row);
+  }
+
+  function createTimeSelect(type, selectedVal = '') {
+    const select = document.createElement('select');
+    select.className = 'form-select form-select-sm form-select-time';
+    select.innerHTML = `<option value="">${type === 'from' ? 'From Time' : 'To Time'}</option>`;
+    slots.forEach(slot => {
+      const option = document.createElement('option');
+      option.value = slot;
+      option.textContent = slot;
+      if (slot === selectedVal) option.selected = true;
+      select.appendChild(option);
+    });
+    return select;
+  }
+
+  function saveSelectedSlots(dayKey, container) {
+    const rows = container.querySelectorAll('.d-flex');
+    selectedSlots[dayKey] = [];
+    rows.forEach(row => {
+      const selects = row.querySelectorAll('select');
+      const from = selects[0].value;
+      const to = selects[1].value;
+      if (from && to) {
+        selectedSlots[dayKey].push([from, to]);
+      }
+    });
+  }
+
+  function validateSlot(fromSelect, toSelect) {
+    const fromIndex = slots.indexOf(fromSelect.value);
+    const toIndex = slots.indexOf(toSelect.value);
+    if (fromSelect.value && toSelect.value && fromIndex >= toIndex) {
+      alert('"To Time" must be after "From Time"');
+      toSelect.value = '';
+    }
+  }
+
+  prevWeek.onclick = () => {
+    if (!currentDate || !fromdateStr || !todateStr) return;
+    const fromdate = new Date(fromdateStr);
+    const todate = new Date(todateStr);
+
+    const newDate = new Date(currentDate);
+    newDate.setDate(currentDate.getDate() - 7);
+    if (newDate >= fromdate) {
+      currentDate = newDate;
+      renderCalendar(currentDate, fromdate, todate);
+      monthSelect.value = `${currentDate.getFullYear()}-${currentDate.getMonth()}`;
+    }
+  };
+
+  nextWeek.onclick = () => {
+    if (!currentDate || !fromdateStr || !todateStr) return;
+    const fromdate = new Date(fromdateStr);
+    const todate = new Date(todateStr);
+
+    const newDate = new Date(currentDate);
+    newDate.setDate(currentDate.getDate() + 7);
+    if (newDate <= todate) {
+      currentDate = newDate;
+      renderCalendar(currentDate, fromdate, todate);
+      monthSelect.value = `${currentDate.getFullYear()}-${currentDate.getMonth()}`;
+    }
+  };
+
+  monthSelect.onchange = () => {
+    if (!fromdateStr || !todateStr) return;
+    const [year, month] = monthSelect.value.split('-').map(Number);
+    currentDate = new Date(year, month, 1);
+    renderCalendar(currentDate, new Date(fromdateStr), new Date(todateStr));
+  };
+
+  // Set button click - save all selected slots JSON into hidden input
+  document.getElementById('continue_btn').addEventListener('click', function () {
+    const hiddenInput = document.getElementById('time_slot');
+    const filteredSlots = {};
+    for (const day in selectedSlots) {
+      if (selectedSlots[day] && selectedSlots[day].length > 0) {
+        filteredSlots[day] = selectedSlots[day];
+      }
+    }
+    hiddenInput.value = JSON.stringify(filteredSlots);
+    console.log('Selected Slots JSON:', hiddenInput.value);
+
+    // Optional: close modal or submit form here
+    $('#exampleModal').modal('hide');
+  });
+
+  // Initialize calendar if dates are already set
+  resetCalendar();
+});
+
+</script>
+
+
 <script>
     let mapboxAccessToken = '{{ config("config.map_box_access_token") }}';
     mapboxgl.accessToken = mapboxAccessToken;
@@ -767,6 +1159,7 @@ Your Ads
                 'fixed_price': "required",
                 'agree': "required",
                 'banners': "required",
+                'time_slot': "required",
             },
             messages: {
                 'job_listing_type[]': "Please select at least one job listing type.",
@@ -782,7 +1175,8 @@ Your Ads
                 'hourly_price': "Please enter the hourly price.",
                 'fixed_price': "Please enter the fixed price.",
                 'agree': "You must agree to the terms.",
-                'banners': "Banner is required."
+                'banners': "Banner is required.",
+                'time_slot': "Time slot is required.",
             },
             errorClass: 'error text-danger custom-error',
             errorElement: 'span',

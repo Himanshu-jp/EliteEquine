@@ -563,19 +563,19 @@
             </div>
             <div class="col-lg-12">
                 <div class="industry_area_inner2">
-                <div thumbsSlider="" class="swiper IndustryMetrics">
+                <div thumbsSlider="" class="swiper mySwiper1">
                     <div class="swiper-wrapper">
-                    @foreach($industryMatricData as $index => $matric)
-                    <div class="swiper-slide">
-                        <div class="industry_area_sld_bx toggle-btn {{ $index === 0 ? 'active-toggle' : '' }}" data-index="{{ $index }}">
-                        <div class="content">
-                            <h3>{{ $matric->title }}</h3>
-                            <button class="commen_btn " data-index="{{ $index }}">Read More</button>
-                        </div>
-                        <img src="{{ asset('storage/' . $matric->image) }}" alt="" />
-                        </div>
-                    </div>
-                    @endforeach
+                        @foreach($industryMatricData as $index => $matric)
+                            <div class="swiper-slide">
+                                <div class="industry_area_sld_bx toggle-btn {{ $index === 0 ? 'active-toggle' : '' }}" data-index="{{ $index }}">
+                                <div class="content">
+                                    <h3>{{ $matric->title }}</h3>
+                                    <button class="commen_btn " data-index="{{ $index }}">Read More</button>
+                                </div>
+                                <img src="{{ asset('storage/' . $matric->image) }}" alt="" />
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
 
