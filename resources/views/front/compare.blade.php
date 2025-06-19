@@ -51,7 +51,13 @@
 
                 <div class="compare-details">
                     
-                    <div class="compare-row">{{@$value->subcategory->name}}</div>
+                    <div class="compare-row">
+                       
+
+                        {{ @$value->subcategory->map(function($show) {
+                                    return $show->category->name;
+                                })->filter()->implode(', ') }}
+                    </div>
 
                     <div class="compare-row">
                         @if($value->disciplines)

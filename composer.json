@@ -19,6 +19,7 @@
         "spatie/laravel-permission": "^6.17",
         "stripe/stripe-php": "^17.3",
         "terdia/currency-util": "^1.0",
+        "twilio/sdk": "^8.6",
         "yajra/laravel-datatables-oracle": "^12"
     },
     "require-dev": {

@@ -582,7 +582,7 @@ function handleImageUpload(event) {
     files.forEach(file => {
         if (file.size > maxSize) {
             // alert(`"${file.name}" is too large. Maximum allowed size is 4MB.`);
-            Swal.fire("Elite Equine", `"${file.name}" is too large. Maximum allowed size is 4MB.`, "error");
+            Swal.fire("EliteQuine", `"${file.name}" is too large. Maximum allowed size is 4MB.`, "error");
             return;
         }
 
@@ -660,7 +660,7 @@ function handleVideoUpload(event) {
     files.forEach(file => {
         if (file.size > maxSize) {
             // alert(`"${file.name}" is too large. Maximum allowed size is 10MB.`);
-            Swal.fire("Elite Equine", `"${file.name}" is too large. Maximum allowed size is 20MB.`, "error");
+            Swal.fire("EliteQuine", `"${file.name}" is too large. Maximum allowed size is 20MB.`, "error");
             return;
         }
 

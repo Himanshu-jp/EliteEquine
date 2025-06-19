@@ -67,7 +67,7 @@
 <body>
     <div class="email-container">
         <div class="email-header">
-            <a href="{{ url('/') }}">
+            <a href="{{ asset('/') }}">
                 <img src="{{ asset('front/home/assets/images/logo/logo.svg') }}" alt="EliteQueen Logo">
             </a>
         </div>

@@ -10,7 +10,7 @@ Partnerships
         <div class="about-content z-3 position-relative">
             <div class="col-lg-7 col-md-10 mx-auto">
                 <div class="about-title text-center p-0">
-                    <h1>Partnership with Elite Equine</h1>
+                    <h1>Partnership with EliteQuine</h1>
                     {!! $partnerContent->description !!}
                 </div>
             </div>

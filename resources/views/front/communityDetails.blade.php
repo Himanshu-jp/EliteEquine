@@ -374,12 +374,12 @@ function chatCreate() {
             if (response.success) {
                 window.location.href = '{{ route("messages",["room_id" => ""]) }}' + response.data;
             } else {
-                Swal.fire("Elite Equine", 'Failed to create chat room: ' + response.message, "error");
+                Swal.fire("EliteQuine", 'Failed to create chat room: ' + response.message, "error");
             }
         },
         error: function(xhr, status, error) {
             console.error('Error creating chat room:', xhr.responseText);
-            Swal.fire("Elite Equine", 'Failed to create chat room', "error");
+            Swal.fire("EliteQuine", 'Failed to create chat room', "error");
         }
     });
 }

@@ -152,9 +152,9 @@
 
         //---------for removing the records alert------------//
         @if(Session::has('message'))
-            Swal.fire("Elite Equine", "{{ Session::get('message') }}", "success");
+            Swal.fire("EliteQuine", "{{ Session::get('message') }}", "success");
         @elseif(Session::has('error'))
-            Swal.fire("Elite Equine", "{{ Session::get('error') }}", "error");
+            Swal.fire("EliteQuine", "{{ Session::get('error') }}", "error");
         @endif
         $(document).on('click', '.confirm-button', function(e) {
             var href = $(this).data('href');

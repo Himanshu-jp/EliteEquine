@@ -96,7 +96,7 @@ Checkout
                                 @php $price = @$products->price; @endphp
                             @endif
                             <p class="mb-0"><strong>Price:</strong> ${{ number_format((float) @$price, 2, '.', ',') }}</p>
-                            <p class="mb-0"><strong>Category:</strong> {{ @$products->subcategory->name }}</p>
+                            <p class="mb-0"><strong>Category:</strong> {{ @$products->category->name }}</p>
                             <p class="mb-0"><strong>Location:</strong> {{ @$products->productDetail->city }}, {{ @$products->productDetail->state }}</p>
                         </div>
                     </div>

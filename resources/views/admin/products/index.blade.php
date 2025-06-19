@@ -269,7 +269,7 @@ $(document).ready(function () {
                 method: 'GET',
                 success: function (res) {
                     if (res.count >= 10) {
-                        Swal.fire("Elite Equine", "You can only feature a maximum of 10 products.", "error");
+                        Swal.fire("EliteQuine", "You can only feature a maximum of 10 products.", "error");
                         $thisCheckbox.prop('checked', false); // revert change
                     } else {
                         toggleFeature(toggleUrl);
@@ -290,12 +290,12 @@ $(document).ready(function () {
                 success: function (response) {
                     if(response.success == false)
                     {
-                        Swal.fire("Elite Equine", response.message, "error");
+                        Swal.fire("EliteQuine", response.message, "error");
                     }
 
                     if(response.success == true)
                     {
-                        Swal.fire("Elite Equine", response.message, "success");
+                        Swal.fire("EliteQuine", response.message, "success");
                     }
 
                 },
