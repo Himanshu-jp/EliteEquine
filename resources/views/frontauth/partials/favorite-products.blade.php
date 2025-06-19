@@ -30,9 +30,23 @@
         @endphp
         <span class="badge" style="background-color:{{$color}};">{{$product->product_status}}</span>
     </td>
-    <td class="text-center">
-        <!-- <a href="#" class="text-dark me-2"><i class="fi fi-rr-pencil"></i></a> -->
-        <span class="text-dark favorite-btn {{ $product->favorites->where('user_id', auth()->id())->count() ? 'favorited' : '' }}" data-product-id="{{ $product->id }}">
+    <td>
+        <span class="text-xs font-weight-bold">{{(@$product->user->plan_expired_on)?date('d-m-Y', $product->user->plan_expired_on):''}}</span>
+    </td>
+
+    <td class="text-center">       
+        @if($product->category_id=='1')
+            <a href="{{ route('horseDetails',@$product->id)}}" target="_blank" class="text-dark me-2" data-toggle="tooltip" data-placement="top"><i class="fi fi-rr-eye"></i></a> 
+
+        @elseif($product->category_id=='2')
+            <a href="{{ route('equipmentDetails',@$product->id)}}" target="_blank" class="text-dark me-2" data-toggle="tooltip" data-placement="top"><i class="fi fi-rr-eye"></i></a> 
+        @elseif($product->category_id=='3')
+            <a href="{{ route('barnsDetails',@$product->id)}}" target="_blank" class="text-dark me-2" data-toggle="tooltip" data-placement="top"><i class="fi fi-rr-eye"></i></a> 
+        @else
+            <a href="{{ route('serviceDetails',@$product->id)}}" target="_blank" class="text-dark me-2" data-toggle="tooltip" data-placement="top"><i class="fi fi-rr-eye"></i></a> 
+        @endif
+
+         <span class="text-dark favorite-btn {{ $product->favorites->where('user_id', auth()->id())->count() ? 'favorited' : '' }}" data-product-id="{{ $product->id }}">
             
                 @if($product->favorites->where('user_id', auth()->id())->count() > 0)
                     <i class="fi fi-ss-heart" style="color: #A19061;"></i>
@@ -41,6 +55,7 @@
                 @endif
             
         </span>
+        
     </td>
 </tr>
 @empty

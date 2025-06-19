@@ -503,13 +503,22 @@
 
             }
 
+            // function formatDate(dateString) {
+            //     var date = new Date(dateString);
+            //     return date.toLocaleDateString('en-US', {
+            //         month: 'short',
+            //         day: 'numeric',
+            //         year: 'numeric'
+            //     });
+            // }
+
             function formatDate(dateString) {
-                var date = new Date(dateString);
-                return date.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                });
+                const date = new Date(dateString);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+                const year = String(date.getFullYear()).slice(-2); // Get last 2 digits
+
+                return `${day}/${month}/${year}`;
             }
 
             function addClusterView() {

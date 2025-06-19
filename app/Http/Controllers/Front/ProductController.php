@@ -35,7 +35,6 @@ use App\Services\Front\BidService;
 use Carbon\Carbon;
 use Currency\Util\CurrencySymbolMapping;
 
-
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -134,7 +133,7 @@ class ProductController extends Controller
     public function productList(Request $request)
     {
         $user = auth::user();
-        $products = Product::with(['category','image', 'video', 'document']);
+        $products = Product::with(['category','image', 'video', 'document','user']);
         $products = $products->where(['deleted_at' => null, 'user_id' => $user->id]);
 
         if ($request->has('search') && $request->search !== null) {
@@ -168,24 +167,46 @@ class ProductController extends Controller
         $product = $this->productService->createProduct($validatedData, $user);
 
         //productZone
-        if (!$product) {
-            return redirect()->back()->with('error', 'Failed to create product.');
-        } 
-        else if($product->category_id==1) {
-            return redirect()->route('productHorseDetails', ['id' => $product->id]);
-        }
-        else if($product->category_id==2) {
-            return redirect()->route('productEquipmentDetails', ['id' => $product->id]);
-        }
-        else if($product->category_id==3) {
-            return redirect()->route('productBarnsDetails', ['id' => $product->id]);
-        }
-        else if($product->category_id==4) {
-            return redirect()->route('productServiceDetails', ['id' => $product->id]);
-        }
-        else{
-            return redirect()->back()->with('error', 'Failed to find the category.');
-        }
+     if (!$product) {
+    return response()->json([
+        'status' => 'error',
+        'message' => 'Failed to create product.'
+    ], 400);
+}
+
+switch ($product->category_id) {
+    case 1:
+        $url = route('productHorseDetails', ['id' => $product->id]);
+        $message = 'Horse product created successfully.';
+        break;
+
+    case 2:
+        $url = route('productEquipmentDetails', ['id' => $product->id]);
+        $message = 'Equipment product created successfully.';
+        break;
+
+    case 3:
+        $url = route('productBarnsDetails', ['id' => $product->id]);
+        $message = 'Barn product created successfully.';
+        break;
+
+    case 4:
+        $url = route('productServiceDetails', ['id' => $product->id]);
+        $message = 'Service product created successfully.';
+        break;
+
+    default:
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Invalid category.'
+        ], 400);
+}
+
+return response()->json([
+    'status' => 'success',
+    'message' => $message,
+    'url' => $url
+]);
     }
 
     //------Horse 0001-------//
@@ -600,5 +621,23 @@ class ProductController extends Controller
         return redirect()->route('home')->with('success', $result['message']);
     }
 
+    public function uploadAjaxImage(request $request){
+
+         $file = $request->file('file');
+    
+    // Store the file in the 'all' folder on the S3 disk
+    $path = $file->store('all', 's3');
+
+    // Make the file publicly accessible (optional)
+    Storage::disk('s3')->setVisibility($path, 'public');
+
+    // Get the full URL to the uploaded file
+    $url = Storage::disk('s3')->url($path);
+
+
+  return response()->json([
+        'url' => $url
+    ]);
+    }
 
 }

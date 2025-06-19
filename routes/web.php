@@ -73,6 +73,7 @@ Route::middleware([
 
     //---------------below route is related to add products---------------------///
     Route::get('/product', [ProductController::class, 'index'])->name('product');
+    
     Route::get('/removeImage/{id}', [ProductController::class, 'removeImage'])->name('removeImage');
     Route::get('/removeVideo/{id}', [ProductController::class, 'removeVideo'])->name('removeVideo');
     Route::get('/removeDocument/{id}', [ProductController::class, 'removeDocument'])->name('removeDocument');
@@ -115,6 +116,12 @@ Route::middleware([
 
     //------------Chat Messanger-------------//
     Route::get('/messages', [HomeController::class, 'chatMessage'])->name('messages');
+
+    Route::post('/submitReport', [HomeController::class, 'submitReport'])->name('submitReport');
+    Route::get('/favorite', [HomeController::class, 'favorite'])->name('favorite');
+    Route::get('/review', [HomeController::class, 'review'])->name('review');
+    Route::get('/invoice', [HomeController::class, 'invoice'])->name('invoice');
+    Route::get('/invoiceDetails/{id}', [HomeController::class, 'invoiceDetails'])->name('invoiceDetails');
 
 });
 
@@ -221,11 +228,7 @@ Route::get('/contact', [ContactUsController::class, 'show'])->name('contact.form
 Route::post('/contact', [ContactUsController::class, 'submit'])->name('contact.submit');
 
 //-------------------------------------------------------------------------//
-Route::post('/submitReport', [HomeController::class, 'submitReport'])->name('submitReport');
-Route::get('/favorite', [HomeController::class, 'favorite'])->name('favorite');
-Route::get('/review', [HomeController::class, 'review'])->name('review');
-Route::get('/invoice', [HomeController::class, 'invoice'])->name('invoice');
-Route::get('/invoiceDetails/{id}', [HomeController::class, 'invoiceDetails'])->name('invoiceDetails');
+
 Route::post('/charge_add_ons', [HomeController::class, 'charge_add_ons'])->name('charge_add_ons');
 Route::get('/notificationModalnextLevel', [HomeController::class, 'notificationModalnextLevel'])->name('notificationModalnextLevel');
 Route::get('/check_seriesCheck', [HomeController::class, 'check_seriesCheck'])->name('check_seriesCheck');

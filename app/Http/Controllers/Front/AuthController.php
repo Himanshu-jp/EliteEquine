@@ -16,6 +16,7 @@ use App\Models\Product;
 use App\Models\UserDetailAlert;
 use App\Models\UserDetails;
 use App\Models\Favorite;
+use App\Models\Review;
 use App\Services\Front\AuthService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
@@ -40,8 +41,11 @@ class AuthController extends Controller
             ->orderBy('id', 'desc')
             ->limit(6)
             ->get();
+        $totalAd = Product::where('user_id',$user->id)->count();
         $favorites = Favorite::where('user_id', auth()->id())->count();
-        return view('frontauth/dashboard', compact(['products', 'favorites']));
+        $averageRating = Review::where('product_owner_id', $user->id)->avg('rating');
+
+        return view('frontauth/dashboard', compact(['products', 'favorites','totalAd','averageRating']));
     }
 
     public function login(Request $request)

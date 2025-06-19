@@ -14,12 +14,15 @@ use App\Http\Controllers\API\v1\HomeController;
 use App\Http\Controllers\API\v1\ContactUsController;
 use App\Http\Controllers\API\v1\FavoriteController;
 use App\Http\Controllers\API\v1\ChatController;
+use App\Http\Controllers\Front\ProductController as WEBPROC;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
 Route::prefix('v1')->group(function () {
+    Route::post('/uploadAjaxImage', [WEBPROC::class, 'uploadAjaxImage']);
+
     Route::post('chatJobTrigger', [AuthController::class, 'chatJobTrigger']);
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);

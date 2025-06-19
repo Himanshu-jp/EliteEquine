@@ -61,7 +61,7 @@
                     <div class="card-header p-0 pe-3">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h4>0</h4>
+                                <h4>{{$totalAd}}</h4>
                                 <p>Submitted ads</p>
                             </div>
                             <div class="icon">
@@ -80,7 +80,7 @@
                     <div class="card-header p-0 pe-3">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h4>0/5</h4>
+                                <h4>{{number_format($averageRating,1)}}/5</h4>
                                 <p>Your Rating</p>
                             </div>
                             <div class="icon">

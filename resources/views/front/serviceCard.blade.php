@@ -39,7 +39,7 @@
 
                                 @if (@$value->productDetail->fromdate)
                                     <br />
-                                    ({{ format_date(@$value->productDetail->fromdate) . ' - ' . format_date(@$value->productDetail->todate) }})
+                                    ({{ date('d/m/y',strtotime(@$value->productDetail->fromdate)) . ' - ' . date('d/m/y',strtotime(@$value->productDetail->todate)) }})
                                 @endif
                             </span>
                         </div>
@@ -163,7 +163,7 @@
 
                             @if (@$value->productDetail->fromdate)
                                 <br />
-                                ({{ format_date(@$value->productDetail->fromdate) . ' - ' . format_date(@$value->productDetail->todate) }})
+                                 ({{ date('d/m/y',strtotime(@$value->productDetail->fromdate)) . ' - ' . date('d/m/y',strtotime(@$value->productDetail->todate)) }})
                             @endif
                         </span>
                     </div>
@@ -481,14 +481,14 @@
                         }
                         popupContent += `
                         <div class="feat_card_bx list-page-card">
-                            <a href="${baseUrl}/service-details/${event.id}" target="_blank">
+                            <a href="${baseUrl}/serviceDetails/${event.id}" target="_blank">
                                 <div class="imagelist">
                                 <img src="${imageSrc}" alt="hourse-image">
                                 </div>
                             </a>
 
                             <div class="content">
-                                <a href="${baseUrl}/service-details/${event.id}" target="_blank">
+                                <a href="${baseUrl}/serviceDetails/${event.id}" target="_blank">
                                 <h3>${event.title}</h3>
                                 </a>
 
@@ -519,7 +519,7 @@
                                 </div>
 
                                 <div class="bx2">
-                                    <a href="${baseUrl}/service-details/${event.id}" target="_blank">Deatil</a>
+                                    <a href="${baseUrl}/serviceDetails/${event.id}" target="_blank">Deatil</a>
                                 </div>
                                 </div>
                             </div>
@@ -544,13 +544,22 @@
 
             }
 
-            function formatDate(dateString) {
-                var date = new Date(dateString);
-                return date.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                });
+            // function formatDate(dateString) {
+            //     var date = new Date(dateString);
+            //     return date.toLocaleDateString('en-US', {
+            //         month: 'short',
+            //         day: 'numeric',
+            //         year: 'numeric'
+            //     });
+            // }
+
+             function formatDate(dateString) {
+                const date = new Date(dateString);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+                const year = String(date.getFullYear()).slice(-2); // Get last 2 digits
+
+                return `${day}/${month}/${year}`;
             }
 
             function addClusterView() {

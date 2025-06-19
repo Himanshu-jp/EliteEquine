@@ -564,8 +564,26 @@
                                                     );
                                                 @endphp
                                                 @if ($averageRating)
-                                                    <img src="{{ asset('front/home/assets/images/star-rating5.svg') }}"
-                                                        height="18px" alt="" />
+
+                                                    @switch($averageRating)
+                                                        @case('5')
+                                                             <img src="{{ asset('front/home/assets/images/star-rating5.svg') }}" height="18px" alt="" />
+                                                            @break
+
+                                                        @case('4')
+                                                             <img src="{{ asset('front/home/assets/images/star-rating4.svg') }}" height="18px" alt="" />
+                                                            @break
+
+                                                        @case('3')
+                                                             <img src="{{ asset('front/home/assets/images/star-rating3.svg') }}" height="18px" alt="" />
+                                                            @break
+                                                        @case('2')
+                                                            <img src="{{ asset('front/home/assets/images/star-rating2.svg') }}" height="18px" alt="" />
+                                                            @break
+
+                                                        @default
+                                                             <img src="{{ asset('front/home/assets/images/star-rating1.svg') }}" height="18px" alt="" />
+                                                    @endswitch                                                   
                                                     <span>{{ $arr[$averageRating - 1] }}</span>
                                                 @else
                                                     <span>No reviews yet</span>
@@ -660,7 +678,7 @@
                                                 <input type="hidden" name="product_id" id="product_id"
                                                     value="{{ $products->id }}">
                                                 <div class="mb-3">
-                                                    <textarea class="form-control style-2" placeholder="Enter your comment here..." id="message" name="message"
+                                                    <textarea class="form-control style-2" placeholder="Enter your reason here..." id="message" name="message"
                                                         rows="5"></textarea>
                                                     @if ($errors->has('message'))
                                                         <span

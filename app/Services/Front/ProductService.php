@@ -29,6 +29,8 @@ class ProductService
 {
     public function createProduct($data,$user)
     {
+
+       
         if (isset($data['id'])) {
             $product = Product::where(['id' => $data['id'], 'user_id' => $user->id])->first();
         } else {
@@ -102,63 +104,45 @@ class ProductService
 
         // Handle file uploads
         $imagePaths = [];
-        if (isset($data['image'])) {
+        if (isset($data['image_uploads'])) {
 
-            // $existingImages = ProductImage::where('product_id', $product->id)->get();
-            // foreach ($existingImages as $video) {
-            //     // Delete the file from storage
-            //     if ($video->image && Storage::disk('public')->exists($video->image)) {
-            //         Storage::disk('public')->delete($video->image);
-            //     }
-            // }
-            // Delete existing images for the product
-            // ProductImage::where('product_id', $product->id)->delete();
-
-            foreach ($data['image'] as $key => $image) {
-                $imagePath = $image->store('products/images', 'public');
+    $key=0;
+            foreach ($data['image_uploads'] as $image) {
                 $imagePaths[$key]['product_id'] = $product->id;
-                $imagePaths[$key]['image'] = $imagePath;
+                $imagePaths[$key]['image'] = $image;
                 $imagePaths[$key]['created_at'] = Carbon::now();
                 $imagePaths[$key]['updated_at'] = Carbon::now();
+                $key++;
             }
         }
         // Store the image paths in the database
         $imageResult = ProductImage::insert($imagePaths);
 
         $videoPaths = [];
-        if (isset($data['video'])) {
+        if (isset($data['video_uploads'])) {
 
-            // $existingVideos = ProductVideo::where('product_id', $product->id)->get();
-            // foreach ($existingVideos as $video) {
-            //     // Delete the file from storage
-            //     if ($video->video_url && Storage::disk('public')->exists($video->video_url)) {
-            //         Storage::disk('public')->delete($video->video_url);
-            //     }
-            //     if ($video->thumbnail && Storage::disk('public')->exists($video->thumbnail)) {
-            //         Storage::disk('public')->delete($video->thumbnail);
-            //     }
-            // }
-            // Delete existing video for the product
-            // ProductVideo::where('product_id', $product->id)->delete();
+          
+    $key=0;
 
-            foreach ($data['video'] as $key => $video) {
-                $videoPath = $video->store('products/videos', 'public');
+            foreach ($data['video_uploads'] as  $video) {
+              
                 $thumbnailFilename = Str::uuid() . '.jpg';
                 $thumbnailPath = 'products/thumbnails/' . $thumbnailFilename;
-
-                // Generate Thumbnail using FFmpeg
+$relativePath = str_replace(url('storage') . '/', '', $video);
                 FFMpeg::fromDisk('public')
-                    ->open($videoPath)
+                    ->open($relativePath)
                     ->getFrameFromSeconds(1)
                     ->export()
                     ->toDisk('public')
                     ->save($thumbnailPath);
 
                 $videoPaths[$key]['product_id'] = $product->id;
-                $videoPaths[$key]['video_url'] = $videoPath;
+                $videoPaths[$key]['video_url'] = $video;
                 $videoPaths[$key]['thumbnail'] = $thumbnailPath;
                 $videoPaths[$key]['created_at'] = Carbon::now();
                 $videoPaths[$key]['updated_at'] = Carbon::now();
+    $key++;
+
             }
         }
 
@@ -166,25 +150,18 @@ class ProductService
         $videoResult = ProductVideo::insert($videoPaths);
 
         $documentPaths = [];
-        if (isset($data['document'])) {
+        if (isset($data['document_uploads'])) {
+    $key=0;
 
-            // $existingdocuments = ProductDocument::where('product_id', $product->id)->get();
-            // foreach ($existingdocuments as $video) {
-            //     // Delete the file from storage
-            //     if ($video->file && Storage::disk('public')->exists($video->file)) {
-            //         Storage::disk('public')->delete($video->file);
-            //     }
-            // }
-            // Delete existing document for the product
-            // ProductDocument::where('product_id', $product->id)->delete();
-
-            foreach ($data['document'] as $key => $document) {
-                $documentPath = $document->store('products/documents', 'public');
+            foreach ($data['document_uploads'] as  $document) {
+             
                 $documentPaths[$key]['product_id'] = $product->id;
-                $documentPaths[$key]['file'] = $documentPath;
+                $documentPaths[$key]['file'] = $document;
                 $documentPaths[$key]['created_at'] = Carbon::now();
                 $documentPaths[$key]['updated_at'] = Carbon::now();
             }
+    $key++;
+
         }
         // Store the document paths in the database
         $documentResult = ProductDocument::insert($documentPaths);
@@ -999,8 +976,10 @@ class ProductService
         return $product;
     }
 
-    public function getSoldProducts(int $limit = 12)
+    public function getSoldProducts($data)
     {
+
+$xArray=array('Horses'=>1,'Equipment'=>2,'Housing'=>3,'Services'=>4);
         $data = Product::withoutTrashed()->with([
             'user',
             'productDetail',
@@ -1021,11 +1000,11 @@ class ProductService
             'sex',
             'greenEligibilities'
         ])
-        ->where('category_id','1')
+        ->where('category_id',$xArray[$data['type']])
         ->whereNotIn('product_status', ['pending','live','expire']);
 
         $total = $data->get()->count();
-        $data = $data->paginate($limit);
+        $data = $data->paginate(12);
 
         return [
                 'success' => true,

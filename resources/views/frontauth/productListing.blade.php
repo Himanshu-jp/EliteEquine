@@ -108,6 +108,11 @@ Product Listing
                                     <th
                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Sex</th> --}}
+
+                                     <th
+                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Expires</th>
+
                                     <th
                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Action</th>
@@ -299,6 +304,11 @@ Product Listing
                                         <span
                                             class="text-xs font-weight-bold">{{@$value->sex->commonMaster->name}}</span>
                                     </td> --}}
+
+                                     <td>
+                                         <span class="text-xs font-weight-bold">{{(@$value->user->plan_expired_on)?date('d-m-Y', $value->user->plan_expired_on):''}}</span>
+                                     </td>
+
                                     <td class="align-middle text-center">
                                         
                                         @if($sale == 'auction')
@@ -320,6 +330,7 @@ Product Listing
                                     </td>
                                 </tr>
                                 @endforeach
+
                                 @else
                                 <tr>
                                     <td colspan="8">

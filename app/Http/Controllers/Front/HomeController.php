@@ -530,7 +530,7 @@ class HomeController extends Controller
         // $orderBy = in_array($request->input('order_by'), ['asc', 'desc']) ? $request->input('order_by') : 'desc';
 
         // Get only products that are favorited by the authenticated user
-        $query = Product::whereHas('favorites', function ($q) {
+        $query = Product::with('user')->whereHas('favorites', function ($q) {
             $q->where('user_id', auth()->user()->id);
         })->with('favorites');
 
@@ -545,6 +545,8 @@ class HomeController extends Controller
 
         // Sort and paginate
         $favProducts = $query->orderBy('id', $order)->paginate(10);
+
+    
         // $favProducts = $query->where('category_id', $categoryId)->orderBy('id', $order)->paginate(10);
 
         // AJAX response
