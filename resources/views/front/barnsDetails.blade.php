@@ -634,7 +634,7 @@ Product Details
                            @if($products->user_id !== auth()->id() && auth()->check())
                                 <li><button class="report-btn"  data-bs-target="#ReportProduct" data-bs-toggle="modal"><img src="{{asset('front/home/assets/images/plag-icon.svg')}}" alt="" /></button></li>
                             @elseif($products->user_id == auth()->id())
-                                <li><button class="report-btn"  onclick="Swal.fire('Elite Equine', 'You are not allowed to report this as the owner.', 'warning');"><img src="{{asset('front/home/assets/images/plag-icon.svg')}}" alt="" /></button></li>
+                                <li><button class="report-btn"  onclick="Swal.fire('EliteQuine', 'You are not allowed to report this as the owner.', 'warning');"><img src="{{asset('front/home/assets/images/plag-icon.svg')}}" alt="" /></button></li>
                             @else
                                 <li><button class="report-btn"  onclick="showLoginModal('Please login to report this to ad owner.')"><img src="{{asset('front/home/assets/images/plag-icon.svg')}}" alt="" /></button></li>
                             @endif
@@ -891,12 +891,12 @@ function chatCreate() {
             if (response.success) {
                 window.location.href = '{{ route("messages",["room_id" => ""]) }}' + response.data;
             } else {
-                Swal.fire("Elite Equine", 'Failed to create chat room: ' + response.message, "error");
+                Swal.fire("EliteQuine", 'Failed to create chat room: ' + response.message, "error");
             }
         },
         error: function(xhr, status, error) {
             console.error('Error creating chat room:', xhr.responseText);
-            Swal.fire("Elite Equine", 'Failed to create chat room', "error");
+            Swal.fire("EliteQuine", 'Failed to create chat room', "error");
         }
     });
 }
@@ -1235,14 +1235,14 @@ var slider = new Swiper('.gallery-slider', {
                     data: {},
                     success: function (response) {
                         if (response.status) {
-                            Swal.fire("Elite Equine", "Comment removed successfully.", "success");
+                            Swal.fire("EliteQuine", "Comment removed successfully.", "success");
                             addProductComment(page);
                         } else {
-                            Swal.fire("Elite Equine", response.message, "error");
+                            Swal.fire("EliteQuine", response.message, "error");
                         }
                     },
                     error: function (xhr) {
-                        Swal.fire("Elite Equine", "Submission failed. Please try again.", "error");
+                        Swal.fire("EliteQuine", "Submission failed. Please try again.", "error");
                         console.error(xhr.responseText);
                     }
                 });

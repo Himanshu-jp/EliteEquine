@@ -317,7 +317,7 @@ const socket = io("https://v1.checkprojectstatus.com:3115/");
 
                 if (selected.length === 0) {
                     // alert("Please select at least one chat to delete.");
-                    Swal.fire("Elite Equine", "Please select at least one chat to delete.", "error");
+                    Swal.fire("EliteQuine", "Please select at least one chat to delete.", "error");
                     return;
                 }
                     Swal.fire({
@@ -343,13 +343,13 @@ const socket = io("https://v1.checkprojectstatus.com:3115/");
                                 },
                                 success: function (res) {
                                     // alert("Chats deleted successfully.");
-                                    Swal.fire("Elite Equine", "Selected chats deleted successfully.", "success");
+                                    Swal.fire("EliteQuine", "Selected chats deleted successfully.", "success");
                                     socket.emit("THREADS_LIST", {'user_id':SENDER_ID, search:'',page:1,limit:100});
                                     // Optionally refresh chat list
                                 },
                                 error: function () {
                                     // alert("Failed to delete chats.");
-                                    Swal.fire("Elite Equine", "Failed to delete chats.", "error");
+                                    Swal.fire("EliteQuine", "Failed to delete chats.", "error");
                                 }
                             });
 

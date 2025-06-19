@@ -374,14 +374,14 @@
                         if (!eventGroups[latLng]) {
                             eventGroups[latLng] = [];
                         }
-                           eventGroups[latLng].push(event);
+                        eventGroups[latLng].push(event);
                         if (!eventGroups[latLng1]) {
                             eventGroups[latLng1] = [];
                         }
-                          eventGroups[latLng1].push(event);
+                        eventGroups[latLng1].push(event);
 
-                     
-                      
+
+
                         var object = {};
                         object.title = event.title;
                         object.price = event.price;
@@ -439,9 +439,9 @@
                     } = feature.properties;
                     console.log(coordinates, "coordinates");
                     if (isTrail == 1) {
-                        var markerIconUrl = "{{ url('/') }}/images/Horse Red.png";
+                        var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/Horse Red.png";
                     } else {
-                        var markerIconUrl = "{{ url('/') }}/images/Horse Blue.png";
+                        var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/Horse Blue.png";
                     }
 
 
@@ -478,8 +478,8 @@
                             'Price not available';
 
                         //var ticketUrl = isAuthenticated ? (event.ticket_sale_link || '#') : loginRoute;
-                        // var eventImage = event.image && event.image.length > 0  ?"{{ url('/') }}/"+ event.image[0].image : '{{ url('/') }}/public/front/home/assets/images/logo/logo.svg' ;
-                        var eventImage = "{{ url('/') }}/front/home/assets/images/logo/logo.svg";
+                        // var eventImage = event.image && event.image.length > 0  ?"{{ env('MAP_PUBLIC') }}/"+ event.image[0].image : '{{ env('MAP_PUBLIC') }}/public/front/home/assets/images/logo/logo.svg' ;
+                        var eventImage = "{{ env('MAP_PUBLIC') }}/front/home/assets/images/logo/logo.svg";
                         var baseUrl = "{{ url('/') }}";
                         var authUserId = '{{ auth()->id() }}';
                         var reviews = event?.user?.reviews;
@@ -517,7 +517,7 @@
                         <div class="feat_card_bx list-page-card">
                             <a href="${baseUrl}/horseDetails/${event.id}" target="_blank">
                                 <div class="imagelist">
-                                    <img src="${baseUrl}/storage/${event.image[0].image || 'default.svg'}" alt="${event.title}" />
+                                    <img src="${baseUrl}/public/storage/${event.image[0].image || 'default.svg'}" alt="${event.title}" />
                                     
                                 </div>
                             </a>
@@ -535,7 +535,7 @@
                                 <span class="sp1">${event.disciplines_names}</span>
 
                                 <div class="location">
-                                    <img src="${baseUrl}/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
+                                    <img src="${baseUrl}/public/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
                                     <span>${event.product_detail.city}, ${event.product_detail.state}, ${event.product_detail.country}<br />
                                     Trial: ${trials}
                                     ${event.product_detail.fromdate ? `<br />(${formatDate(event.product_detail.fromdate)} - ${formatDate(event.product_detail.todate)})` : ''}
@@ -545,7 +545,14 @@
                                 <div class="foot">
                                     <div class="bx">
                                         <div class="imagee">
-                                            <img src="${baseUrl}/storage/${event.user?.profile_photo_path || 'default-user.png'}" class="user-img" alt="">
+                                         
+
+<img 
+  src="${baseUrl}/public/${event.user && event.user.profile_photo_path ? 'storage/' + event.user.profile_photo_path : 'images/default-user.png'}" 
+  class="user-img" 
+  alt=""
+>
+
                                         </div>
                                         <div class="content">
                                             <h4>${event.user?.name}</h4>
@@ -843,12 +850,12 @@
             error: function(xhr) {
                 if (xhr.status === 401) {
                     Swal.fire({
-                        title: "Elite Equine",
+                        title: "EliteQuine",
                         text: "Please login to add favorite.",
                         imageUrl: "{{ asset('front/home/assets/images/add-favorite.svg') }}",
                         imageWidth: 400,
                         imageHeight: 200,
-                        imageAlt: "Elite Equine",
+                        imageAlt: "EliteQuine",
                         // This disables the default Swal styling for confirm button
                         customClass: {
                             confirmButton: 'commen_btn'

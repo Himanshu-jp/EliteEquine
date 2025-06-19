@@ -406,14 +406,14 @@ HJ Forum Details
                     data: {},
                     success: function (response) {
                         if (response.status) {
-                            Swal.fire("Elite Equine", "Comment removed successfully.", "success");
+                            Swal.fire("EliteQuine", "Comment removed successfully.", "success");
                             addforumComment(page);
                         } else {
-                            Swal.fire("Elite Equine", response.message, "error");
+                            Swal.fire("EliteQuine", response.message, "error");
                         }
                     },
                     error: function (xhr) {
-                        Swal.fire("Elite Equine", "Submission failed. Please try again.", "error");
+                        Swal.fire("EliteQuine", "Submission failed. Please try again.", "error");
                         console.error(xhr.responseText);
                     }
                 });

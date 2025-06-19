@@ -186,12 +186,12 @@
 
     function showLoginModal(message) {
         Swal.fire({
-            title: "Elite Equine",
+            title: "EliteQuine",
             text: message,
             imageUrl: "{{ asset('front/home/assets/images/add-favorite.svg') }}",
             imageWidth: 400,
             imageHeight: 200,
-            imageAlt: "Elite Equine",
+            imageAlt: "EliteQuine",
             // This disables the default Swal styling for confirm button
             customClass: {
                 confirmButton: ''
@@ -228,12 +228,12 @@
             error: function(xhr) {
                 if (xhr.status === 401) {
                     Swal.fire({
-                        title: "Elite Equine",
+                        title: "EliteQuine",
                         text: "Please login to add favorite.",
                         imageUrl: "{{ asset('front/home/assets/images/add-favorite.svg') }}",
                         imageWidth: 400,
                         imageHeight: 200,
-                        imageAlt: "Elite Equine",
+                        imageAlt: "EliteQuine",
                         // This disables the default Swal styling for confirm button
                         customClass: {
                             confirmButton: ''

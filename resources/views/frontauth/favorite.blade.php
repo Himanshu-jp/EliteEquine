@@ -233,7 +233,7 @@ $(document).on('click', '.favorite-btn', function(e) {
         },
         error: function(xhr) {
             if (xhr.status === 401) {
-                Swal.fire("Elite Equine", "Please login to add favorite.", "error");
+                Swal.fire("EliteQuine", "Please login to add favorite.", "error");
             } else {
                 alert('Something went wrong.');
             }

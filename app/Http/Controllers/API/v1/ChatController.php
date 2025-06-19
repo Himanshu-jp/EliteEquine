@@ -114,7 +114,7 @@ class ChatController extends BaseController
         if (!isset($convenien)) {
             $convenien = new Conveniencs;
             $convenien->type = 'SINGLE';
-            $convenien->group_name = 'Elite Equine';
+            $convenien->group_name = 'EliteQuine';
             $convenien->ticket_type = 'Single';
             $convenien->ticket_id = 0;
             $convenien->last_message = '';

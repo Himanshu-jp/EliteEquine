@@ -324,7 +324,7 @@ $(document).on('change', '#manual_change', function(e) {
                     product_status: newStatus
                 },
                 success: function(response) {
-                    Swal.fire("Elite Equine", "Product status updated successfully", "success");
+                    Swal.fire("EliteQuine", "Product status updated successfully", "success");
                     $("#record_" + productId).html(
                         `<span class='badge status-box-sold' style='background-color:green;'>${newStatus}</span>`
                     );

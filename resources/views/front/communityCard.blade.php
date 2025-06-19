@@ -319,7 +319,7 @@
                     layers: ['unclustered-point']
                 });
                 console.log('features', features);
-                var markerIconUrl = "{{ url('/') }}/images/Community Blue.png";
+                var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/Community Blue.png";
                 var uniqueFeatures = getUniqueFeatures(features, 'venue_name');
                 console.log('uniqueFeatures', uniqueFeatures);
                 uniqueFeatures.forEach(feature => {
@@ -364,8 +364,8 @@
                             'Price not available';
 
                         //var ticketUrl = isAuthenticated ? (event.ticket_sale_link || '#') : loginRoute;
-                        // var eventImage = event.image && event.image.length > 0  ?"{{ url('/') }}/"+ event.image[0].image : '{{ url('/') }}/public/front/home/assets/images/logo/logo.svg' ;
-                        var eventImage = "{{ url('/') }}/front/home/assets/images/logo/logo.svg";
+                        // var eventImage = event.image && event.image.length > 0  ?"{{ env('MAP_PUBLIC') }}/"+ event.image[0].image : '{{ env('MAP_PUBLIC') }}/public/front/home/assets/images/logo/logo.svg' ;
+                        var eventImage = "{{ env('MAP_PUBLIC') }}/front/home/assets/images/logo/logo.svg";
                         var baseUrl = "{{ url('/') }}";
                         var authUserId = '{{ auth()->id() }}';
                         if (event.user && event.user.reviews) {
@@ -377,12 +377,12 @@
 
 
                         var imageSrc = event.image ?
-                            `${baseUrl}/storage/${event.image}` :
-                            `${baseUrl}/front/home/assets/images/logo/logo.svg`;
+                            `${baseUrl}/public/storage/${event.image}` :
+                            `${baseUrl}/public/front/home/assets/images/logo/logo.svg`;
 
                         var profileSrc = event.user?.profile_photo_path ?
-                            `${baseUrl}/storage/${event.user.profile_photo_path}` :
-                            `${baseUrl}/front/auth/assets/img/user-img.png`;
+                            `${baseUrl}/public/storage/${event.user.profile_photo_path}` :
+                            `${baseUrl}/public/front/auth/assets/img/user-img.png`;
 
 
                         var eventUrl = `${baseUrl}/eventdetail/${event.id}`;
@@ -421,7 +421,7 @@
                                 <span class="sp1"></span>
 
                                 <div class="location">
-                                <img src="${baseUrl}/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
+                                <img src="${baseUrl}/public/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
                                 <span>
                                     ${event.location}<br/>
                                     Event Date : ${formatDate(event.date)}

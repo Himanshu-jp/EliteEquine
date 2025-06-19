@@ -368,9 +368,9 @@
                     } = feature.properties;
                     console.log(coordinates, "coordinates");
                     if (isTrail == 1) {
-                        var markerIconUrl = "{{ url('/') }}/images/Equipment Red.png";
+                        var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/Equipment Red.png";
                     } else {
-                        var markerIconUrl = "{{ url('/') }}/images/Equipment Blue.png";
+                        var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/Equipment Blue.png";
                     }
                     // Create a custom HTML element for the marker
                     var markerElement = document.createElement('div');
@@ -405,8 +405,8 @@
                             'Price not available';
 
                         //var ticketUrl = isAuthenticated ? (event.ticket_sale_link || '#') : loginRoute;
-                        // var eventImage = event.image && event.image.length > 0  ?"{{ url('/') }}/"+ event.image[0].image : '{{ url('/') }}/public/front/home/assets/images/logo/logo.svg' ;
-                        var eventImage = "{{ url('/') }}/front/home/assets/images/logo/logo.svg";
+                        // var eventImage = event.image && event.image.length > 0  ?"{{ env('MAP_PUBLIC') }}/"+ event.image[0].image : '{{ env('MAP_PUBLIC') }}/public/front/home/assets/images/logo/logo.svg' ;
+                        var eventImage = "{{ env('MAP_PUBLIC') }}/front/home/assets/images/logo/logo.svg";
                         var baseUrl = "{{ url('/') }}";
                         var authUserId = '{{ auth()->id() }}';
                         var reviews = event?.user?.reviews;
@@ -416,12 +416,12 @@
                             0;
 
                         var imageSrc = event.image?.[0]?.image ?
-                            `${baseUrl}/storage/${event.image[0].image}` :
-                            `${baseUrl}/front/home/assets/images/logo/logo.svg`;
+                            `${baseUrl}/public/storage/${event.image[0].image}` :
+                            `${baseUrl}/public/front/home/assets/images/logo/logo.svg`;
 
                         var profileSrc = event.user?.profile_photo_path ?
-                            `${baseUrl}/storage/${event.user.profile_photo_path}` :
-                            `${baseUrl}/front/auth/assets/img/user-img.png`;
+                            `${baseUrl}/public/storage/${event.user.profile_photo_path}` :
+                            `${baseUrl}/public/front/auth/assets/img/user-img.png`;
 
                         var isFavorited = event.favorites?.some(fav => fav.user_id === authUserId);
 
@@ -460,7 +460,7 @@
                                 <h4 class="mb-1">Price: $${Number(event.product_detail.price).toLocaleString()}</h4>
 
                                 <div class="location">
-                                <img src="${baseUrl}/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
+                                <img src="${baseUrl}/public/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
                                 <span>${event.product_detail.city}, ${event.product_detail.state}, ${event.product_detail.country}</span>
                                 </div>
 
@@ -757,12 +757,12 @@
             error: function(xhr) {
                 if (xhr.status === 401) {
                     Swal.fire({
-                        title: "Elite Equine",
+                        title: "EliteQuine",
                         text: "Please login to add favorite.",
                         imageUrl: "{{ asset('front/home/assets/images/add-favorite.svg') }}",
                         imageWidth: 400,
                         imageHeight: 200,
-                        imageAlt: "Elite Equine",
+                        imageAlt: "EliteQuine",
                         // This disables the default Swal styling for confirm button
                         customClass: {
                             confirmButton: 'commen_btn'

@@ -186,7 +186,7 @@
                     layers: ['unclustered-point']
                 });
                
-                var markerIconUrl = "{{url('/')}}/images/Community Blue.png";
+                var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/Community Blue.png";
                 var uniqueFeatures = getUniqueFeatures(features, 'venue_name');
              
                 uniqueFeatures.forEach(feature => {
@@ -228,8 +228,8 @@
                             'Price not available';
 
                         //var ticketUrl = isAuthenticated ? (event.ticket_sale_link || '#') : loginRoute;
-                        // var eventImage = event.image && event.image.length > 0  ?"{{ url('/') }}/"+ event.image[0].image : '{{ url('/') }}/public/front/home/assets/images/logo/logo.svg' ;
-                        var eventImage = "{{ url('/') }}/front/home/assets/images/logo/logo.svg";
+                        // var eventImage = event.image && event.image.length > 0  ?"{{ env('MAP_PUBLIC') }}/"+ event.image[0].image : '{{ env('MAP_PUBLIC') }}/public/front/home/assets/images/logo/logo.svg' ;
+                        var eventImage = "{{ env('MAP_PUBLIC') }}/front/home/assets/images/logo/logo.svg";
                         var baseUrl = "{{ url('/') }}";
                         var eventUrl = `${baseUrl}communityDetails/${event.id}`;
                         var maxLength = 40;
@@ -519,12 +519,12 @@
             error: function(xhr) {
                 if (xhr.status === 401) {
                     Swal.fire({
-                        title: "Elite Equine",
+                        title: "EliteQuine",
                         text: "Please login to add favorite.",
                         imageUrl: "{{ asset('front/home/assets/images/add-favorite.svg') }}",
                         imageWidth: 400,
                         imageHeight: 200,
-                        imageAlt: "Elite Equine",
+                        imageAlt: "EliteQuine",
                         // This disables the default Swal styling for confirm button
                         customClass: {
                             confirmButton: 'commen_btn'
