@@ -245,7 +245,7 @@
                     fetchEventsByCategory(selectedCategory);
                 }
             })
-            var userCoordinates = [75.769446, 26.836992];
+            var userCoordinates = ["{{ $longitude }}", "{{ $latitude }}"];
             mapboxgl.accessToken = '{{ env('MAPBOX_ACCESS_TOKEN') }}';
             var map = new mapboxgl.Map({
                 container: 'map',
