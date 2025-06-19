@@ -169,6 +169,60 @@ Product Listing
                                         @if($sale == 'standard')
                                             @if($status == 'live' && $method == 'platform')
                                                 <span class="badge transaction-methods status-box-live" >{{$status}}</span>
+                                            @elseif($status == 'sold')
+                                                <span class="badge transaction-methods status-box-sold" >{{ $status }}</span>
+                                            @elseif($status == 'expire' && $method == 'platform')
+                                                <span class="badge transaction-methods" >{{ $status }}</span>
+                                            @elseif($status !== 'pending' && $method == 'buyertoseller')
+                                                <select name="manual_change" data-id="{{@$value->id}}" id="manual_change">
+                                                    <option value="live" {{($status == 'live') ? 'selected' : ''}}>Live</option>
+                                                    @if($value->category_id==1)
+                                                        @foreach(__subCategoryHorseData() as $key=>$cat)
+                                                            <option value="{{$cat}}" {{$status==$cat?'selected':''}}>{{$cat}}</option>
+                                                        @endforeach
+                                                    @endif
+                                                    @if($value->category_id==3)
+                                                        @foreach(__subCategoryBarnsData() as $key=>$cat)
+                                                            <option value="{{$cat}}" {{$status==$cat?'selected':''}}>{{$cat}}</option>
+                                                        @endforeach
+                                                    @endif
+                                                    <option value="sold">Sold</option>
+
+                                                </select>
+                                            @elseif($status == 'sold' && $method == 'buyertoseller')
+                                                <span class="badge transaction-methods" >{{ $status }}</span>
+                                            @elseif($status == 'expire' && $method == 'buyertoseller')
+                                                <span class="badge transaction-methods" >{{ $status }}</span>
+                                            @endif
+
+                                        @elseif($sale == 'auction')
+                                            @if(($status == 'live' || $status == 'closed') && $method == 'buyertoseller')
+                                                <select name="manual_change" data-id="{{ @$value->id }}" id="manual_change">
+                                                    <option value="live" {{ ($status == 'live') ? 'selected' : '' }} {{ ($status == 'closed') ? 'hidden' : '' }}>Live</option>
+                                                    <option value="closed" {{ ($status == 'closed') ? 'selected' : '' }}>Closed</option>
+                                                    <option value="sold" {{ ($status == 'sold') ? 'selected' : '' }}>Sold</option>
+                                                </select>
+                                            @elseif($status == 'sold' && $method == 'platform')
+                                                <span class="badge transaction-methods" >{{ $status }}</span>
+                                            @elseif($status == 'expire' && $method == 'platform')
+                                                <span class="badge transaction-methods status-box-live" >{{ $status }}</span>
+                                            @elseif(($status == 'live' || $status == 'closed') && $method == 'platform')
+                                                <select name="manual_change" data-id="{{ @$value->id }}" id="manual_change">
+                                                    <option value="live" {{ ($status == 'live') ? 'selected' : '' }} {{ ($status == 'closed') ? 'hidden' : '' }}>Live</option>
+                                                    <option value="closed" {{ ($status == 'closed') ? 'selected' : '' }}>Closed</option>
+                                                    <option value="sold" {{ ($status == 'sold') ? 'selected' : '' }}>Sold</option>
+                                                </select>
+                                            @elseif($status == 'sold' && $method == 'buyertoseller')
+                                                <span class="badge transaction-methods" >{{ $status }}</span>
+                                            @elseif($status == 'expire' && $method == 'buyertoseller')
+                                                <span class="badge transaction-methods expire" >{{ $status }}</span>
+                                            @endif
+                                        @endif
+
+
+                                        {{-- @if($sale == 'standard')
+                                            @if($status == 'live' && $method == 'platform')
+                                                <span class="badge transaction-methods status-box-live" >{{$status}}01</span>
                                             @elseif($status == 'sold' && $method == 'platform')
                                                 <span class="badge transaction-methods" >{{ $status }}</span>
                                             @elseif($status == 'expire' && $method == 'platform')
@@ -176,13 +230,25 @@ Product Listing
                                             @elseif(($status == 'live' || $status == 'closed') && $method == 'buyertoseller')
                                                 <select name="manual_change" data-id="{{@$value->id}}" id="manual_change">
                                                     <option value="live" {{($status == 'live') ? 'selected' : ''}}>Live</option>
+                                                    @if($value->category_id==1)
+                                                    <option value="For Sale">For Sale</option>
+                                                    <option value="For Lease">For Lease</option>
+                                                    <option value="Short-Term Lease Option">Short-Term Lease Option</option>
+                                                    <option value="Lease-To-Buy Option">Lease-To-Buy Option</option>
+                                                    <option value="Half Lease Option">Half Lease Option</option>
+                                                    <option value="In Search of Training Rides">In Search of Training Rides</option>
+                                                    <option value="In Search of Catch Rides">In Search of Catch Rides</option>
+                                                    <option value="Show Lease Option">Show Lease Option</option>
+                                                    @endif
                                                     <option value="sold">Sold</option>
+
                                                 </select>
                                             @elseif($status == 'sold' && $method == 'buyertoseller')
                                                 <span class="badge transaction-methods" >{{ $status }}</span>
                                             @elseif($status == 'expire' && $method == 'buyertoseller')
                                                 <span class="badge transaction-methods" >{{ $status }}</span>
                                             @endif
+
                                         @elseif($sale == 'auction')
                                             @if(($status == 'live' || $status == 'closed') && $method == 'platform')
                                                 <select name="manual_change" data-id="{{ @$value->id }}" id="manual_change">
@@ -205,7 +271,8 @@ Product Listing
                                             @elseif($status == 'expire' && $method == 'buyertoseller')
                                                 <span class="badge transaction-methods expire" >{{ $status }}</span>
                                             @endif
-                                        @endif
+                                        @endif --}}
+                                        
                                     </td>
 
                                     {{--<td class="align-middle text-center text-sm">
@@ -325,9 +392,9 @@ $(document).on('change', '#manual_change', function(e) {
                 },
                 success: function(response) {
                     Swal.fire("EliteQuine", "Product status updated successfully", "success");
-                    $("#record_" + productId).html(
-                        `<span class='badge status-box-sold' style='background-color:green;'>${newStatus}</span>`
-                    );
+                    // $("#record_" + productId).html(
+                    //     `<span class='badge status-box-sold' style='background-color:green;'>${newStatus}</span>`
+                    // );
 
                     // Update previous status data attribute
                     $select.data('previous', newStatus);

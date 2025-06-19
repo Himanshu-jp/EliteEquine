@@ -32483,6 +32483,11 @@ input.is-invalid ~ .remove-video-link {
     background: #00a591;
     color: #fff;
 }
+.status-box-sold {
+    border-radius: 5px;
+    background: #00b300;
+    color: #fff;
+}
 .status-box-expire {
     border-radius: 5px;
     background: #df1010;

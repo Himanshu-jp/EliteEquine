@@ -12,8 +12,8 @@
                             <img src="{{ @$value->image->first() ? asset('storage/' . @$value->image->first()->image) : asset('front/home/assets/images/logo/logo.svg') }}"
                                 alt="hourse-image">
 
-                            @if (@$value->product_status == 'sold')
-                                <span class="tag-img sold-tag">Sold</span>
+                            @if (@$value->product_status !== 'pending' && @$value->product_status !== 'live' && @$value->product_status !== 'expire')
+                                <span class="tag-img sold-tag">{{$value->product_status}}</span>
                             @else
                                 @if (!empty(@$value->greenEligibilities))
                                     <span class="tag-img">{{ @$value->greenEligibilities->commonMaster->name }} </span>

@@ -48,6 +48,12 @@ return new class extends Migration
             $table->string('trail_latitude')->nullable();
             $table->string('trail_longitude')->nullable();
             $table->string('trial_location')->nullable();
+            $table->string('haulings_location_from')->nullable();
+            $table->string('haulings_location_to')->nullable();
+            $table->string('haulings_location_to_lat')->nullable();
+            $table->string('haulings_location_to_lng')->nullable();
+            $table->string('haulings_location_from_lat')->nullable();
+            $table->string('haulings_location_from_lng')->nullable();
             $table->string('banner')->nullable();
             $table->string('agree')->nullable();
             $table->timestamps();

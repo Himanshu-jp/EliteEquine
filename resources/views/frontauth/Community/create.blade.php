@@ -19,6 +19,24 @@ else{
     $title = "Community & Events - Add Record";
 }
 @endphp
+<style>
+    
+    #location-list li {
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    #location-list{
+        border: 1px solid #ccc;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none;
+        position: absolute;
+        z-index: 999;
+        background: white;
+        width: 100%;
+    }
+</style>
 <div class="container-fluid mt-4">
     <div class="ms-0 d-flex align-items-center justify-content-between flex-wrap">
         <h4 class="h5 font-weight-bolder">{{$title}}</h4>
