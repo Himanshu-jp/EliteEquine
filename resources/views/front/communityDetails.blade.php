@@ -317,10 +317,12 @@ Community & Event Details
         const urlParams = new URLSearchParams(window.location.search);
         let lat = '{{@$products->productDetail->latitude}}' || 26.8467;
         let lng = '{{@$products->productDetail->longitude}}' || 75.7647;
+          let trailLat = '{{ @$products->productDetail->trail_latitude }}' || 26.8467;
+            let trailLong = '{{ @$products->productDetail->trail_longitude }}' || 75.7647;
 
         const updateLocation = () => {
-            initializeMap(lat, lng);
-            addMapMarker(lat, lng);
+  initializeMap(lat, lng, trailLat, trailLong);
+           // addMapMarker(lat, lng);
         };
 
         if (navigator.geolocation) {
@@ -340,18 +342,53 @@ Community & Event Details
         initializeLocationAutocomplete();
     };
 
-    function initializeMap(latitude, longitude) {
-        map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [longitude, latitude],
-            zoom: 10,
-            pitch: 60,
-            bearing: -20
-        });
+        function initializeMap(latitude, longitude, trailLat, trailLong) {
+            // Initialize the map
+            const map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/standard',
+                center: [longitude, latitude],
+                zoom: 8
+            });
 
-        map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-    }
+            // Blue marker for main location
+            var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/Community Blue.png";
+            var markerElement = document.createElement('div');
+            markerElement.className = 'blue-circle-marker';
+
+            var markerImage = document.createElement('img');
+            markerImage.src = markerIconUrl;
+            markerImage.alt = "Marker";
+            markerImage.className = "marker-image";
+            markerElement.appendChild(markerImage);
+
+            var venueName = document.createElement('span');
+            venueName.className = 'marker-venue-name';
+            markerElement.appendChild(venueName);
+
+            new mapboxgl.Marker(markerElement)
+                .setLngLat([longitude, latitude])
+                .addTo(map);
+
+            // Red marker for trail location
+            var markerIconUrlTrail = "{{ env('MAP_PUBLIC') }}/images/Community Red.png";
+            var trailMarkerElement = document.createElement('div');
+            trailMarkerElement.className = 'red-circle-marker';
+
+            var trailMarkerImage = document.createElement('img');
+            trailMarkerImage.src = markerIconUrlTrail;
+            trailMarkerImage.alt = "Trail Marker";
+            trailMarkerImage.className = "marker-image";
+            trailMarkerElement.appendChild(trailMarkerImage);
+
+            var trailVenueName = document.createElement('span');
+            trailVenueName.className = 'marker-venue-name';
+            trailMarkerElement.appendChild(trailVenueName);
+
+            new mapboxgl.Marker(trailMarkerElement)
+                .setLngLat([trailLong, trailLat])
+                .addTo(map);
+        }
 </script>
 
 <script>
