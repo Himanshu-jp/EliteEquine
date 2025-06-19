@@ -7,41 +7,8 @@
     .category-scroll button {
         border: none;
     }
-
-    .category-scroll button.active .card-list {
-        background: #d6b868;
-    }
-
-    .location-suggestions {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        max-height: 200px;
-        overflow-y: auto;
-        background: white;
-        border: 1px solid #ccc;
-        border-top: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-    }
-
-    .location-suggestions li {
-        padding: 8px 12px;
-        border-bottom: 1px solid #eee;
-    }
-
-    .location-suggestions li:last-child {
-        border-bottom: none;
-    }
-
-    .location-suggestions li.highlighted,
-    .location-suggestions li:hover {
-        background-color: #0074D9;
-        /* nice blue */
-        color: white;
-    }
-
+ 
+ 
         .category-scroll button {border: none;
         overflow: hidden;
     border-radius: 20px;}
@@ -85,7 +52,7 @@
 
     <!-------------------------------- banner_area ------------------------------------>
     <section class="banner_area">
-        <div class="container">
+        <div class="container-fluid">
             <div class="banner_area_inner">
                 <div class="image_bx">
                     <img src="{{ asset('front/home/assets/images/hource_img_banner.png') }}" alt="" />
@@ -337,6 +304,7 @@
                                                             @elseif($value->category_id==4)
                                                                 <a href="{{route('serviceDetails',@$value->id)}}">
                                                             @endif
+
                                                                 <div class="image">
                                                                     <img src="{{(@$value->image->first())?asset('storage/'.@$value->image->first()->image):asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
                                                                     <span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span>
@@ -468,7 +436,8 @@
                                                                         <div class="imagee">
                                                                             <img src="{{(@$value->user->profile_photo_path)?asset('storage/'.@$value->user->profile_photo_path):asset('front/auth/assets/img/user-img.png')}}" class="user-img" alt="">
                                                                         </div>
-                                                                        <div class="content">
+
+                                                                        {{-- <div class="content">
                                                                             <h4>{{@$value->user->name}}</h4>
                                                                             <div class="stars">
                                                                                 @php
@@ -484,6 +453,7 @@
                                                                                 <i class="fa-solid fa-star"></i>
                                                                                 <i class="fa-solid fa-star"></i> -->
                                                                             </div>
+
                                                                             <div class="content">
                                                                                 <h4>{{ @$value->user->name }}</h4>
                                                                                 <div class="stars">
@@ -509,7 +479,8 @@
                                                                                     <i class="fa-solid fa-star"></i> -->
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
+                                                                        </div> --}}
+
                                                                         <div class="content">
                                                                             <h4>{{@$value->user->name}}</h4>
                                                                             <div class="stars">
@@ -594,17 +565,17 @@
                 <div class="industry_area_inner2">
                 <div thumbsSlider="" class="swiper mySwiper1">
                     <div class="swiper-wrapper">
-                    @foreach($industryMatricData as $index => $matric)
-                    <div class="swiper-slide">
-                        <div class="industry_area_sld_bx toggle-btn {{ $index === 0 ? 'active-toggle' : '' }}" data-index="{{ $index }}">
-                        <div class="content">
-                            <h3>{{ $matric->title }}</h3>
-                            <button class="commen_btn " data-index="{{ $index }}">Read More</button>
-                        </div>
-                        <img src="{{ asset('storage/' . $matric->image) }}" alt="" />
-                        </div>
-                    </div>
-                    @endforeach
+                        @foreach($industryMatricData as $index => $matric)
+                            <div class="swiper-slide">
+                                <div class="industry_area_sld_bx toggle-btn {{ $index === 0 ? 'active-toggle' : '' }}" data-index="{{ $index }}">
+                                <div class="content">
+                                    <h3>{{ $matric->title }}</h3>
+                                    <button class="commen_btn " data-index="{{ $index }}">Read More</button>
+                                </div>
+                                <img src="{{ asset('storage/' . $matric->image) }}" alt="" />
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
 

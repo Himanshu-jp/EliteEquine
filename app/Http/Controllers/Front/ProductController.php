@@ -67,6 +67,11 @@ class ProductController extends Controller
         {
             return redirect()->route('settings')->with('error', 'Please first complete your Settings details.');
         }
+        if(Auth::user()->is_subscribed != '1')
+        {
+                    return redirect()->route('subscription')->with('error', 'You does not have any valid subscription.');
+
+        }
         
         // $products = Product::with(['image', 'video', 'document'])
         //     ->where(['deleted_at' => null, 'user_id' => $user->id, 'product_status' => null])
@@ -219,6 +224,10 @@ class ProductController extends Controller
             ->where(['id' => $request->id, 'deleted_at' => null, 'user_id' => $user->id])
             ->orderBy('id', 'desc')
             ->first();
+
+        // dd($products->toArray());
+        // dd($products->subcategory->pluck('category_id')->toArray());
+            
         return view('frontauth/productHorseDetails', compact(['productId', 'products', 'subcategories']));
     }
 
@@ -434,7 +443,7 @@ class ProductController extends Controller
     {
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
-            'product_status' => 'required|string|in:live,sold'
+            'product_status' => 'required|string'
         ]);
 
         $product = Product::find($request->product_id);
@@ -550,7 +559,9 @@ class ProductController extends Controller
             }
         }
         $service_date = $data['service_date'] ?? '';
-        $result = $this->checkoutService->process($data, $product, $user->id, $service_date);
+        $time_slot_from = $data['time_slot_from'] ?? '';
+        $time_slot_to = $data['time_slot_to'] ?? '';
+        $result = $this->checkoutService->process($data, $product, $user->id, $service_date, $time_slot_from, $time_slot_to);
         if($result['success'] == false)
         {
             return redirect()->back()->with('error', $result['message']);

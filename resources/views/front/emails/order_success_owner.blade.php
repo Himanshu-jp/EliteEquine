@@ -67,7 +67,7 @@
 <body>
     <div class="email-container">
         <div class="email-header">
-            <a href="{{ url('/') }}">
+            <a href="{{ asset('/') }}">
                 <img src="{{ asset('front/home/assets/images/logo/logo.svg') }}" alt="EliteQueen Logo">
             </a>
         </div>
@@ -80,7 +80,7 @@
 
             <div class="product-info">
                 <p><strong>Product:</strong> {{ $product->title }}</p>
-                <p><strong>Category:</strong> {{ $product->subcategory->name ?? 'N/A' }}</p>
+                <p><strong>Category:</strong> {{ $product->category->name ?? 'N/A' }}</p>
                 <p><strong>Price:</strong> ${{ number_format($product->price, 2) }}</p>
                 <p><strong>Location:</strong> {{ $product->productDetail->city ?? '' }}, {{ $product->productDetail->state ?? '' }}</p>
                 <p><strong>Description:</strong><br>

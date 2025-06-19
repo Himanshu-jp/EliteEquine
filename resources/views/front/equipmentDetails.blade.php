@@ -254,54 +254,91 @@ Product Details
                         @endforeach
                     </div>
                     @endif
+
+
                     <!------------Comments add / view section---------->
                     <div class="comment-section">                        
                         <!-- Comment Form -->
                         @if(auth()->check()) 
-                            <div class="comment-form">
+                           <div class="comment-form">
                                 <h4 class="comment-form-title">Write a Comment</h4>
-                                <form action="{{route('productComment')}}" method="post" id="product-comment-form">   
+                                <form action="{{ route('productComment') }}" method="POST" enctype="multipart/form-data" id="product-comment-form">
                                     @csrf                
                                     <input type="hidden" name="product_id" value="{{$products->id}}">
-                                    <div>
+
+                                    <div class="col-md-12 mb-3">
+                                        <label for="name" class="form-label">Title</label>
+                                        <input type="text" class="form-control comment-input-form mb-0" placeholder="Enter your title" name="title" id="title" autocomplete="off">                                            
+                                    </div>  
+                                    <div>  
+                                        <label for="name" class="form-label">Content</label>                                      
                                         <textarea class="comment-textarea form-control mb-2" rows="6" name="comment" id="comment" placeholder="Write your comment here...">{{old('comment')}}</textarea>    
                                         @if($errors->has('comment'))
                                             <span class="error text-danger">{{$errors->first('comment')}}</span>
                                         @endif
                                     </div>                                    
+                                    <div class="col-md-12 mt-3">
+                                        <div class="upload-cmt-input" onclick="document.getElementById('uploadFile').click();"> 
+                                            <div class="upload-icon"> <img src="{{asset('front/auth/assets/img/icons/image.svg')}}" class="user-img" alt="" id="editDocument"></div>
+                                                    <h5 class="pt-3">Select pdf & document format files. </h5>
+                                                    <div href="#" class="upload-image">
+                                                        <h6>Browse File</h6>
+                                                    </div>
+                                            <input type="file" name="file" id="uploadFile" accept="image/*">
+                                            <img id="previewImage" class="preview" alt="Image Preview">
+                                        </div>
+                                    </div>
                                     <button type="submit" class="comment-submit-btn" id="product-comment-form-submit">Post Comment</button>
                                 </form>
                             </div>
                         @else
                             <div class="comment-form">
                                 <h4 class="comment-form-title">Write a Comment</h4>
-                                <form action="{{route('productComment')}}" method="post" id="product-comment-form-guest">   
+                                <form action="{{route('productComment')}}" method="post" id="product-comment-form-guest">
                                     @csrf                
                                     <input type="hidden" name="product_id" value="{{$products->id}}">
+
+                                    <div class="col-md-12 mb-3">
+                                        <label for="name" class="form-label">Title</label>
+                                        <input type="text" class="form-control comment-input-form mb-0" placeholder="Enter your title" name="title" id="title" autocomplete="off">                                            
+                                    </div>  
                                     <div>
+                                        <label for="name" class="form-label">Content</label>
                                         <textarea class="comment-textarea form-control mb-2" rows="6" name="comment" id="comment" placeholder="Write your comment here...">{{old('comment')}}</textarea>    
                                         @if($errors->has('comment'))
                                             <span class="error text-danger">{{$errors->first('comment')}}</span>
                                         @endif  
                                     </div>
+
+                                    <div class="col-md-12 mt-3">
+                                        <div class="upload-cmt-input" onclick="document.getElementById('uploadFile').click();"> 
+                                            <div class="upload-icon"> <img src="{{asset('front/auth/assets/img/icons/image.svg')}}" class="user-img" alt="" id="editDocument"></div>
+                                                    <h5 class="pt-3">Select pdf & document format files. </h5>
+                                                    <div href="#" class="upload-image">
+                                                        <h6>Browse File</h6>
+                                                    </div>
+                                            <input type="file" name="file" id="uploadFile" accept="image/*">
+                                            <img id="previewImage" class="preview" alt="Image Preview">
+                                        </div>
+                                    </div>
                                     
                                     <div class="row">
                                         <div class="col-md-4 mt-3">
                                             <label for="name" class="form-label">Name</label>
-                                            <input type="name" class="inner-form form-control mb-0" placeholder="Enter your name" name="name" id="name" value="{{old('name', @$guest['name'] ?? '')}}"  autocomplete="off">                                            
+                                            <input type="name" class="form-control comment-input-form mb-0" placeholder="Enter your name" name="name" id="name" value="{{old('name', @$guest['name'] ?? '')}}"  autocomplete="off">                                            
                                         </div>
 
                                         <div class="col-md-4 mt-3">
                                             <label for="email" class="form-label">Email</label>
-                                            <input type="email" class="inner-form form-control mb-0" placeholder="Enter email address" name="email" id="email" value="{{old('email', @$guest['email'] ?? '')}}" autocomplete="off">
+                                            <input type="email" class="form-control comment-input-form mb-0" placeholder="Enter email address" name="email" id="email" value="{{old('email', @$guest['email'] ?? '')}}" autocomplete="off">
                                         </div>
                                         <div class="col-md-4 mt-3">
                                             <label for="website" class="form-label">Website</label>
-                                            <input type="website" class="inner-form form-control mb-0" placeholder="Enter your website address" name="website" id="website" value="{{old('website', @$guest['website'] ?? '')}}" autocomplete="off">                                            
+                                            <input type="website" class="form-control comment-input-form mb-0" placeholder="Enter your website address" name="website" id="website" value="{{old('website', @$guest['website'] ?? '')}}" autocomplete="off">                                            
                                         </div>
                                     </div>
                                     
-                                    <button type="submit" class="comment-submit-btn" id="product-comment-form-submit">Post Comment</button>
+                                    <button type="submit" class="comment-submit-btn" id="product-comment-form-submit-guest">Post Comment</button>
                                 </form>
                             </div>
                         @endif
@@ -334,6 +371,8 @@ Product Details
 
                     </div>
 
+                  
+
                 </div>
             </div>
 
@@ -355,7 +394,7 @@ Product Details
                             </div>
                         @endif
 
-                        @if(@$products->sale_method == 'standard' && @$products->product_status == 'live')
+                        @if(@$products->sale_method == 'standard' && @$products->product_status == 'live' && @$products->transaction_method == 'platform')
                             <div class="pb-3 gap-2">
                                 <span class="text-secondary">Price</span>
                                 <h2 class="fw-bold">{{ $products->currency.' '.number_format($products->price,2) }} </h2>
@@ -625,7 +664,7 @@ Product Details
                             @if($products->user_id !== auth()->id() && auth()->check())
                                 <li><button class="report-btn"  data-bs-target="#ReportProduct" data-bs-toggle="modal"><img src="{{asset('front/home/assets/images/plag-icon.svg')}}" alt="" /></button></li>
                             @elseif($products->user_id == auth()->id())
-                                <li><button class="report-btn"  onclick="Swal.fire('Elite Equine', 'You are not allowed to report this as the owner.', 'warning');"><img src="{{asset('front/home/assets/images/plag-icon.svg')}}" alt="" /></button></li>
+                                <li><button class="report-btn"  onclick="Swal.fire('EliteQuine', 'You are not allowed to report this as the owner.', 'warning');"><img src="{{asset('front/home/assets/images/plag-icon.svg')}}" alt="" /></button></li>
                             @else
                                 <li><button class="report-btn"  onclick="showLoginModal('Please login to report this to ad owner.')"><img src="{{asset('front/home/assets/images/plag-icon.svg')}}" alt="" /></button></li>
                             @endif
@@ -926,12 +965,12 @@ function chatCreate() {
             if (response.success) {
                 window.location.href = '{{ route("messages",["room_id" => ""]) }}' + response.data;
             } else {
-                Swal.fire("Elite Equine", 'Failed to create chat room: ' + response.message, "error");
+                Swal.fire("EliteQuine", 'Failed to create chat room: ' + response.message, "error");
             }
         },
         error: function(xhr, status, error) {
             console.error('Error creating chat room:', xhr.responseText);
-            Swal.fire("Elite Equine", 'Failed to create chat room', "error");
+            Swal.fire("EliteQuine", 'Failed to create chat room', "error");
         }
     });
 }
@@ -957,12 +996,20 @@ document.getElementById('shareBtn').addEventListener('click', function(event) {
     $(document).ready(function () {
         $("#product-comment-form").validate({
             rules: {
+                title:{
+                    required: true,
+                    maxlength: 500
+                },
                 comment: {
                     required: true,
                     maxlength: 5000
                 }
             },
             messages: {
+                title: {
+                    required: "Title field is required.",
+                    maxlength: "The title field must not be greater than 500 characters"
+                },
                 comment: {
                     required: "Content field is required.",
                     maxlength: "The Content field must not be greater than 5000 characters"
@@ -979,24 +1026,30 @@ document.getElementById('shareBtn').addEventListener('click', function(event) {
             },
 
             submitHandler: function (form) {
+        
                 $('#product-comment-form-submit').prop('disabled', true).text('Please wait...');
-                let formData = $(form).serialize();
+                let formData = new FormData(form);
 
                 $.ajax({
                     url: $(form).attr('action'),
                     method: 'POST',
                     data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function (response) {
                         $('#product-comment-form-submit')
                             .prop('disabled', false)
                             .text('Post Comment');
-
+                        
                         if (response.status) {
                             // Optionally reset form and append comment
                             $(form)[0].reset();
                             addProductComment(page);
                             $("#noComments").hide();
                             $("#data-wrapper").show();
+                            const previewImageDiv = document.getElementById('previewImage');
+                            previewImageDiv.src="";
+                            previewImageDiv.style.display = 'none';
 
                         } else {
                             alert(response.message || 'Something went wrong');
@@ -1030,6 +1083,10 @@ document.getElementById('shareBtn').addEventListener('click', function(event) {
                     maxlength: 255,
                     url: true,
                 },
+                title:{
+                    required: true,
+                    maxlength: 500
+                },
                 comment: {
                     required: true,
                     maxlength: 5000
@@ -1048,6 +1105,10 @@ document.getElementById('shareBtn').addEventListener('click', function(event) {
                 website: {
                     required: "Please enter your web address",
                     maxlength: "Website must not exceed 255 characters"
+                },
+                title: {
+                    required: "Title field is required.",
+                    maxlength: "The title field must not be greater than 500 characters"
                 },  
                 comment: {
                     required: "Content field is required.",
@@ -1065,24 +1126,29 @@ document.getElementById('shareBtn').addEventListener('click', function(event) {
             },
 
             submitHandler: function (form) {
-                $('#product-comment-form-submit').prop('disabled', true).text('Please wait...');
-                let formData = $(form).serialize();
-
+                $('#product-comment-form-submit-guest').prop('disabled', true).text('Please wait...');
+                let formData = new FormData(form);
                 $.ajax({
                     url: $(form).attr('action'),
                     method: 'POST',
                     data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function (response) {
-                        $('#product-comment-form-submit')
+                        if (response.status) {
+
+                            $('#product-comment-form-submit-guest')
                             .prop('disabled', false)
                             .text('Post Comment');
-
-                        if (response.status) {
+                            
                             // Optionally reset form and append comment
                             $(form)[0].reset();
                             addProductComment(page);
                             $("#noComments").hide();
                             $("#data-wrapper").show();
+                            const previewImageDiv = document.getElementById('previewImage');
+                            previewImageDiv.src="";
+                            previewImageDiv.style.display = 'none';
 
                             //----guest user-----//
                             $("#name").val(response.guest['name']);
@@ -1094,8 +1160,7 @@ document.getElementById('shareBtn').addEventListener('click', function(event) {
                         }
                     },
                     error: function (xhr) {
-                        $('#product-comment-form-submit').prop('disabled', false).text('Post Comment');
-
+                        $('#product-comment-form-submit-guest').prop('disabled', false).text('Post Comment');
                         // Show error message
                         alert('Submission failed. Please try again.');
                         console.error(xhr.responseText);
@@ -1246,14 +1311,14 @@ var slider = new Swiper('.gallery-slider', {
                     data: {},
                     success: function (response) {
                         if (response.status) {
-                            Swal.fire("Elite Equine", "Comment removed successfully.", "success");
+                            Swal.fire("EliteQuine", "Comment removed successfully.", "success");
                             addProductComment(page);
                         } else {
-                            Swal.fire("Elite Equine", response.message, "error");
+                            Swal.fire("EliteQuine", response.message, "error");
                         }
                     },
                     error: function (xhr) {
-                        Swal.fire("Elite Equine", "Submission failed. Please try again.", "error");
+                        Swal.fire("EliteQuine", "Submission failed. Please try again.", "error");
                         console.error(xhr.responseText);
                     }
                 });
@@ -1309,4 +1374,104 @@ var slider = new Swiper('.gallery-slider', {
   });
 </script>
 
+<script>
+    const fileInput = document.getElementById('uploadFile');
+    const previewImage = document.getElementById('previewImage');
+
+    fileInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function () {
+          previewImage.src = reader.result;
+          previewImage.style.display = 'block';
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        previewImage.src = '';
+        previewImage.style.display = 'none';
+      }
+    });
+  </script>
+<style>
+    .comment-input-form {
+    border-radius: 14px;
+    border: 1px solid var(--Border-2, #DDD);
+    background: var(--Color-White, #FFF);
+    padding: 14px 22px;
+    color: #3D3D3D;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 26px;
+}
+
+.upload-cmt-input {
+    width: 100%;
+    padding: 25px 15px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    position: relative;
+    border-radius: 20px;
+    border: 1px dashed #DDD;
+    background: #FFF;
+    padding: 30px;
+}
+.upload-cmt-input h5 {
+    color: #000;
+    text-align: center;
+    font-family: Inter;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%; /* 27px */
+}
+
+.upload-cmt-input .upload-image {
+    color: #A19061;
+    text-align: center;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 150%; /* 22.5px */
+    text-decoration-line: underline !important;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+}
+ 
+
+    .upload-cmt-input input[type="file"] {
+      display: none;
+    }
+
+    .upload-cmt-input .upload-icon {
+      font-size: 36px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .upload-cmt-input .upload-text {
+      font-size: 14px;
+      color: #444;
+    }
+
+    .upload-cmt-input img.preview {
+      margin-top: 15px;
+      max-width: 100%;
+      max-height: 180px;
+      display: none;
+      border-radius: 6px;
+      object-fit: contain;
+      border: 1px solid #ccc;
+    }
+  </style>
 @endsection

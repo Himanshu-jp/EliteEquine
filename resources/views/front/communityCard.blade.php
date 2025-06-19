@@ -1,62 +1,64 @@
-@if($viewMode=="grid")
-<div class="row">
-    @foreach($data as $key=>$value)
-        <div class="col-lg-4 mb-3">
-            <div class="feat_card_bx grid-view">
-                <a href="{{route('communityDetails',@$value->id)}}">
-                    <div class="image">
-                        <img src="{{(@$value->image)?asset('storage/'.@$value->image):asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
-                        {{-- <span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span> --}}
-                    </div>
-                </a>
-                <div class="content">
-                    <a href="{{route('communityDetails',@$value->id)}}">
-                        <h3>
-                            {{@$value->title}}
-                        </h3>
+@if ($viewMode == 'grid')
+    <div class="row">
+        @foreach ($data as $key => $value)
+            <div class="col-lg-4 mb-3">
+                <div class="feat_card_bx grid-view">
+                    <a href="{{ route('communityDetails', @$value->id) }}">
+                        <div class="image">
+                            <img src="{{ @$value->image ? asset('storage/' . @$value->image) : asset('front/home/assets/images/logo/logo.svg') }}"
+                                alt="hourse-image">
+                            {{-- <span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span> --}}
+                        </div>
                     </a>
+                    <div class="content">
+                        <a href="{{ route('communityDetails', @$value->id) }}">
+                            <h3>
+                                {{ @$value->title }}
+                            </h3>
+                        </a>
 
-                    <h4>Price : ${{number_format(@$value->price)}} </h4>
-                    <span class="sp1"></span>
-                    <div class="location">
-                        <img src="{{asset('front/home/assets/images/icons/loction_icn.svg')}}" alt="location-icon" />
-                        <span>{{@$value->location}} <br />
-                            Event Date : {{ format_date(@$value->date)}}
-                        </span>
-                    </div>
-                    <div class="foot">
-                        <div class="bx">
-                            <div class="imagee">
-                                <img src="{{(@$value->user->profile_photo_path)?asset('storage/'.@$value->user->profile_photo_path):asset('front/auth/assets/img/user-img.png')}}" class="user-img" alt="">
-                            </div>
-                            <div class="content">
-                                <h4>{{@$value->user->name}}</h4>
-                                <div class="stars">
-                                    @php
-                                        $averageRating = round(optional(@$value->user->reviews)->avg('rating'), 1);
-                                        $totalReviews  = optional(@$value->user->reviews)->count();
-                                    @endphp 
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <i class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
-                                    @endfor
-                                    <!-- <i class="fa-solid fa-star"></i>
+                        <h4>Price : ${{ number_format(@$value->price) }} </h4>
+                        <span class="sp1"></span>
+                        <div class="location">
+                            <img src="{{ asset('front/home/assets/images/icons/loction_icn.svg') }}"
+                                alt="location-icon" />
+                            <span>{{ @$value->location }} <br />
+                                Event Date : {{ format_date(@$value->date) }}
+                            </span>
+                        </div>
+                        <div class="foot">
+                            <div class="bx">
+                                <div class="imagee">
+                                    <img src="{{ @$value->user->profile_photo_path ? asset('storage/' . @$value->user->profile_photo_path) : asset('front/auth/assets/img/user-img.png') }}"
+                                        class="user-img" alt="">
+                                </div>
+                                <div class="content">
+                                    <h4>{{ @$value->user->name }}</h4>
+                                    <div class="stars">
+                                        @php
+                                            $averageRating = round(optional(@$value->user->reviews)->avg('rating'), 1);
+                                            $totalReviews = optional(@$value->user->reviews)->count();
+                                        @endphp
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <i
+                                                class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
+                                        @endfor
+                                        <!-- <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i> -->
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
-                        
                     </div>
-                </div>              
+                </div>
             </div>
-        </div>
-    @endforeach
-</div>
-
+        @endforeach
+    </div>
 @else
-
     <div class="col-lg-8">
         <div class="map-info">
             <div>
@@ -84,7 +86,7 @@
             <div class="horsescard-popup" id="popupCard">
                 <div class="inner-box">
 
-                    <img src="{{asset('front/home/assets/images/featured_hource1.png')}}" id="popupImage" />
+                    <img src="{{ asset('front/home/assets/images/featured_hource1.png') }}" id="popupImage" />
                     <div class="info" id="popupInfo"></div>
                 </div>
                 <span class="close-btn" onclick="closePopup()">×</span>
@@ -92,10 +94,9 @@
             </div>
         </div>
     </div>
-    
-    <div class="col-lg-4">
-        @foreach($data as $key=>$value)
 
+    <div class="col-lg-4">
+        @foreach ($data as $key => $value)
             <div class="feat_card_bx list-page-card">
 
                 {{-- <a href="{{route('horseDetails',@$value->id)}}">
@@ -105,25 +106,26 @@
                     </div>
                 </a> --}}
 
-                <a href="{{route('communityDetails',@$value->id)}}">
+                <a href="{{ route('communityDetails', @$value->id) }}">
                     <div class="imagelist">
-                        <img src="{{(@$value->image)?asset('storage/'.@$value->image):asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
+                        <img src="{{ @$value->image ? asset('storage/' . @$value->image) : asset('front/home/assets/images/logo/logo.svg') }}"
+                            alt="hourse-image">
                     </div>
                 </a>
 
                 <div class="content">
-                    <a href="{{route('communityDetails',@$value->id)}}">
+                    <a href="{{ route('communityDetails', @$value->id) }}">
                         <h3>
-                            {{@$value->title}}
+                            {{ @$value->title }}
                         </h3>
                     </a>
 
-                    <h4>Price : ${{number_format(@$value->price)}} </h4>
+                    <h4>Price : ${{ number_format(@$value->price) }} </h4>
                     <span class="sp1"></span>
                     <div class="location">
-                        <img src="{{asset('front/home/assets/images/icons/loction_icn.svg')}}" alt="location-icon" />
-                        <span>{{@$value->location}} <br />
-                            Event Date : {{ format_date(@$value->date)}}
+                        <img src="{{ asset('front/home/assets/images/icons/loction_icn.svg') }}" alt="location-icon" />
+                        <span>{{ @$value->location }} <br />
+                            Event Date : {{ format_date(@$value->date) }}
                         </span>
                     </div>
 
@@ -131,10 +133,11 @@
                     <div class="foot">
                         <div class="bx">
                             <div class="imagee">
-                                <img src="{{(@$value->user->profile_photo_path)?asset('storage/'.@$value->user->profile_photo_path):asset('front/auth/assets/img/user-img.png')}}" class="user-img" alt="">
+                                <img src="{{ @$value->user->profile_photo_path ? asset('storage/' . @$value->user->profile_photo_path) : asset('front/auth/assets/img/user-img.png') }}"
+                                    class="user-img" alt="">
                             </div>
                             <div class="content">
-                                    <h4>{{@$value->user->name}}</h4>
+                                <h4>{{ @$value->user->name }}</h4>
                                 <div class="stars">
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
@@ -159,12 +162,12 @@
             (function() {
 
 
-                let map; // global map reference
-                let currentPopup = null; // to keep track of the currently opened popup
+                var map; // global map reference
+                var currentPopup = null; // to keep track of the currently opened popup
 
                 // Reverse geocode to get human-readable location from lat,lng and set input value
                 function reverseGeocode(lat, lng) {
-                    const url =
+                    var url =
                         `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxAccessToken}`;
 
                     fetch(url)
@@ -172,13 +175,13 @@
                         .then(data => {
                             if (data.features && data.features.length > 0) {
                                 // Use the place_name of the first feature as the location string
-                                const placeName = data.features[0].place_name;
-                                const mapLocationInput = document.getElementById('map-location');
+                                var placeName = data.features[0].place_name;
+                                var mapLocationInput = document.getElementById('map-location');
                                 if (mapLocationInput) {
                                     mapLocationInput.value = placeName;
                                 }
 
-                                const locationInput = document.getElementById('location');
+                                var locationInput = document.getElementById('location');
                                 if (locationInput) {
                                     locationInput.value = placeName;
                                 }
@@ -190,15 +193,15 @@
                 }
 
 
-                const urlParams = new URLSearchParams(window.location.search);
+                var urlParams = new URLSearchParams(window.location.search);
                 // Default or from URL
-                let lat = parseFloat(urlParams.get('latitude')) || 26.8467;
-                let lng = parseFloat(urlParams.get('longitude')) || 75.7647;
-                const selectedCategory = urlParams.get('category') || '1';
+                var lat = parseFloat(urlParams.get('latitude')) || 26.8467;
+                var lng = parseFloat(urlParams.get('longitude')) || 75.7647;
+                var selectedCategory = urlParams.get('category') || '1';
 
                 // Elements to store lat and lng values
-                const latInput = document.getElementById('latitude');
-                const lngInput = document.getElementById('longitude');
+                var latInput = document.getElementById('latitude');
+                var lngInput = document.getElementById('longitude');
 
                 // Try to get user's current location via Geolocation API
                 if (navigator.geolocation) {
@@ -242,9 +245,9 @@
                     fetchEventsByCategory(selectedCategory);
                 }
             })
-            let userCoordinates = [75.769446, 26.836992];
+            var userCoordinates = [75.769446, 26.836992];
             mapboxgl.accessToken = '{{ env('MAPBOX_ACCESS_TOKEN') }}';
-            const map = new mapboxgl.Map({
+            var map = new mapboxgl.Map({
                 container: 'map',
                 center: userCoordinates,
                 style: "mapbox://styles/mapbox/standard",
@@ -257,33 +260,33 @@
                 bearing: -60
             });
 
-            const events = @json($data);
-            let horseList = events.data;
+            var events = @json($data);
+            var horseList = events.data;
 
 
 
-            const eventGroups = {};
-            const allData = [];
+            var eventGroups = {};
+            var allData = [];
             horseList.forEach(event => {
 
-                if (event.product_detail) {
+                if (event) {
 
-                    if (event.product_detail.latitude && event.product_detail.longitude) {
-                        const latLng = `${event.product_detail.latitude},${event.product_detail.longitude}`;
+                    if (event.latitude && event.longitude) {
+                        var latLng = `${event.latitude},${event.longitude}`;
 
                         if (!eventGroups[latLng]) {
                             eventGroups[latLng] = [];
                         }
                         eventGroups[latLng].push(event);
-                        let object = {};
+                        var object = {};
                         object.title = event.title;
                         object.price = event.price;
                         object.description = event.description;
-                        object.image = event.image && event.image.length > 0 ? event.image[0].image : '';
-                        object.address = event.product_detail ? (event.product_detail.street + ' ' + event
-                            .product_detail.city) : '';
-                        object.latitude = event.product_detail ? (event.product_detail.latitude) : '';
-                        object.longitude = event.product_detail ? (event.product_detail.longitude) : '';
+                        object.image = event.image;
+                        object.address = event ? (event.street + ' ' + event
+                            .city) : '';
+                        object.latitude = event ? (event.latitude) : '';
+                        object.longitude = event ? (event.longitude) : '';
                         allData.push(object)
                     }
 
@@ -292,10 +295,10 @@
             console.log('allData', allData)
 
             function getUniqueFeatures(features, comparatorProperty) {
-                const uniqueIds = new Set();
-                const uniqueFeatures = [];
-                for (const feature of features) {
-                    const id = feature.properties[comparatorProperty];
+                var uniqueIds = new Set();
+                var uniqueFeatures = [];
+                for (var feature of features) {
+                    var id = feature.properties[comparatorProperty];
                     if (!uniqueIds.has(id)) {
                         uniqueIds.add(id);
                         uniqueFeatures.push(feature);
@@ -312,16 +315,16 @@
 
                 }
                 customMarkers = [];
-                const features = map.queryRenderedFeatures({
+                var features = map.queryRenderedFeatures({
                     layers: ['unclustered-point']
                 });
                 console.log('features', features);
-                const markerIconUrl = "http://192.168.5.41/elit-equine-new/EliteEquine/public/images/marker_map_icon.svg";
-                const uniqueFeatures = getUniqueFeatures(features, 'venue_name');
+                var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/Community Blue.png";
+                var uniqueFeatures = getUniqueFeatures(features, 'venue_name');
                 console.log('uniqueFeatures', uniqueFeatures);
                 uniqueFeatures.forEach(feature => {
-                    const coordinates = feature.geometry.coordinates;
-                    const {
+                    var coordinates = feature.geometry.coordinates;
+                    var {
                         venue_name,
                         venue_address,
                         latitude,
@@ -329,27 +332,27 @@
                     } = feature.properties;
                     console.log(coordinates, "coordinates");
                     // Create a custom HTML element for the marker
-                    const markerElement = document.createElement('div');
+                    var markerElement = document.createElement('div');
                     markerElement.className = 'red-circle-marker';
 
-                    const markerImage = document.createElement('img');
+                    var markerImage = document.createElement('img');
                     markerImage.src = markerIconUrl;
                     markerImage.alt = "Marker";
                     markerImage.className = "marker-image";
 
                     markerElement.appendChild(markerImage);
 
-                    const venueName = document.createElement('span');
+                    var venueName = document.createElement('span');
                     venueName.className = 'marker-venue-name';
-                    venueName.innerText = venue_name;
+                    // venueName.innerText = venue_name;
                     markerElement.appendChild(venueName);
 
-                    let marker = new mapboxgl.Marker(markerElement).setLngLat([coordinates[0], coordinates[1]]).addTo(
+                    var marker = new mapboxgl.Marker(markerElement).setLngLat([coordinates[0], coordinates[1]]).addTo(
                         map);
 
-                    const latLng = `${latitude},${longitude}`;
-                    const eventsAtLocation = eventGroups[latLng];
-                    let popupContent = '';
+                    var latLng = `${latitude},${longitude}`;
+                    var eventsAtLocation = eventGroups[latLng];
+                    var popupContent = '';
                     console.log(latitude, longitude, "SSSS")
                     console.log(latLng, 'latLng')
                     console.log(eventGroups[latLng])
@@ -357,36 +360,41 @@
                     eventsAtLocation.forEach(event => {
 
 
-                        const ticketPrice = event.price ? `Starts from $${event.price}` :
+                        var ticketPrice = event.price ? `Starts from $${event.price}` :
                             'Price not available';
 
-                        //const ticketUrl = isAuthenticated ? (event.ticket_sale_link || '#') : loginRoute;
-                        // const eventImage = event.image && event.image.length > 0  ?"{{ url('/') }}/"+ event.image[0].image : '{{ url('/') }}/public/front/home/assets/images/logo/logo.svg' ;
-                        const eventImage = "{{ url('/') }}/front/home/assets/images/logo/logo.svg";
-                        const baseUrl = "{{ url('/') }}";
-                        const authUserId = '{{auth()->id()}}';
-                        const averageRating = Math.round(event.user.reviews.reduce((sum, r) => sum + r.rating, 0) / event.user.reviews.length);
+                        //var ticketUrl = isAuthenticated ? (event.ticket_sale_link || '#') : loginRoute;
+                        // var eventImage = event.image && event.image.length > 0  ?"{{ env('MAP_PUBLIC') }}/"+ event.image[0].image : '{{ env('MAP_PUBLIC') }}/public/front/home/assets/images/logo/logo.svg' ;
+                        var eventImage = "{{ env('MAP_PUBLIC') }}/front/home/assets/images/logo/logo.svg";
+                        var baseUrl = "{{ url('/') }}";
+                        var authUserId = '{{ auth()->id() }}';
+                        if (event.user && event.user.reviews) {
+                            var averageRating = Math.round(event.user.reviews.reduce((sum, r) => sum + r
+                                .rating, 0) / event.user.reviews.length);
+                        } else {
+                            var averageRating = 0;
+                        }
 
-                        const imageSrc = event.image
-                            ? `${baseUrl}/storage/${event.image}`
-                            : `${baseUrl}/front/home/assets/images/logo/logo.svg`;
 
-                        const profileSrc = event.user?.profile_photo_path
-                            ? `${baseUrl}/storage/${event.user.profile_photo_path}`
-                            : `${baseUrl}/front/auth/assets/img/user-img.png`;
+                        var imageSrc = event.image ?
+                            `${baseUrl}/public/storage/${event.image}` :
+                            `${baseUrl}/public/front/home/assets/images/logo/logo.svg`;
 
-                        const isFavorited = event.favorites.some(fav => fav.user_id === authUserId);
+                        var profileSrc = event.user?.profile_photo_path ?
+                            `${baseUrl}/public/storage/${event.user.profile_photo_path}` :
+                            `${baseUrl}/public/front/auth/assets/img/user-img.png`;
 
-                        const eventUrl = `${baseUrl}/eventdetail/${event.id}`;
-                        const maxLength = 40;
-                        const descriptionText = event.description || '';
-                        const truncatedDescription = descriptionText.length > maxLength ?
+
+                        var eventUrl = `${baseUrl}/eventdetail/${event.id}`;
+                        var maxLength = 40;
+                        var descriptionText = event.description || '';
+                        var truncatedDescription = descriptionText.length > maxLength ?
                             descriptionText.substring(0, maxLength) + "..." :
                             descriptionText;
                         console.log(event);
-                        let venueHtml = '';
+                        var venueHtml = '';
                         if (event.title && event.title) {
-                            const venueDetailUrl = "url".replace(':id', event.id);
+                            var venueDetailUrl = "url".replace(':id', event.id);
                             venueHtml = `
                             <div class="venue-name-new">
                                 <a href="${venueDetailUrl}" target="_blank" class="venue-name-new-ic">
@@ -413,7 +421,7 @@
                                 <span class="sp1"></span>
 
                                 <div class="location">
-                                <img src="${baseUrl}/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
+                                <img src="${baseUrl}/public/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
                                 <span>
                                     ${event.location}<br/>
                                     Event Date : ${formatDate(event.date)}
@@ -440,13 +448,13 @@
                             </div>
                         `;
                     });
-                    const popup = new mapboxgl.Popup({
+                    var popup = new mapboxgl.Popup({
                             offset: 25
                         })
                         .setHTML(popupContent);
                     popup.on('open', () => {
 
-                        const popupElement = document.querySelector('.mapboxgl-popup-content');
+                        var popupElement = document.querySelector('.mapboxgl-popup-content');
                     });
                     marker.setPopup(popup);
 
@@ -459,14 +467,18 @@
             }
 
             function formatDate(dateString) {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                var date = new Date(dateString);
+                return date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
             }
 
             function addClusterView() {
-                const seenCoords = new Set();
+                var seenCoords = new Set();
 
-                const eventsfeature = allData.map((event) => ({
+                var eventsfeature = allData.map((event) => ({
 
                     type: "Feature",
                     geometry: {
@@ -561,10 +573,10 @@
                 }, 1000);
                 // inspect a cluster on click
                 map.on('click', 'clusters', (e) => {
-                    const features = map.queryRenderedFeatures(e.point, {
+                    var features = map.queryRenderedFeatures(e.point, {
                         layers: ['clusters']
                     });
-                    const clusterId = features[0].properties.cluster_id;
+                    var clusterId = features[0].properties.cluster_id;
                     map.getSource('clusterEvent').getClusterExpansionZoom(
                         clusterId,
                         (err, zoom) => {
@@ -583,9 +595,9 @@
                 // the location of the feature, with
                 // description HTML from its properties.
                 map.on('click', 'unclustered-point', (e) => {
-                    const coordinates = e.features[0].geometry.coordinates.slice();
-                    const mag = e.features[0].properties.mag;
-                    const tsunami =
+                    var coordinates = e.features[0].geometry.coordinates.slice();
+                    var mag = e.features[0].properties.mag;
+                    var tsunami =
                         e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
 
                     // Ensure that if the map is zoomed out such that
@@ -605,35 +617,36 @@
                         .addTo(map);
                 });
             }
-            const nav = new mapboxgl.NavigationControl();
+            var nav = new mapboxgl.NavigationControl();
             map.addControl(nav, 'top-right');
 
-
-            class RelocateControl {
-                onAdd(map) {
-                    this.map = map;
-                    this.container = document.createElement('div');
-                    this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
-                    this.container.innerHTML = `
+            if (typeof window.RelocateControl === 'undefined') {
+                class RelocateControl {
+                    onAdd(map) {
+                        this.map = map;
+                        this.container = document.createElement('div');
+                        this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+                        this.container.innerHTML = `
                     <button id="relocateBtn" type="button" title="Relocate" style="padding:3px;">
                         <img src="{{ asset('images/current-location-10.svg') }}">
                     </button>
                 `;
-                    this.container.querySelector('#relocateBtn').addEventListener('click', () => {
-                        map.easeTo({
-                            center: userCoordinates,
-                            zoom: 10,
-                            duration: 500
+                        this.container.querySelector('#relocateBtn').addEventListener('click', () => {
+                            map.easeTo({
+                                center: userCoordinates,
+                                zoom: 10,
+                                duration: 500
+                            });
                         });
-                    });
-                    return this.container;
+                        return this.container;
+                    }
+                    onRemove() {
+                        this.container.parentNode.removeChild(this.container);
+                        this.map = undefined;
+                    }
                 }
-                onRemove() {
-                    this.container.parentNode.removeChild(this.container);
-                    this.map = undefined;
-                }
+                map.addControl(new RelocateControl(), 'top-right');
             }
-            map.addControl(new RelocateControl(), 'top-right');
 
             map.on("load", () => {
 
@@ -642,18 +655,18 @@
 
             });
             map.on('moveend', () => {
-                const zoomLevel = map.getZoom();
+                var zoomLevel = map.getZoom();
                 this.makeMarker();
 
-                const bounds = map.getBounds();
-                const southWest = bounds.getSouthWest();
-                const northEast = bounds.getNorthEast();
-                const latRange = [southWest.lat, northEast.lat];
-                const lngRange = [southWest.lng, northEast.lng];
+                var bounds = map.getBounds();
+                var southWest = bounds.getSouthWest();
+                var northEast = bounds.getNorthEast();
+                var latRange = [southWest.lat, northEast.lat];
+                var lngRange = [southWest.lng, northEast.lng];
 
 
-                const urlParams = new URLSearchParams(window.location.search);
-                const datetimes = urlParams.get('datetimes') || '';
+                var urlParams = new URLSearchParams(window.location.search);
+                var datetimes = urlParams.get('datetimes') || '';
 
 
 

@@ -1,91 +1,99 @@
-@if($viewMode=="grid")
-<div class="row">
-    @foreach($data as $key=>$value)
-        <div class="col-lg-4 mb-3">
-            <div class="feat_card_bx grid-view">
-                <a href="{{route('serviceDetails',@$value->id)}}">
-                    <div class="image">
-                        <img src="{{(@$value->image->first())?asset('storage/'.@$value->image->first()->image):asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
-                        {{-- <span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span> --}}
-                    </div>
-                </a>
-                <div class="content">
-                    <a href="{{route('serviceDetails',@$value->id)}}">
-                        <h3>
-                            {{@$value->title}}
-                            {{-- {{@$value->title}} | {{@$value->productDetail->age}} | {{@$value->height->commonMaster->name}} <br />
+@if ($viewMode == 'grid')
+    <div class="row">
+        @foreach ($data as $key => $value)
+            <div class="col-lg-4 mb-3">
+                <div class="feat_card_bx grid-view">
+                    <a href="{{ route('serviceDetails', @$value->id) }}">
+                        <div class="image">
+                            <img src="{{ @$value->image->first() ? asset('storage/' . @$value->image->first()->image) : asset('front/home/assets/images/logo/logo.svg') }}"
+                                alt="hourse-image">
+                            {{-- <span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span> --}}
+                        </div>
+                    </a>
+                    <div class="content">
+                        <a href="{{ route('serviceDetails', @$value->id) }}">
+                            <h3>
+                                {{ @$value->title }}
+                                {{-- {{@$value->title}} | {{@$value->productDetail->age}} | {{@$value->height->commonMaster->name}} <br />
                             {{ @$value->breeds->map(function($breed) {
                                 return optional($breed->commonMaster)->name;
                             })->filter()->implode(' | ') }} --}}
-                        </h3>
-                    </a>
+                            </h3>
+                        </a>
 
-                    {{-- <h4>Call For Price</h4> --}}
-                    <h4>Houlry Pay: ${{number_format(@$value->productDetail->hourly_price)}} </h4>
-                    <h4>Fixed Pay: ${{number_format(@$value->productDetail->fixed_price)}} </h4>
-                    <h4>Salary Price: ${{number_format(@$value->productDetail->salary)}} </h4>
+                        {{-- <h4>Call For Price</h4> --}}
+                        <h4>Houlry Pay: ${{ number_format(@$value->productDetail->hourly_price) }} </h4>
+                        <h4>Fixed Pay: ${{ number_format(@$value->productDetail->fixed_price) }} </h4>
+                        <h4>Salary Price: ${{ number_format(@$value->productDetail->salary) }} </h4>
 
-                    {{-- <span class="sp1"></span> --}}
-                    <div class="location">
-                        <img src="{{asset('front/home/assets/images/icons/loction_icn.svg')}}" alt="location-icon" />
-                        <span>{{@$value->productDetail->city}}, {{@$value->productDetail->state}}, {{@$value->productDetail->country}} <br />
-                            Dates Available : {{ @$value->triedUpcomingShows->map(function($upcoming) {
+                        {{-- <span class="sp1"></span> --}}
+                        <div class="location">
+                            <img src="{{ asset('front/home/assets/images/icons/loction_icn.svg') }}"
+                                alt="location-icon" />
+                            <span>{{ @$value->productDetail->city }}, {{ @$value->productDetail->state }},
+                                {{ @$value->productDetail->country }} <br />
+                                Dates Available :
+                                {{ @$value->triedUpcomingShows->map(function ($upcoming) {
                                         return optional($upcoming->commonMaster)->name;
                                     })->filter()->implode(' | ') }}
 
-                            @if(@$value->productDetail->fromdate)
-                                <br/>
-                                ({{ format_date(@$value->productDetail->fromdate).' - '.format_date(@$value->productDetail->todate)}})
-                            @endif
-                        </span>
-                    </div>
-                    <div class="foot">
-                        <div class="bx">
-                            <div class="imagee">
-                                <img src="{{(@$value->user->profile_photo_path)?asset('storage/'.@$value->user->profile_photo_path):asset('front/auth/assets/img/user-img.png')}}" class="user-img" alt="">
-                            </div>
-                            <div class="content">
-                                <h4>{{@$value->user->name}}</h4>
-                                <div class="stars">
-                                    @php
-                                        $averageRating = round(optional(@$value->user->reviews)->avg('rating'), 1);
-                                        $totalReviews  = optional(@$value->user->reviews)->count();
-                                    @endphp 
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <i class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
-                                    @endfor
-                                    <!-- <i class="fa-solid fa-star"></i>
+                                @if (@$value->productDetail->fromdate)
+                                    <br />
+                                    ({{ format_date(@$value->productDetail->fromdate) . ' - ' . format_date(@$value->productDetail->todate) }})
+                                @endif
+                            </span>
+                        </div>
+                        <div class="foot">
+                            <div class="bx">
+                                <div class="imagee">
+                                    <img src="{{ @$value->user->profile_photo_path ? asset('storage/' . @$value->user->profile_photo_path) : asset('front/auth/assets/img/user-img.png') }}"
+                                        class="user-img" alt="">
+                                </div>
+                                <div class="content">
+                                    <h4>{{ @$value->user->name }}</h4>
+                                    <div class="stars">
+                                        @php
+                                            $averageRating = round(optional(@$value->user->reviews)->avg('rating'), 1);
+                                            $totalReviews = optional(@$value->user->reviews)->count();
+                                        @endphp
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <i
+                                                class="bi bi-star-fill {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
+                                        @endfor
+                                        <!-- <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i> -->
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="bx2">
-                            <button class="compare-add-button" data-id="{{$value->id}}">
-                                <img src="{{asset('front/home/assets/images/icons/re_icn.svg')}}" alt="" />
-                            </button>
+                            <div class="bx2">
+                                <button class="compare-add-button" data-id="{{ $value->id }}">
+                                    <img src="{{ asset('front/home/assets/images/icons/re_icn.svg') }}"
+                                        alt="" />
+                                </button>
 
-                            {{--<button>
+                                {{-- <button>
                                 <img src="{{asset('front/home/assets/images/icons/like_icn.svg')}}" alt="" />
-                            </button>--}}
-                            <button class="favorite-btn {{ $value->favorites->where('user_id', auth()->id())->count() ? 'favorited' : '' }}" data-product-id="{{ $value->id }}">
-                                @if($value->favorites->where('user_id', auth()->id())->count() > 0)
-                                    <i class="fa-solid fa-heart"></i>
-                                @else
-                                <i class="fa-regular fa-heart favorited"></i>
-                                @endif
-                            </button>
+                            </button> --}}
+                                <button
+                                    class="favorite-btn {{ $value->favorites->where('user_id', auth()->id())->count() ? 'favorited' : '' }}"
+                                    data-product-id="{{ $value->id }}">
+                                    @if ($value->favorites->where('user_id', auth()->id())->count() > 0)
+                                        <i class="fa-solid fa-heart"></i>
+                                    @else
+                                        <i class="fa-regular fa-heart favorited"></i>
+                                    @endif
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>              
+                </div>
             </div>
-        </div>
-    @endforeach
-</div>
+        @endforeach
+    </div>
 @else
-
     <div class="col-lg-8">
         <div class="map-info">
             <div>
@@ -113,7 +121,7 @@
             <div class="horsescard-popup" id="popupCard">
                 <div class="inner-box">
 
-                    <img src="{{asset('front/home/assets/images/featured_hource1.png')}}" id="popupImage" />
+                    <img src="{{ asset('front/home/assets/images/featured_hource1.png') }}" id="popupImage" />
                     <div class="info" id="popupInfo"></div>
                 </div>
                 <span class="close-btn" onclick="closePopup()">×</span>
@@ -121,49 +129,53 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-lg-4">
-        @foreach($data as $key=>$value)
+        @foreach ($data as $key => $value)
             <div class="feat_card_bx list-page-card">
-                <a href="{{route('serviceDetails',@$value->id)}}">
+                <a href="{{ route('serviceDetails', @$value->id) }}">
                     <div class="imagelist">
-                        <img src="{{(@$value->image->first())?asset('storage/'.@$value->image->first()->image):asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
+                        <img src="{{ @$value->image->first() ? asset('storage/' . @$value->image->first()->image) : asset('front/home/assets/images/logo/logo.svg') }}"
+                            alt="hourse-image">
                     </div>
                 </a>
 
                 <div class="content">
-                    <a href="{{route('serviceDetails',@$value->id)}}">
+                    <a href="{{ route('serviceDetails', @$value->id) }}">
                         <h3>
-                            {{@$value->title}}
+                            {{ @$value->title }}
                         </h3>
                     </a>
 
-                    <h4>Houlry Pay: ${{number_format(@$value->productDetail->hourly_price)}} </h4>
-                    <h4>Fixed Pay: ${{number_format(@$value->productDetail->fixed_price)}} </h4>
-                    <h4>Salary Price: ${{number_format(@$value->productDetail->salary)}} </h4>
+                    <h4>Houlry Pay: ${{ number_format(@$value->productDetail->hourly_price) }} </h4>
+                    <h4>Fixed Pay: ${{ number_format(@$value->productDetail->fixed_price) }} </h4>
+                    <h4>Salary Price: ${{ number_format(@$value->productDetail->salary) }} </h4>
 
                     {{-- <span class="sp1"></span> --}}
                     <div class="location">
-                        <img src="{{asset('front/home/assets/images/icons/loction_icn.svg')}}" alt="location-icon" />
-                        <span>{{@$value->productDetail->city}}, {{@$value->productDetail->state}}, {{@$value->productDetail->country}} <br />
-                            Dates Available : {{ @$value->triedUpcomingShows->map(function($upcoming) {
-                                        return optional($upcoming->commonMaster)->name;
-                                    })->filter()->implode(' | ') }}
+                        <img src="{{ asset('front/home/assets/images/icons/loction_icn.svg') }}" alt="location-icon" />
+                        <span>{{ @$value->productDetail->city }}, {{ @$value->productDetail->state }},
+                            {{ @$value->productDetail->country }} <br />
+                            Dates Available :
+                            {{ @$value->triedUpcomingShows->map(function ($upcoming) {
+                                    return optional($upcoming->commonMaster)->name;
+                                })->filter()->implode(' | ') }}
 
-                            @if(@$value->productDetail->fromdate)
-                                <br/>
-                                ({{ format_date(@$value->productDetail->fromdate).' - '.format_date(@$value->productDetail->todate)}})
+                            @if (@$value->productDetail->fromdate)
+                                <br />
+                                ({{ format_date(@$value->productDetail->fromdate) . ' - ' . format_date(@$value->productDetail->todate) }})
                             @endif
                         </span>
                     </div>
 
                     <div class="foot">
                         <div class="bx">
-                             <div class="imagee">
-                                <img src="{{(@$value->user->profile_photo_path)?asset('storage/'.@$value->user->profile_photo_path):asset('front/auth/assets/img/user-img.png')}}" class="user-img" alt="">
+                            <div class="imagee">
+                                <img src="{{ @$value->user->profile_photo_path ? asset('storage/' . @$value->user->profile_photo_path) : asset('front/auth/assets/img/user-img.png') }}"
+                                    class="user-img" alt="">
                             </div>
                             <div class="content">
-                                    <h4>{{@$value->user->name}}</h4>
+                                <h4>{{ @$value->user->name }}</h4>
                                 <div class="stars">
                                     <i class="fa-solid fa-star"></i>
                                     <i class="fa-solid fa-star"></i>
@@ -174,15 +186,17 @@
                             </div>
                         </div>
                         <div class="bx2">
-                            <button class="compare-add-button" data-id="{{$value->id}}">
-                                <img src="{{asset('front/home/assets/images/icons/re_icn.svg')}}" alt="" />
+                            <button class="compare-add-button" data-id="{{ $value->id }}">
+                                <img src="{{ asset('front/home/assets/images/icons/re_icn.svg') }}" alt="" />
                             </button>
 
-                            <button class="favorite-btn {{ $value->favorites->where('user_id', auth()->id())->count() ? 'favorited' : '' }}" data-product-id="{{ $value->id }}">
-                                @if($value->favorites->where('user_id', auth()->id())->count() > 0)
+                            <button
+                                class="favorite-btn {{ $value->favorites->where('user_id', auth()->id())->count() ? 'favorited' : '' }}"
+                                data-product-id="{{ $value->id }}">
+                                @if ($value->favorites->where('user_id', auth()->id())->count() > 0)
                                     <i class="fa-solid fa-heart"></i>
                                 @else
-                                <i class="fa-regular fa-heart favorited"></i>
+                                    <i class="fa-regular fa-heart favorited"></i>
                                 @endif
                             </button>
                         </div>
@@ -201,12 +215,12 @@
             (function() {
 
 
-                let map; // global map reference
-                let currentPopup = null; // to keep track of the currently opened popup
+                var map; // global map reference
+                var currentPopup = null; // to keep track of the currently opened popup
 
                 // Reverse geocode to get human-readable location from lat,lng and set input value
                 function reverseGeocode(lat, lng) {
-                    const url =
+                    var url =
                         `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxAccessToken}`;
 
                     fetch(url)
@@ -214,13 +228,13 @@
                         .then(data => {
                             if (data.features && data.features.length > 0) {
                                 // Use the place_name of the first feature as the location string
-                                const placeName = data.features[0].place_name;
-                                const mapLocationInput = document.getElementById('map-location');
+                                var placeName = data.features[0].place_name;
+                                var mapLocationInput = document.getElementById('map-location');
                                 if (mapLocationInput) {
                                     mapLocationInput.value = placeName;
                                 }
 
-                                const locationInput = document.getElementById('location');
+                                var locationInput = document.getElementById('location');
                                 if (locationInput) {
                                     locationInput.value = placeName;
                                 }
@@ -232,15 +246,15 @@
                 }
 
 
-                const urlParams = new URLSearchParams(window.location.search);
+                var urlParams = new URLSearchParams(window.location.search);
                 // Default or from URL
-                let lat = parseFloat(urlParams.get('latitude')) || 26.8467;
-                let lng = parseFloat(urlParams.get('longitude')) || 75.7647;
-                const selectedCategory = urlParams.get('category') || '1';
+                var lat = parseFloat(urlParams.get('latitude')) || 26.8467;
+                var lng = parseFloat(urlParams.get('longitude')) || 75.7647;
+                var selectedCategory = urlParams.get('category') || '1';
 
                 // Elements to store lat and lng values
-                const latInput = document.getElementById('latitude');
-                const lngInput = document.getElementById('longitude');
+                var latInput = document.getElementById('latitude');
+                var lngInput = document.getElementById('longitude');
 
                 // Try to get user's current location via Geolocation API
                 if (navigator.geolocation) {
@@ -284,9 +298,9 @@
                     fetchEventsByCategory(selectedCategory);
                 }
             })
-            let userCoordinates = [75.769446, 26.836992];
+            var userCoordinates = [75.769446, 26.836992];
             mapboxgl.accessToken = '{{ env('MAPBOX_ACCESS_TOKEN') }}';
-            const map = new mapboxgl.Map({
+            var map = new mapboxgl.Map({
                 container: 'map',
                 center: userCoordinates,
                 style: "mapbox://styles/mapbox/standard",
@@ -299,33 +313,40 @@
                 bearing: -60
             });
 
-            const events = @json($data);
-            let horseList = events.data;
+            var events = @json($data);
+            var horseList = events.data;
 
 
 
-            const eventGroups = {};
-            const allData = [];
+            var eventGroups = {};
+            var allData = [];
             horseList.forEach(event => {
 
                 if (event.product_detail) {
 
-                    if (event.product_detail.latitude && event.product_detail.longitude) {
-                        const latLng = `${event.product_detail.latitude},${event.product_detail.longitude}`;
+                    if (event.product_detail?.latitude && event.product_detail?.longitude) {
+                        var latLng = `${event.product_detail?.latitude},${event.product_detail?.longitude}`;
+                          var latLng1 = `${event.product_detail.trail_latitude},${event.product_detail.trail_longitude}`;
 
                         if (!eventGroups[latLng]) {
                             eventGroups[latLng] = [];
                         }
                         eventGroups[latLng].push(event);
-                        let object = {};
+                        if (!eventGroups[latLng1]) {
+                            eventGroups[latLng1] = [];
+                        }
+                        eventGroups[latLng1].push(event);
+                        var object = {};
                         object.title = event.title;
                         object.price = event.price;
                         object.description = event.description;
                         object.image = event.image && event.image.length > 0 ? event.image[0].image : '';
-                        object.address = event.product_detail ? (event.product_detail.street + ' ' + event
+                        object.address = event.product_detail ? (event.product_detail?.street + ' ' + event
                             .product_detail.city) : '';
-                        object.latitude = event.product_detail ? (event.product_detail.latitude) : '';
-                        object.longitude = event.product_detail ? (event.product_detail.longitude) : '';
+                        object.latitude = event.product_detail ? (event.product_detail?.latitude) : '';
+                        object.longitude = event.product_detail ? (event.product_detail?.longitude) : '';
+                        object.trail_longitude = event.product_detail ? (event.product_detail.trail_longitude) : '';
+                        object.trail_latitude = event.product_detail ? (event.product_detail.trail_latitude) : '';
                         allData.push(object)
                     }
 
@@ -334,10 +355,10 @@
             console.log('allData', allData)
 
             function getUniqueFeatures(features, comparatorProperty) {
-                const uniqueIds = new Set();
-                const uniqueFeatures = [];
-                for (const feature of features) {
-                    const id = feature.properties[comparatorProperty];
+                var uniqueIds = new Set();
+                var uniqueFeatures = [];
+                for (var feature of features) {
+                    var id = feature.properties[comparatorProperty];
                     if (!uniqueIds.has(id)) {
                         uniqueIds.add(id);
                         uniqueFeatures.push(feature);
@@ -354,44 +375,50 @@
 
                 }
                 customMarkers = [];
-                const features = map.queryRenderedFeatures({
+                var features = map.queryRenderedFeatures({
                     layers: ['unclustered-point']
                 });
                 console.log('features', features);
-                const markerIconUrl = "http://192.168.5.41/elit-equine-new/EliteEquine/public/images/marker_map_icon.svg";
-                const uniqueFeatures = getUniqueFeatures(features, 'venue_name');
+
+                var uniqueFeatures = getUniqueFeatures(features, 'venue_name');
                 console.log('uniqueFeatures', uniqueFeatures);
                 uniqueFeatures.forEach(feature => {
-                    const coordinates = feature.geometry.coordinates;
-                    const {
+                    var coordinates = feature.geometry.coordinates;
+                    var {
                         venue_name,
                         venue_address,
                         latitude,
+                        isTrail,
                         longitude
                     } = feature.properties;
                     console.log(coordinates, "coordinates");
+                    if (isTrail == 1) {
+                        var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/Services Jobs Red.png";
+                    } else {
+                        var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/Services Jobs Blue.png";
+                    }
                     // Create a custom HTML element for the marker
-                    const markerElement = document.createElement('div');
+                    var markerElement = document.createElement('div');
                     markerElement.className = 'red-circle-marker';
 
-                    const markerImage = document.createElement('img');
+                    var markerImage = document.createElement('img');
                     markerImage.src = markerIconUrl;
                     markerImage.alt = "Marker";
                     markerImage.className = "marker-image";
 
                     markerElement.appendChild(markerImage);
 
-                    const venueName = document.createElement('span');
+                    var venueName = document.createElement('span');
                     venueName.className = 'marker-venue-name';
-                    venueName.innerText = venue_name;
+                    //venueName.innerText = venue_name;
                     markerElement.appendChild(venueName);
 
-                    let marker = new mapboxgl.Marker(markerElement).setLngLat([coordinates[0], coordinates[1]]).addTo(
+                    var marker = new mapboxgl.Marker(markerElement).setLngLat([coordinates[0], coordinates[1]]).addTo(
                         map);
 
-                    const latLng = `${latitude},${longitude}`;
-                    const eventsAtLocation = eventGroups[latLng];
-                    let popupContent = '';
+                    var latLng = `${latitude},${longitude}`;
+                    var eventsAtLocation = eventGroups[latLng];
+                    var popupContent = '';
                     console.log(latitude, longitude, "SSSS")
                     console.log(latLng, 'latLng')
                     console.log(eventGroups[latLng])
@@ -399,50 +426,50 @@
                     eventsAtLocation.forEach(event => {
 
 
-                        const ticketPrice = event.price ? `Starts from $${event.price}` :
+                        var ticketPrice = event.price ? `Starts from $${event.price}` :
                             'Price not available';
 
-                        //const ticketUrl = isAuthenticated ? (event.ticket_sale_link || '#') : loginRoute;
-                        // const eventImage = event.image && event.image.length > 0  ?"{{ url('/') }}/"+ event.image[0].image : '{{ url('/') }}/public/front/home/assets/images/logo/logo.svg' ;
-                        const eventImage = "{{ url('/') }}/front/home/assets/images/logo/logo.svg";
-                        const baseUrl = "{{ url('/') }}";
-                        const authUserId = '{{auth()->id()}}';
-                        const reviews = event?.user?.reviews;
+                        //var ticketUrl = isAuthenticated ? (event.ticket_sale_link || '#') : loginRoute;
+                        // var eventImage = event.image && event.image.length > 0  ?"{{ env('MAP_PUBLIC') }}/"+ event.image[0].image : '{{ env('MAP_PUBLIC') }}/public/front/home/assets/images/logo/logo.svg' ;
+                        var eventImage = "{{ env('MAP_PUBLIC') }}/front/home/assets/images/logo/logo.svg";
+                        var baseUrl = "{{ url('/') }}";
+                        var authUserId = '{{ auth()->id() }}';
+                        var reviews = event?.user?.reviews;
 
-                        const averageRating = Array.isArray(reviews) && reviews.length > 0
-                            ? Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length)
-                            : 0;
+                        var averageRating = Array.isArray(reviews) && reviews.length > 0 ?
+                            Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) :
+                            0;
 
-                        const imageSrc = event.image?.[0]?.image
-                            ? `${baseUrl}/storage/${event.image[0].image}`
-                            : `${baseUrl}/front/home/assets/images/logo/logo.svg`;
+                        var imageSrc = event.image?.[0]?.image ?
+                            `${baseUrl}/public/storage/${event.image[0].image}` :
+                            `${baseUrl}/public/front/home/assets/images/logo/logo.svg`;
 
-                        const profileSrc = event.user?.profile_photo_path
-                            ? `${baseUrl}/storage/${event.user.profile_photo_path}`
-                            : `${baseUrl}/front/auth/assets/img/user-img.png`;
+                        var profileSrc = event.user?.profile_photo_path ?
+                            `${baseUrl}/public/storage/${event.user.profile_photo_path}` :
+                            `${baseUrl}/public/front/auth/assets/img/user-img.png`;
 
-                        const favorites = event.favorites || [];
-                        const isFavorited = favorites.some(fav => fav.user_id === authUserId);
+                        var favorites = event.favorites || [];
+                        var isFavorited = favorites.some(fav => fav.user_id === authUserId);
 
-                        const upcomingDates = (event.tried_upcoming_shows || [])
+                        var upcomingDates = (event.tried_upcoming_shows || [])
                             .map(u => u.common_master?.name)
                             .filter(Boolean)
                             .join(" | ");
 
-                        const fromDate = event.product_detail?.fromdate
-                            ? `(${formatDate(event.product_detail.fromdate)} - ${formatDate(event.product_detail.todate)})`
-                            : "";
+                        var fromDate = event.product_detail?.fromdate ?
+                            `(${formatDate(event.product_detail?.fromdate)} - ${formatDate(event.product_detail?.todate)})` :
+                            "";
 
-                        const eventUrl = `${baseUrl}/eventdetail/${event.id}`;
-                        const maxLength = 40;
-                        const descriptionText = event.description || '';
-                        const truncatedDescription = descriptionText.length > maxLength ?
+                        var eventUrl = `${baseUrl}/eventdetail/${event.id}`;
+                        var maxLength = 40;
+                        var descriptionText = event.description || '';
+                        var truncatedDescription = descriptionText.length > maxLength ?
                             descriptionText.substring(0, maxLength) + "..." :
                             descriptionText;
                         console.log(event);
-                        let venueHtml = '';
+                        var venueHtml = '';
                         if (event.title && event.title) {
-                            const venueDetailUrl = "url".replace(':id', event.id);
+                            var venueDetailUrl = "url".replace(':id', event.id);
                             venueHtml = `
                             <div class="venue-name-new">
                                 <a href="${venueDetailUrl}" target="_blank" class="venue-name-new-ic">
@@ -465,14 +492,14 @@
                                 <h3>${event.title}</h3>
                                 </a>
 
-                                <h4>Houlry Pay: $${Number(event.product_detail.hourly_price).toLocaleString()}</h4>
-                                <h4>Fixed Pay: $${Number(event.product_detail.fixed_price).toLocaleString()}</h4>
-                                <h4>Salary Price: $${Number(event.product_detail.salary).toLocaleString()}</h4>
+                                <h4>Houlry Pay: $${Number(event.product_detail?.hourly_price).toLocaleString()}</h4>
+                                <h4>Fixed Pay: $${Number(event.product_detail?.fixed_price).toLocaleString()}</h4>
+                                <h4>Salary Price: $${Number(event.product_detail?.salary).toLocaleString()}</h4>
 
                                 <div class="location">
-                                <img src="/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
+                               <img src="${baseUrl}/public/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
                                 <span>
-                                    ${event.product_detail.city}, ${event.product_detail.state}, ${event.product_detail.country}<br/>
+                                    ${event.product_detail?.city}, ${event.product_detail?.state}, ${event.product_detail?.country}<br/>
                                     Dates Available: ${upcomingDates}<br/>
                                     ${fromDate}
                                 </span>
@@ -499,13 +526,13 @@
                             </div>
                         `;
                     });
-                    const popup = new mapboxgl.Popup({
+                    var popup = new mapboxgl.Popup({
                             offset: 25
                         })
                         .setHTML(popupContent);
                     popup.on('open', () => {
 
-                        const popupElement = document.querySelector('.mapboxgl-popup-content');
+                        var popupElement = document.querySelector('.mapboxgl-popup-content');
                     });
                     marker.setPopup(popup);
 
@@ -518,30 +545,52 @@
             }
 
             function formatDate(dateString) {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                var date = new Date(dateString);
+                return date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
             }
 
             function addClusterView() {
-                const seenCoords = new Set();
+                var seenCoords = new Set();
 
-                const eventsfeature = allData.map((event) => ({
-
-                    type: "Feature",
-                    geometry: {
-                        type: "Point",
-                        coordinates: [
-                            parseFloat(event.longitude),
-                            parseFloat(event.latitude),
-                        ],
+                var eventsfeature = allData.flatMap((event) => [{
+                        type: "Feature",
+                        geometry: {
+                            type: "Point",
+                            coordinates: [
+                                parseFloat(event.longitude),
+                                parseFloat(event.latitude),
+                            ],
+                        },
+                        properties: {
+                            venue_name: event.title || "Unknown Venue",
+                            venue_address: event.address || "No Address",
+                            latitude: event.latitude || "No Address",
+                            longitude: event.longitude || "No Address",
+                            isTrail: 0,
+                        },
                     },
-                    properties: {
-                        venue_name: event.title || "Unknown Venue",
-                        venue_address: event.address || "No Address",
-                        latitude: event.latitude || "No Address",
-                        longitude: event.longitude || "No Address",
-                    },
-                }));
+                    {
+                        type: "Feature",
+                        geometry: {
+                            type: "Point",
+                            coordinates: [
+                                parseFloat(event.trail_longitude),
+                                parseFloat(event.trail_latitude),
+                            ],
+                        },
+                        properties: {
+                            venue_name: event.title || "Unknown Venue",
+                            venue_address: event.address || "No Address",
+                            latitude: event.trail_latitude || "No Address",
+                            longitude: event.trail_longitude || "No Address",
+                            isTrail: 1,
+                        },
+                    }
+                ]);
                 console.log("eventsfeature", eventsfeature)
                 map.addSource("clusterEvent", {
                     type: "geojson",
@@ -620,10 +669,10 @@
                 }, 1000);
                 // inspect a cluster on click
                 map.on('click', 'clusters', (e) => {
-                    const features = map.queryRenderedFeatures(e.point, {
+                    var features = map.queryRenderedFeatures(e.point, {
                         layers: ['clusters']
                     });
-                    const clusterId = features[0].properties.cluster_id;
+                    var clusterId = features[0].properties.cluster_id;
                     map.getSource('clusterEvent').getClusterExpansionZoom(
                         clusterId,
                         (err, zoom) => {
@@ -642,9 +691,9 @@
                 // the location of the feature, with
                 // description HTML from its properties.
                 map.on('click', 'unclustered-point', (e) => {
-                    const coordinates = e.features[0].geometry.coordinates.slice();
-                    const mag = e.features[0].properties.mag;
-                    const tsunami =
+                    var coordinates = e.features[0].geometry.coordinates.slice();
+                    var mag = e.features[0].properties.mag;
+                    var tsunami =
                         e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
 
                     // Ensure that if the map is zoomed out such that
@@ -664,35 +713,36 @@
                         .addTo(map);
                 });
             }
-            const nav = new mapboxgl.NavigationControl();
+            var nav = new mapboxgl.NavigationControl();
             map.addControl(nav, 'top-right');
 
-
-            class RelocateControl {
-                onAdd(map) {
-                    this.map = map;
-                    this.container = document.createElement('div');
-                    this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
-                    this.container.innerHTML = `
+            if (typeof window.RelocateControl === 'undefined') {
+                class RelocateControl {
+                    onAdd(map) {
+                        this.map = map;
+                        this.container = document.createElement('div');
+                        this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+                        this.container.innerHTML = `
                     <button id="relocateBtn" type="button" title="Relocate" style="padding:3px;">
                         <img src="{{ asset('images/current-location-10.svg') }}">
                     </button>
                 `;
-                    this.container.querySelector('#relocateBtn').addEventListener('click', () => {
-                        map.easeTo({
-                            center: userCoordinates,
-                            zoom: 10,
-                            duration: 500
+                        this.container.querySelector('#relocateBtn').addEventListener('click', () => {
+                            map.easeTo({
+                                center: userCoordinates,
+                                zoom: 10,
+                                duration: 500
+                            });
                         });
-                    });
-                    return this.container;
+                        return this.container;
+                    }
+                    onRemove() {
+                        this.container.parentNode.removeChild(this.container);
+                        this.map = undefined;
+                    }
                 }
-                onRemove() {
-                    this.container.parentNode.removeChild(this.container);
-                    this.map = undefined;
-                }
+                map.addControl(new RelocateControl(), 'top-right');
             }
-            map.addControl(new RelocateControl(), 'top-right');
 
             map.on("load", () => {
 
@@ -701,18 +751,18 @@
 
             });
             map.on('moveend', () => {
-                const zoomLevel = map.getZoom();
+                var zoomLevel = map.getZoom();
                 this.makeMarker();
 
-                const bounds = map.getBounds();
-                const southWest = bounds.getSouthWest();
-                const northEast = bounds.getNorthEast();
-                const latRange = [southWest.lat, northEast.lat];
-                const lngRange = [southWest.lng, northEast.lng];
+                var bounds = map.getBounds();
+                var southWest = bounds.getSouthWest();
+                var northEast = bounds.getNorthEast();
+                var latRange = [southWest.lat, northEast.lat];
+                var lngRange = [southWest.lng, northEast.lng];
 
 
-                const urlParams = new URLSearchParams(window.location.search);
-                const datetimes = urlParams.get('datetimes') || '';
+                var urlParams = new URLSearchParams(window.location.search);
+                var datetimes = urlParams.get('datetimes') || '';
 
 
 
@@ -723,49 +773,49 @@
 
 <script>
     // add favorite
-        $('.favorite-btn').on('click', function(e) {
-            e.preventDefault();
+    $('.favorite-btn').on('click', function(e) {
+        e.preventDefault();
 
-            let productId = $(this).data('product-id');
-            let url = `{{ url('favorite') }}`+'/'+ productId;
-            let $btn = $(this);
+        var productId = $(this).data('product-id');
+        var url = `{{ url('favorite') }}` + '/' + productId;
+        var $btn = $(this);
 
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    // alert(response.message);
-                    if (response.favorited) {
-                        $btn.addClass('favorited');  
-                        $btn.find("i").addClass('fa-solid').removeClass('fa-regular favorited');
-                    } else {
-                        $btn.removeClass('favorited');
-                        $btn.find("i").addClass('fa-regular favorited').removeClass('fa-solid');
-                    }
-                },
-                error: function(xhr) {
-                    if (xhr.status === 401) {
-                        Swal.fire({
-                            title: "Elite Equine",
-                            text: "Please login to add favorite.",
-                            imageUrl: "{{ asset('front/home/assets/images/add-favorite.svg') }}",
-                            imageWidth: 400,
-                            imageHeight: 200,
-                            imageAlt: "Elite Equine",
-                            // This disables the default Swal styling for confirm button
-                            customClass: {
-                                confirmButton: 'commen_btn'
-                            },
-                            buttonsStyling: false, // <--- disables SweetAlert's built-in styling
-                            confirmButtonText: "<a href='{{ route('login') }}' class='commen_btn'>Login</a>"
-                        });
-                    } else {
-                        alert('Something went wrong.');
-                    }
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                // alert(response.message);
+                if (response.favorited) {
+                    $btn.addClass('favorited');
+                    $btn.find("i").addClass('fa-solid').removeClass('fa-regular favorited');
+                } else {
+                    $btn.removeClass('favorited');
+                    $btn.find("i").addClass('fa-regular favorited').removeClass('fa-solid');
                 }
-            });
+            },
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    Swal.fire({
+                        title: "EliteQuine",
+                        text: "Please login to add favorite.",
+                        imageUrl: "{{ asset('front/home/assets/images/add-favorite.svg') }}",
+                        imageWidth: 400,
+                        imageHeight: 200,
+                        imageAlt: "EliteQuine",
+                        // This disables the default Swal styling for confirm button
+                        customClass: {
+                            confirmButton: 'commen_btn'
+                        },
+                        buttonsStyling: false, // <--- disables SweetAlert's built-in styling
+                        confirmButtonText: "<a href='{{ route('login') }}' class='commen_btn'>Login</a>"
+                    });
+                } else {
+                    alert('Something went wrong.');
+                }
+            }
         });
+    });
 </script>

@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('product_details', function (Blueprint $table) {
-            //
+        Schema::create('product_subcategory', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('product_id')->nullable()->index();
+            $table->foreignId('category_id')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('product_details', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('product_subcategory');
     }
 };

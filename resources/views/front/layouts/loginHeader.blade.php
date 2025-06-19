@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Elite Equine - @yield('title')</title>
+    <title>EliteQuine - @yield('title')</title>
     <link rel="icon" type="image/x-icon" href="{{asset('front/home/assets/images/logo/favicon.svg')}}" />
     <!-------------------------------- Css Links ------------------------------------>
     <link rel="stylesheet" href="{{asset('front/home/assets/Bootstrap/bootstrap.min.css')}}" />
@@ -31,7 +31,7 @@
     <!-------------------------------- Header ------------------------------------>
     <header class="header-inner position-sticky">
         <nav class="navbar navbar-expand-xl">
-            <div class="container">
+            <div class="container-fluid">
                 <a class="navbar-brand" href="{{route('home')}}">
                     <img src="{{asset('front/home/assets/images/logo/logo.svg')}}" alt="" /></a>
                 <div class="d-lg-none">

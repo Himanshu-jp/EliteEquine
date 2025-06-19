@@ -41,7 +41,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::with(['user', 'category', 'subcategory'])->findOrFail($id);
+        $product = Product::with(['user', 'category', 'subcategory.category'])->findOrFail($id);
         return view('admin.products.show', compact('product'));
     }
 

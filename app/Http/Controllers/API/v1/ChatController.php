@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use App\Services\API\v1\CategoryService;
 use App\Http\Controllers\API\v1\BaseController;
+use App\Jobs\EmailSendJob;
 
 use App\Models\{User,Conveniencs,ChatUser,Chat};
 use Illuminate\Http\Request;
@@ -113,7 +114,7 @@ class ChatController extends BaseController
         if (!isset($convenien)) {
             $convenien = new Conveniencs;
             $convenien->type = 'SINGLE';
-            $convenien->group_name = 'Elite Equine';
+            $convenien->group_name = 'EliteQuine';
             $convenien->ticket_type = 'Single';
             $convenien->ticket_id = 0;
             $convenien->last_message = '';
@@ -221,6 +222,21 @@ class ChatController extends BaseController
             $chat->file_type = $request->type;
             
             
+            
+            $usre_id=$request->user_id;
+            $Senderdetails=User::where('id',$usre_id)->first();
+$snder_name=$Senderdetails->name;
+
+            $receiverr=$request->to_id;
+
+$userdetails=User::where('id',$receiverr)->first();
+    $mainUseData = ['FirstName'=>$userdetails->name,'snder_name'=>$snder_name];
+
+
+           $data=array('code'=>'new_messsage','email'=>$userdetails->email,'dataArray'=>$mainUseData,'name'=>$userdetails->name);
+                EmailSendJob::dispatch($data);
+
+
             // if($request->type == 'IMAGE'){
             //     $imagePath = $request->file->store('chat/images', 'public');
             //     $chat->file = $imagePath;

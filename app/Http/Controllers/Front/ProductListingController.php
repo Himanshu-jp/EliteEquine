@@ -60,7 +60,7 @@ class ProductListingController extends Controller
         }
 
         if (!empty($request->location)) {
-            $location = $request->location;
+          /*   $location = $request->location;
             $data = $data->where(function ($query) use ($location) {
                 $query->orWhereHas('productDetail', function ($q) use ($location) {
                     $q->where('precise_location', 'like', "%$location%")
@@ -69,7 +69,21 @@ class ProductListingController extends Controller
                         ->orWhere('country', 'like', "%$location%")
                         ->orWhere('street', 'like', "%$location%");
                 });
-            });
+            }); */
+             $latitude = $request->latitude;
+                $longitude = $request->longitude;
+                $radius = 100;
+
+                $data->whereHas('productDetail', function ($query) use ($latitude, $longitude, $radius) {
+                    $haversine = "(6371 * acos(cos(radians($latitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians($longitude)) 
+                        + sin(radians($latitude)) 
+                        * sin(radians(latitude))))";
+
+                    $query->select('*')
+                        ->whereRaw("$haversine < ?", [$radius]);
+                });
         }
 
         if (!empty($request->category)) {
@@ -77,7 +91,10 @@ class ProductListingController extends Controller
         }
 
         if (!empty($request->subCategory)) {
-            $data->whereIn('sub_category', $request->subCategory);
+            $subCategory = $request->subCategory;
+            $data->whereHas('subCategory', function ($q) use ($subCategory) {
+                $q->whereIn('category_id', $subCategory);
+            });
         }
 
         if (!empty($request->minPrice) && !empty($request->maxPrice)) {
@@ -313,12 +330,14 @@ class ProductListingController extends Controller
         if (!empty($request->limit)) {
             $limit = $request->limit;
         }
-
-
+        // print_r($data->get()->toArray()); exit;
+        
         $total = $data->count();
         $data = $data->paginate($limit); // Adjust per page as needed
         $viewMode = $request->view_mode;
-        $html = view('front/card', compact(['data','viewMode']))->render();
+          $latitude=$request->latitude ?? 26.836992;
+        $longitude= $request->longitude ?? 75.769446;
+        $html = view('front/card', compact(['data','viewMode','longitude','latitude']))->render();
         // return view('front/card', compact(['data','viewMode']));
        
         $pagination = $data->withQueryString()->links('pagination::bootstrap-4')->render();
@@ -344,7 +363,7 @@ class ProductListingController extends Controller
             'video',
             'document',
             'category',
-            'subcategory',
+            'subcategory.category',
             'disciplines',
             'breeds',
             'colors',
@@ -434,7 +453,7 @@ class ProductListingController extends Controller
 
         if (!empty($request->location)) {
             $location = $request->location;
-            $data = $data->where(function ($query) use ($location) {
+          /*   $data = $data->where(function ($query) use ($location) {
                 $query->orWhereHas('productDetail', function ($q) use ($location) {
                     $q->where('precise_location', 'like', "%$location%")
                         ->orWhere('city', 'like', "%$location%")
@@ -442,7 +461,21 @@ class ProductListingController extends Controller
                         ->orWhere('country', 'like', "%$location%")
                         ->orWhere('street', 'like', "%$location%");
                 });
-            });
+            }); */
+              $latitude = $request->latitude;
+                $longitude = $request->longitude;
+                $radius = 100;
+
+                $data->whereHas('productDetail', function ($query) use ($latitude, $longitude, $radius) {
+                    $haversine = "(6371 * acos(cos(radians($latitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians($longitude)) 
+                        + sin(radians($latitude)) 
+                        * sin(radians(latitude))))";
+
+                    $query->select('*')
+                        ->whereRaw("$haversine < ?", [$radius]);
+                });
         }
 
         if (!empty($request->date) && !empty($request->date)) {
@@ -695,7 +728,7 @@ class ProductListingController extends Controller
 
         if (!empty($request->location)) {
             $location = $request->location;
-            $data = $data->where(function ($query) use ($location) {
+           /*  $data = $data->where(function ($query) use ($location) {
                 $query->orWhereHas('productDetail', function ($q) use ($location) {
                     $q->where('precise_location', 'like', "%$location%")
                         ->orWhere('city', 'like', "%$location%")
@@ -703,7 +736,21 @@ class ProductListingController extends Controller
                         ->orWhere('country', 'like', "%$location%")
                         ->orWhere('street', 'like', "%$location%");
                 });
-            });
+            }); */
+             $latitude = $request->latitude;
+                $longitude = $request->longitude;
+                $radius = 100;
+
+                $data->whereHas('productDetail', function ($query) use ($latitude, $longitude, $radius) {
+                    $haversine = "(6371 * acos(cos(radians($latitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians($longitude)) 
+                        + sin(radians($latitude)) 
+                        * sin(radians(latitude))))";
+
+                    $query->select('*')
+                        ->whereRaw("$haversine < ?", [$radius]);
+                });
         }
 
         if (!empty($request->date) && !empty($request->date)) {
@@ -727,7 +774,10 @@ class ProductListingController extends Controller
         }
 
         if (!empty($request->subCategory)) {
-            $data->whereIn('sub_category', $request->subCategory);
+            $subCategory = $request->subCategory;
+            $data->whereHas('subCategory', function ($q) use ($subCategory) {
+                $q->whereIn('category_id', $subCategory);
+            });
         }
 
         if (!empty($request->propertyTypes)) {
@@ -960,7 +1010,7 @@ class ProductListingController extends Controller
 
         if (!empty($request->location)) {
             $location = $request->location;
-            $data = $data->where(function ($query) use ($location) {
+            /* $data = $data->where(function ($query) use ($location) {
                 $query->orWhereHas('productDetail', function ($q) use ($location) {
                     $q->where('precise_location', 'like', "%$location%")
                         ->orWhere('city', 'like', "%$location%")
@@ -968,7 +1018,21 @@ class ProductListingController extends Controller
                         ->orWhere('country', 'like', "%$location%")
                         ->orWhere('street', 'like', "%$location%");
                 });
-            });
+            }); */
+             $latitude = $request->latitude;
+                $longitude = $request->longitude;
+                $radius = 100;
+
+                $data->whereHas('productDetail', function ($query) use ($latitude, $longitude, $radius) {
+                    $haversine = "(6371 * acos(cos(radians($latitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians($longitude)) 
+                        + sin(radians($latitude)) 
+                        * sin(radians(latitude))))";
+
+                    $query->select('*')
+                        ->whereRaw("$haversine < ?", [$radius]);
+                });
         }
 
         if (!empty($request->date) && !empty($request->date)) {
@@ -1170,7 +1234,7 @@ class ProductListingController extends Controller
             'triedUpcomingShows',
             'height',
             'sex',
-            'greenEligibilities'
+            'greenEligibilities',
         ]);
         $products = $products->where(['deleted_at' => null, 'id' => $id]);
         $products = $products->where('product_status', '!=', 'sold');
@@ -1187,14 +1251,19 @@ class ProductListingController extends Controller
 
         //----guest user cookie---//
         $guest = json_decode(Cookie::get('guest', '[]'), true);
-
+        $schedulesArr = [];
+        $schedules = Schedule::where('product_id', $products->id)->get();
+        if($schedules->isNotEmpty())
+        {
+            $schedulesArr = $schedules->toArray();
+        }
         $selectedDate = null;
         if(auth()->check() == true)
         {
             $selectedDate = Schedule::where(['product_id' => @$products->id, 'user_id' => auth()->id(), 'status' => '1'])->orderBy('id', 'desc')->get();
         }
 
-        return view('front/serviceDetails', compact(['products', 'moreAdd', 'guest', 'selectedDate']));
+        return view('front/serviceDetails', compact(['products', 'moreAdd', 'guest', 'selectedDate', 'schedulesArr']));
     }
 
     // category search

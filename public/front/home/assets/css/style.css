@@ -161,7 +161,7 @@ header nav .navbar-brand img {
 }
 
 header nav ul {
-  gap: 10px;
+  gap: 40px;
   justify-content: end;
   width: 100%;
   margin-top: 29px;
@@ -195,6 +195,7 @@ header nav ul li a.active::before {
   background-repeat: no-repeat;
   background-size: cover;
   padding-top: 90px;
+  margin-top: -1px;
 }
 
 .banner_area_inner {
@@ -210,7 +211,7 @@ header nav ul li a.active::before {
 .banner_area_inner1 h1 {
   color: #fff;
   font-family: var(--magical_font);
-  font-size: 54px;
+  font-size:80px;
   font-style: normal;
   font-weight: 500;
   line-height: 167%;
@@ -228,7 +229,7 @@ header nav ul li a.active::before {
 .banner_area_inner1 h1>span:nth-child(2) {
   color: #d6b868;
   font-family: var(--gilbert_font);
-  font-size:74px;
+  font-size:80px;
   font-style: italic;
   font-weight: 400;
   line-height: 120%;
@@ -333,7 +334,7 @@ header nav ul li a.active::before {
   font-style: normal;
   font-weight: 400;
   line-height: 110%;
-  min-height: 57px;
+  /* min-height: 57px; */
   /* 19.2px */
 }
 
@@ -535,10 +536,10 @@ header nav ul li a.active::before {
   filter: none;
 }
 
-.swiper {
+/* .swiper {
   width: 100%;
   height: 100%;
-}
+} */
 
 .swiper-slide {
   text-align: center;
@@ -599,9 +600,9 @@ header nav ul li a.active::before {
 }
 
 .feat_card_bx .content h4 {
-  color: var(--Neutral-700, #3c4563);
+ color: var(--Neutral-700, #3C4563);
   font-family: Poppins;
-  font-size: 16px;
+  font-size: 15px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -619,7 +620,9 @@ header nav ul li a.active::before {
   text-align: left;
   display: flex;
 }
-
+.feat_card_bx .content .location span br {
+    display: none;
+}
 .feat_card_bx .content .location {
   display: flex;
   align-items: start;
@@ -641,11 +644,11 @@ header nav ul li a.active::before {
   flex-wrap: wrap;
   text-align: left;
   color: #000;
-  font-family: var(--poppins_font);
-  font-size: 11px;
+  font-family: Poppins;
+  font-size: 12px;
   font-style: normal;
-  font-weight: 500;
-  line-height: 17px;
+  font-weight: 400;
+  line-height: 160%; /* 19.2px */
 }
 
 .feat_card_bx .content .foot {
@@ -746,6 +749,7 @@ header nav ul li a.active::before {
   cursor: pointer;
   width: 100%;
   height: 100%;
+  min-height: 190px;
 }
 
 .industry_area_sld_bx h3 {
@@ -1908,23 +1912,23 @@ img.icon-input {
 }
 
 .map-locainfo {
-  display: flex;
-  justify-content: space-around;
-  border-radius: 50px;
-  background: #fff;
-  box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.15);
-  padding: 9px 0px;
-  color: #000;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 9px;
-  /* 69.231% */
-  text-transform: capitalize;
-  max-width: 475px;
-  margin: 0 auto;
-  align-items: center;
-  margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 50px;
+    background: #fff;
+    box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.15);
+    padding: 9px 14px;
+    gap: 10px;
+    color: #000;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 9px;
+    text-transform: capitalize;
+    max-width: 475px;
+    margin: 0 auto;
+    align-items: center;
+    margin-top: 20px;
 }
 
 
@@ -2351,10 +2355,15 @@ ul.footer-bottom-link li {
   flex: 1;
   padding: 20px;
 }
-
+/* #filterSidebar {
+  display: none;
+}
+#filterSidebar.show {
+  display: block;
+} */
 /* Hide sidebar on mobile by default */
 @media (max-width: 768px) {
-  .filter-sidebar {
+  .filter-sidebar.show  {
     position: fixed;
     right: -100%;
     top: 0;
@@ -2510,8 +2519,7 @@ ul.footer-bottom-link li {
 .filter-section select,
 .filter-section input {
   border-radius: 8px;
-  border: 1px solid #D1D5DB;
-  background: #FFF;
+  border: 1px solid #D1D5DB;  
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
   width: 100%;
   padding: 10px 15px;
@@ -2524,7 +2532,11 @@ ul.footer-bottom-link li {
   line-height: normal;
   letter-spacing: -0.28px;
 }
-
+.form-select:focus {
+    border-color: #D1D5DB;
+    outline: 0;
+    box-shadow: none;
+}
 .slider-track {
   background: #000;
   /* change this to your brand color */
@@ -2712,14 +2724,22 @@ ul.footer-bottom-link li {
 }
 
 .feat_card_bx.list-page-card .imagelist img {
-  width: 100%;
-  min-height: 241px !important;
+  width: 100%; 
   height: 100%;
   object-fit: cover;
+  min-height: 241px !important;
+  border-radius: 20px;
 }
 
 .feat_card_bx.list-page-card .content {
   padding: 0;
+  flex: 1;
+}
+.feat_card_bx .content .foot .bx2 a {
+    color: #ab9c65;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: underline !important;
 }
 
 .main-content .map-locations .map-locainfo {
@@ -2814,7 +2834,10 @@ ul.footer-bottom-link li {
   transform: translateX(0) !important;
   padding: 0px;
 }
-
+.swiper-wrapper { 
+    height: auto !important;
+    
+}
 .btnnext,
 .btnprev {
   position: absolute;
@@ -2984,6 +3007,7 @@ ul.horseinfo_list li {
   display: flex;
   margin-bottom: 6px;
   gap: 10px;
+  align-items: center;
 }
 
 .all-btn-text {
@@ -3054,7 +3078,7 @@ ul.horseinfo_list li {
 .comment-actions {
   display: flex;
   gap: 10px;
-  padding-left: 60px;
+  padding-left: 0px;
 }
 
 .comment-btn {
@@ -3071,6 +3095,8 @@ ul.horseinfo_list li {
 
 .reply-btn {
   color: #A19061;
+  font-size: 15px;
+  margin-top: 7px;
 }
 
 .comment-btn:hover {
@@ -6003,6 +6029,7 @@ section.industry_area.forum-bg-border .container {
     border-radius: 0px 0px 10px 10px;
     border: 1px solid #ccc;
     border-top: 0px;
+    z-index: 999;
 }
 
 #map-location-list li, #location-list li {
@@ -6016,11 +6043,11 @@ section.industry_area.forum-bg-border .container {
     pointer-events: none;
     position: absolute;
     /* will-change: transform; */
-    top:auto !important ;
-    left: 50% !important;
+    /* top:auto !important ; */
+    /* left: 50% !important; */
     right: 0 !important;
-    bottom: 0 !important;
-    transform: translate(-50%, -10%) !important;
+    /* bottom: 0 !important;
+    transform: translate(-50%, -10%) !important; */
     width: 100%;
 }
 .mapboxgl-popup-content {
@@ -6259,10 +6286,10 @@ ul.act-icon li img {
 .list-unstyled li a {
     display: inline-block;
 }
-#map {
+/* #map {
     background-image: url(../images/map-dummy.png);
     border-radius: 20px;
-}
+} */
 .form-check:not(.form-switch) .form-check-input[type=radio]:after {
   transition: opacity 0.25s ease-in-out;
   content: "";
@@ -6310,4 +6337,280 @@ ul.act-icon li img {
 }
 .filter-ads-checkbx .fa-star {
     color: #FFA910;
+}
+
+
+
+.card-boxleft h2.fw-bold {
+    color: #000;
+    font-family: Inter;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    max-width: 100%;
+}
+
+
+
+.notife-custom-checkbox {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+.notife-custom-checkbox input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.notife-custom-checkbox span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: white;
+    border: 2px solid #b3a075;
+    border-radius: 4px;
+}
+.notife-custom-checkbox input:checked + span {
+    background-color: #b3a075;
+}
+.notife-custom-checkbox span:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+.notife-custom-checkbox input:checked + span:after {
+    display: block;
+}
+.notife-custom-checkbox span:after {
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Save Button */
+.btn-save {
+    background-color: #b3a075;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 30px;
+    border: none;
+    margin-bottom: 0px !important;
+}
+#notificationModal .modal-body .table thead th {
+    padding: 0.75rem 1.5rem;
+    text-transform: capitalize  !important;
+    letter-spacing: 0px;
+    border: 0 !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+    color: #000 !important;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+}
+.modal-body.notificationModalnextLevelHtmlInner .table-responsive, .modal-body.notificationModalnextLevelHtmlInner thead {
+    border: 0px !important;
+}
+#notificationModal .modal-dialog {
+    max-width: 695px;
+}
+#notificationModal .modal-content {
+    border-radius: 20px;
+    background: #fff;
+    overflow: hidden;
+}
+#notificationModal table.table {
+    margin-bottom: 0px;
+}
+#notificationModal .modal-body {
+    border-radius: 15px;
+    border: 1px solid #d9d9d9;
+    background: #fff;
+    padding: 0px;
+}
+
+#notificationModal .modal-body td.text-start {
+    color: #000;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    /* padding: 0px 19px; */ 
+}
+#notificationModal td  {
+    border-color: inherit;
+    border-style: solid;
+    border-width:0;
+    text-align: center;
+}
+#notificationModal tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+}
+#notificationModal.modal-title {
+    color: var(--Black, #000);
+    font-family: Inter;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 32px; /* 123.077% */
+    letter-spacing: -0.52px;
+}
+
+#notificationModal .modal-header {
+    padding: 15px 0px;
+}
+#notificationModal .modal-header .btn-close {
+ 
+    margin-right: 0px; 
+}
+.form-check {
+    display: block;
+    min-height: auto;
+    margin-bottom: 0.125rem;
+    position: relative;
+}
+
+.form-check .form-check-input {
+    float: left;
+    margin-left: -1.73em;
+}
+
+.form-check-reverse {
+    padding-right: 1.73em;
+    padding-left: 0;
+    text-align: right;
+}
+
+.form-check-reverse .form-check-input {
+    float: right;
+    margin-right: -1.73em;
+    margin-left: 0;
+}
+
+.form-check-input {
+    --form-check-bg: #fff;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    margin-top: 0.135em;
+    vertical-align: top;
+    appearance: none;
+    background-color: var(--form-check-bg);
+    background-image: var(--form-check-bg-image);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: none;
+    print-color-adjust: exact;
+    transition: background-color 0.25s ease, border-color 0.25s ease,
+        background-position 0.15s ease-in-out, opacity 0.15s ease-out,
+        box-shadow 0.15s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-check-input {
+        transition: none;
+    }
+}
+
+.form-check-input[type="checkbox"] {
+    border-radius: 0.35rem;
+}
+
+.form-check-input[type="radio"] {
+    border-radius: 50%;
+}
+
+.form-check-input:active {
+    filter: brightness(99%);
+}
+
+.form-check-input:focus {
+    border-color: #ccc;
+    outline: 0;
+    box-shadow: none;
+    background-color: var(--white);
+}
+
+.form-check-input:checked {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.form-check-input:checked[type="checkbox"] {
+    --form-check-bg-image: linear-gradient(195deg, #a09165 0%, #a09165 100%);
+}
+
+.form-check-input:checked[type="radio"] {
+    --form-check-bg-image: linear-gradient(195deg, #a09165 0%, #a09165 100%);
+}
+
+.form-check-input[type="checkbox"]:indeterminate {
+    background-color: #a09165;
+    border-color: #a09165;
+    --form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
+}
+
+.form-check-input:disabled {
+    pointer-events: none;
+    filter: none;
+    opacity: 0.5;
+}
+
+.form-check-input[disabled] ~ .form-check-label,
+.form-check-input:disabled ~ .form-check-label {
+    cursor: default;
+    opacity: 0.5;
+}
+
+.form-switch {
+    padding-left: 2.375rem;
+}
+
+.form-switch .form-check-input {
+    --form-switch-bg: none;
+    width: 1.875rem;
+    margin-left: -2.375rem;
+    background-image: var(--form-switch-bg);
+    background-position: left center;
+    border-radius: 1.875rem;
+    transition: background-color 0.25s ease, border-color 0.25s ease,
+        background-position 0.15s ease-in-out, opacity 0.15s ease-out,
+        box-shadow 0.15s ease-in-out;
+}
+.modal-body.p-0.notificationModalnextLevelHtml label.ad-lister-checkbox {
+    margin-bottom: 0px;
+}
+.comment-image{
+  height: 150px;
+}
+.comment-body{
+  padding-left: 0;
+}
+.comment-image img{
+    max-height: 100%;
+    border-radius: 10px;
+}
+.comment-title{
+  margin-top: 20px;
+  font-size: 25px;
+  font-weight: 600;
+  color: #000;
 }

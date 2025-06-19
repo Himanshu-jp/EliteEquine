@@ -170,27 +170,11 @@ Your Ads
                                             pointer-events: none;
                                             color: #555;"></i>
                                 @if($errors->has('category'))
-                                    <span class="error text-danger">{{$errors->first('category')}}</span>
+                                    <span class="error text-danger ">{{$errors->first('category')}}</span>
                                 @endif
                             </div>        
                         @endif
-                    
-                     <div class="mb-3">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <label for="price" class="form-label">Price</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="is_negotiable" name="is_negotiable" {{(old('is_negotiable')=='on' || @$products->is_negotiable=='yes')?'checked':''}}>
-                                <label class="form-check-label" for="Height_hands">Is Negotiable?</label>
-                            </div>
-                        </div>
-                        <input type="text" autocomplete="off" class="inner-form form-control mb-0" id="price" name="price"
-                            value="{{old('price', @$products->price)}}" placeholder="Enter Price...">
-                        @if($errors->has('price'))
-                            <span class="error text-danger">{{$errors->first('price')}}</span>
-                        @endif
-                    </div>
-
-                    
+                                        
                     <div class="mb-2">
                         <label class="form-label">Add External Links <span data-toggle="tooltip" data-placement="top" title="Enter the external link for your product.">
                             <img src="{{asset('images/letter-i.png')}}" width="15" height="15" alt="" />
@@ -202,7 +186,7 @@ Your Ads
                             @foreach($externalLinks as $index => $link)
                                 <div class="position-relative mb-2 external-link-group">
                                     <input type="text" name="external_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add External Link..." value="{{ @$link->link }}" autocomplete="off">
-                                    <button type="button" class="btn btn-sm btn-danger remove-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
+                                    <button type="button" class="remove-link" style="z-index:2;">&times;</button>
                                 </div>
                             @endforeach
                         </div>
@@ -224,7 +208,7 @@ Your Ads
                             @foreach($externalLinks as $index => $link)
                                 <div class="position-relative mb-2 external-video-link-group">
                                     <input type="text" name="video_link[]" class="inner-form form-control mb-0 pe-5"  placeholder="Add Video Link..." value="{{ @$link->link }}" autocomplete="off">
-                                    <button type="button" class="btn btn-sm btn-danger remove-video-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
+                                    <button type="button" class="remove-video-link " style="z-index:2;">&times;</button>
                                 </div>
                             @endforeach
                         </div>
@@ -362,17 +346,15 @@ Your Ads
                     @endif
                 </div>
 
-                {{-- <div class="col-lg-6 mb-3" id="bid_price">
+                <div class="col-lg-6 mb-3" id="bid_price">
                     <label for="bid_min_price" class="form-label">Bid Minimum Price</label>
                     <input type="text" name="bid_min_price" id="bid_min_price" class="inner-form form-control mb-0 numbervalid" placeholder="Enter bid minimum price" value="{{old('bid_min_price',@$products->productDetail->bid_min_price)}}">
                     @if($errors->has('bid_min_price'))
                         <span class="error text-danger">{{$errors->first('bid_min_price')}}</span>
                     @endif
-                </div> --}}
-
+                </div>
             </div>
 
-           
 
             <div class="d-flex align-items-center justify-content-start gap-2 flex-wrap">
                 <h6>Select Transaction Method:</h6>
@@ -395,6 +377,21 @@ Your Ads
                 </div>
                 @if($errors->has('transaction_method'))
                     <span class="error text-danger">{{$errors->first('transaction_method')}}</span>
+                @endif
+            </div>
+
+            <div class="col-lg-6 mb-3" id="priceDiv" style="display: none;">
+                <div class="d-flex align-items-center justify-content-between">
+                    <label for="price" class="form-label">Price</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="is_negotiable" name="is_negotiable" {{(old('is_negotiable')=='on' || @$products->is_negotiable=='yes')?'checked':''}}>
+                        <label class="form-check-label" for="Height_hands">Is Negotiable?</label>
+                    </div>
+                </div>
+                <input type="text" autocomplete="off" class="inner-form form-control mb-0 numbervalid" id="price" name="price"
+                    value="{{old('price', @$products->price)}}" placeholder="Enter Price...">
+                @if($errors->has('price'))
+                    <span class="error text-danger">{{$errors->first('price')}}</span>
                 @endif
             </div>
             
@@ -444,7 +441,7 @@ Your Ads
             let newField = `
                 <div class="position-relative mb-2 external-link-group">
                     <input type="text" name="external_link[]" class="inner-form form-control mb-0 pe-5" placeholder="Add External Link...">
-                    <button type="button" class="btn btn-sm btn-danger remove-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
+                    <button type="button" class="remove-link " style="z-index:2;">&times;</button>
                 </div>`;
             $('#external-links-wrapper').append(newField);
         });
@@ -460,7 +457,7 @@ Your Ads
             let newField = `
                 <div class="position-relative mb-2 external-video-link-group">
                     <input type="text" name="video_link[]" class="inner-form form-control mb-0 pe-5" placeholder="Add Video Link...">
-                    <button type="button" class="btn btn-sm btn-danger remove-video-link position-absolute top-50 end-0 translate-middle-y me-2" style="z-index:2;">&times;</button>
+                    <button type="button" class="remove-video-link" style="z-index:2;">&times;</button>
                 </div>`;
             $('#external-video-links-wrapper').append(newField);
         });
@@ -585,7 +582,7 @@ function handleImageUpload(event) {
     files.forEach(file => {
         if (file.size > maxSize) {
             // alert(`"${file.name}" is too large. Maximum allowed size is 4MB.`);
-            Swal.fire("Elite Equine", `"${file.name}" is too large. Maximum allowed size is 4MB.`, "error");
+            Swal.fire("EliteQuine", `"${file.name}" is too large. Maximum allowed size is 4MB.`, "error");
             return;
         }
 
@@ -663,7 +660,7 @@ function handleVideoUpload(event) {
     files.forEach(file => {
         if (file.size > maxSize) {
             // alert(`"${file.name}" is too large. Maximum allowed size is 10MB.`);
-            Swal.fire("Elite Equine", `"${file.name}" is too large. Maximum allowed size is 20MB.`, "error");
+            Swal.fire("EliteQuine", `"${file.name}" is too large. Maximum allowed size is 20MB.`, "error");
             return;
         }
 
@@ -753,6 +750,29 @@ function updateInputFiles() {
         $("#bid_expire").hide();
         $("#bid_price").hide();
     });
+
+
+
+    //------for transcation method-----kamal--------//
+
+    $("input[name='transaction_method']:checked").each(function () {
+        console.log($(this).val());
+        if($(this).val()=="platform"){
+            $("#priceDiv").show();
+        }else{
+            $("#price").val('');
+            $("#priceDiv").hide();
+        }
+    });
+
+    $("#platform").on('click', function() {
+        $("#priceDiv").show();
+    });
+    $("#buyertoseller").on('click', function() {
+        $("#price").val('');
+        $("#priceDiv").hide();
+    });
+
     function toggleSaleMethodBasedOnCategory() {
         const selectedCategoryId = $('#category').val();
 
@@ -880,10 +900,6 @@ $("#productForm").validate({
             required: true,
             maxlength: 500
         },
-        price: {
-            required: true,
-            number: true
-        },
         currency: {
             required: true,
             maxlength: 3
@@ -912,6 +928,11 @@ $("#productForm").validate({
         description: {
             required: true,
             maxlength: 5000
+        },
+        price: {
+            required: function(element) {
+                return $('#platform').is(':checked');
+            }
         },
         bid_end_date: {
             required: function(element) {

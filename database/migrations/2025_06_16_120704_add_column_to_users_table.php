@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('subscription_id')->nullable();
             $table->longText('stripe_connect_data')->nullable();
             $table->integer('avgRating')->default(0);
+            $table->string('lister_types')->nullable();
         });
     }
 

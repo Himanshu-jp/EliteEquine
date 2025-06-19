@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="image/png" href="{{asset('front/auth/assets/img/logos/logo.svg')}}">
-    <title>Elite Equine - Sign In</title>
+    <title>EliteQuine - Sign In</title>
     <link rel="stylesheet" type="text/css"
         href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
     <link href="{{asset('front/auth/assets/css/nucleo-icons.css')}}" rel="stylesheet" />

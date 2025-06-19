@@ -28,6 +28,8 @@ class CheckoutRequest extends FormRequest
         if($this->has('service_job'))
         {
             $rules['service_date'] = 'required|date';
+            $rules['time_slot_from'] = 'required';
+            $rules['time_slot_to'] = 'required';
         } else {
             $rules = [
                 // product

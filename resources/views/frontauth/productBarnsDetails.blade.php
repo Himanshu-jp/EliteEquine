@@ -79,7 +79,7 @@ Your Ads
 
             <div class="row">
 
-                <div class="col-md-3 mt-3 position-relative">
+                {{-- <div class="col-md-3 mt-3 position-relative">
                     <label for="sub_category" class="form-label">Sub Category *</label>
                     <select class="form-select pe-5 mb-2 inner-form form-control" name="sub_category" id="sub_category" >
                         <option value="">-- Select Sub Category --</option>
@@ -88,6 +88,24 @@ Your Ads
                         @endforeach
                     </select>
 
+                    @if($errors->has('sub_category'))
+                        <span class="error text-danger">{{$errors->first('sub_category')}}</span>
+                    @endif
+                </div> --}}
+
+                <div class="col-md-3 mt-3 position-relative">
+                    <label for="exampleFormControlInput1" class="form-label">Sub Category</label>
+                    <select class="form-control select2" id="sub_category" name="sub_category[]" multiple="multiple">
+                        @foreach ($subcategories as $key=>$value)
+                            <option value="{{$key}}" {{in_array($key,old('sub_category',@$products->subcategory->pluck('category_id')->toArray()))?'selected':''}} >{{$value}}</option>
+                        @endforeach
+                    </select>
+                    <i class="fi fi-rr-angle-small-down" style="position: absolute;
+                                top: 63%;
+                                right: 30px;
+                                transform: translateY(-50%);
+                                pointer-events: none;
+                                color: #555;"></i>
                     @if($errors->has('sub_category'))
                         <span class="error text-danger">{{$errors->first('sub_category')}}</span>
                     @endif
@@ -251,13 +269,13 @@ Your Ads
                     @endif
                 </div>
 
-                <div class="col-md-3 mt-3 position-relative">
+                {{-- <div class="col-md-3 mt-3 position-relative">
                     <label for="bid_min_price" class="form-label">Bid Minimum Price</label>
                     <input type="text" name="bid_min_price" id="bid_min_price" class="inner-form form-control mb-0 numbervalid" placeholder="Enter bid minimum price" value="{{old('bid_min_price',@$products->productDetail->bid_min_price)}}">
                     @if($errors->has('bid_min_price'))
                         <span class="error text-danger">{{$errors->first('bid_min_price')}}</span>
                     @endif
-                </div>
+                </div> --}}
 
             </div>
         </div>
@@ -750,9 +768,9 @@ Your Ads
 
         $('#productDetailsForm').validate({
             rules: {
-                'sub_category': "required",
+                'sub_category[]': { required: true },
                 'property_types[]': { required: true },
-                'stalls_available': "required",
+                'stalls_available': {required:true, digits: true },
                 'stable_amenities[]': { required: true },
                 'housing_stables_around_horse_shows[]': { required: true },
                 'fromdate': "required",
@@ -769,7 +787,7 @@ Your Ads
                 'banners': "required",
             },
             messages: {
-                'sub_category': "Sub category is required.",
+                'sub_category[]': { required:"Sub category is required."},
                 'property_types[]': { required: "Please select at least one property type." },
                 'stalls_available': "Please enter the number of stalls available.",
                 'stable_amenities[]': { required: "Please select at least one stable amenity." },
