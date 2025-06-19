@@ -930,10 +930,10 @@
 
         window.onload = () => {
             const urlParams = new URLSearchParams(window.location.search);
-            let lat = '{{ @$products->productDetail->latitude }}' || 26.8467;
-            let lng = '{{ @$products->productDetail->longitude }}' || 75.7647;
-            let trailLat = '{{ @$products->productDetail->trail_latitude }}' || 26.8467;
-            let trailLong = '{{ @$products->productDetail->trail_longitude }}' || 75.7647;
+            let lat = '{{ @$products->productDetail->latitude }}' ;
+            let lng = '{{ @$products->productDetail->longitude }}' ;
+            let trailLat = '{{ @$products->productDetail->trail_latitude }}' ;
+            let trailLong = '{{ @$products->productDetail->trail_longitude }}' ;
             const updateLocation = () => {
                 initializeMap(lat, lng, trailLat, trailLong);
                 //   addMapMarker(lat, lng);
