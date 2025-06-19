@@ -139,29 +139,29 @@
             if (event.product_detail) {
 
                 if (event.product_detail?.latitude && event.product_detail?.longitude) {
-                   var latLng = `${event.product_detail?.latitude},${event.product_detail?.longitude}`;
-                          var latLng1 = `${event.product_detail.trail_latitude},${event.product_detail.trail_longitude}`;
+                    var latLng = `${event.product_detail?.latitude},${event.product_detail?.longitude}`;
+                    var latLng1 = `${event.product_detail.trail_latitude},${event.product_detail.trail_longitude}`;
 
-                        if (!eventGroups[latLng]) {
-                            eventGroups[latLng] = [];
-                        }
-                        eventGroups[latLng].push(event);
-                        if (!eventGroups[latLng1]) {
-                            eventGroups[latLng1] = [];
-                        }
-                        eventGroups[latLng1].push(event);
+                    if (!eventGroups[latLng]) {
+                        eventGroups[latLng] = [];
+                    }
+                    eventGroups[latLng].push(event);
+                    if (!eventGroups[latLng1]) {
+                        eventGroups[latLng1] = [];
+                    }
+                    eventGroups[latLng1].push(event);
 
                     var object = {};
                     object.title = event.title;
                     object.price = event.price;
                     object.description = event.description;
                     object.image = event.image && event.image.length > 0 ? event.image[0].image : '';
-                    object.address = event.product_detail?  (event.product_detail?.street + ' ' + event
+                    object.address = event.product_detail ? (event.product_detail?.street + ' ' + event
                         .product_detail.city) : '';
-                    object.latitude = event.product_detail?  (event.product_detail?.latitude) : '';
-                    object.longitude = event.product_detail?  (event.product_detail?.longitude) : '';
-                          object.trail_longitude = event.product_detail ? (event.product_detail.trail_longitude) : '';
-                        object.trail_latitude = event.product_detail ? (event.product_detail.trail_latitude) : '';
+                    object.latitude = event.product_detail ? (event.product_detail?.latitude) : '';
+                    object.longitude = event.product_detail ? (event.product_detail?.longitude) : '';
+                    object.trail_longitude = event.product_detail ? (event.product_detail.trail_longitude) : '';
+                    object.trail_latitude = event.product_detail ? (event.product_detail.trail_latitude) : '';
                     allData.push(object)
                 }
 
@@ -194,7 +194,7 @@
                 layers: ['unclustered-point']
             });
 
-           
+
             var uniqueFeatures = getUniqueFeatures(features, 'venue_name');
 
             uniqueFeatures.forEach(feature => {
@@ -207,12 +207,12 @@
                     longitude
                 } = feature.properties;
 
-               if (isTrail == 1) {
-                        var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/{{$markerImage}}";
-                    } else {
-                        var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/{{$markerImageTrail}}";
-                    }
-               
+                if (isTrail == 1) {
+                    var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/{{ $markerImage }}";
+                } else {
+                    var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/{{ $markerImageTrail }}";
+                }
+
                 // Create a custom HTML element for the marker
                 var markerElement = document.createElement('div');
                 markerElement.className = 'red-circle-marker';
@@ -247,21 +247,24 @@
                     var eventImage = "{{ env('MAP_PUBLIC') }}/front/home/assets/images/logo/logo.svg";
                     var baseUrl = "{{ url('/') }}";
                     var eventUrl = `${baseUrl}eventdetail/${event.id}`;
-                   
-                        var breeds =event.breeds ? event.breeds.map(b => b.common_master_id?.name).join(" | ") : '';
-                        var disciplines =  event.disciplines ? event.disciplines.map(d => d.common_master_id?.name).join(" | ") : '';
-                        var trials = event.tried_upcoming_shows ? event.tried_upcoming_shows.map(t => t.common_master_id?.name).join(" | ") : '';
 
-                   
+                    var breeds = event.breeds ? event.breeds.map(b => b.common_master_id?.name).join(
+                        " | ") : '';
+                    var disciplines = event.disciplines ? event.disciplines.map(d => d.common_master_id
+                        ?.name).join(" | ") : '';
+                    var trials = event.tried_upcoming_shows ? event.tried_upcoming_shows.map(t => t
+                        .common_master_id?.name).join(" | ") : '';
+
+
                     var reviews = event?.user?.reviews;
                     var maxLength = 40;
                     var descriptionText = event.description || '';
                     var truncatedDescription = descriptionText.length > maxLength ?
                         descriptionText.substring(0, maxLength) + "..." :
                         descriptionText;
-                           var averageRating = Array.isArray(reviews) && reviews.length > 0
-                            ? Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length)
-                            : 0;
+                    var averageRating = Array.isArray(reviews) && reviews.length > 0 ?
+                        Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) :
+                        0;
 
                     var venueHtml = '';
                     if (event.title && event.title) {
@@ -300,16 +303,15 @@
                                     <img src="${baseUrl}/public/front/home/assets/images/icons/loction_icn.svg" alt="location-icon" />
                                     <span>${event.product_detail?.city}, ${event.product_detail?.state}, ${event.product_detail?.country}<br />
                                     Trial: ${trials}`;
-                                    if(event.product_detail && event.product_detail.fromdate)
-                                    {
-   popupContent += ` <br />(${formatDate(event.product_detail.fromdate)} - ${formatDate(event.product_detail.todate)})}
+                    if (event.product_detail && event.product_detail.fromdate) {
+                        popupContent += ` <br />(${formatDate(event.product_detail.fromdate)} - ${formatDate(event.product_detail.todate)})}
                                     </span>`;
-                                    }
-                                  
-                                  popupContent += ` </div>
+                    }
+
+                    popupContent += ` </div>
 
 
-                                   <img src="{{(@$user->profile_photo_path)?asset('storage/'.@$user->profile_photo_path):asset('front/auth/assets/img/user-img.png')}}" class="user-img" alt="">
+                              
                                 <div class="foot">
                                     <div class="bx">
                                         <div class="imagee">
@@ -355,48 +357,54 @@
 
 
         }
-  function formatDate(dateString) {
-                var date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            }
+
+        function formatDate(dateString) {
+            var date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
         function addClusterView() {
             var seenCoords = new Set();
 
-             var eventsfeature = allData.flatMap((event) => [{
-                        type: "Feature",
-                        geometry: {
-                            type: "Point",
-                            coordinates: [
-                                parseFloat(event.longitude),
-                                parseFloat(event.latitude),
-                            ],
-                        },
-                        properties: {
-                            venue_name: event.title || "Unknown Venue",
-                            venue_address: event.address || "No Address",
-                            latitude: event.latitude || "No Address",
-                            longitude: event.longitude || "No Address",
-                            isTrail: 0,
-                        },
+            var eventsfeature = allData.flatMap((event) => [{
+                    type: "Feature",
+                    geometry: {
+                        type: "Point",
+                        coordinates: [
+                            parseFloat(event.longitude),
+                            parseFloat(event.latitude),
+                        ],
                     },
-                    {
-                        type: "Feature",
-                        geometry: {
-                            type: "Point",
-                            coordinates: [
-                                parseFloat(event.trail_longitude),
-                                parseFloat(event.trail_latitude),
-                            ],
-                        },
-                        properties: {
-                            venue_name: event.title || "Unknown Venue",
-                            venue_address: event.address || "No Address",
-                            latitude: event.trail_latitude || "No Address",
-                            longitude: event.trail_longitude || "No Address",
-                            isTrail: 1,
-                        },
-                    }
-                ]);
+                    properties: {
+                        venue_name: event.title || "Unknown Venue",
+                        venue_address: event.address || "No Address",
+                        latitude: event.latitude || "No Address",
+                        longitude: event.longitude || "No Address",
+                        isTrail: 0,
+                    },
+                },
+                {
+                    type: "Feature",
+                    geometry: {
+                        type: "Point",
+                        coordinates: [
+                            parseFloat(event.trail_longitude),
+                            parseFloat(event.trail_latitude),
+                        ],
+                    },
+                    properties: {
+                        venue_name: event.title || "Unknown Venue",
+                        venue_address: event.address || "No Address",
+                        latitude: event.trail_latitude || "No Address",
+                        longitude: event.trail_longitude || "No Address",
+                        isTrail: 1,
+                    },
+                }
+            ]);
 
             map.addSource("clusterEvent", {
                 type: "geojson",
@@ -529,10 +537,10 @@
                    this.container = document.createElement('div');
                    this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
                    this.container.innerHTML = `
-               <button id="relocateBtn" type="button" title="Relocate" style="padding:3px;">
-                   <img src="{{ asset('frontend/images/current-location-10.svg') }}">
-               </button>
-           `;
+           <button id="relocateBtn" type="button" title="Relocate" style="padding:3px;">
+               <img src="{{ asset('frontend/images/current-location-10.svg') }}">
+           </button>
+       `;
                    this.container.querySelector('#relocateBtn').addEventListener('click', () => {
                        map.easeTo({
                            center: userCoordinates,
