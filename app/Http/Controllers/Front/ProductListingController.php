@@ -1026,6 +1026,13 @@ class ProductListingController extends Controller
         });
 
 
+        //-------when to day is gone then no data will show in the list------//
+        $currentDate = date('Y-m-d');
+        $data->whereHas('productDetail', function ($q) use($currentDate) {
+            $q->whereDate('todate', '>=', $currentDate);
+        });        
+
+
         $searchString = $request->search;
         if (!empty($searchString)) {
             $data = $data->where(function ($query) use ($searchString) {

@@ -13,7 +13,7 @@ use Stripe\Customer;
 use Stripe\Account;
 use Stripe\Subscription;
 use App\Models\User;
-
+use Log;
 
 class StripeController extends Controller
 {
@@ -191,5 +191,9 @@ public function updateAccountDetails(request $request){
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }
+    }
+
+    public function stripewebhook(request $request){
+        Log::info(json_encode($request->all()));
     }
 }

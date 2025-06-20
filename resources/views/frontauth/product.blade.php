@@ -1243,7 +1243,7 @@ function recurringImage() {
         $('.fullscreen-cover').hide();
 
             location.href = response.url;
-            Swal.fire("EliteQuine", response.message, "success");
+            // Swal.fire("EliteQuine", response.message, "success");
             }
         });
         }

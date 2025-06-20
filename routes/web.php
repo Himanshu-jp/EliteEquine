@@ -251,6 +251,7 @@ Route::get('/purchase-plan-cancel', [SubscriptionController::class, 'purchase_pl
 
 
 Route::get('/cron-first/{id}', [CronController::class, 'cronFirst'])->name('cronFirst');
+Route::any('/stripewebhook', [StripeController::class, 'stripewebhook'])->name('stripewebhook');
 
 
 

@@ -77,7 +77,13 @@ class HomeController extends Controller
             'triedUpcomingShows',
             'height',
             'greenEligibilities'
-        ])->where(['deleted_at' => null, 'feature' => 1, 'product_status' => 'live'])->orderBy('category_id')->get();
+        ])->where(['deleted_at' => null, 'feature' => 1, 'product_status' => 'live'])
+        ->whereHas('user', function ($q) {
+            $q->where('is_subscribed','1')
+            ->where('plan_expired_on', '>',time());
+        })
+        ->orderBy('category_id')
+        ->get();
         $featuredData = $featured->groupBy('category_id');
 
         // Industry Matric
@@ -102,7 +108,11 @@ class HomeController extends Controller
             'user',
             'productDetail',
             'image'
-        ])->where(['product_status' => 'live', 'deleted_at' => null]);
+        ])->where(['product_status' => 'live', 'deleted_at' => null])
+        ->whereHas('user', function ($q) {
+            $q->where('is_subscribed','1')
+            ->where('plan_expired_on', '>',time());
+        });
 
         //-----add horse category condition------//
         $searchString = $request->search;
@@ -129,7 +139,6 @@ class HomeController extends Controller
             $data->where('category_id', $request->category);
         }
         $events = $data->orderBy('id', 'desc')->take(3)->get()->toArray();
-
         
         return view('front/home', compact(['blogs', 'partnershipCollaborate', 'featuredData', 'industryMatricData', 'homeAboutData', 'sellerBusinessData', 'buyerBrowserData', 'buyerFaqData', 'events', 'coordinate', 'hjForumData']));
     }

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('height_id')->nullable();
             $table->foreignId('sex_id')->nullable();
             $table->foreignId('green_eligibilitie_id')->nullable();
-            $table->dateTime('fromdate')->nullable();
-            $table->dateTime('todate')->nullable();          
+            $table->date('fromdate')->nullable();
+            $table->date('todate')->nullable();          
             $table->integer('bid_min_price')->nullable();
             $table->integer('sale_price')->nullable();
             $table->integer('lease_price')->nullable();
