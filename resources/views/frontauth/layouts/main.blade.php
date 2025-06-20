@@ -198,7 +198,7 @@
 
     </script>
     <div class="fullscreen-cover">
-        {{ 'Your Name Here' }}
+        {{ 'Loading!!' }}
     </div>
 </body>
 

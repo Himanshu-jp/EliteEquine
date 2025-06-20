@@ -1216,6 +1216,26 @@ function recurringImage() {
                 document: []
             };
             recurringImage();
+        }else{
+             $('.fullscreen-cover').html('Submitting Your Form, Please Wait!')
+
+        // Build form data from the form element
+        var formElement = document.getElementById('productForm');
+        var formData = new FormData(formElement);
+        
+           $.ajax({
+            url: $('#productForm').attr('action'),
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+        $('.fullscreen-cover').hide();
+
+            location.href = response.url;
+            Swal.fire("EliteQuine", response.message, "success");
+            }
+        });
         }
     }
         // else: form will submit normally if no file

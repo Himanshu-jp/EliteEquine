@@ -27,10 +27,10 @@ use FFMpeg;
 
 class ProductService
 {
-    public function createProduct($data,$user)
+    public function createProduct($data, $user)
     {
 
-       
+
         if (isset($data['id'])) {
             $product = Product::where(['id' => $data['id'], 'user_id' => $user->id])->first();
         } else {
@@ -51,14 +51,14 @@ class ProductService
         // $product->price_reduced = ($data['price_reduced'] == 'on') ? 1 : 0;
         $product->currency = $data['currency'];
         $product->description = $data['description'];
-        $product->product_status = ($product->product_status)?$product->product_status:'pending';
+        $product->product_status = ($product->product_status) ? $product->product_status : 'pending';
         $product->created_at = Carbon::now();
         $product->updated_at = Carbon::now();
         $product->save();
 
 
-        if($data['bid_min_price']!=""){
-            $productDetail = ProductDetail::where('product_id',$product->id)->first();  
+        if ($data['bid_min_price'] != "") {
+            $productDetail = ProductDetail::where('product_id', $product->id)->first();
             if (!$productDetail) {
                 $productDetail = new ProductDetail();
                 $productDetail->product_id = $product->id;
@@ -66,7 +66,7 @@ class ProductService
                 $productDetail->created_at = Carbon::now();
                 $productDetail->updated_at = Carbon::now();
                 $productDetail->save();
-            }else{
+            } else {
                 $productDetail->bid_min_price = $data['bid_min_price'];
                 $productDetail->created_at = Carbon::now();
                 $productDetail->updated_at = Carbon::now();
@@ -74,8 +74,8 @@ class ProductService
             }
         }
 
-        $externalLink=[];
-        if (!empty($data['external_link']) && is_array($data['external_link']) && count($data['external_link']) > 0 && !empty($data['external_link'][0]) ) {
+        $externalLink = [];
+        if (!empty($data['external_link']) && is_array($data['external_link']) && count($data['external_link']) > 0 && !empty($data['external_link'][0])) {
             foreach ($data['external_link'] as $key => $link) {
                 $externalLink[$key]['product_id'] = $product->id;
                 $externalLink[$key]['link'] = $link;
@@ -83,11 +83,11 @@ class ProductService
                 $externalLink[$key]['created_at'] = Carbon::now();
                 $externalLink[$key]['updated_at'] = Carbon::now();
             }
-            ProductLink::where('product_id', $product->id)->where('type','web')->delete();
+            ProductLink::where('product_id', $product->id)->where('type', 'web')->delete();
             $linkResult = ProductLink::insert($externalLink);
         }
 
-        $videoLink=[];
+        $videoLink = [];
         if (!empty($data['video_link']) && is_array($data['video_link']) && count($data['video_link']) > 0 && !empty($data['video_link'][0])) {
             foreach ($data['video_link'] as $key => $link) {
                 $videoLink[$key]['product_id'] = $product->id;
@@ -96,7 +96,7 @@ class ProductService
                 $videoLink[$key]['created_at'] = Carbon::now();
                 $videoLink[$key]['updated_at'] = Carbon::now();
             }
-            ProductLink::where('product_id', $product->id)->where('type','video')->delete();
+            ProductLink::where('product_id', $product->id)->where('type', 'video')->delete();
             $videoLinkResult = ProductLink::insert($videoLink);
         }
 
@@ -106,7 +106,7 @@ class ProductService
         $imagePaths = [];
         if (isset($data['image_uploads'])) {
 
-    $key=0;
+            $key = 0;
             foreach ($data['image_uploads'] as $image) {
                 $imagePaths[$key]['product_id'] = $product->id;
                 $imagePaths[$key]['image'] = $image;
@@ -121,16 +121,16 @@ class ProductService
         $videoPaths = [];
         if (isset($data['video_uploads'])) {
 
-          
-    $key=0;
 
-            foreach ($data['video_uploads'] as  $video) {
+            $key = 0;
+
+            foreach ($data['video_uploads'] as $video) {
                 $videoPaths[$key]['product_id'] = $product->id;
                 $videoPaths[$key]['video_url'] = $video['video_url'] ?? $video->video_url;
                 $videoPaths[$key]['thumbnail'] = $video['thumbnail_url'] ?? $video->thumbnail_url;
                 $videoPaths[$key]['created_at'] = Carbon::now();
                 $videoPaths[$key]['updated_at'] = Carbon::now();
-    $key++;
+                $key++;
 
             }
         }
@@ -140,16 +140,16 @@ class ProductService
 
         $documentPaths = [];
         if (isset($data['document_uploads'])) {
-    $key=0;
+            $key = 0;
 
-            foreach ($data['document_uploads'] as  $document) {
-             
+            foreach ($data['document_uploads'] as $document) {
+
                 $documentPaths[$key]['product_id'] = $product->id;
                 $documentPaths[$key]['file'] = $document;
                 $documentPaths[$key]['created_at'] = Carbon::now();
                 $documentPaths[$key]['updated_at'] = Carbon::now();
             }
-    $key++;
+            $key++;
 
         }
         // Store the document paths in the database
@@ -221,28 +221,36 @@ class ProductService
     {
         // Delete existing files (if any)
         foreach ($modelClass::where('product_id', $productId)->get() as $oldFile) {
-            Storage::disk('public')->delete($oldFile->$column);
+            // Delete file from S3
+            Storage::disk('s3')->delete($oldFile->$column);
+
+            // Delete DB record
             $oldFile->delete();
         }
 
-        // Upload new files
+        // Upload new files to S3
         foreach ($newFiles as $file) {
+            $storedPath = $file->store($path, 's3'); // Upload to S3
+
+            // (Optional) Make file public
+            Storage::disk('s3')->setVisibility($storedPath, 'public');
+
             $modelClass::create([
                 'product_id' => $productId,
-                $column => $file->store($path, 'public')
+                $column => $storedPath
             ]);
         }
     }
 
     //----- Horse data store----//
-    public function createProductHorseDetails($data,$user)
+    public function createProductHorseDetails($data, $user)
     {
         $productDetail = ProductDetail::where(['product_id' => $data['productId']])->first();
         if (!$productDetail) {
             $productDetail = new ProductDetail();
             $productDetail->product_id = $data['productId'];
         }
-        
+
         //-------save product details table data----------------//
         $productDetail->age = $data['age'];
         $productDetail->height_id = $data['height_id'];
@@ -257,19 +265,26 @@ class ProductService
         $productDetail->sirebloodline = $data['sirebloodline'];
         $productDetail->dambloodline = $data['dambloodline'];
         $productDetail->usef = $data['usef'];
-        $pedigree_chart = (isset($data['pedigree_chart']))?$data['pedigree_chart']->store('products/pedigree_chart', 'public'):$productDetail['pedigree_chart'];
+        if (isset($data['pedigree_chart'])) {
+            $pedigree_chart = $data['pedigree_chart']->store('products/pedigree_chart', 's3');
+
+            // Make the file publicly accessible (optional)
+            Storage::disk('s3')->setVisibility($pedigree_chart, 'public');
+        } else {
+            $pedigree_chart = $productDetail['pedigree_chart'];
+        }
         $productDetail->pedigree_chart = $pedigree_chart;
         $productDetail->created_at = Carbon::now();
         $productDetail->updated_at = Carbon::now();
 
 
         $userDetail = UserDetails::where(['user_id' => $user->id])->first();
-        if(@$data['contactSet']){
+        if (@$data['contactSet']) {
             $phone = $userDetail->phone;
-        }else{
+        } else {
             $phone = $data['phone'];
         }
-        if(@$data['addressSet']){
+        if (@$data['addressSet']) {
             $precise_location = $userDetail->precise_location;
             $country = $userDetail->country;
             $state = $userDetail->state;
@@ -277,18 +292,18 @@ class ProductService
             $street = $userDetail->street;
             $latitude = $userDetail->latitude;
             $longitude = $userDetail->longitude;
-        }else{
+        } else {
             $precise_location = $data['precise_location'];
             $country = $data['country'];
             $state = $data['state'];
             $city = $data['city'];
             $street = $data['street'];
-            
+
             $latitude = $data['latitude'];
             $longitude = $data['longitude'];
         }
 
-        $productDetail->phone = $phone; 
+        $productDetail->phone = $phone;
         $productDetail->precise_location = $precise_location;
         $productDetail->country = $country;
         $productDetail->state = $state;
@@ -303,19 +318,19 @@ class ProductService
 
         //-------save product table data & enable product status as live----------------//
         $product = Product::where(['id' => $data['productId'], 'user_id' => $user->id])->first();
-        $product->product_status = ($product->product_status=="pending")?'live':$product->product_status;
+        $product->product_status = ($product->product_status == "pending") ? 'live' : $product->product_status;
         $product->updated_at = Carbon::now();
         $product->save();
 
 
         //-------save product details mulitple data----------------//
         $productId = $product->id;
-        $productRemove = ProductRelation::where('product_id',$productId)->delete();
+        $productRemove = ProductRelation::where('product_id', $productId)->delete();
         $insertData = [];
 
-         // Handle sub_category --00--
+        // Handle sub_category --00--
         if (isset($data['sub_category'])) {
-           foreach ($data['sub_category'] as $key => $category) {
+            foreach ($data['sub_category'] as $key => $category) {
                 $externalLink[$key]['product_id'] = $productId;
                 $externalLink[$key]['category_id'] = $category;
                 $externalLink[$key]['created_at'] = Carbon::now();
@@ -428,7 +443,7 @@ class ProductService
                 ];
             }, $data['tried_upcoming_shows']));
         }
-       
+
         // Handle height_id single option --09--
         if (isset($data['height_id'])) {
             $insertData[] = [
@@ -439,7 +454,7 @@ class ProductService
                 'updated_at' => now(),
             ];
         }
-        
+
         // Handle sex_id single option --10--
         if (isset($data['sex_id'])) {
             $insertData[] = [
@@ -450,7 +465,7 @@ class ProductService
                 'updated_at' => now(),
             ];
         }
-       
+
         // Handle sex_id single option --11--
         if (isset($data['green_eligibilitie_id'])) {
             $insertData[] = [
@@ -461,7 +476,7 @@ class ProductService
                 'updated_at' => now(),
             ];
         }
-        
+
         // Insert all the data at once
         $relationResult = ProductRelation::insert($insertData);
 
@@ -469,14 +484,14 @@ class ProductService
     }
 
     //----- Equipment data store------//
-    public function createProductEquipmentDetails($data,$user)
+    public function createProductEquipmentDetails($data, $user)
     {
         $productDetail = ProductDetail::where(['product_id' => $data['productId']])->first();
         if (!$productDetail) {
             $productDetail = new ProductDetail();
             $productDetail->product_id = $data['productId'];
         }
-        
+
         //-------save product details table data----------------//
         $productDetail->price = $data['price'];
         $productDetail->hourly_price = $data['hourly_price'];
@@ -485,12 +500,12 @@ class ProductService
         $productDetail->updated_at = Carbon::now();
 
         $userDetail = UserDetails::where(['user_id' => $user->id])->first();
-        if(@$data['contactSet']){
+        if (@$data['contactSet']) {
             $phone = $userDetail->phone;
-        }else{
+        } else {
             $phone = $data['phone'];
         }
-        if(@$data['addressSet']){
+        if (@$data['addressSet']) {
             $precise_location = $userDetail->precise_location;
             $country = $userDetail->country;
             $state = $userDetail->state;
@@ -498,7 +513,7 @@ class ProductService
             $latitude = $userDetail->latitude;
             $longitude = $userDetail->longitude;
             $street = $userDetail->street;
-        }else{
+        } else {
             $precise_location = $data['precise_location'];
             $country = $data['country'];
             $state = $data['state'];
@@ -510,7 +525,7 @@ class ProductService
 
         $productDetail->latitude = $latitude;
         $productDetail->longitude = $longitude;
-        $productDetail->phone = $phone; 
+        $productDetail->phone = $phone;
         $productDetail->precise_location = $precise_location;
         $productDetail->country = $country;
         $productDetail->state = $state;
@@ -523,14 +538,14 @@ class ProductService
 
         //-------save product table data & enable product status as live----------------//
         $product = Product::where(['id' => $data['productId'], 'user_id' => $user->id])->first();
-        $product->product_status = ($product->product_status=="pending")?'live':$product->product_status;        
+        $product->product_status = ($product->product_status == "pending") ? 'live' : $product->product_status;
         $product->updated_at = Carbon::now();
         $product->save();
 
 
         //-------save product details mulitple data----------------//
         $productId = $product->id;
-        $productRemove = ProductRelation::where('product_id',$productId)->delete();
+        $productRemove = ProductRelation::where('product_id', $productId)->delete();
         $insertData = [];
 
         // Handle horse_apparel --01--
@@ -636,7 +651,7 @@ class ProductService
                 ];
             }, $data['brands']));
         }
-       
+
         // Handle horse_sizes --09--
         if (isset($data['horse_sizes'])) {
             $insertData = array_merge($insertData, array_map(function ($pId) use ($productId) {
@@ -649,7 +664,7 @@ class ProductService
                 ];
             }, $data['horse_sizes']));
         }
-       
+
         // Handle rider_sizes --10--
         if (isset($data['rider_sizes'])) {
             $insertData = array_merge($insertData, array_map(function ($pId) use ($productId) {
@@ -662,7 +677,7 @@ class ProductService
                 ];
             }, $data['rider_sizes']));
         }
-        
+
         // Handle exchanged_upcoming_horse_shows --11--
         if (isset($data['exchanged_upcoming_horse_shows'])) {
             $insertData = array_merge($insertData, array_map(function ($pId) use ($productId) {
@@ -675,23 +690,23 @@ class ProductService
                 ];
             }, $data['exchanged_upcoming_horse_shows']));
         }
-       
-               
+
+
         // Insert all the data at once
         $relationResult = ProductRelation::insert($insertData);
 
         return $product;
     }
-   
+
     //----- Barns data store------//
-    public function createProductBarnsDetails($data,$user)
+    public function createProductBarnsDetails($data, $user)
     {
         $productDetail = ProductDetail::where(['product_id' => $data['productId']])->first();
         if (!$productDetail) {
             $productDetail = new ProductDetail();
             $productDetail->product_id = $data['productId'];
         }
-        
+
         //-------save product details table data----------------//
         $productDetail->stalls_available = $data['stalls_available'];
         $productDetail->fromdate = $data['fromdate'];
@@ -707,12 +722,12 @@ class ProductService
         $productDetail->updated_at = Carbon::now();
 
         $userDetail = UserDetails::where(['user_id' => $user->id])->first();
-        if(@$data['contactSet']){
+        if (@$data['contactSet']) {
             $phone = $userDetail->phone;
-        }else{
+        } else {
             $phone = $data['phone'];
         }
-        if(@$data['addressSet']){
+        if (@$data['addressSet']) {
             $precise_location = $userDetail->precise_location;
             $country = $userDetail->country;
             $state = $userDetail->state;
@@ -720,7 +735,7 @@ class ProductService
             $street = $userDetail->street;
             $latitude = $userDetail->latitude;
             $longitude = $userDetail->longitude;
-        }else{
+        } else {
             $precise_location = $data['precise_location'];
             $country = $data['country'];
             $state = $data['state'];
@@ -730,7 +745,7 @@ class ProductService
             $street = $data['street'];
         }
 
-        $productDetail->phone = $phone; 
+        $productDetail->phone = $phone;
         $productDetail->precise_location = $precise_location;
         $productDetail->country = $country;
         $productDetail->state = $state;
@@ -745,19 +760,19 @@ class ProductService
 
         //-------save product table data & enable product status as live----------------//
         $product = Product::where(['id' => $data['productId'], 'user_id' => $user->id])->first();
-        $product->product_status = ($product->product_status=="pending")?'live':$product->product_status;
+        $product->product_status = ($product->product_status == "pending") ? 'live' : $product->product_status;
         $product->updated_at = Carbon::now();
         $product->save();
 
 
         //-------save product details mulitple data----------------//
         $productId = $product->id;
-        $productRemove = ProductRelation::where('product_id',$productId)->delete();
+        $productRemove = ProductRelation::where('product_id', $productId)->delete();
         $insertData = [];
 
-         // Handle sub_category --00--
+        // Handle sub_category --00--
         if (isset($data['sub_category'])) {
-           foreach ($data['sub_category'] as $key => $category) {
+            foreach ($data['sub_category'] as $key => $category) {
                 $externalLink[$key]['product_id'] = $productId;
                 $externalLink[$key]['category_id'] = $category;
                 $externalLink[$key]['created_at'] = Carbon::now();
@@ -817,22 +832,22 @@ class ProductService
                     'updated_at' => now(),
                 ];
             }, $data['housing_amenities']));
-        }      
+        }
         // Insert all the data at once
         $relationResult = ProductRelation::insert($insertData);
 
         return $product;
     }
 
-     //----- Service & jobs data store------//
-    public function createProductServiceJobsDetails($data,$user)
+    //----- Service & jobs data store------//
+    public function createProductServiceJobsDetails($data, $user)
     {
         $productDetail = ProductDetail::where(['product_id' => $data['productId']])->first();
         if (!$productDetail) {
             $productDetail = new ProductDetail();
             $productDetail->product_id = $data['productId'];
         }
-        
+
         //-------save product details table data----------------//
         $productDetail->fromdate = $data['fromdate'];
         $productDetail->todate = $data['todate'];
@@ -852,13 +867,13 @@ class ProductService
         $productDetail->updated_at = Carbon::now();
 
         $userDetail = UserDetails::where(['user_id' => $user->id])->first();
-        if(@$data['contactSet']){
+        if (@$data['contactSet']) {
             $phone = $userDetail->phone;
-        }else{
+        } else {
             $phone = $data['phone'];
         }
-        
-        if(@$data['addressSet']){
+
+        if (@$data['addressSet']) {
             $precise_location = $userDetail->precise_location;
             $country = $userDetail->country;
             $state = $userDetail->state;
@@ -866,7 +881,7 @@ class ProductService
             $street = $userDetail->street;
             $latitude = $userDetail->latitude;
             $longitude = $userDetail->longitude;
-        }else{
+        } else {
             $precise_location = $data['precise_location'];
             $country = $data['country'];
             $state = $data['state'];
@@ -876,8 +891,8 @@ class ProductService
             $longitude = $data['longitude'];
         }
 
-     
-        $productDetail->phone = $phone; 
+
+        $productDetail->phone = $phone;
         $productDetail->precise_location = $precise_location;
         $productDetail->country = $country;
         $productDetail->state = $state;
@@ -888,7 +903,7 @@ class ProductService
         $productDetail->trail_latitude = @$data['trail_latitude'];
         $productDetail->trail_longitude = @$data['trail_longitude'];
 
-          
+
 
         $productDetail->street = $street;
         $productDetail->banner = $data['banners'];
@@ -898,14 +913,14 @@ class ProductService
 
         //-------save product table data & enable product status as live----------------//
         $product = Product::where(['id' => $data['productId'], 'user_id' => $user->id])->first();
-        $product->product_status = ($product->product_status=="pending")?'live':$product->product_status;
+        $product->product_status = ($product->product_status == "pending") ? 'live' : $product->product_status;
         $product->updated_at = Carbon::now();
         $product->save();
 
 
         //-------save product details mulitple data----------------//
         $productId = $product->id;
-        $productRemove = ProductRelation::where('product_id',$productId)->delete();
+        $productRemove = ProductRelation::where('product_id', $productId)->delete();
         $insertData = [];
 
         // Handle job_listing_type --01--
@@ -958,7 +973,7 @@ class ProductService
                     'updated_at' => now(),
                 ];
             }, $data['assistance_upcoming_shows']));
-        }      
+        }
         // Insert all the data at once
         $relationResult = ProductRelation::insert($insertData);
 
@@ -968,7 +983,7 @@ class ProductService
     public function getSoldProducts($data)
     {
 
-$xArray=array('Horses'=>1,'Equipment'=>2,'Housing'=>3,'Services'=>4);
+        $xArray = array('Horses' => 1, 'Equipment' => 2, 'Housing' => 3, 'Services' => 4);
         $data = Product::withoutTrashed()->with([
             'user',
             'productDetail',
@@ -989,16 +1004,16 @@ $xArray=array('Horses'=>1,'Equipment'=>2,'Housing'=>3,'Services'=>4);
             'sex',
             'greenEligibilities'
         ])
-        ->where('category_id',$xArray[$data['type']])
-        ->whereNotIn('product_status', ['pending','live','expire']);
+            ->where('category_id', $xArray[$data['type']])
+            ->whereNotIn('product_status', ['pending', 'live', 'expire']);
 
         $total = $data->get()->count();
         $data = $data->paginate(12);
 
         return [
-                'success' => true,
-                'data' => $data,
-                'total' => $total
-            ];
+            'success' => true,
+            'data' => $data,
+            'total' => $total
+        ];
     }
 }
