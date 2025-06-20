@@ -308,7 +308,7 @@
                                                             @endif
 
                                                                 <div class="image">
-                                                                    <img src="{{(@$value->image->first())?asset('storage/'.@$value->image->first()->image):asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
+                                                                    <img src="{{(@$value->image->first())?@$value->image->first()->image:asset('front/home/assets/images/logo/logo.svg')}}" alt="hourse-image">
                                                                     <span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span>
                                                                 </div>
                                                             </a>

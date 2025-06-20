@@ -56,7 +56,7 @@ Community & Events
                                             <td>
                                                 <div class="d-flex px-2 py-1">
                                                     <div>                                                    
-                                                        <img src="{{(@$value->image)?asset('storage/'.@$value->image):asset('front/home/assets/images/logo/logo.svg')}}" width="80" class="avatar avatar-sm me-3" alt="image-1">   
+                                                        <img src="{{(@$value->image)?@$value->image:asset('front/home/assets/images/logo/logo.svg')}}" width="80" class="avatar avatar-sm me-3" alt="image-1">   
                                                     </div>
                                                 </div>
                                                 

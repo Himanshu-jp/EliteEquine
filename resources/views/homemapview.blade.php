@@ -282,7 +282,7 @@
                         <div class="feat_card_bx list-page-card">
                             <a href="${baseUrl}/horseDetails/${event.id}" target="_blank">
                                 <div class="imagelist">
-                                    <img src="${baseUrl}/public/storage/${event.image[0].image || 'default.svg'}" alt="${event.title}" />
+                                    <img src="${event.image[0].image || baseUrl+'/public/storage/default.svg'}" alt="${event.title}" />
                                     
                                 </div>
                             </a>

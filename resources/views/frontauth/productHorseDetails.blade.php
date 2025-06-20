@@ -415,7 +415,7 @@ Your Ads
                 <div class="col-md-3 mt-3 position-relative">
                     <label for="pedigree_chart" class="form-label">Upload Pedigree Chart</label>
                     @if(@$products->productDetail->pedigree_chart)
-                        <img src="{{asset('storage/'.@$products->productDetail->pedigree_chart)}}" class="upload-image w-100" id="uploadTrigger"
+                        <img src="{{@$products->productDetail->pedigree_chart}}" class="upload-image w-100" id="uploadTrigger"
                     alt="Click to upload" style="cursor: pointer;" />
                     @else
                         <img src="{{asset('front/auth/assets/img/icons/upload-img.svg')}}" class="upload-image w-100" id="uploadTrigger"

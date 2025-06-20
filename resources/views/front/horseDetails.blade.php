@@ -217,7 +217,7 @@
                             @if (@$products->productDetail->pedigree_chart)
                                 <h3 class="horse-info-heading">Pedigree Chart</h3>
                                 <img class="pedigreechart"
-                                    src="{{ asset('storage/' . @$products->productDetail->pedigree_chart) }}"
+                                    src="{{ @$products->productDetail->pedigree_chart }}"
                                     alt="" />
                                 <div class="info-desc-footer">
                                     <ul>
@@ -241,7 +241,7 @@
                                 <h3 class="horse-info-heading">More Details</h3>
                                 <ul class="list-unstyled d-flex gap-3">
                                     @foreach (@$products->document as $key => $document)
-                                        <li><a href="{{ asset('storage/' . $document->file) }}" target="_blank"><img
+                                        <li><a href="{{ $document->file }}" target="_blank"><img
                                                     src="{{ asset('front/home/assets/images/pdf-icon.svg') }}"
                                                     alt="" /></a></li>
                                     @endforeach

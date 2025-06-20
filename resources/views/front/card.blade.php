@@ -9,7 +9,7 @@
                 <div class="feat_card_bx grid-view">
                     <a href="{{ route('horseDetails', @$value->id) }}">
                         <div class="image">
-                            <img src="{{ @$value->image->first() ? asset('storage/' . @$value->image->first()->image) : asset('front/home/assets/images/logo/logo.svg') }}"
+                            <img src="{{ @$value->image->first() ? @$value->image->first()->image : asset('front/home/assets/images/logo/logo.svg') }}"
                                 alt="hourse-image">
 
                             @if (@$value->product_status !== 'pending' && @$value->product_status !== 'live' && @$value->product_status !== 'expire')
@@ -81,7 +81,7 @@
                         <div class="foot">
                             <div class="bx">
                                 <div class="imagee">
-                                    <img src="{{ @$value->user->profile_photo_path ? asset('storage/' . @$value->user->profile_photo_path) : asset('front/auth/assets/img/user-img.png') }}"
+                                    <img src="{{ @$value->user->profile_photo_path ? @$value->user->profile_photo_path: asset('front/auth/assets/img/user-img.png') }}"
                                         class="user-img" alt="">
                                 </div>
                                 <div class="content">
@@ -164,7 +164,7 @@
             <div class="feat_card_bx list-page-card">
                 <a href="{{ route('horseDetails', @$value->id) }}">
                     <div class="imagelist">
-                        <img src="{{ @$value->image->first() ? asset('storage/' . @$value->image->first()->image) : asset('front/home/assets/images/logo/logo.svg') }}"
+                        <img src="{{ @$value->image->first() ? @$value->image->first()->image : asset('front/home/assets/images/logo/logo.svg') }}"
                             alt="hourse-image">
                         <span class="tag-img">{{ @$value->greenEligibilities->commonMaster->name }} </span>
                     </div>
@@ -210,7 +210,7 @@
                     <div class="foot">
                         <div class="bx">
                             <div class="imagee">
-                                <img src="{{ @$value->user->profile_photo_path ? asset('storage/' . @$value->user->profile_photo_path) : asset('front/auth/assets/img/user-img.png') }}"
+                                <img src="{{ @$value->user->profile_photo_path ? @$value->user->profile_photo_path : asset('front/auth/assets/img/user-img.png') }}"
                                     class="user-img" alt="">
                             </div>
                             <div class="content">
@@ -519,7 +519,7 @@
                         <div class="feat_card_bx list-page-card">
                             <a href="${baseUrl}/horseDetails/${event.id}" target="_blank">
                                 <div class="imagelist">
-                                    <img src="${baseUrl}/public/storage/${event.image[0].image || 'default.svg'}" alt="${event.title}" />
+                                    <img src="${event.image[0].image || baseUrl+'/public/storage/default.svg'}" alt="${event.title}" />
                                     
                                 </div>
                             </a>

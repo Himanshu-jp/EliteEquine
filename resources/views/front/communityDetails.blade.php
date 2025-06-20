@@ -14,7 +14,7 @@
                     <div class="left-side-deatils">
 
                         @if (@$community->image)
-                            <img class="pedigreechart" src="{{ asset('storage/' . @$community->image) }}" alt="" />
+                            <img class="pedigreechart" src="{{@$community->image }}" alt="" />
                             <div class="info-desc-footer">
                                 <ul>
                                     <li><span> <img src="{{ asset('front/home/assets/images/location-icon.svg') }}"
@@ -281,7 +281,7 @@
                                     <div class="adsfromcrd">
                                         <a href="{{ route('communityDetails', $value->id) }}">
                                             <div class="adsimg">
-                                                <img src="{{ @$value->image ? asset('storage/' . @$value->image) : asset('front/home/assets/images/logo/logo.svg') }}"
+                                                <img src="{{ @$value->image ? @$value->image : asset('front/home/assets/images/logo/logo.svg') }}"
                                                     width="80" class="avatar avatar-sm me-3" alt="image-1">
                                             </div>
                                         </a>
@@ -356,8 +356,8 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     position => {
-                        lat = position.coords.latitude;
-                        lng = position.coords.longitude;
+                        // lat = position.coords.latitude;
+                        // lng = position.coords.longitude;
                         updateLocation();
                     },
                     () => updateLocation(), {

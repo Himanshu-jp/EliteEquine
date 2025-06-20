@@ -2349,8 +2349,8 @@ ul.footer-bottom-link li {
   width: 100%;
   background: #fff;
   transition: right 0.3s ease;
-  height: 100vh;
-    overflow: auto;
+  /* height: 100vh;
+    overflow: auto; */
 }
 /* #horse-list .col-lg-4 {
     height: 100vh;

@@ -42,7 +42,7 @@
                         <img src="{{asset('front/home/assets/images/delete.svg')}}" width="24" alt="Featured-profiles">
                     </button>
 
-                    <img src="{{(@$value->image->first())?asset('storage/'.@$value->image->first()->image):asset('front/home/assets/images/logo/logo.svg')}}" class="compare-image" alt="Featured-profiles">
+                    <img src="{{(@$value->image->first())?$value->image->first()->image:asset('front/home/assets/images/logo/logo.svg')}}" class="compare-image" alt="Featured-profiles">
                     <div class="compare-title">
                         {{@$value->title}} <br>
                         <span>{{@$value->category->name}}</span>

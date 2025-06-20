@@ -5,7 +5,7 @@
                 <div class="feat_card_bx grid-view">
                     <a href="{{ route('serviceDetails', @$value->id) }}">
                         <div class="image">
-                            <img src="{{ @$value->image->first() ? asset('storage/' . @$value->image->first()->image) : asset('front/home/assets/images/logo/logo.svg') }}"
+                            <img src="{{ @$value->image->first() ? @$value->image->first()->image : asset('front/home/assets/images/logo/logo.svg') }}"
                                 alt="hourse-image">
                             {{-- <span class="tag-img">{{@$value->greenEligibilities->commonMaster->name}} </span> --}}
                         </div>
@@ -135,7 +135,7 @@
             <div class="feat_card_bx list-page-card">
                 <a href="{{ route('serviceDetails', @$value->id) }}">
                     <div class="imagelist">
-                        <img src="{{ @$value->image->first() ? asset('storage/' . @$value->image->first()->image) : asset('front/home/assets/images/logo/logo.svg') }}"
+                        <img src="{{ @$value->image->first() ?  @$value->image->first()->image : asset('front/home/assets/images/logo/logo.svg') }}"
                             alt="hourse-image">
                     </div>
                 </a>
@@ -441,7 +441,7 @@
                             0;
 
                         var imageSrc = event.image?.[0]?.image ?
-                            `${baseUrl}/public/storage/${event.image[0].image}` :
+                            `${event.image[0].image}` :
                             `${baseUrl}/public/front/home/assets/images/logo/logo.svg`;
 
                         var profileSrc = event.user?.profile_photo_path ?

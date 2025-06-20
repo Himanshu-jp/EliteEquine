@@ -202,7 +202,7 @@
                             @if (@$products->productDetail->pedigree_chart)
                                 <h3 class="horse-info-heading">Pedigree Chart</h3>
                                 <img class="pedigreechart"
-                                    src="{{ asset('storage/' . @$products->productDetail->pedigree_chart) }}"
+                                    src="{{ @$products->productDetail->pedigree_charta }}"
                                     alt="" />
                                 <div class="info-desc-footer">
                                     <ul>
@@ -778,7 +778,7 @@
                                 @foreach (@$moreAdd as $key => $value)
                                     <div class="adsfromcrd">
                                         <div class="adsimg">
-                                            <img src="{{ @$value->image->first() ? asset('storage/' . @$value->image->first()->image) : asset('front/home/assets/images/logo/logo.svg') }}"
+                                            <img src="{{ @$value->image->first() ? @$value->image->first()->image : asset('front/home/assets/images/logo/logo.svg') }}"
                                                 width="80" class="avatar avatar-sm me-3" alt="image-1">
                                         </div>
                                         <div class="adsfromcrd-cont">
@@ -900,8 +900,8 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     position => {
-                        lat = position.coords.latitude;
-                        lng = position.coords.longitude;
+                        // lat = position.coords.latitude;
+                        // lng = position.coords.longitude;
                         updateLocation();
                     },
                     () => updateLocation(), {

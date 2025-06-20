@@ -447,9 +447,19 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <label for="price" class="form-label">Price</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="is_negotiable" name="is_negotiable"
-                                {{ old('is_negotiable') == 'on' || @$products->is_negotiable == 'yes' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="Height_hands">Is Negotiable?</label>
+
+                            <input class="form-check-input" type="checkbox" id="is_negotiable" name="is_negotiable" value="1"
+                                {{ old('is_negotiable') == "yes" || @$products->is_negotiable == "yes" ? 'checked' : '' }}>
+                            <label class="form-check-label" for="is_negotiable">Is Negotiable?</label>
+                           
+                            <input class="form-check-input" type="checkbox" id="is_motivated_seller" name="is_motivated_seller" value="1"
+                                {{ old('is_motivated_seller') == "yes" || @$products->is_motivated_seller == "yes" ? 'checked' : '' }}>
+                            <label class="form-check-label" for="is_motivated_seller">Is Motivated Seller?</label>
+                            
+                            <input class="form-check-input" type="checkbox" id="price_reduced" name="price_reduced" value="1"
+                                {{ old('price_reduced') == "yes" || @$products->price_reduced == "yes" ? 'checked' : '' }}>
+                            <label class="form-check-label" for="price_reduced">Price Reduced?</label>
+
                         </div>
                     </div>
                     <input type="text" autocomplete="off" class="inner-form form-control mb-0 numbervalid"
@@ -1188,7 +1198,7 @@ function recurringImage() {
         $('.fullscreen-cover').hide();
 
             location.href = response.url;
-            Swal.fire("EliteQuine", response.message, "success");
+            // Swal.fire("EliteQuine", response.message, "success");
             }
         });
     }

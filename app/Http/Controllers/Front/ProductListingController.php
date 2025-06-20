@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\Schedule;
+use Illuminate\Support\Facades\DB;
+
 
 class ProductListingController extends Controller
 {
@@ -45,6 +47,12 @@ class ProductListingController extends Controller
 
         //-----add horse category condition------//
         $data = $data->where('category_id', 1);
+
+        //----checking the expiry date of an user-------//
+        $data->whereHas('user', function ($q) {
+            $q->where('is_subscribed','1')
+            ->where('plan_expired_on', '>',time());
+        });
 
         $searchString = $request->search;
         if (!empty($searchString)) {
@@ -438,6 +446,12 @@ class ProductListingController extends Controller
         //-----add horse category condition------//
         $data = $data->where('category_id', 2);
 
+        //----checking the expiry date of an user-------//
+        $data->whereHas('user', function ($q) {
+            $q->where('is_subscribed','1')
+            ->where('plan_expired_on', '>',time());
+        });
+
 
         $searchString = $request->search;
         if (!empty($searchString)) {
@@ -714,6 +728,12 @@ class ProductListingController extends Controller
 
         //-----add horse category condition------//
         $data = $data->where('category_id', 3);
+
+        //----checking the expiry date of an user-------//
+        $data->whereHas('user', function ($q) {
+            $q->where('is_subscribed','1')
+            ->where('plan_expired_on', '>',time());
+        });
 
 
         $searchString = $request->search;
@@ -998,6 +1018,12 @@ class ProductListingController extends Controller
 
         //-----add horse category condition------//
         $data = $data->where('category_id', 4);
+
+        //----checking the expiry date of an user-------//
+        $data->whereHas('user', function ($q) {
+            $q->where('is_subscribed','1')
+            ->where('plan_expired_on', '>',time());
+        });
 
 
         $searchString = $request->search;

@@ -23,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('schedules', function (Blueprint $table) {
-            $table->dropColumn('time_slot');
+            $table->dropColumn('time_slot_from');
+            $table->dropColumn('time_slot_to');
         });
     }
 };

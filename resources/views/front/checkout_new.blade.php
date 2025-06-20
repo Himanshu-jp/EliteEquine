@@ -85,7 +85,7 @@ Checkout
                     <div class="d-flex align-items-center mb-3">
 
                         @if(@$products->image->first())
-                        <img src="{{ asset('storage/' . @$products->image->first()->image) }}" class="me-3" width="80" height="80" alt="">
+                        <img src="{{  @$products->image->first()->image }}" class="me-3" width="80" height="80" alt="">
                         @endif
                         <div>
                             <h6>{{ @$products->title }}</h6>

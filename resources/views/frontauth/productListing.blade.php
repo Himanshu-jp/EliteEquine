@@ -130,7 +130,7 @@ Product Listing
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div>
-                                                <img src="{{(@$value->image->first())?asset('storage/'.@$value->image->first()->image):asset('front/home/assets/images/logo/logo.svg')}}"
+                                                <img src="{{(@$value->image->first())?@$value->image->first()->image:asset('front/home/assets/images/logo/logo.svg')}}"
                                                     class="avatar avatar-sm me-3 product-list-img" alt="image-1">
                                             </div>
                                             <div class="d-flex flex-column justify-content-center">
@@ -310,7 +310,7 @@ Product Listing
                                     </td> --}}
 
                                      <td>
-                                         <span class="text-xs font-weight-bold">{{(@$value->user->plan_expired_on)?date('d-m-Y', $value->user->plan_expired_on):''}}</span>
+                                         <span class="text-xs font-weight-bold">{{(@$value->user->plan_expired_on)?date('F d,Y', $value->user->plan_expired_on):''}}</span>
                                      </td>
 
                                     <td class="align-middle text-center">

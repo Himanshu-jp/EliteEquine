@@ -229,7 +229,7 @@
 
                         //var ticketUrl = isAuthenticated ? (event.ticket_sale_link || '#') : loginRoute;
                         // var eventImage = event.image && event.image.length > 0  ?"{{ env('MAP_PUBLIC') }}/"+ event.image[0].image : '{{ env('MAP_PUBLIC') }}/public/front/home/assets/images/logo/logo.svg' ;
-                        var eventImage = "{{ env('MAP_PUBLIC') }}/front/home/assets/images/logo/logo.svg";
+                        var eventImage = event.image || baseUrl+'/public/storage/default.svg';
                         var baseUrl = "{{ url('/') }}";
                         var eventUrl = `${baseUrl}communityDetails/${event.id}`;
                         var maxLength = 40;

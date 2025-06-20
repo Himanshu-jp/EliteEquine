@@ -29,8 +29,6 @@ class ProductService
 {
     public function createProduct($data, $user)
     {
-
-
         if (isset($data['id'])) {
             $product = Product::where(['id' => $data['id'], 'user_id' => $user->id])->first();
         } else {
@@ -46,9 +44,9 @@ class ProductService
         $product->title = $data['title'];
         $product->slug = Str::slug($data['title'], '-');
         $product->price = $data['price'];
-        $product->is_negotiable = (isset($data['is_negotiable']) && $data['is_negotiable'] == 'on') ? 'yes' : 'no';
-        // $product->is_motivated_seller = ($data['is_motivated_seller'] == 'on') ? 1 : 0;
-        // $product->price_reduced = ($data['price_reduced'] == 'on') ? 1 : 0;
+        $product->is_negotiable = (isset($data['is_negotiable']) && $data['is_negotiable'] == 1) ? 'yes' : 'no';
+        $product->is_motivated_seller = (isset($data['is_motivated_seller']) && $data['is_motivated_seller'] == 1) ? 'yes' : 'no';
+        $product->price_reduced = (isset($data['price_reduced']) && $data['price_reduced'] == 1) ? 'yes' : 'no';
         $product->currency = $data['currency'];
         $product->description = $data['description'];
         $product->product_status = ($product->product_status) ? $product->product_status : 'pending';
@@ -174,7 +172,9 @@ class ProductService
         $product->currency = $data['currency'] ?? $product->currency;
         $product->description = $data['description'] ?? $product->description;
         // $product->external_link = $data['external_link'] ?? $product->external_link;
-        $product->is_negotiable = (isset($data['is_negotiable']) && $data['is_negotiable'] == 'on') ? 'yes' : 'no';
+        $product->is_negotiable = (isset($data['is_negotiable']) && $data['is_negotiable'] == 1) ? 'yes' : 'no';
+        $product->is_motivated_seller = (isset($data['is_motivated_seller']) && $data['is_motivated_seller'] == 1) ? 'yes' : 'no';
+        $product->price_reduced = (isset($data['price_reduced']) && $data['price_reduced'] == 1) ? 'yes' : 'no';
         $product->updated_at = now();
         $product->save();
 
@@ -237,15 +237,17 @@ class ProductService
 
             $modelClass::create([
                 'product_id' => $productId,
-                $column => $storedPath
+                $column =>  Storage::disk('s3')->url($storedPath)
             ]);
+
+            
         }
     }
 
     //----- Horse data store----//
     public function createProductHorseDetails($data, $user)
     {
-        $productDetail = ProductDetail::where(['product_id' => $data['productId']])->first();
+         $productDetail = ProductDetail::where(['product_id' => $data['productId']])->first();
         if (!$productDetail) {
             $productDetail = new ProductDetail();
             $productDetail->product_id = $data['productId'];
@@ -265,14 +267,20 @@ class ProductService
         $productDetail->sirebloodline = $data['sirebloodline'];
         $productDetail->dambloodline = $data['dambloodline'];
         $productDetail->usef = $data['usef'];
-        if (isset($data['pedigree_chart'])) {
-            $pedigree_chart = $data['pedigree_chart']->store('products/pedigree_chart', 's3');
+      if (isset($data['pedigree_chart'])) {
+    // Store file in S3
+    $pedigree_chart = $data['pedigree_chart']->store('products/pedigree_chart', 's3');
 
-            // Make the file publicly accessible (optional)
-            Storage::disk('s3')->setVisibility($pedigree_chart, 'public');
-        } else {
-            $pedigree_chart = $productDetail['pedigree_chart'];
-        }
+    // Make the file publicly accessible
+    Storage::disk('s3')->setVisibility($pedigree_chart, 'public');
+
+    // Get full URL
+    $pedigree_chart = Storage::disk('s3')->url($pedigree_chart);
+
+} else {
+    $pedigree_chart = $productDetail['pedigree_chart'];
+}
+
         $productDetail->pedigree_chart = $pedigree_chart;
         $productDetail->created_at = Carbon::now();
         $productDetail->updated_at = Carbon::now();
@@ -302,7 +310,9 @@ class ProductService
             $latitude = $data['latitude'];
             $longitude = $data['longitude'];
         }
-
+ $productDetail->trial_location = @$data['trial_location'];
+        $productDetail->trail_latitude = @$data['trail_latitude'];
+        $productDetail->trail_longitude = @$data['trail_longitude'];
         $productDetail->phone = $phone;
         $productDetail->precise_location = $precise_location;
         $productDetail->country = $country;
@@ -522,7 +532,9 @@ class ProductService
             $latitude = $data['latitude'];
             $longitude = $data['longitude'];
         }
-
+ $productDetail->trial_location = @$data['trial_location'];
+        $productDetail->trail_latitude = @$data['trail_latitude'];
+        $productDetail->trail_longitude = @$data['trail_longitude'];
         $productDetail->latitude = $latitude;
         $productDetail->longitude = $longitude;
         $productDetail->phone = $phone;
@@ -715,6 +727,9 @@ class ProductService
         $productDetail->daily_board_rental_rate = $data['daily_board_rental_rate'];
         $productDetail->monthly_board_rental_rate = $data['monthly_board_rental_rate'];
         $productDetail->weekly_board_rental_rate = $data['weekly_board_rental_rate'];
+         $productDetail->trial_location = @$data['trial_location'];
+        $productDetail->trail_latitude = @$data['trail_latitude'];
+        $productDetail->trail_longitude = @$data['trail_longitude'];
         $productDetail->sale_cost = $data['sale_cost'];
         $productDetail->realtor = $data['realtor'];
         $productDetail->property_manager = $data['property_manager'];

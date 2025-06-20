@@ -238,6 +238,8 @@
                                             Category</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Price Method</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Expires</th>
                                             <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Status</th>
@@ -309,6 +311,8 @@
                                                 @endif
                                             </td>
 
+
+
                                             <td class="align-middle text-center text-sm">
                                                 @if(@$value->product_status == 'live')
                                                     <span class="badge"
@@ -336,6 +340,11 @@
                                                 <span
                                                     class="text-xs font-weight-bold">{{@$value->sex->commonMaster->name}}</span>
                                             </td> --}}
+
+                                             <td>
+                                         <span class="text-xs font-weight-bold">{{(@$value->user->plan_expired_on)?date('F d,Y', $value->user->plan_expired_on):''}}</span>
+                                     </td>
+                                            
                                              <td class="align-middle text-center">
                                         
                                                 @if($sale == 'auction')

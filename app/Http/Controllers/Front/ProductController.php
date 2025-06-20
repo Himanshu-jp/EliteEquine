@@ -79,7 +79,6 @@ class ProductController extends Controller
         //     ->orderBy('id', 'desc')
         //     ->first();
         // return view('frontauth/product', compact('products'));
-
         return view('frontauth/product',compact('currencyList'));
     }
 
@@ -94,7 +93,8 @@ class ProductController extends Controller
         
         if(@$products->product_status=="sold"){
              return redirect()->back()->with('error', 'This product has been sold and can no longer be updated.');
-        }            
+        }         
+        // dd($products->toArray());   
         return view('frontauth/product', compact(['products','currencyList']));
     }
    
@@ -172,46 +172,46 @@ class ProductController extends Controller
         $product = $this->productService->createProduct($validatedData, $user);
 
         //productZone
-     if (!$product) {
-    return response()->json([
-        'status' => 'error',
-        'message' => 'Failed to create product.'
-    ], 400);
-}
+        if (!$product) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to create product.'
+            ], 400);
+        }
 
-switch ($product->category_id) {
-    case 1:
-        $url = route('productHorseDetails', ['id' => $product->id]);
-        $message = 'Horse product created successfully.';
-        break;
+        switch ($product->category_id) {
+            case 1:
+                $url = route('productHorseDetails', ['id' => $product->id]);
+                $message = 'Horse product created successfully.';
+                break;
 
-    case 2:
-        $url = route('productEquipmentDetails', ['id' => $product->id]);
-        $message = 'Equipment product created successfully.';
-        break;
+            case 2:
+                $url = route('productEquipmentDetails', ['id' => $product->id]);
+                $message = 'Equipment product created successfully.';
+                break;
 
-    case 3:
-        $url = route('productBarnsDetails', ['id' => $product->id]);
-        $message = 'Barn product created successfully.';
-        break;
+            case 3:
+                $url = route('productBarnsDetails', ['id' => $product->id]);
+                $message = 'Barn product created successfully.';
+                break;
 
-    case 4:
-        $url = route('productServiceDetails', ['id' => $product->id]);
-        $message = 'Service product created successfully.';
-        break;
+            case 4:
+                $url = route('productServiceDetails', ['id' => $product->id]);
+                $message = 'Service product created successfully.';
+                break;
 
-    default:
+            default:
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Invalid category.'
+                ], 400);
+        }
+
         return response()->json([
-            'status' => 'error',
-            'message' => 'Invalid category.'
-        ], 400);
-}
-
-return response()->json([
-    'status' => 'success',
-    'message' => $message,
-    'url' => $url
-]);
+            'status' => 'success',
+            'message' => $message,
+            'url' => $url
+        ]);
     }
 
     //------Horse 0001-------//
@@ -262,6 +262,7 @@ return response()->json([
         $user = Auth::user();
         $validatedData = $request->all();
         $product = $this->productService->createProductHorseDetails($validatedData, $user);
+
         if (!$product) {
             return redirect()->back()->with('error', 'Failed to create product details.');
         } else {
