@@ -79,7 +79,7 @@ protected $appends = ['disciplines_names'];
 
     public function user()
     {
-        return $this->belongsTo(User::class)->select('id', 'name', 'profile_photo_path', 'email', 'phone_no');
+        return $this->belongsTo(User::class)->select('id', 'name', 'profile_photo_path', 'email', 'phone_no','plan_activated_on','plan_expired_on');
     }
 
     public function category()

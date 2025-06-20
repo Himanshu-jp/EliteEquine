@@ -61,7 +61,7 @@ Hj Forum
                                     </li>
                                         <span>
                                         <img src="{{asset('front/home/assets/images/calendar-icon.svg')}}"
-                                            alt="">&nbsp; {{@$value->created_at->format('d M Y h:m a')}} 
+                                            alt="">&nbsp; {{@$value->created_at->format('M d, Y h:m A')}} 
                                         </span>
                                     </ul>
                                 </div>

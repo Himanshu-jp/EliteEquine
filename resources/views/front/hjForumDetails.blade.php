@@ -35,7 +35,7 @@ HJ Forum Details
             <div class="info-desc-footer">
                 <ul class="d-flex gap-3 justify-content-start">
                     <li><span> <img src="{{asset('front/home/assets/images/icons/user.png')}}" width="20" alt="" /></span> &nbsp;{{@$forum->user->name}}</li>
-                    <li><span> <img src="{{asset('front/home/assets/images/calendar-icon.svg')}}" alt="" /></span>  {{@$forum->created_at->format('d M Y h:m a')}}
+                    <li><span> <img src="{{asset('front/home/assets/images/calendar-icon.svg')}}" alt="" /></span>  {{@$forum->created_at->format('M d, Y h:m A')}}
                     </li>
                 </ul>
             </div>

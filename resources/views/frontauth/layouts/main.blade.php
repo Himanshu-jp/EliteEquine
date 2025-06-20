@@ -29,6 +29,25 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v1.0.0/mapbox-gl-supported.js"></script>
 </head>
 
+
+<style>
+  .fullscreen-cover {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: #2222227a;
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    height: 100%;
+    z-index: 99;
+}
+</style>
 <body class="g-sidenav-show">
 
     {{-- <div class="preloader">
@@ -178,6 +197,9 @@
         $(".preloader").fadeOut();
 
     </script>
+    <div class="fullscreen-cover">
+        {{ 'Your Name Here' }}
+    </div>
 </body>
 
 </html>

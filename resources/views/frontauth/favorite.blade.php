@@ -117,6 +117,7 @@
                                     <th>Price</th>
                                     <th>Category</th>
                                     <th class="text-center">Status</th>
+                                    <th class="text-center">Expires</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>

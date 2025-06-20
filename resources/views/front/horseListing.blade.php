@@ -67,10 +67,7 @@
                                         name="maxLeasePrice" />
                                 </div>
                             </div>
-
                         </div>
-
-
                         <div class="filter-section">
                             <label for="currency">Currency</label>
                             <select id="currency" class="form-select form-control" name="currency">

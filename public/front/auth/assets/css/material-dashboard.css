@@ -32578,3 +32578,8 @@ img.user-img {
 textarea.inner-form.form-control {
     height: auto !important;
 }
+
+#editImg {
+    width: 200px;
+    border-radius: 10px;
+}

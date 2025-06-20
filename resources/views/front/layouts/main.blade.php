@@ -291,12 +291,11 @@
         });
     });
 
-
-
-    $(document).on('click', '.compare-add-button', function(e) {
+   
+    $(document).on('click', '.compare-add-button', function (e) {
+        e.preventDefault();
         var id = $(this).data('id');
 
-        // $('.preloader').show();
         $.ajax({
             url: '{{ url('compare') }}',
             type: 'POST',
@@ -305,18 +304,20 @@
                 id: id,
                 status: 'add'
             },
-            success: function(response) {
+            success: function (response) {
                 $('.preloader').hide();
                 $('#compare-list').html(response.html);
-                $("#compareModal").modal('show');
+
+                const myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('compareModal'));
+                myModal.show();
             }
         });
     });
 
-    $(document).on('click', '.compare-remove-button', function(e) {
+    $(document).on('click', '.compare-remove-button', function (e) {
+        e.preventDefault();
         var id = $(this).data('id');
 
-        // $('.preloader').show();
         $.ajax({
             url: '{{ url('compare') }}',
             type: 'POST',
@@ -325,21 +326,25 @@
                 id: id,
                 status: 'remove'
             },
-            success: function(response) {
+            success: function (response) {
                 $('.preloader').hide();
-                $('#compare-list').html(response.html); // Inject rendered HTML
-                $("#compareModal").modal('show');
+                $('#compare-list').html(response.html);
+
+                const myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('compareModal'));
+
                 if (response.total == 0) {
-                    $("#compareModal").modal('hide');
+                    myModal.hide();
+                } else {
+                    myModal.show();
                 }
             }
         });
     });
 
-    $(document).on('click', '.compare-remove-all', function(e) {
+    $(document).on('click', '.compare-remove-all', function (e) {
+        e.preventDefault();
         var id = $(this).data('id');
 
-        // $('.preloader').show();
         $.ajax({
             url: '{{ url('compare') }}',
             type: 'POST',
@@ -348,16 +353,21 @@
                 id: id,
                 status: 'all'
             },
-            success: function(response) {
+            success: function (response) {
                 $('.preloader').hide();
-                $('#compare-list').html(response.html); // Inject rendered HTML
-                $("#compareModal").modal('show');
+                $('#compare-list').html(response.html);
+
+                const myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('compareModal'));
+
                 if (response.total == 0) {
-                    $("#compareModal").modal('hide');
+                    myModal.hide();
+                } else {
+                    myModal.show();
                 }
             }
         });
     });
+
 </script>
 
 
@@ -458,7 +468,7 @@
         }
 
         .show {
-            display: block;
+            display: inline-flex;
         }
 
         .form-check-input:checked[type="checkbox"] {
@@ -573,6 +583,7 @@
 
     
 </script>
+
 </body>
 
 </html>

@@ -4,7 +4,15 @@ Sold
 @endsection
 @section('content')
 
+<style>
+    .nav-link{
+        color: #000;
+    }
 
+       .nav-link.active{
+        color: #ff9100;
+    }
+</style>
 <section class="single-banner">
     <img src="{{asset('front/home/assets/images/single-banner-bg.jpg')}}" class="banner-bg w-100" alt="">
     <div class="container">
@@ -16,50 +24,19 @@ Sold
 
 <section class="section">
     <div class="container">
-        {{--<div class="row">
-            <div class="col-lg-3 mb-3">
-                <div class="feat_card_bx">
-                    <div class="image">
-                        <img src="{{asset('front/home/assets/images/featured_hource3.png')}}" alt="hource-image" />
-                    </div>
-                    <div class="content">
-                        <h3 onclick="window.location.href='{{route('sale')}}'">Synergy | 2019 | 16.2h <br />Westphalian
-                            | Gelding</h3>
-                        <h4>Sale: $100,000 - $150,000</h4>
-                        <h4 class="mb-1">Lease: $40,000 - $60,000 / yr</h4>
-                        <span class="sp1">Hunter, Jumper, Equitation</span>
-                        <div class="location">
-                            <img src="{{asset('front/home/assets/images/icons/loction_icn.svg')}}" alt="location-icon" />
-                            <span>Ocala, FL <br />Trial: World Equestrian Center - Ocala (1/22/25 - 3/15/25)</span>
-                        </div>
-                        <div class="foot">
-                            <div class="bx">
-                                <div class="imagee">
-                                    <img src="{{asset('front/home/assets/images/profile_feture.svg')}}" alt="Featured-profiles" />
-                                </div>
-                                <div class="content">
-                                    <h4>Martin Douzant</h4>
-                                    <div class="stars">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bx2">
-                                <button><img src="{{asset('front/home/assets/images/icons/re_icn.svg')}}" alt="" /></button>
-                                <button><img src="{{asset('front/home/assets/images/icons/like_icn.svg')}}" alt="" /></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>  --}}
+<div class="row">
+    <div class="col-md-12 text-center d-flex justify-content-center mt-2 mb-3">
+              <nav class="nav">
+  <a class="nav-link active changeTabs" data-tab="Horses"  href="javascript:;">Horses</a>
+  <a class="nav-link changeTabs" data-tab="Equipment" href="javascript:;">Equipment & Apparel</a>
+  <a class="nav-link changeTabs" data-tab="Housing" href="javascript:;">Barns & Housing</a>
+  <a class="nav-link changeTabs " data-tab="Services"  href="javascript:;">Services & Jobs
+</a>
+</nav>
+    </div>
+</div>
             <div id="productsold-list" class="row">
-                {{-- Horse cards will be injected here --}}
-                
+             
             </div>
 
             <div class="col-lg-12 mx-auto mt-4" id="noDataFound" style="display:none;">
@@ -72,21 +49,7 @@ Sold
                 </nav>
             </div>
             
-            <!-- <div class="col-lg-4 mx-auto mt-4">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination d-flex justify-content-center align-items-center">
-                        <li class="page-item"><a class="page-link" href="#"><img
-                                    src="{{asset('front/home/assets/images/icons/arrow_left.png')}}" width="24" alt=""></a></li>
-                        <li class="page-item"><a class="page-link active" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><img
-                                    src="{{asset('front/home/assets/images/icons/arrow_right.png')}}" width="24" alt=""></a></li>
-                    </ul>
-                </nav>
-            </div> -->
+        
             <div class="col-lg-12 mx-auto mt-4">
                 <nav aria-label="Page navigation example">
                         <div class="Page navigation example">
@@ -104,14 +67,14 @@ Sold
 @endsection
 @section('script')
 <script>
-    function loadHorses(page = 1) {   
+    function loadHorses(page = 1,type=null) {   
     $('.preloader').show();
     $.ajax({
         url: '{{ route("product.sold.datatable") }}',
-        type: 'POST',
+        type: 'get',
         data: {
-            _token: '{{ csrf_token() }}',
             page: page,
+            type: type,
         },
         success: function(response) { 
             window.scrollTo({ top: 0, behavior: 'smooth' });    
@@ -129,12 +92,12 @@ Sold
 }
  // Initial load
 $(document).ready(function () {
-    loadHorses();
+    loadHorses(1,$('.changeTabs.active').attr('data-tab'));
     // Optional: click on pagination
     $(document).on('click', '.pagination a', function(e) {
         e.preventDefault();
         let page = $(this).attr('href').split('page=')[1];
-        loadHorses(page);
+        loadHorses(page,$('.changeTabs.active').attr('data-tab'));
     });
 });
 
@@ -144,7 +107,14 @@ function loadHorsesAndScroll() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     // Call your original function
-    loadHorses();
+    loadHorses(1,$('.changeTabs.active').attr('data-tab'));
 }
+
+$('body').on('click','.changeTabs',function(){
+    $('.changeTabs').removeClass('active')
+    $(this).addClass('active')
+    loadHorses(1,$(this).attr('data-tab'));
+
+})
 </script>
 @endsection

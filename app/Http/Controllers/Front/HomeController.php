@@ -29,6 +29,7 @@ use App\Models\AboutSellerBusiness;
 use App\Models\BuyerBrowser;
 use App\Models\BuyerFaq;
 use App\Models\ChatUser;
+use App\Models\Community;
 use App\Models\Conveniencs;
 use App\Models\ProductComment;
 use App\Models\ProductReport;
@@ -129,7 +130,6 @@ class HomeController extends Controller
         }
         $events = $data->orderBy('id', 'desc')->take(3)->get()->toArray();
 
-        // dd($industryMatricData->toArray());
         
         return view('front/home', compact(['blogs', 'partnershipCollaborate', 'featuredData', 'industryMatricData', 'homeAboutData', 'sellerBusinessData', 'buyerBrowserData', 'buyerFaqData', 'events', 'coordinate', 'hjForumData']));
     }
@@ -530,7 +530,7 @@ class HomeController extends Controller
         // $orderBy = in_array($request->input('order_by'), ['asc', 'desc']) ? $request->input('order_by') : 'desc';
 
         // Get only products that are favorited by the authenticated user
-        $query = Product::whereHas('favorites', function ($q) {
+        $query = Product::with('user')->whereHas('favorites', function ($q) {
             $q->where('user_id', auth()->user()->id);
         })->with('favorites');
 
@@ -545,6 +545,8 @@ class HomeController extends Controller
 
         // Sort and paginate
         $favProducts = $query->orderBy('id', $order)->paginate(10);
+
+    
         // $favProducts = $query->where('category_id', $categoryId)->orderBy('id', $order)->paginate(10);
 
         // AJAX response
@@ -692,15 +694,17 @@ class HomeController extends Controller
 
     public function updateNotificationData(request $request){
 
-
     if(!isset($request->lister)){
  User::where('id',Auth::user()->id)->update(['opt_in_notification'=>'no']);
 
 $request->lister=[];
       }else{
  User::where('id',Auth::user()->id)->update(['opt_in_notification'=>'yes']);
+     $request->lister=array_keys($request->lister);
 
       }
+
+
 $alerts=[];
 if (is_array($request->lister) && in_array('1', $request->lister)) {
     array_push($alerts, 'subscription', 'payment');

@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('communities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->index();
-            $table->string("title");
-            $table->string("requirement");
+            $table->longText("title");
+            $table->longText("requirement");
             $table->date("date");
             $table->time("time");
-            $table->string("event_around");
+            $table->longText("event_around");
             $table->integer("price");
             $table->string("image");
             $table->string("location");

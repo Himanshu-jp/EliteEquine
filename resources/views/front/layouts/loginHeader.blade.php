@@ -27,7 +27,7 @@
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v1.0.0/mapbox-gl-supported.js"></script>
 </head>
 
-<body>
+<body id="home">
     <!-------------------------------- Header ------------------------------------>
     <header class="header-inner position-sticky">
         <nav class="navbar navbar-expand-xl">

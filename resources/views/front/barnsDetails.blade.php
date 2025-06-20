@@ -18,15 +18,15 @@
                                 <div class="swiper-wrapper">
 
                                     @foreach (@$products->image as $key => $image)
-                                        <div class="swiper-slide"><img src="{{ asset('storage/' . $image->image) }}"
+                                        <div class="swiper-slide"><img src="{{ $image->image }}"
                                                 alt=""></div>
                                     @endforeach
 
                                     @foreach (@$products->video as $key => $video)
                                         <div class="swiper-slide">
                                             <video width="" height="" controls>
-                                                <source src="{{ asset('storage/' . $video->video_url) }}" type="video/mp4">
-                                                <source src="{{ asset('storage/' . $video->video_url) }}" type="video/ogg">
+                                                <source src="{{ $video->video_url }}" type="video/mp4">
+                                                <source src="{{  $video->video_url }}" type="video/ogg">
                                                 Your browser does not support the video tag.
                                             </video>
                                         </div>
@@ -86,13 +86,13 @@
                                 <div class="swiper-wrapper">
 
                                     @foreach (@$products->image as $key => $image)
-                                        <div class="swiper-slide"><img src="{{ asset('storage/' . $image->image) }}"
+                                        <div class="swiper-slide"><img src="{{ $image->image }}"
                                                 alt=""></div>
                                     @endforeach
 
 
                                     @foreach (@$products->video as $key => $video)
-                                        <div class="swiper-slide"><img src="{{ asset('storage/' . $video->thumbnail) }}"
+                                        <div class="swiper-slide"><img src="{{ $video->thumbnail }}"
                                                 alt=""></div>
                                     @endforeach
 
@@ -226,7 +226,7 @@
                                 <h3 class="horse-info-heading">More Details</h3>
                                 <ul class="list-unstyled d-flex gap-3">
                                     @foreach (@$products->document as $key => $document)
-                                        <li><a href="{{ asset('storage/' . $document->file) }}" target="_blank"><img
+                                        <li><a href="{{ $document->file }}" target="_blank"><img
                                                     src="{{ asset('front/home/assets/images/pdf-icon.svg') }}"
                                                     alt="" /></a></li>
                                     @endforeach
@@ -444,7 +444,7 @@
                                                     alt="" /> Call for price</button>
                                         @elseif(@$products->sale_method == 'standard' && @$products->transaction_method == 'platform')
                                             @if (@$products->product_status == 'live')
-                                                <a href="{{ route('product.checkout', $products->id) }}"><button
+                                                <a href="{{ route('product.checkout', $products->id) }}" class="w-100"><button
                                                         type="button" class="buy w-100">Buy Now</button></a>
                                             @elseif(@$products->product_status == 'sold')
                                                 <button class="call-price w-100">Sold</button>
@@ -547,8 +547,25 @@
                                                 @endphp
 
                                                 @if ($averageRating)
-                                                    <img src="{{ asset('front/home/assets/images/star-rating5.svg') }}"
-                                                        height="18px" alt="" />
+                                                    @switch($averageRating)
+                                                        @case('5')
+                                                             <img src="{{ asset('front/home/assets/images/star-rating5.svg') }}" height="18px" alt="" />
+                                                            @break
+
+                                                        @case('4')
+                                                             <img src="{{ asset('front/home/assets/images/star-rating4.svg') }}" height="18px" alt="" />
+                                                            @break
+
+                                                        @case('3')
+                                                             <img src="{{ asset('front/home/assets/images/star-rating3.svg') }}" height="18px" alt="" />
+                                                            @break
+                                                        @case('2')
+                                                            <img src="{{ asset('front/home/assets/images/star-rating2.svg') }}" height="18px" alt="" />
+                                                            @break
+
+                                                        @default
+                                                             <img src="{{ asset('front/home/assets/images/star-rating1.svg') }}" height="18px" alt="" />
+                                                    @endswitch
                                                     <span>{{ $arr[$averageRating - 1] }}</span>
                                                 @else
                                                     <span>No reviews yet</span>

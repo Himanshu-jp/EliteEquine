@@ -28,30 +28,30 @@ class ProductRequest extends FormRequest
             'transaction_method' => 'required|in:platform,buyertoseller',
             'title' => 'required|string|max:500',
             'currency' => 'required|string|max:3',
-            'video'   => 'nullable|array',
-            'video.*' => 'mimes:mp4,mov,avi,wmv|max:20480',
+            // 'video'   => 'nullable|array',
+            // 'video.*' => 'mimes:mp4,mov,avi,wmv|max:20480',
 
-            'document'   => 'nullable|array',
-            'document.*'   => 'mimes:pdf,doc,docx|max:4096',
+            // 'document'   => 'nullable|array',
+            // 'document.*'   => 'mimes:pdf,doc,docx|max:4096',
 
             'external_link'   => 'nullable|array',
             'external_link.*' => 'nullable|url|max:400',
             
-            'video_link'   => 'nullable|array',
-            'video_link.*' => 'nullable|url|max:400',
+            // 'video_link'   => 'nullable|array',
+            // 'video_link.*' => 'nullable|url|max:400',
 
             'description' => 'required|string|max:5000',
             'bid_end_date' => ['required_if:sale_method,auction', 'nullable', 'date', 'after_or_equal:'.now()->addDays(2)->toDateString()],
             'price' => ['required_if:transaction_method,platform', 'nullable'],
         ];
-        // Only require image if the method is POST (create)
-        if ($this->id!=null) {            
-            $rules['image'] = 'nullable|array';
-            $rules['image.*'] = 'nullable|image|mimes:jpeg,png,jpg|max:4096';
-        } else {
-            $rules['image'] = 'nullable|required';
-            $rules['image.*'] = 'required|image|mimes:jpeg,png,jpg|max:4096';
-        }      
+        // // Only require image if the method is POST (create)
+        // if ($this->id!=null) {            
+        //     $rules['image'] = 'nullable|array';
+        //     $rules['image.*'] = 'nullable|image|mimes:jpeg,png,jpg|max:4096';
+        // } else {
+        //     $rules['image'] = 'nullable|required';
+        //     $rules['image.*'] = 'required|image|mimes:jpeg,png,jpg|max:4096';
+        // }      
 
         return $rules;
     }
@@ -76,25 +76,25 @@ class ProductRequest extends FormRequest
             'currency.string' => 'Currency must be a valid string.',
             'currency.max' => 'Currency may not be greater than 3 characters.',
 
-            'image.required' => 'Please upload at least one image.',
-            'image.array'    => 'Images must be provided as an array.',
-            'image.*.image'  => 'Each file in images must be an image.',
-            'image.*.mimes'  => 'Images must be of type jpeg, png, or jpg.',
-            'image.*.max'    => 'Each image must not exceed 4MB.',
+            // 'image.required' => 'Please upload at least one image.',
+            // 'image.array'    => 'Images must be provided as an array.',
+            // 'image.*.image'  => 'Each file in images must be an image.',
+            // 'image.*.mimes'  => 'Images must be of type jpeg, png, or jpg.',
+            // 'image.*.max'    => 'Each image must not exceed 4MB.',
 
-            'video.array'    => 'Videos must be provided as an array.',
-            'video.*.mimes'  => 'Each video must be of type mp4, mov, avi, or wmv.',
-            'video.*.max'    => 'Each video must not exceed 20MB.',
+            // 'video.array'    => 'Videos must be provided as an array.',
+            // 'video.*.mimes'  => 'Each video must be of type mp4, mov, avi, or wmv.',
+            // 'video.*.max'    => 'Each video must not exceed 20MB.',
 
-            'document.array'        => 'Documents must be provided as an array.',
-            'document.*.mimes'      => 'Each document must be a file of type: pdf, doc, docx.',
-            'document.*.max'        => 'Each document must not exceed 4MB.',
+            // 'document.array'        => 'Documents must be provided as an array.',
+            // 'document.*.mimes'      => 'Each document must be a file of type: pdf, doc, docx.',
+            // 'document.*.max'        => 'Each document must not exceed 4MB.',
 
             'external_link.*.url' => 'External link must be a valid URL.',
             'external_link.*.max' => 'External link may not be greater than 400 characters.',
            
-            'video_link.*.url' => 'Video link must be a valid URL.',
-            'video_link.*.max' => 'Video link may not be greater than 400 characters.',
+            // 'video_link.*.url' => 'Video link must be a valid URL.',
+            // 'video_link.*.max' => 'Video link may not be greater than 400 characters.',
 
             'description.required' => 'Description is required.',
             'description.string' => 'Description must be a valid string.',

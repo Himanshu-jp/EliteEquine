@@ -3,6 +3,8 @@
         style="min-width: 200px; background: #f8f9fa; font-family: Arial, sans-serif;">
         <div class="compare-heading">
             <h3>Compare</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="compareClose();"></button>
+
             <button class="btn-theme-bg compare-remove-all" data-id="1">Clear</button>
         </div>
         

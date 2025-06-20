@@ -20,9 +20,9 @@ class SoldController extends Controller
         return view('front/sold');
     }
 
-    public function soldDataTable()
+    public function soldDataTable(request $request)
     {
-        $result = $this->productService->getSoldProducts(12);
+         $result = $this->productService->getSoldProducts($request->all());
         $total = $result['total'];
         $data = $result['data'];
         $viewMode = 'grid';

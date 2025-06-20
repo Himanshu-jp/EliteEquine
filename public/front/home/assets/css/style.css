@@ -979,10 +979,11 @@ header nav ul li a.active::before {
   display: flex;
   flex-wrap: wrap;
   margin-top: 22px;
+  gap: 20px;
 }
 
 .forseller_area_inner2 .bx1 {
-  width: 50%;
+  width: 48%;
   margin-bottom: 46px;
 }
 
@@ -2348,8 +2349,13 @@ ul.footer-bottom-link li {
   width: 100%;
   background: #fff;
   transition: right 0.3s ease;
+  height: 100vh;
+    overflow: auto;
 }
-
+/* #horse-list .col-lg-4 {
+    height: 100vh;
+    overflow: auto;
+} */
 /* Main content */
 .main-content {
   flex: 1;

@@ -29,6 +29,7 @@
                                 {{ @$value->breeds->map(function ($breed) {
                                         return optional($breed->commonMaster)->name;
                                     })->filter()->implode(' | ') }}
+                                | {{ @$value->sex->commonMaster->name }}
                             </h3>
                         </a>
 
@@ -74,7 +75,7 @@
                                     })->filter()->implode(' | ') }}
                                 @if (@$value->productDetail->fromdate)
                                     <br />
-                                    ({{ format_date(@$value->productDetail->fromdate) . ' - ' . format_date(@$value->productDetail->todate) }})
+                                    ({{ date('d/m/y',strtotime(@$value->productDetail->fromdate)) . ' - ' . date('d/m/y',strtotime(@$value->productDetail->todate)) }})
                                 @endif
                         </div>
                         <div class="foot">
@@ -177,6 +178,7 @@
                             {{ @$value->breeds->map(function ($breed) {
                                     return optional($breed->commonMaster)->name;
                                 })->filter()->implode(' | ') }}
+                            | {{ @$value->sex->commonMaster->name }}
                         </h3>
                     </a>
 
@@ -200,7 +202,7 @@
                                 })->filter()->implode(' | ') }}
                             @if (@$value->productDetail->fromdate)
                                 <br />
-                                ({{ format_date(@$value->productDetail->fromdate) . ' - ' . format_date(@$value->productDetail->todate) }})
+                                ({{ date('d/m/y',strtotime(@$value->productDetail->fromdate)) . ' - ' . date('d/m/y',strtotime(@$value->productDetail->todate)) }})
                             @endif
                     </div>
 
@@ -589,13 +591,22 @@
 
             }
 
+            // function formatDate(dateString) {
+            //     var date = new Date(dateString);
+            //     return date.toLocaleDateString('en-US', {
+            //         month: 'short',
+            //         day: 'numeric',
+            //         year: 'numeric'
+            //     });
+            // }
+
             function formatDate(dateString) {
-                var date = new Date(dateString);
-                return date.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                });
+                const date = new Date(dateString);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+                const year = String(date.getFullYear()).slice(-2); // Get last 2 digits
+
+                return `${day}/${month}/${year}`;
             }
 
             function addClusterView() {
