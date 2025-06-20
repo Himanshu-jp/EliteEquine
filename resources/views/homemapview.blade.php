@@ -208,9 +208,9 @@
                 } = feature.properties;
 
                 if (isTrail == 1) {
-                    var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/{{ $markerImage }}";
-                } else {
                     var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/{{ $markerImageTrail }}";
+                } else {
+                    var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/{{ $markerImage }}";
                 }
 
                 // Create a custom HTML element for the marker

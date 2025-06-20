@@ -948,11 +948,12 @@
 
         window.onload = () => {
             const urlParams = new URLSearchParams(window.location.search);
-            let lat = '{{ @$products->productDetail->latitude }}' ;
+            let lat = '{{$products->productDetail->latitude}}' ;
             let lng = '{{ @$products->productDetail->longitude }}' ;
             let trailLat = '{{ @$products->productDetail->trail_latitude }}' ;
             let trailLong = '{{ @$products->productDetail->trail_longitude }}' ;
             const updateLocation = () => {
+                
                 initializeMap(lat, lng, trailLat, trailLong);
                 //   addMapMarker(lat, lng);
             };
@@ -960,8 +961,8 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     position => {
-                        lat = position.coords.latitude;
-                        lng = position.coords.longitude;
+                       // lat = position.coords.latitude;
+                       // lng = position.coords.longitude;
                         updateLocation();
                     },
                     () => updateLocation(), {
@@ -984,6 +985,7 @@
                 center: [longitude, latitude],
                 zoom: 8
             });
+          
 
             // Blue marker for main location
             var markerIconUrl = "{{ env('MAP_PUBLIC') }}/images/Horse Blue.png";
