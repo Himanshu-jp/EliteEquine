@@ -105,8 +105,8 @@
                                 <div class="d-flex align-items-center justify-content-start gap-2 flex-wrap mt-2">
                                     @foreach (@$products->image as $key => $image)
                                         <div class="position-relative">
-                                            <a href="{{ asset('storage/' . $image->image) }}" target="_blank">
-                                                <img src="{{ asset('storage/' . $image->image) }}" alt="Image"
+                                            <a href="{{ $image->image }}" target="_blank">
+                                                <img src="{{$image->image }}" alt="Image"
                                                     class="img-thumbnail" style="width: 150px;">
                                             </a>
                                             @if (@$products->image->count() > 1)
@@ -299,7 +299,7 @@
                             <div class="d-flex align-items-center justify-content-start gap-2 flex-wrap mt-2">
                                 @foreach (@$products->video as $image)
                                     <div class="position-relative">
-                                        <a href={{ asset('storage/' . $image->video_url) }} target="_blank">
+                                        <a href={{$image->video_url}} target="_blank">
                                             <img src="{{ asset('front/auth/assets/img/icons/video.svg') }}"
                                                 class="user-img" alt="" id="editVideo"
                                                 style="width: 50px; height: 50px;">
@@ -346,7 +346,7 @@
                             <div class="d-flex align-items-center justify-content-start gap-2 flex-wrap mt-2">
                                 @foreach (@$products->document as $image)
                                     <div class="position-relative">
-                                        <a href={{ asset('storage/' . $image->file) }} target="_blank">
+                                        <a href={{ $image->file }} target="_blank">
                                             <img src="{{ asset('front/auth/assets/img/icons/pdf-icon.svg') }}"
                                                 class="user-img" alt="" id="editImg"
                                                 style="width: 50px; height: 50px;">
@@ -387,24 +387,26 @@
                         @endif
                     </div>
 
-                    <div class="col-lg-6 mb-3" id="bid_expire">
-                        <label for="bid_end_date" class="form-label">Bid End Date</label>
-                        <input type="date" autocomplete="off" class="inner-form form-control mb-0" id="bid_end_date"
-                            name="bid_end_date" value="{{ old('bid_end_date', @$products->bid_expire_date) }}"
-                            placeholder="Please select Bid end date">
-                        @if ($errors->has('bid_end_date'))
-                            <span class="error text-danger">{{ $errors->first('bid_end_date') }}</span>
-                        @endif
-                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 mb-3" id="bid_expire">
+                            <label for="bid_end_date" class="form-label">Bid End Date</label>
+                            <input type="date" autocomplete="off" class="inner-form form-control mb-0" id="bid_end_date"
+                                name="bid_end_date" value="{{ old('bid_end_date', @$products->bid_expire_date) }}"
+                                placeholder="Please select Bid end date">
+                            @if ($errors->has('bid_end_date'))
+                                <span class="error text-danger">{{ $errors->first('bid_end_date') }}</span>
+                            @endif
+                        </div>
 
-                    <div class="col-lg-6 mb-3" id="bid_price">
-                        <label for="bid_min_price" class="form-label">Bid Minimum Price</label>
-                        <input type="text" name="bid_min_price" id="bid_min_price"
-                            class="inner-form form-control mb-0 numbervalid" placeholder="Enter bid minimum price"
-                            value="{{ old('bid_min_price', @$products->productDetail->bid_min_price) }}">
-                        @if ($errors->has('bid_min_price'))
-                            <span class="error text-danger">{{ $errors->first('bid_min_price') }}</span>
-                        @endif
+                        <div class="col-lg-6 mb-3" id="bid_price">
+                            <label for="bid_min_price" class="form-label">Bid Minimum Price</label>
+                            <input type="text" name="bid_min_price" id="bid_min_price"
+                                class="inner-form form-control mb-0 numbervalid" placeholder="Enter bid minimum price"
+                                value="{{ old('bid_min_price', @$products->productDetail->bid_min_price) }}">
+                            @if ($errors->has('bid_min_price'))
+                                <span class="error text-danger">{{ $errors->first('bid_min_price') }}</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
 
@@ -1118,7 +1120,7 @@
             processData: false,
             contentType: false,
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             success: function(response) {
                 if (response.url) {
@@ -1156,9 +1158,6 @@ function recurringImage() {
     } else {
         total_skip = 0;
 
-        $('.fullscreen-cover').hide();
-return false;
-
         $('.fullscreen-cover').html('Submitting Your Form, Please Wait!')
 
         // Build form data from the form element
@@ -1168,9 +1167,16 @@ return false;
         // Append uploaded URLs from imageUploads object
         for (const [type, urls] of Object.entries(imageUploads)) {
             urls.forEach((url, index) => {
-                formData.append(`${type}_uploads[${index}]`, url);
+                if(type == 'video'){
+                    formData.append(`${type}_uploads[${index}][video_url]`, url.video_url);
+                    formData.append(`${type}_uploads[${index}][thumbnail_url]`, url.thumbnail_url);
+                }else{
+                    formData.append(`${type}_uploads[${index}]`, url);
+                }
             });
         }
+
+        
 
         $.ajax({
             url: $('#productForm').attr('action'),
@@ -1192,7 +1198,7 @@ return false;
 
     
     $('#productForm').on('submit', function(e) {
-        // if ($("#productForm").valid()) {
+        if ($("#productForm").valid()) {
              $('.fullscreen-cover').css('display','flex')
         e.preventDefault(); // Prevent default form submission
 
@@ -1211,7 +1217,7 @@ return false;
             };
             recurringImage();
         }
-    // }
+    }
         // else: form will submit normally if no file
     });
 </script>

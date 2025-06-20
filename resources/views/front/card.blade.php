@@ -29,6 +29,7 @@
                                 {{ @$value->breeds->map(function ($breed) {
                                         return optional($breed->commonMaster)->name;
                                     })->filter()->implode(' | ') }}
+                                | {{ @$value->sex->commonMaster->name }}
                             </h3>
                         </a>
 
@@ -177,6 +178,7 @@
                             {{ @$value->breeds->map(function ($breed) {
                                     return optional($breed->commonMaster)->name;
                                 })->filter()->implode(' | ') }}
+                            | {{ @$value->sex->commonMaster->name }}
                         </h3>
                     </a>
 

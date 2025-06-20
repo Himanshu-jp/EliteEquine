@@ -330,7 +330,8 @@ class ProductListingController extends Controller
         if (!empty($request->limit)) {
             $limit = $request->limit;
         }
-        // print_r($data->get()->toArray()); exit;
+
+        // dd($data->get()->toArray());
         
         $total = $data->count();
         $data = $data->paginate($limit); // Adjust per page as needed

@@ -125,20 +125,9 @@ class ProductService
     $key=0;
 
             foreach ($data['video_uploads'] as  $video) {
-              
-                $thumbnailFilename = Str::uuid() . '.jpg';
-                $thumbnailPath = 'products/thumbnails/' . $thumbnailFilename;
-$relativePath = str_replace(url('storage') . '/', '', $video);
-                FFMpeg::fromDisk('public')
-                    ->open($relativePath)
-                    ->getFrameFromSeconds(1)
-                    ->export()
-                    ->toDisk('public')
-                    ->save($thumbnailPath);
-
                 $videoPaths[$key]['product_id'] = $product->id;
-                $videoPaths[$key]['video_url'] = $video;
-                $videoPaths[$key]['thumbnail'] = $thumbnailPath;
+                $videoPaths[$key]['video_url'] = $video['video_url'] ?? $video->video_url;
+                $videoPaths[$key]['thumbnail'] = $video['thumbnail_url'] ?? $video->thumbnail_url;
                 $videoPaths[$key]['created_at'] = Carbon::now();
                 $videoPaths[$key]['updated_at'] = Carbon::now();
     $key++;

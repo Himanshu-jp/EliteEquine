@@ -41,15 +41,15 @@
                                 <div class="swiper-wrapper">
 
                                     @foreach (@$products->image as $key => $image)
-                                        <div class="swiper-slide"><img src="{{ asset('storage/' . $image->image) }}"
+                                        <div class="swiper-slide"><img src="{{$image->image }}"
                                                 alt=""></div>
                                     @endforeach
 
                                     @foreach (@$products->video as $key => $video)
                                         <div class="swiper-slide">
                                             <video width="" height="" controls>
-                                                <source src="{{ asset('storage/' . $video->video_url) }}" type="video/mp4">
-                                                <source src="{{ asset('storage/' . $video->video_url) }}" type="video/ogg">
+                                                <source src="{{$video->video_url }}" type="video/mp4">
+                                                <source src="{{  $video->video_url }}" type="video/ogg">
                                                 Your browser does not support the video tag.
                                             </video>
                                         </div>
@@ -109,13 +109,13 @@
                                 <div class="swiper-wrapper">
 
                                     @foreach (@$products->image as $key => $image)
-                                        <div class="swiper-slide"><img src="{{ asset('storage/' . $image->image) }}"
+                                        <div class="swiper-slide"><img src="{{ $image->image }}"
                                                 alt=""></div>
                                     @endforeach
 
 
                                     @foreach (@$products->video as $key => $video)
-                                        <div class="swiper-slide"><img src="{{ asset('storage/' . $video->thumbnail) }}"
+                                        <div class="swiper-slide"><img src="{{ $video->thumbnail }}"
                                                 alt=""></div>
                                     @endforeach
 
@@ -606,8 +606,25 @@
                                                     );
                                                 @endphp
                                                 @if ($averageRating)
-                                                    <img src="{{ asset('front/home/assets/images/star-rating5.svg') }}"
-                                                        height="18px" alt="" />
+                                                    @switch($averageRating)
+                                                        @case('5')
+                                                             <img src="{{ asset('front/home/assets/images/star-rating5.svg') }}" height="18px" alt="" />
+                                                            @break
+
+                                                        @case('4')
+                                                             <img src="{{ asset('front/home/assets/images/star-rating4.svg') }}" height="18px" alt="" />
+                                                            @break
+
+                                                        @case('3')
+                                                             <img src="{{ asset('front/home/assets/images/star-rating3.svg') }}" height="18px" alt="" />
+                                                            @break
+                                                        @case('2')
+                                                            <img src="{{ asset('front/home/assets/images/star-rating2.svg') }}" height="18px" alt="" />
+                                                            @break
+
+                                                        @default
+                                                             <img src="{{ asset('front/home/assets/images/star-rating1.svg') }}" height="18px" alt="" />
+                                                    @endswitch
                                                     <span>{{ $arr[$averageRating - 1] }}</span>
                                                 @else
                                                     <span>No reviews yet</span>

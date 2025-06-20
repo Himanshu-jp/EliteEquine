@@ -1,7 +1,7 @@
 <!-- footer start -->
 <footer>
     <div class="container">
-        <div class="logo-footer"> <img src="{{asset('front/home/assets/images/logo/logo.svg')}}" alt="" /> </div>
+        <div class="logo-footer"><a href="#home"> <img src="{{asset('front/home/assets/images/logo/logo.svg')}}" alt="" /> </a></div>
         <div class="row">
             <div class="col-lg-4">
                 <div class="footer-box">

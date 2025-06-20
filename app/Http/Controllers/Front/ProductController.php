@@ -34,6 +34,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Services\Front\BidService;
 use Carbon\Carbon;
 use Currency\Util\CurrencySymbolMapping;
+use FFMpeg;
+use Illuminate\Support\Str;
 
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
@@ -132,6 +134,9 @@ class ProductController extends Controller
     
     public function productList(Request $request)
     {
+
+
+        
         $user = auth::user();
         $products = Product::with(['category','image', 'video', 'document','user']);
         $products = $products->where(['deleted_at' => null, 'user_id' => $user->id]);
@@ -624,6 +629,37 @@ return response()->json([
     public function uploadAjaxImage(request $request){
 
          $file = $request->file('file');
+
+         $mimeType = $file->getMimeType();
+
+if (str_starts_with($mimeType, 'video/')) {
+    $videoPath = $file->store('products/videos', 's3');
+Storage::disk('s3')->setVisibility($videoPath, 'public');
+$videoUrl = Storage::disk('s3')->url($videoPath);
+
+// 2. Generate thumbnail path
+$thumbnailFilename = Str::uuid() . '.jpg';
+$thumbnailPath = 'products/thumbnails/' . $thumbnailFilename;
+
+// 3. Generate and save thumbnail to S3
+FFMpeg::fromDisk('s3')
+    ->open($videoPath)
+    ->getFrameFromSeconds(1)
+    ->export()
+    ->toDisk('s3')
+    ->save($thumbnailPath);
+
+Storage::disk('s3')->setVisibility($thumbnailPath, 'public');
+$thumbnailUrl = Storage::disk('s3')->url($thumbnailPath);
+
+$url=[
+    'video_url' => $videoUrl,
+    'thumbnail_url' => $thumbnailUrl,
+];
+  return response()->json([
+        'url' => $url
+    ]);
+}else{
     
     // Store the file in the 'all' folder on the S3 disk
     $path = $file->store('all', 's3');
@@ -638,6 +674,7 @@ return response()->json([
   return response()->json([
         'url' => $url
     ]);
+}
     }
 
 }

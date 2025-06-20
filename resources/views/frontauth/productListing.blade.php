@@ -198,6 +198,8 @@ Product Listing
                                                 <span class="badge transaction-methods" >{{ $status }}</span>
                                             @elseif($status == 'expire' && $method == 'buyertoseller')
                                                 <span class="badge transaction-methods" >{{ $status }}</span>
+                                            @else
+                                                <span class="badge transaction-methods status-box-pending" >{{ $status }}</span>
                                             @endif
 
                                         @elseif($sale == 'auction')
@@ -221,6 +223,8 @@ Product Listing
                                                 <span class="badge transaction-methods" >{{ $status }}</span>
                                             @elseif($status == 'expire' && $method == 'buyertoseller')
                                                 <span class="badge transaction-methods expire" >{{ $status }}</span>
+                                             @else
+                                                <span class="badge transaction-methods status-box-pending" >{{ $status }}</span>
                                             @endif
                                         @endif
 

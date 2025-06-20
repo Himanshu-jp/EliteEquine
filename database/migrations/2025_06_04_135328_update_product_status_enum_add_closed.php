@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            DB::statement("ALTER TABLE products MODIFY COLUMN product_status ENUM('pending','live', 'sold', 'expire', 'closed') DEFAULT 'pending'");
+            // DB::statement("ALTER TABLE products MODIFY COLUMN product_status ENUM('pending','live', 'sold', 'expire', 'closed') DEFAULT 'pending'");
         });
     }
 
@@ -23,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            DB::statement("ALTER TABLE products MODIFY COLUMN product_status ENUM('pending','live', 'sold', 'expire') DEFAULT 'pending'");
+            // DB::statement("ALTER TABLE products MODIFY COLUMN product_status ENUM('pending','live', 'sold', 'expire') DEFAULT 'pending'");
         });
     }
 };

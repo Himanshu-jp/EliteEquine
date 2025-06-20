@@ -266,6 +266,8 @@
                                     </li>
                                 @endforeach
 
+                                    
+
                             </ul>
                             <ul class="controal_btns">
                                 <li>
@@ -318,8 +320,7 @@
                                                                             {{ @$value->breeds->map(function($breed) {
                                                                                 return optional($breed->commonMaster)->name;
                                                                             })->filter()->implode(' | ') }}
-
-                                                                            
+                                                                            | {{ @$value->sex->commonMaster->name }}
                                                                         </h3>
                                                                     </a>
 

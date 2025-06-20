@@ -62,7 +62,8 @@ Chat Messages
                 <button class="back-btn d-md-none" onclick="goBackToSidebar()">
                     <img src="{{asset('front/auth/assets/img/icons/close-btn.svg')}}" alt="Back" width="30px" />
                 </button>
-                <h5 class="mb-0 booking_id">{{Auth::User()->name}}</h5>
+                <h5 class="mb-0 booking_id"></h5>
+                {{-- <h5 class="mb-0 booking_id">{{Auth::User()->name}}</h5> --}}
                 {{-- <a href="#" class="btn btn-primary"><img src="{{asset('front/auth/assets/img/icons/star.svg')}}" alt=""> Leave A Review</a> --}}
                 {{-- <div class="usr-msg-details booking_id w-100"></div> --}}
 
@@ -345,6 +346,7 @@ const socket = io("https://v1.checkprojectstatus.com:3115/");
                                 },
                                 success: function (res) {
                                     // alert("Chats deleted successfully.");
+                                    window.location.reload();
                                     Swal.fire("EliteQuine", "Selected chats deleted successfully.", "success");
                                     socket.emit("THREADS_LIST", {'user_id':SENDER_ID, search:'',page:1,limit:100});
                                     // Optionally refresh chat list

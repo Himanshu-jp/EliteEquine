@@ -31,7 +31,7 @@ return new class extends Migration
             $table->integer("auc_winner_pay_in")->nullable();
             $table->integer("bid_end_days")->nullable();
             $table->enum("mark_as",['sold','lease','rented'])->nullable();
-            $table->string("product_status")->nullable();
+            $table->string("product_status")->default('pending');
             $table->timestamps();
             $table->softDeletes();
         });
