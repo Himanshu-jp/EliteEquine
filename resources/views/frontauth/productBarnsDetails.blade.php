@@ -1288,4 +1288,29 @@
 
         });
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const fromDateInput = document.getElementById('fromdate');
+            const toDateInput = document.getElementById('todate');
+
+            // When 'fromdate' changes, update 'todate' min attribute
+            fromDateInput.addEventListener('change', function () {
+                const fromDate = this.value;
+                toDateInput.min = fromDate;
+
+                // Optional: reset todate if it's earlier than new fromdate
+                if (toDateInput.value < fromDate) {
+                    toDateInput.value = fromDate;
+                }
+            });
+
+            // Trigger once on load to handle pre-filled values
+            if (fromDateInput.value) {
+                toDateInput.min = fromDateInput.value;
+            }
+        });
+    </script>
+
+    
 @endsection
